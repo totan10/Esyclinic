@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor's Profile - Dr. Ashutosh Samal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
     <style>
         /* Add custom styles here */
         body {
@@ -55,13 +57,13 @@
             text-align: center;
         }
         .slot-container {
-            max-width: 50%;
+            max-width: 100%;
         }
         /* Add modern 3D look to rounded rectangles */
         .slot-item {
             background-color: #00b2c8;
             border-radius: 25px;
-            padding: 30px; /* Increase padding */
+            padding: 40px; /* Increase padding */
             margin-bottom: 20px;
             cursor: pointer;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -85,21 +87,41 @@
         }
         /* Add a new class for slot timings within the modal */
         .modal-slot-item {
-            background-color: #00b2c8;
+            background-color: transparent;
+            border: 2px solid black;
             border-radius: 25px;
-            padding: 15px; /* Adjust padding */
+            padding: 10px; /* Adjust padding */
             margin-right: 10px; /* Add margin between slot items */
             margin-bottom: 10px; /* Adjust margin bottom */
             cursor: pointer;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
-            width: calc(50% - 10px); /* Set width to fit two items in a row */
+            width: calc(16.666% - 10px); /* Set width to fit six items in a row */
+            display: inline-block;
         }
         /* Display a maximum of six slot timings per row */
         .slot-section {
-            display: flex;
+            display: inline-block;
             flex-wrap: wrap;
             justify-content: flex-start;
+        }
+        /* Style for timing text */
+        .modal-slot-item span {
+            color: #00b2c8; /* Blue color */
+            
+            display: block;
+            margin-bottom: 5px;
+        }
+        /* Style for availability text */
+        .modal-slot-item .availability {
+            color: #7BF066; /* Green color */
+            
+        }
+        #slotModal{
+          padding-left: 0px;
+          width: 50%;
+          margin-left: 50%;
+          
         }
     </style>
 </head>
@@ -118,7 +140,7 @@
         </div>
     </div>
     <div class="modal" id="slotModal" tabindex="-1">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog" style="max-width: 100%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Slot Information</h5>
@@ -163,7 +185,6 @@
                 const dateB = new Date(slotData.SCH_DT);
                 return dateA - dateB;
             });
-            console.log(slots);
 
             for (let i = 0; i < slots.length; i += 2) {
                 const slotItemPair = document.createElement("div");
@@ -213,46 +234,57 @@
         }
 
         // Modify handleSlotClick function to accept slot data
-        function handleSlotClick(slotdata) {
-            // Get the modal element
-            var modal = document.getElementById('slotModal');
-            var modalContent = modal.querySelector('.modal-body');
-            modalContent.innerHTML = '';
-            const slot = slotdata ? slotdata : null;
+function handleSlotClick(slotdata) {
+    // Get the modal element
+    var modal = document.getElementById('slotModal');
+    var modalContent = modal.querySelector('.modal-body');
+    modalContent.innerHTML = '';
+    const slot = slotdata ? slotdata : null;
 
-            // Check if slot object and its properties are defined
-            if (slot && slot.SLOTS) {
-                // Iterate over each time period array (Morning, Afternoon, Evening)
-                ['Morning', 'Afternoon', 'Evening'].forEach(timePeriod => {
-                    const slotsForPeriod = slot.SLOTS[0][timePeriod];
-                    if (slotsForPeriod && slotsForPeriod.length > 0) {
-                        modalContent.innerHTML += `<h4>${timePeriod} Slots</h4>`;
-                        modalContent.innerHTML += '<div class="slot-section">';
-                        // Iterate over slots for the current time period
-                        slotsForPeriod.forEach(function(timeSlot, index) {
-                            if (index % 6 === 0 && index !== 0) {
-                                modalContent.innerHTML += '</div><div class="slot-section">';
-                            }
-                            modalContent.innerHTML += `<div class="modal-slot-item" data-slot="${JSON.stringify(timeSlot)}">${timeSlot.FROM} - ${timeSlot.TO}</div>`;
-                        });
-                        modalContent.innerHTML += '</div>';
-                    } else {
-                        // Display message if no slots available for the current time period
-                        modalContent.innerHTML += `<h4>${timePeriod} Slots</h4>`;
-                        modalContent.innerHTML += '<div class="no-slots-animation">No slots available</div>';
+    // Check if slot object and its properties are defined
+    if (slot && slot.SLOTS) {
+        // Define image URLs for each time period
+        const iconUrls = {
+            Morning: '/morning_icon.jpeg',
+            Afternoon: '/afternoon_icon.jpeg',
+            Evening: '/evening_icon.jpeg'
+        };
+
+        // Iterate over each time period array (Morning, Afternoon, Evening)
+        ['Morning', 'Afternoon', 'Evening'].forEach(timePeriod => {
+            const slotsForPeriod = slot.SLOTS[0][timePeriod];
+            if (slotsForPeriod && slotsForPeriod.length > 0) {
+                const iconUrl = iconUrls[timePeriod];
+                modalContent.innerHTML += `<h4><img src="${iconUrl}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
+                modalContent.innerHTML += '<div class="slot-section">';
+                // Iterate over slots for the current time period
+                slotsForPeriod.forEach(function(timeSlot, index) {
+                    if (index % 6 === 0 && index !== 0) {
+                        modalContent.innerHTML += '</div><div class="slot-section">';
                     }
+                    modalContent.innerHTML += `
+                        <div class="modal-slot-item" data-slot="${JSON.stringify(timeSlot)}">
+                            <span>${timeSlot.FROM} - ${timeSlot.TO}</span>
+                            <div class="availability">Available</div>
+                        </div>`;
                 });
+                modalContent.innerHTML += '</div>';
             } else {
-                // Handle case where slot data is missing or incorrect
-                modalContent.innerHTML = 'Error: Slot data not available';
+                // Display message if no slots available for the current time period
+                modalContent.innerHTML += `<h4><img src="${iconUrls[timePeriod]}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
+                modalContent.innerHTML += '<div class="no-slots-animation">No slots available</div>';
             }
+        });
+    } else {
+        // Handle case where slot data is missing or incorrect
+        modalContent.innerHTML = 'Error: Slot data not available';
+    }
 
-            // Open the modal
-            var modalInstance = new bootstrap.Modal(modal);
-            modalInstance.show();
-        }
-
-        // Make a POST API call to fetch slot data using Axios
+    // Open the modal
+    var modalInstance = new bootstrap.Modal(modal);
+    modalInstance.show();
+}
+   // Make a POST API call to fetch slot data using Axios
         async function fetchSlotData(drId) {
             const url = "http://easyhealths.com/api/availdrslot";
             const params = {
@@ -363,8 +395,6 @@
             slotData = slotData.data;
             // Call the function to generate slot items with dates
             generateSlotItems(slotData);
-
-            console.log(slotData);
         }
         // Parse URL parameters to get doctor's data
         const queryString = window.location.search;
