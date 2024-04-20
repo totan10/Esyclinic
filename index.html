@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homepage</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+  /* Preloader styles */
+  .preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #FFFFFF; /* Background color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensure it's on top of everything */
+  }
+
+  .preloader img {
+    animation: fadeInOut 3s linear infinite alternate; /* Fading animation */
+  }
+
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0; /* Start transparent */
+    }
+    100% {
+      opacity: 1; /* End opaque */
+    }
+  }
+</style>
+<body>
+  <!-- Preloader -->
+  <div class="preloader">
+    <img src="preloader.gif" alt="Preloader">
+  </div>
+<header>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <img src="logo.png" alt="Logo" class="logo">
+      </div>
+      <div class="col-md-6 text-end">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Corporate Login</button>
+        <img src="profile-icon.png" alt="Profile" class="profile-icon">
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content rounded">
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-6 d-none d-lg-block">
+            <img src="company-logo.png" alt="Company Logo" class="company-logo">
+            <h4 class="company-name">Company Name</h4>
+          </div>
+          <div class="col-lg-6 col-12">
+            <form id="loginForm">
+              <div class="form-group">
+                <label for="username"><i class="fas fa-user"></i> Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Enter username">
+              </div>
+              <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Enter password">
+              </div>
+              <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-sign-in-alt"></i> Login</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<script src="script.js"></script>
+<script>
+  // Hide the preloader after 3 seconds
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      document.querySelector('.preloader').style.display = 'none';
+    }, 3000); // 3 seconds
+  });
+</script>
+</body>
+</html>

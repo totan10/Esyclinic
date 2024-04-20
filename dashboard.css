@@ -1,0 +1,13 @@
+
+.dropdown-menu-end {
+    left: auto !important;
+    right: 0 !important;
+  }
+  
+  /* Align user profile icon vertically */
+  .profile-icon {
+    height: 30px;
+    width: auto;
+    margin-right: 5px;
+  }
+  

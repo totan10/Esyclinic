@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctor's Booking</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
+    <style>
+      /* Custom CSS */
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .header {
+        background-color: #00205b; /* Dark blue background */
+        height: 40px; /* Height of the header */
+        color: white; /* Text color */
+        text-align: center; /* Center align text */
+        font-size: 24px; /* Font size */
+      }
+
+      /* Custom CSS */
+      .navbar-container {
+        position: fixed; /* Fix the navbar container */
+        top: 0; /* Position at the top */
+        width: 100%; /* Full width */
+        z-index: 999; /* Ensure it's above other content */
+      }
+
+      .navbar {
+        background-color: #f8f9fa; /* Navbar background color */
+        padding: 10px; /* Padding for navbar content */
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .searchbar-container {
+        position: relative;
+        width: 60%; /* Search bar takes 60% of the navbar width */
+      }
+
+      .searchbar {
+        width: calc(100% - 40px); /* Adjusted width considering icon padding */
+        padding: 10px 30px 10px 10px; /* Adjust padding to your preference */
+        font-size: 16px;
+        outline: none;
+        border: none;
+        border-radius: 20px; /* Rounded corners */
+        border: 2px solid #ccc; /* Border around search bar */
+        
+      }
+
+      /* Other styles remain the same */
+
+      .navbar-brand img {
+        max-height: 40px;
+        margin-right: 10px;
+      }
+
+      .searchbar:focus {
+        border-color: #007bff; /* Border color when focused */
+      }
+
+      .searchbar:focus + .input-group-text {
+        color: #007bff; /* Icon color when search bar is focused */
+      }
+
+      #searchResults {
+        list-style-type: none;
+        padding: 0;
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        background-color: #fff;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+        overflow-y: auto; /* Add scrollbar if needed */
+        max-height: 150px; /* Limit max height to show scrollbar */
+        display: none; /* Hide by default */
+        top: 25px;
+      }
+
+      #searchResults.active {
+        display: block; /* Show when active */
+      }
+
+      #searchResults li {
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-bottom: 1px solid #ddd;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+      }
+      #searchResults li:hover {
+        background-color: #f3f3f3;
+      }
+
+      .doctor-info {
+        margin-left: 10px;
+      }
+
+      .doctor-info h5 {
+        margin: 0;
+      }
+
+      .doctor-info p {
+        margin: 5px 0;
+      }
+
+      .doctor-photo {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #ddd;
+        overflow: hidden;
+      }
+
+      .doctor-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .no-results {
+        padding: 10px;
+        text-align: center;
+      }
+
+      .input-group-text {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        padding: 10px; /* Adjust padding to your preference */
+      }
+
+      .input-group-text i {
+        color: #ccc; /* Icon color */
+        border: none;
+      }
+
+      .profile-icon {
+        margin-left: 20px; /* Margin between search bar and profile icon */
+        font-size: 24px; /* Font size for profile icon */
+        cursor: pointer;
+      }
+
+      .swiper-container {
+        width: 100%;
+        height: 400px; /* Adjust height of the slider */
+      }
+
+      .swiper-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: fill; /* Ensure the image covers the entire slide */
+      }
+
+      .swiper-button-prev,
+      .swiper-button-next {
+        background: transparent;
+        opacity: 0.55;
+        --swiper-navigation-color: rgba(252, 252, 252, 0.85);
+        transition: opacity 0.3s ease, color 0.3s ease;
+      }
+      .swiper-button-prev:hover,
+      .swiper-button-next:hover {
+        background: transparent;
+        opacity: 0.85;
+        --swiper-navigation-color: #fcfcfc;
+      }
+
+      .specialists-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px; /* Adjust the gap between grid items */
+        padding: 20px;
+        justify-content: center;
+        overflow-x: auto;
+      }
+      #specialistsContainer {
+        overflow-x: auto;
+      }
+
+      .specialist {
+        text-align: center;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+        cursor: pointer; /* Add pointer cursor */
+        background-color: #f0f0f0;
+      }
+
+      .specialist img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-bottom: 10px;
+      }
+
+      .specialist p {
+        margin: 5px 0; /* Reduce the gap between p tags and image */
+        line-height: 1.2; /* Ensure consistent line height */
+        color: #333; /* Adjust text color */
+        font-size: 14px; /* Adjust font size */
+        font-weight: 500; /* Adjust font weight */
+        text-align: center;
+      }
+
+      .view-all-btn {
+        text-align: right;
+        margin-right: 20px;
+        margin-top: 10px;
+      }
+
+      .view-all-btn a {
+        color: #00205b;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      /* Custom CSS for Doctors Grid for Today */
+      .doctors-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px; /* Adjust the gap between grid items */
+        padding: 20px;
+        justify-content: center;
+      }
+
+      .doctor {
+        text-align: center;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+        cursor: pointer; /* Add pointer cursor */
+        background: #f0f0f0; /* Gradient background */
+      }
+
+      .specialist,
+      .doctor,
+      .symptom,
+      .doctor-specialist {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+      /* For Specialists Grid, Doctors Grid, Symptoms Grid, and Doctor Specialists Grid */
+      .specialist:hover,
+      .doctor:hover,
+      .symptom:hover,
+      .doctor-specialist:hover {
+        transform: translateY(-5px) scale(1.05);
+        transition: transform 0.3s ease;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        background-color: #baacac;
+        color: #f3f3f3;
+      }
+      .specialist:hover,
+      .doctor:hover,
+      .symptom:hover,
+      .doctor-specialist p:hover {
+        color: #f3f3f3;
+      }
+      .doctor img {
+        width: 100%;
+        height: 200px; /* Ensure proper image aspect ratio */
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+
+      .doctor-details {
+        padding: 10px;
+      }
+
+      .doctor p {
+        margin: 5px 0;
+        text-align: center;
+      }
+      .fee-book-container {
+        height: 40px;
+        background-color: #00205b;
+        position: relative;
+        width: 100%; /* Make the button full width */
+        border-radius: 5px;
+      }
+      .fee-banner {
+        position: absolute;
+        color: #fff;
+        padding: 10px;
+        left: 5px;
+      }
+
+      .book-now-btn {
+        position: absolute;
+        right: 5px;
+        color: #fff;
+        background-color: #00205b;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        top: 5px;
+      }
+
+      .book-now-btn:hover {
+        background-color: #f0f0f0; /* Light gray background on hover */
+        color: #007bff;
+      }
+
+      .symptoms-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px; /* Adjust the gap between grid items */
+        padding: 20px;
+        justify-content: center;
+      }
+
+      .symptom {
+        text-align: center;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+        cursor: pointer; /* Add pointer cursor */
+        background: #f0f0f0; /* Gradient background */
+      }
+
+      .symptom img {
+        width: 100%;
+        height: auto; /* Ensure proper image aspect ratio */
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+
+      .symptom-details {
+        padding: 10px;
+      }
+
+      .symptom p {
+        margin: 5px 0;
+        text-align: center;
+      }
+
+      .doctor-specialists-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px; /* Adjust the gap between grid items */
+        padding: 20px;
+        justify-content: center;
+      }
+
+      .doctor-specialist {
+        text-align: center;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+        cursor: pointer; /* Add pointer cursor */
+        background: #f0f0f0; /* Gradient background */
+      }
+
+      .doctor-specialist img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-bottom: 10px;
+      }
+
+      .doctor-name {
+        margin: 5px 0; /* Reduce the gap between p tags and image */
+        line-height: 1.2; /* Ensure consistent line height */
+        color: #00205b; /* Adjust text color */
+        font-size: 14px; /* Adjust font size */
+        font-weight: bold; /* Adjust font weight */
+        text-align: center;
+      }
+
+      .doctor-category {
+        margin: 5px 0; /* Reduce the gap between p tags and image */
+        line-height: 1.2; /* Ensure consistent line height */
+        color: #00205b; /* Adjust text color */
+        font-size: 12px; /* Adjust font size */
+        font-weight: normal; /* Adjust font weight */
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <!-- <div class="header">
+        Doctor's Booking
+    </div> -->
+
+    <!-- Navbar Container -->
+    <div class="navbar-container">
+      <!-- Navbar -->
+      <nav class="navbar">
+        <!-- Logo -->
+        <a class="navbar-brand" href="#">
+          <img src="logo.png" alt="Company Logo" />
+        </a>
+        <!-- Search Bar with Search Icon -->
+        <div class="input-group searchbar-container">
+          <input
+            type="text"
+            class="form-control searchbar"
+            placeholder="Search"
+            aria-label="Search"
+            aria-describedby="search-button"
+            id="searchInput"
+            autocomplete="off"
+          />
+          <div class="input-group-text">
+            <i class="fas fa-search"></i>
+          </div>
+          <ul id="searchResults"></ul>
+        </div>
+        <!-- Profile Icon -->
+        <div class="profile-icon">
+          <i class="fas fa-user"></i>
+          <!-- Adjust icon as needed -->
+        </div>
+      </nav>
+    </div>
+
+    <!-- Slider Container -->
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <!-- Images will be dynamically added here -->
+      </div>
+      <!-- Add Pagination -->
+      <div class="swiper-pagination"></div>
+    </div>
+
+    <!-- Meet our specialist -->
+    <div class="header" style="background-color: #00205b; color: white">
+      Book Doctor By specialists
+      <div class="view-all-btn">
+        <button class="view-more-specialists">View All</button>
+      </div>
+    </div>
+    <!-- Specialists Grid -->
+    <div class="specialists-container" id="specialistsContainer">
+      <!-- Data will be dynamically added here -->
+    </div>
+
+    <!-- Doctors for Today -->
+    <div class="header" style="background-color: #00205b; color: white">
+      Doctors for Today
+      <div class="view-all-btn">
+        <a href="#">View All</a>
+      </div>
+    </div>
+
+    <!-- Doctors Grid for Today -->
+    <div class="doctors-container">
+      <!-- Data will be dynamically added here -->
+    </div>
+
+    <!-- Find Doctors by Symptoms -->
+    <div class="header" style="background-color: #00205b; color: white">
+      Find Doctors by Symptoms
+      <div class="view-all-btn">
+        <a href="#">View All</a>
+      </div>
+    </div>
+
+    <!-- Symptoms Grid -->
+    <div class="symptoms-container">
+      <!-- Data will be dynamically added here -->
+    </div>
+
+    <!-- Meet our specialist -->
+    <div class="header" style="background-color: #00205b; color: white">
+      Meet our specialists
+      <div class="view-all-btn">
+        <a href="#">View All</a>
+      </div>
+    </div>
+    <!-- Specialists Grid -->
+    <div class="doctor-specialists-container">
+      <!-- Data will be dynamically added here -->
+    </div>
+
+    <!-- JavaScript libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <script>
+      let doctorsData = [];
+      const searchInput = document.getElementById("searchInput");
+      const searchResults = document.getElementById("searchResults");
+      let specialistsContainer = document.querySelector(
+        ".specialists-container"
+      );
+      let specialistsData = [];
+
+      // Initial number of specialists to show
+      const initialSpecialistsToShow = 6;
+
+      function generateSpecialistsGrid(startIndex, endIndex) {
+        // Clear existing content before generating new content
+        specialistsContainer.innerHTML = "";
+        console.log(specialistsData);
+        // Loop through the specialistsData array and generate grid elements
+        for (
+          let i = startIndex;
+          i < Math.min(endIndex, specialistsData.length);
+          i++
+        ) {
+          const specialist = specialistsData[i];
+          const specialistDiv = document.createElement("div");
+          specialistDiv.classList.add("specialist");
+          specialistDiv.addEventListener("click", () => {
+            console.log(specialist); // Print specialist data when clicked
+          });
+          const specialistImg = document.createElement("img");
+          specialistImg.src = specialist.PHOTO_URL;
+          const specialistName = document.createElement("p");
+          specialistName.textContent = specialist.SPECIALIST;
+          const specialistDesignation = document.createElement("p");
+          specialistDesignation.textContent = specialist.SPECIALITY;
+          const totalDoctors = document.createElement("p");
+          totalDoctors.textContent = "Total Doctors: " + specialist.TOTAL;
+          specialistDiv.appendChild(specialistImg);
+          specialistDiv.appendChild(specialistName);
+          specialistDiv.appendChild(specialistDesignation);
+          specialistDiv.appendChild(totalDoctors);
+          specialistsContainer.appendChild(specialistDiv);
+        }
+      }
+      // Add event listener to the "View More" button for specialists
+      document
+        .querySelector(".view-more-specialists")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+          const specialistsContainer = document.getElementById(
+            "specialistsContainer"
+          );
+          const viewMoreButton = this;
+          if (specialistsData.length <= initialSpecialistsToShow) {
+            // If there are no more specialists to show, disable the button
+            viewMoreButton.disabled = true;
+            viewMoreButton.textContent = "No more specialists";
+          } else {
+            console.log(specialistsData.length);
+            // If there are more specialists to show, generate grid elements for all specialists
+            generateSpecialistsGrid(
+              initialSpecialistsToShow,
+              specialistsData.length
+            );
+            // Change button text and functionality
+            viewMoreButton.textContent = "View Less";
+            viewMoreButton.classList.add("view-less-specialists");
+            viewMoreButton.classList.remove("view-more-specialists");
+          }
+        });
+
+      // Add event listener to the "View Less" button for specialists
+      document
+        .querySelector(".view-all-btn")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+          const viewLessButton = document.querySelector(
+            ".view-less-specialists"
+          );
+          if (viewLessButton) {
+            // If "View Less" button is present, revert to original functionality
+            generateSpecialistsGrid(0, initialSpecialistsToShow);
+            viewLessButton.textContent = "View All";
+            viewLessButton.classList.add("view-more-specialists");
+            viewLessButton.classList.remove("view-less-specialists");
+          }
+        });
+      // Function to make a POST request on page load
+      window.onload = function () {
+        searchInput.click();
+        searchInput.focus();
+        // Your API endpoint URL
+        const apiUrl = "http://easyhealths.com/api/phopd";
+
+        // Data to be sent in the request body
+        const postData = {
+          // Add any necessary data for the API call
+          PHARMAID: 8,
+        };
+
+        // Making a POST request using Axios
+        axios
+          .post(apiUrl, postData)
+          .then((response) => {
+            // Handle response data
+            console.log(response.data);
+            const sliderData = response.data.data
+              ? response.data.data.slider
+              : null;
+            specialistsData = response.data.data
+              ? response.data.data.specialist
+              : null;
+            console.log(sliderData);
+            const todayDoctorsData = response.data.data
+              ? response.data.data.today_doctor
+              : null;
+            const symptomsData = response.data.data
+              ? response.data.data.symptoms
+              : null;
+            const doctorSpecialistsData = response.data.data
+              ? response.data.data.total_doctor
+              : null;
+            doctorsData = doctorSpecialistsData;
+            // Populate the slider with images
+            const sliderContainer = document.querySelector(".swiper-wrapper");
+            sliderData.forEach((item) => {
+              const slide = document.createElement("div");
+              slide.classList.add("swiper-slide");
+              const img = document.createElement("img");
+              img.src = item.SLIDER_URL;
+              slide.appendChild(img);
+              sliderContainer.appendChild(slide);
+            });
+
+            // Generate grid elements for initial specialists
+            generateSpecialistsGrid(0, initialSpecialistsToShow);
+
+            // for (let i = 0; i < Math.min(specialistsData.length, 6); i++) {
+            //   const specialist = specialistsData[i];
+            //   const specialistDiv = document.createElement("div");
+            //   specialistDiv.classList.add("specialist");
+            //   specialistDiv.addEventListener("click", () => {
+            //     console.log(specialist); // Print specialist data when clicked
+            //   });
+            //   const specialistImg = document.createElement("img");
+            //   specialistImg.src = specialist.PHOTO_URL;
+            //   const specialistName = document.createElement("p");
+            //   specialistName.textContent = specialist.SPECIALIST;
+            //   const specialistDesignation = document.createElement("p");
+            //   specialistDesignation.textContent = specialist.SPECIALITY;
+            //   const totalDoctors = document.createElement("p");
+            //   totalDoctors.textContent = "Total Doctors: " + specialist.TOTAL;
+            //   specialistDiv.appendChild(specialistImg);
+            //   specialistDiv.appendChild(specialistName);
+            //   specialistDiv.appendChild(specialistDesignation);
+            //   specialistDiv.appendChild(totalDoctors);
+            //   specialistsContainer.appendChild(specialistDiv);
+            // }
+            // // Populate the doctors grid for today
+            // Populate the doctors grid for today
+            const doctorsContainer =
+              document.querySelector(".doctors-container");
+            for (let i = 0; i < Math.min(todayDoctorsData.length, 6); i++) {
+              const doctor = todayDoctorsData[i];
+              const doctorDiv = document.createElement("div");
+              doctorDiv.classList.add("doctor");
+
+              const doctorImg = document.createElement("img");
+              doctorImg.src = doctor.DR_PHOTO;
+
+              const doctorName = document.createElement("p");
+              doctorName.textContent = doctor.DR_NAME;
+              doctorName.style.fontWeight = "bold";
+
+              const doctorDetails = document.createElement("p");
+              doctorDetails.innerHTML = `<span>Experience:</span> ${doctor.EXPERIENCE} | <span>Specialization:</span> ${doctor.D_CATG}`;
+              doctorDetails.style.fontSize = "12px";
+
+              const feeBookContainer = document.createElement("div");
+              feeBookContainer.classList.add("fee-book-container");
+
+              const feeBanner = document.createElement("div");
+              feeBanner.classList.add("fee-banner");
+              feeBanner.innerHTML = `Fees: ${doctor.DR_FEES}`;
+
+              const bookNowBtn = document.createElement("button");
+              bookNowBtn.textContent = "Book Now";
+              bookNowBtn.classList.add("book-now-btn");
+
+              feeBookContainer.appendChild(feeBanner);
+              feeBookContainer.appendChild(bookNowBtn);
+
+              doctorDiv.appendChild(doctorImg);
+              doctorDiv.appendChild(doctorName);
+              doctorDiv.appendChild(doctorDetails);
+              doctorDiv.appendChild(feeBookContainer); // Append fee and book container
+
+              doctorsContainer.appendChild(doctorDiv);
+            }
+
+            // Populate the symptoms grid
+            const symptomsContainer = document.querySelector(
+              ".symptoms-container"
+            );
+            for (let i = 0; i < Math.min(symptomsData.length, 6); i++) {
+              const symptom = symptomsData[i];
+              const symptomDiv = document.createElement("div");
+              symptomDiv.classList.add("symptom");
+              symptomDiv.addEventListener("click", () => {
+                console.log(symptom); // Print symptom data when clicked
+              });
+              const symptomImg = document.createElement("img");
+              symptomImg.src = symptom.PHOTO_URL;
+              const symptomName = document.createElement("p");
+              symptomName.textContent = symptom.SYM_NAME;
+              symptomDiv.appendChild(symptomImg);
+              symptomDiv.appendChild(symptomName);
+              symptomsContainer.appendChild(symptomDiv);
+            }
+
+            // Populate the specialists grid
+            const doctorSpecialistsContainer = document.querySelector(
+              ".doctor-specialists-container"
+            );
+            for (
+              let i = 0;
+              i < Math.min(doctorSpecialistsData.length, 6);
+              i++
+            ) {
+              const specialist = doctorSpecialistsData[i];
+              const specialistDiv = document.createElement("div");
+              specialistDiv.classList.add("doctor-specialist");
+              specialistDiv.addEventListener("click", () => {
+                console.log(specialist); // Print specialist data when clicked
+              });
+              const specialistImg = document.createElement("img");
+              specialistImg.src = specialist.DR_PHOTO;
+              const specialistName = document.createElement("p");
+              specialistName.textContent = specialist.DR_NAME;
+              specialistName.classList.add("doctor-name"); // Added class for styling
+              const specialistCategory = document.createElement("p");
+              specialistCategory.textContent = specialist.D_CATG;
+              specialistCategory.classList.add("doctor-category"); // Added class for styling
+              specialistDiv.appendChild(specialistImg);
+              specialistDiv.appendChild(specialistName);
+              specialistDiv.appendChild(specialistCategory);
+              doctorSpecialistsContainer.appendChild(specialistDiv);
+            }
+
+            // Initialize Swiper
+            const swiper = new Swiper(".swiper-container", {
+              loop: true, // Enable loop mode
+              autoplay: {
+                delay: 3000, // Auto play delay in milliseconds
+                disableOnInteraction: false, // Enable/disable autoplay on slider interaction
+              },
+              // Navigation arrows
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              },
+              // pagination: {
+              //     el: '.swiper-pagination', // Specify pagination container
+              // },
+            });
+          })
+          .catch((error) => {
+            // Handle errors
+            console.error("There was an error:", error);
+          });
+      };
+
+      searchInput.addEventListener("input", () => {
+        console.log(doctorsData);
+        const query = searchInput.value;
+        populateSearchResults(query);
+      });
+      // Close search results when clicking outside the search container
+      document.addEventListener("click", (event) => {
+        const isClickInsideSearchContainer =
+          searchInput.contains(event.target) ||
+          searchResults.contains(event.target);
+        if (!isClickInsideSearchContainer) {
+          closeSearchResults();
+        }
+      });
+      function closeSearchResults() {
+        searchResults.classList.remove("active"); // Hide search results
+      }
+      searchInput.addEventListener("click", (event) => {
+        event.stopPropagation();
+        if (searchResults.innerHTML.trim() !== "") {
+          searchResults.classList.add("active");
+        }
+      });
+
+      function populateSearchResults(query) {
+        console.log(doctorsData);
+        searchResults.innerHTML = "";
+
+        if (query.trim() === "") {
+          return;
+        }
+
+        const filteredDoctors = doctorsData.filter((item) => {
+          const cleanItemName = item.DR_NAME.toLowerCase();
+          return cleanItemName.includes(query.toLowerCase());
+        });
+
+        if (filteredDoctors.length === 0) {
+          console.log(filteredDoctors);
+          const noResultsItem = document.createElement("li");
+          noResultsItem.classList.add("no-results");
+          noResultsItem.textContent = "No match found.";
+          searchResults.appendChild(noResultsItem);
+          return;
+        }
+        const filtered = filteredDoctors.sort((a, b) => {
+          const cleanAItemName = a.DR_NAME.toLowerCase();
+          const cleanBItemName = b.DR_NAME.toLowerCase();
+          const aIndex = cleanAItemName.indexOf(query.toLowerCase());
+          const bIndex = cleanBItemName.indexOf(query.toLowerCase());
+          return aIndex - bIndex;
+        });
+        console.log(filtered);
+
+        filtered.forEach((doctor) => {
+          const listItem = document.createElement("li");
+
+          const doctorPhotoContainer = document.createElement("div");
+          doctorPhotoContainer.classList.add("doctor-photo");
+          doctorPhotoContainer.innerHTML = `
+          <img src="${doctor.DR_PHOTO}" alt="${doctor.DR_PHOTO}" class="me-3">
+        `;
+
+          const doctorInfoContainer = document.createElement("div");
+          doctorInfoContainer.classList.add("doctor-info");
+          doctorInfoContainer.innerHTML = `
+          <h5>${doctor.DR_NAME}</h5>
+          <p>${doctor.D_CATG}</p>
+        `;
+
+          listItem.appendChild(doctorPhotoContainer);
+          listItem.appendChild(doctorInfoContainer);
+
+          listItem.addEventListener("click", () => {
+            console.log(doctor)
+            const queryParams = new URLSearchParams(doctor).toString();
+            window.location.href = `demo.html?${queryParams}`;
+          });
+
+          searchResults.appendChild(listItem);
+        });
+
+        searchResults.classList.add("active"); // Show search results
+      }
+    </script>
+  </body>
+</html>

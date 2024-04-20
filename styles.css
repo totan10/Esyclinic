@@ -1,0 +1,58 @@
+/* Custom styles */
+
+.logo {
+    height: 50px;
+  }
+  
+  .profile-icon {
+    height: 30px;
+  }
+  
+  .company-logo {
+    width: 80px;
+    height: auto;
+  }
+  
+  .company-name {
+    margin-top: 10px;
+  }
+  
+  .modal-content {
+    border-radius: 30px;
+    padding: 30px;
+  }
+  
+  .modal-dialog {
+    
+    max-width: 70%;
+    height: 70vh;
+  }
+  
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+  
+  @media (max-width: 991.98px) {
+    .modal-content {
+      width: 90%;
+      padding: 20px;
+    }
+  }
+  
+  @media (max-width: 575.98px) {
+    .modal-content {
+      padding: 15px;
+    }
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-control {
+    border-radius: 20px;
+    padding: 15px;
+  }
+  
