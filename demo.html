@@ -1,323 +1,378 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor's Profile - Dr. Ashutosh Samal</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      crossorigin="anonymous"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"/>
     <style>
-      /* Add custom styles here */
-      body {
-        margin: 0;
-        padding: 0;
-      }
-      #doctorProfileContainer {
-        margin: 0;
-        max-width: fit-content;
-      }
-      .doctor-profile {
-        margin-bottom: 30px;
-        display: flex;
-        justify-content: flex-start;
-      }
-
-      .doctor-image {
-        margin-right: 30px;
-        flex-shrink: 0; /* Prevent image from shrinking */
-        width: 200px; /* Adjust image width */
-        height: fit-content; /* Maintain aspect ratio */
-      }
-      .doctor-image img {
-        border: 2px solid #f8f9fa;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-        z-index: 2;
-      }
-      .doctor-info {
-        flex: 1;
-      }
-
-      .designation {
-        margin-bottom: 10px;
-        font-weight: bold;
-      }
-
-      .specialization,
-      .experience,
-      .qualification {
-        margin-bottom: 5px;
-      }
-
-      .fees,
-      .id,
-      .mobile,
-      .language,
-      .sex {
-        margin-bottom: 5px;
-      }
-
-      .appointments {
-        text-align: center;
-      }
-
-      .slot-container {
-        max-width: 50%;
-      }
-      /* Add modern 3D look to rounded rectangles */
-      .slot-item {
-        background-color: #00b2c8;
-        border-radius: 25px;
-        padding: 30px; /* Increase padding */
-        margin-bottom: 20px;
-        cursor: pointer;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-      }
-
-      .slot-item:hover {
-        transform: translateY(-5px);
-      }
-
-      .slot-item h3 {
-        color: white;
-      }
-      .date-day {
-        color: white;
-        text-align: center;
-        font-weight: 700;
-      }
+        /* Add custom styles here */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;;
+        }
+        #doctorProfileContainer {
+            margin: 0;
+            max-width: fit-content;
+        }
+        .doctor-profile {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .doctor-image {
+            margin-right: 30px;
+            flex-shrink: 0; /* Prevent image from shrinking */
+            width: 200px; /* Adjust image width */
+            height: fit-content; /* Maintain aspect ratio */
+        }
+        .doctor-image img {
+            border: 2px solid #f8f9fa;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+            z-index: 2;
+        }
+        .doctor-info {
+            flex: 1;
+        }
+        .designation {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .specialization,
+        .experience,
+        .qualification {
+            margin-bottom: 5px;
+        }
+        .fees,
+        .id,
+        .mobile,
+        .language,
+        .sex {
+            margin-bottom: 5px;
+        }
+        .appointments {
+            text-align: center;
+        }
+        .slot-container {
+            max-width: 50%;
+        }
+        /* Add modern 3D look to rounded rectangles */
+        .slot-item {
+            background-color: #00b2c8;
+            border-radius: 25px;
+            padding: 30px; /* Increase padding */
+            margin-bottom: 20px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .slot-item:hover {
+            transform: translateY(-5px);
+        }
+        .slot-item h3 {
+            color: white;
+        }
+        .date-day {
+            color: white;
+            text-align: center;
+            font-weight: 700;
+        }
+        .status {
+            text-align: center;
+            font-size: larger;
+            font-weight: 700;
+        }
+        /* Add a new class for slot timings within the modal */
+        .modal-slot-item {
+            background-color: #00b2c8;
+            border-radius: 25px;
+            padding: 15px; /* Adjust padding */
+            margin-right: 10px; /* Add margin between slot items */
+            margin-bottom: 10px; /* Adjust margin bottom */
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            width: calc(50% - 10px); /* Set width to fit two items in a row */
+        }
+        /* Display a maximum of six slot timings per row */
+        .slot-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="row">
-      <div class="col-lg-6">
-        <div id="doctorProfileContainer">
-          <!-- Doctor's profile will be added dynamically here -->
+        <div class="col-lg-6">
+            <div id="doctorProfileContainer">
+                <!-- Doctor's profile will be added dynamically here -->
+            </div>
         </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="container mt-5 slot-container">
-          <h3 class="text-primary mb-3">Available Booking Dates</h3>
-          <!-- Slots will be added dynamically here -->
+        <div class="col-lg-6">
+            <div class="container mt-5 slot-container">
+                <h3 class="text-primary mb-3">Available Booking Dates</h3>
+                <!-- Slots will be added dynamically here -->
+            </div>
         </div>
-      </div>
+    </div>
+    <div class="modal" id="slotModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Slot Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Slot data will be displayed here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <!-- Add this script tag to include Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-      // Function to get formatted date string in "DD Month" format
-      function getFormattedDate(date) {
-        const options = { day: "numeric", month: "long" };
-        return date.toLocaleDateString("en-US", options);
-      }
+        let slotData = [];
+        // Function to get formatted date string in "DD Month" format
+        function getFormattedDate(dateString) {
+            const year = dateString.substring(0, 4);
+            const month = dateString.substring(4, 6);
+            const day = dateString.substring(6, 8);
 
-      // Function to get the next 6 days including today
-      function getNextSixDays() {
-        const dates = [];
-        for (let i = 0; i < 6; i++) {
-          const date = new Date();
-          date.setDate(date.getDate() + i);
-          dates.push(date);
+            // Create a Date object using the parsed components
+            const date = new Date(`${year}-${month}-${day}`);
+
+            // Format the date as "DD Month"
+            const options = { day: "numeric", month: "long" };
+            return date.toLocaleDateString("en-US", options);
         }
-        return dates;
-      }
 
-      // Function to generate slot items with dates
-      function generateSlotItems() {
-        const slotContainer = document.querySelector(".slot-container");
-        const dates = getNextSixDays();
-
-        // Loop through each date and create a slot item
-        for (let i = 0; i < dates.length; i += 2) {
-          const slotItemPair = document.createElement("div");
-          slotItemPair.classList.add("row", "mb-3");
-
-          for (let j = i; j < Math.min(i + 2, dates.length); j++) {
-            const date = dates[j];
-            const formattedDate = getFormattedDate(date);
-            const dayName = date.toLocaleDateString("en-US", {
-              weekday: "long",
+        // Function to generate slot items with dates
+        function generateSlotItems(slotData) {
+            const slotContainer = document.querySelector(".slot-container");
+            const slots = slotData;
+            // Sort slots based on SCH_DT
+            slots.sort((a, b) => {
+                const dateA = new Date(slotData.SCH_DT);
+                const dateB = new Date(slotData.SCH_DT);
+                return dateA - dateB;
             });
+            console.log(slots);
 
-            const slotItem = document.createElement("div");
-            slotItem.classList.add("col-md-6");
+            for (let i = 0; i < slots.length; i += 2) {
+                const slotItemPair = document.createElement("div");
+                slotItemPair.classList.add("row", "mb-3");
+                for (let j = i; j < Math.min(i + 2, slots.length); j++) {
+                    const slot = slots[j];
+                    const date = new Date(slot.SCH_DT);
+                    const formattedDate = getFormattedDate(slot.SCH_DT);
+                    const dayName = slot.SCH_DAY;
+                    const slotItem = document.createElement("div");
+                    slotItem.classList.add("col-md-6");
 
-            slotItem.innerHTML = `
-        <div class="slot-item" onclick="handleSlotClick()">
-          <div class="date-day">${formattedDate}<br>${dayName}</div>
-        </div>
-      `;
+                    // Determine status text and color based on conditions
+                    let statusText, statusColor;
+                    if (
+                        slot.STATUS === "Booking Available" &&
+                        slot.CHK_IN_STS === "UPCOMING"
+                    ) {
+                        statusText = "Available";
+                        statusColor = "#7BF066";
+                    } else if (
+                        slot.STATUS === "Booking Available" &&
+                        slot.CHK_IN_STS === "IN"
+                    ) {
+                        statusText = "In Clinic";
+                        statusColor = "#7BF066";
+                    } else {
+                        statusText = "Not Available";
+                        statusColor = "red";
+                    }
 
-            slotItemPair.appendChild(slotItem);
-          }
+                    // Modify slotItem HTML to call handleSlotClick with slot data
+                    slotItem.innerHTML = `
+                        <div class="slot-item">
+                            <div class="date-day">${formattedDate}<br>${dayName}</div>
+                            <div class="status" style="color: ${statusColor};">${statusText}</div>
+                        </div>
+                    `;
+                    slotItem.addEventListener("click", () => {
+                        handleSlotClick(slot);
+                    });
 
-          slotContainer.appendChild(slotItemPair);
+                    slotItemPair.appendChild(slotItem);
+                }
+                slotContainer.appendChild(slotItemPair);
+            }
         }
-      }
 
-      // Call the function to generate slot items with dates
-      generateSlotItems();
+        // Modify handleSlotClick function to accept slot data
+        function handleSlotClick(slotdata) {
+            // Get the modal element
+            var modal = document.getElementById('slotModal');
+            var modalContent = modal.querySelector('.modal-body');
+            modalContent.innerHTML = '';
+            const slot = slotdata ? slotdata : null;
 
-      // Make a POST API call to fetch slot data using Axios
-      async function fetchSlotData(drId) {
-        const url = "http://easyhealths.com/api/availdr";
-        const params = {
-          DRID: drId,
-          PHARMAID: "8",
-        };
+            // Check if slot object and its properties are defined
+            if (slot && slot.SLOTS) {
+                // Iterate over each time period array (Morning, Afternoon, Evening)
+                ['Morning', 'Afternoon', 'Evening'].forEach(timePeriod => {
+                    const slotsForPeriod = slot.SLOTS[0][timePeriod];
+                    if (slotsForPeriod && slotsForPeriod.length > 0) {
+                        modalContent.innerHTML += `<h4>${timePeriod} Slots</h4>`;
+                        modalContent.innerHTML += '<div class="slot-section">';
+                        // Iterate over slots for the current time period
+                        slotsForPeriod.forEach(function(timeSlot, index) {
+                            if (index % 6 === 0 && index !== 0) {
+                                modalContent.innerHTML += '</div><div class="slot-section">';
+                            }
+                            modalContent.innerHTML += `<div class="modal-slot-item" data-slot="${JSON.stringify(timeSlot)}">${timeSlot.FROM} - ${timeSlot.TO}</div>`;
+                        });
+                        modalContent.innerHTML += '</div>';
+                    } else {
+                        // Display message if no slots available for the current time period
+                        modalContent.innerHTML += `<h4>${timePeriod} Slots</h4>`;
+                        modalContent.innerHTML += '<div class="no-slots-animation">No slots available</div>';
+                    }
+                });
+            } else {
+                // Handle case where slot data is missing or incorrect
+                modalContent.innerHTML = 'Error: Slot data not available';
+            }
 
-        try {
-          const response = await axios.post(url, params);
-          // Axios automatically throws an error for non-2xx responses, so no need for explicit check
-          const data = response.data;
-          return data;
-        } catch (error) {
-          console.error("Error fetching slot data:", error);
-          return null;
+            // Open the modal
+            var modalInstance = new bootstrap.Modal(modal);
+            modalInstance.show();
         }
-      }
 
-      // Create a function to generate the doctor's profile page
-      async function generateDoctorProfilePage(doctorData) {
-        // Create container element
-        const container = document.createElement("div");
-        container.classList.add("container", "mt-5");
-        const profileContainer = document.getElementById(
-          "doctorProfileContainer"
-        );
-        // Create profile row
-        const profileRow = document.createElement("div");
-        profileRow.classList.add("row", "doctor-profile");
+        // Make a POST API call to fetch slot data using Axios
+        async function fetchSlotData(drId) {
+            const url = "http://easyhealths.com/api/availdrslot";
+            const params = {
+                DRID: drId,
+                PHARMAID: "8",
+            };
 
-        // Create image column
-        const imageCol = document.createElement("div");
-        imageCol.classList.add("col-md-4", "col-sm-12", "doctor-image");
-        const image = document.createElement("img");
-        image.src = doctorData.DR_PHOTO;
-        image.alt = doctorData.DR_NAME;
-        image.classList.add("img-thumbnail");
-        imageCol.appendChild(image);
+            try {
+                const response = await axios.post(url, params);
+                // Axios automatically throws an error for non-2xx responses, so no need for explicit check
+                const data = response.data;
+                return data;
+            } catch (error) {
+                console.error("Error fetching slot data:", error);
+                return null;
+            }
+        }
 
-        // Create info column
-        const infoCol = document.createElement("div");
-        infoCol.classList.add("col-md-8", "col-sm-12", "doctor-info");
-        const nameHeader = document.createElement("h2");
-        nameHeader.textContent = doctorData.DR_NAME;
-        const designationPara = document.createElement("p");
-        designationPara.classList.add("designation");
-        designationPara.textContent = doctorData.DESIGNATION;
-        const specializationDiv = document.createElement("div");
-        specializationDiv.classList.add("specialization");
-        specializationDiv.innerHTML = `<b>Specialization:</b> ${doctorData.D_CATG}`;
-        const experienceDiv = document.createElement("div");
-        experienceDiv.classList.add("experience");
-        experienceDiv.innerHTML = `<b>Experience:</b> ${doctorData.EXPERIENCE}`;
-        const qualificationDiv = document.createElement("div");
-        qualificationDiv.classList.add("qualification");
-        qualificationDiv.innerHTML = `<b>Qualification:</b> ${doctorData.QUALIFICATION}`;
-        const feesDiv = document.createElement("div");
-        feesDiv.classList.add("fees");
-        feesDiv.innerHTML = `<b>Fees:</b> ${doctorData.DR_FEES}`;
-        const idDiv = document.createElement("div");
-        idDiv.classList.add("id");
-        idDiv.innerHTML = `<b>ID:</b> ${doctorData.DR_ID}`;
-        const mobileDiv = document.createElement("div");
-        mobileDiv.classList.add("mobile");
-        mobileDiv.innerHTML = `<b>Mobile:</b> ${doctorData.DR_MOBILE}`;
-        const languageDiv = document.createElement("div");
-        languageDiv.classList.add("language");
-        languageDiv.innerHTML = `<b>Language:</b> ${doctorData.LANGUAGE}`;
-        const sexDiv = document.createElement("div");
-        sexDiv.classList.add("sex");
-        sexDiv.innerHTML = `<b>Sex:</b> ${doctorData.SEX}`;
-        const appointmentButton = document.createElement("button");
-        appointmentButton.type = "button";
-        appointmentButton.classList.add(
-          "btn",
-          "btn-primary",
-          "book-appointment"
-        );
-        appointmentButton.textContent = "Book Appointment";
-        appointmentButton.dataset.bsToggle = "modal";
-        appointmentButton.dataset.bsTarget = "#appointmentModal";
+        // Create a function to generate the doctor's profile page
+        async function generateDoctorProfilePage(doctorData) {
+            // Create container element
+            const container = document.createElement("div");
+            container.classList.add("container", "mt-5");
+            const profileContainer = document.getElementById(
+                "doctorProfileContainer"
+            );
+            // Create profile row
+            const profileRow = document.createElement("div");
+            profileRow.classList.add("row", "doctor-profile");
 
-        // Append elements to info column
-        infoCol.appendChild(nameHeader);
-        infoCol.appendChild(designationPara);
-        infoCol.appendChild(specializationDiv);
-        infoCol.appendChild(experienceDiv);
-        infoCol.appendChild(qualificationDiv);
-        infoCol.appendChild(feesDiv);
-        infoCol.appendChild(idDiv);
-        infoCol.appendChild(mobileDiv);
-        infoCol.appendChild(languageDiv);
-        infoCol.appendChild(sexDiv);
-        infoCol.appendChild(appointmentButton);
+            // Create image column
+            const imageCol = document.createElement("div");
+            imageCol.classList.add("col-md-4", "col-sm-12", "doctor-image");
+            const image = document.createElement("img");
+            image.src = doctorData.DR_PHOTO;
+            image.alt = doctorData.DR_NAME;
+            image.classList.add("img-thumbnail");
+            imageCol.appendChild(image);
 
-        // Append columns to profile row
-        profileRow.appendChild(imageCol);
-        profileRow.appendChild(infoCol);
+            // Create info column
+            const infoCol = document.createElement("div");
+            infoCol.classList.add("col-md-8", "col-sm-12", "doctor-info");
+            const nameHeader = document.createElement("h2");
+            nameHeader.textContent = doctorData.DR_NAME;
+            const designationPara = document.createElement("p");
+            designationPara.classList.add("designation");
+            designationPara.textContent = doctorData.DESIGNATION;
+            const specializationDiv = document.createElement("div");
+            specializationDiv.classList.add("specialization");
+            specializationDiv.innerHTML = `<b>Specialization:</b> ${doctorData.D_CATG}`;
+            const experienceDiv = document.createElement("div");
+            experienceDiv.classList.add("experience");
+            experienceDiv.innerHTML = `<b>Experience:</b> ${doctorData.EXPERIENCE}`;
+            const qualificationDiv = document.createElement("div");
+            qualificationDiv.classList.add("qualification");
+            qualificationDiv.innerHTML = `<b>Qualification:</b> ${doctorData.QUALIFICATION}`;
+            const feesDiv = document.createElement("div");
+            feesDiv.classList.add("fees");
+            feesDiv.innerHTML = `<b>Fees:</b> ${doctorData.DR_FEES}`;
+            const idDiv = document.createElement("div");
+            idDiv.classList.add("id");
+            idDiv.innerHTML = `<b>ID:</b> ${doctorData.DR_ID}`;
+            const mobileDiv = document.createElement("div");
+            mobileDiv.classList.add("mobile");
+            mobileDiv.innerHTML = `<b>Mobile:</b> ${doctorData.DR_MOBILE}`;
+            const languageDiv = document.createElement("div");
+            languageDiv.classList.add("language");
+            languageDiv.innerHTML = `<b>Language:</b> ${doctorData.LANGUAGE}`;
+            const sexDiv = document.createElement("div");
+            sexDiv.classList.add("sex");
+            sexDiv.innerHTML = `<b>Sex:</b> ${doctorData.SEX}`;
+            const appointmentButton = document.createElement("button");
+            appointmentButton.type = "button";
+            appointmentButton.classList.add(
+                "btn",
+                "btn-primary",
+                "book-appointment"
+            );
+            appointmentButton.textContent = "Book Appointment";
+            appointmentButton.dataset.bsToggle = "modal";
+            appointmentButton.dataset.bsTarget = "#appointmentModal";
 
-        // Create slots row (if needed)
-        // You can add this part if you want to include available slots information
+            // Append elements to info column
+            infoCol.appendChild(nameHeader);
+            infoCol.appendChild(designationPara);
+            infoCol.appendChild(specializationDiv);
+            infoCol.appendChild(experienceDiv);
+            infoCol.appendChild(qualificationDiv);
+            infoCol.appendChild(feesDiv);
+            infoCol.appendChild(idDiv);
+            infoCol.appendChild(mobileDiv);
+            infoCol.appendChild(languageDiv);
+            infoCol.appendChild(sexDiv);
+            infoCol.appendChild(appointmentButton);
 
-        // Append rows to container
-        container.appendChild(profileRow);
-        // Append container to body
-        profileContainer.appendChild(container);
-        const slotData = await fetchSlotData(doctorData.DR_ID);
-        console.log(slotData);
-      }
-      // Parse URL parameters to get doctor's data
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      const doctor = Object.fromEntries(urlParams.entries());
-      const doctorData = doctor;
-      generateDoctorProfilePage(doctorData);
-      // Call the function to generate the page
+            // Append columns to profile row
+            profileRow.appendChild(imageCol);
+            profileRow.appendChild(infoCol);
 
-      // Add event listener to handle modal opening
-      document
-        .querySelector(".book-appointment")
-        .addEventListener("click", function () {
-          var myModal = new bootstrap.Modal(
-            document.getElementById("appointmentModal")
-          );
-          myModal.show();
-        });
-      // Add event listener to handle modal closing
-      document
-        .getElementById("appointmentModal")
-        .addEventListener("hidden.bs.modal", function () {
-          // Remove the modal backdrop when the modal is closed
-          document.querySelector(".modal-backdrop").remove();
-        });
+            // Create slots row (if needed)
+            // You can add this part if you want to include available slots information
 
-      // Handle form submission if needed
-      document
-        .getElementById("appointmentForm")
-        .addEventListener("submit", function (event) {
-          // Prevent default form submission
-          event.preventDefault();
-          // Handle form submission logic here
-          // You can use JavaScript to process the form data or send it to a server via AJAX
-          // After processing, you can close the modal if needed:
-          // var myModal = new bootstrap.Modal(document.getElementById('appointmentModal'));
-          // myModal.hide();
-        });
+            // Append rows to container
+            container.appendChild(profileRow);
+            // Append container to body
+            profileContainer.appendChild(container);
+            slotData = await fetchSlotData(doctorData.DR_ID);
+            slotData = slotData.data;
+            // Call the function to generate slot items with dates
+            generateSlotItems(slotData);
 
-      function handleSlotClick() {
-        // You can implement logic here for handling slot click
-        alert("Slot clicked!");
-      }
+            console.log(slotData);
+        }
+        // Parse URL parameters to get doctor's data
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const doctor = Object.fromEntries(urlParams.entries());
+        const doctorData = doctor;
+        generateDoctorProfilePage(doctorData);
+        // Call the function to generate the page
     </script>
-  </body>
+</body>
 </html>
