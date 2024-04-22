@@ -744,7 +744,9 @@
           listItem.appendChild(doctorInfoContainer);
 
           listItem.addEventListener("click", () => {
-            console.log(doctor);
+            console.log(doctor)
+            const queryParams = new URLSearchParams(doctor).toString();
+            window.location.href = `demo.html?${queryParams}`;
           });
 
           searchResults.appendChild(listItem);
