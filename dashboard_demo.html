@@ -40,6 +40,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1); /* Add shadow effect */
       }
 
       .searchbar-container {
@@ -55,7 +56,6 @@
         border: none;
         border-radius: 20px; /* Rounded corners */
         border: 2px solid #ccc; /* Border around search bar */
-        
       }
 
       /* Other styles remain the same */
@@ -159,6 +159,7 @@
       }
 
       .swiper-container {
+        margin-top: 50px;
         width: 100%;
         height: 400px; /* Adjust height of the slider */
       }
@@ -169,30 +170,12 @@
         object-fit: fill; /* Ensure the image covers the entire slide */
       }
 
-      .swiper-button-prev,
-      .swiper-button-next {
-        background: transparent;
-        opacity: 0.55;
-        --swiper-navigation-color: rgba(252, 252, 252, 0.85);
-        transition: opacity 0.3s ease, color 0.3s ease;
-      }
-      .swiper-button-prev:hover,
-      .swiper-button-next:hover {
-        background: transparent;
-        opacity: 0.85;
-        --swiper-navigation-color: #fcfcfc;
-      }
-
       .specialists-container {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 10px; /* Adjust the gap between grid items */
         padding: 20px;
         justify-content: center;
-        overflow-x: auto;
-      }
-      #specialistsContainer {
-        overflow-x: auto;
       }
 
       .specialist {
@@ -396,6 +379,24 @@
         font-weight: normal; /* Adjust font weight */
         text-align: center;
       }
+      .slotitems{
+        width: 12.99%;
+      }
+      .slot-item {
+        padding: 10px;
+        margin-left: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+        cursor: pointer; /* Add pointer cursor */
+        border-radius: 10px;
+      }
+      .slot-item:hover{
+        color: #f0f0f0;
+        background-color: #007bff;
+      }
+      .slot-item .date-day,.slot-item .status{
+        text-align: center;
+        padding: 4px;
+      }
     </style>
   </head>
   <body>
@@ -410,7 +411,7 @@
       <nav class="navbar">
         <!-- Logo -->
         <a class="navbar-brand" href="#">
-          <img src="logo.png" alt="Company Logo" />
+          <img src="logo.png" alt="Company Logo" id="companyLogo" />
         </a>
         <!-- Search Bar with Search Icon -->
         <div class="input-group searchbar-container">
@@ -437,23 +438,20 @@
     </div>
 
     <!-- Slider Container -->
-    <div class="swiper-container">
+    <!-- <div class="swiper-container">
       <div class="swiper-wrapper">
-        <!-- Images will be dynamically added here -->
-      </div>
-      <!-- Add Pagination -->
-      <div class="swiper-pagination"></div>
-    </div>
+
+    </div> -->
 
     <!-- Meet our specialist -->
     <div class="header" style="background-color: #00205b; color: white">
-      Book Doctor By specialists
+      Meet our specialists
       <div class="view-all-btn">
-        <button class="view-more-specialists">View All</button>
+        <a href="#">View All</a>
       </div>
     </div>
     <!-- Specialists Grid -->
-    <div class="specialists-container" id="specialistsContainer">
+    <div class="specialists-container">
       <!-- Data will be dynamically added here -->
     </div>
 
@@ -502,90 +500,28 @@
 
     <script>
       let doctorsData = [];
+      let userData = null;
+      document.addEventListener("DOMContentLoaded", function () {
+        // Check if the user is already logged in
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        if (isLoggedIn) {
+          // Retrieve username from localStorage
+          const username = localStorage.getItem("username");
+          // Do something with the logged-in user's data
+          const storedUserData = localStorage.getItem("userData");
+          console.log(storedUserData);
+          // Access and use the user's data
+          if (storedUserData) {
+            userData = JSON.parse(storedUserData);
+            console.log(userData);
+            // Set the logo URL dynamically
+            const companyLogo = document.getElementById("companyLogo");
+            companyLogo.src = userData.data.LOGO_URL;
+          }
+        }
+      });
       const searchInput = document.getElementById("searchInput");
       const searchResults = document.getElementById("searchResults");
-      let specialistsContainer = document.querySelector(
-        ".specialists-container"
-      );
-      let specialistsData = [];
-
-      // Initial number of specialists to show
-      const initialSpecialistsToShow = 6;
-
-      function generateSpecialistsGrid(startIndex, endIndex) {
-        // Clear existing content before generating new content
-        specialistsContainer.innerHTML = "";
-        console.log(specialistsData);
-        // Loop through the specialistsData array and generate grid elements
-        for (
-          let i = startIndex;
-          i < Math.min(endIndex, specialistsData.length);
-          i++
-        ) {
-          const specialist = specialistsData[i];
-          const specialistDiv = document.createElement("div");
-          specialistDiv.classList.add("specialist");
-          specialistDiv.addEventListener("click", () => {
-            console.log(specialist); // Print specialist data when clicked
-          });
-          const specialistImg = document.createElement("img");
-          specialistImg.src = specialist.PHOTO_URL;
-          const specialistName = document.createElement("p");
-          specialistName.textContent = specialist.SPECIALIST;
-          const specialistDesignation = document.createElement("p");
-          specialistDesignation.textContent = specialist.SPECIALITY;
-          const totalDoctors = document.createElement("p");
-          totalDoctors.textContent = "Total Doctors: " + specialist.TOTAL;
-          specialistDiv.appendChild(specialistImg);
-          specialistDiv.appendChild(specialistName);
-          specialistDiv.appendChild(specialistDesignation);
-          specialistDiv.appendChild(totalDoctors);
-          specialistsContainer.appendChild(specialistDiv);
-        }
-      }
-      // Add event listener to the "View More" button for specialists
-      document
-        .querySelector(".view-more-specialists")
-        .addEventListener("click", function (event) {
-          event.preventDefault();
-          const specialistsContainer = document.getElementById(
-            "specialistsContainer"
-          );
-          const viewMoreButton = this;
-          if (specialistsData.length <= initialSpecialistsToShow) {
-            // If there are no more specialists to show, disable the button
-            viewMoreButton.disabled = true;
-            viewMoreButton.textContent = "No more specialists";
-          } else {
-            console.log(specialistsData.length);
-            // If there are more specialists to show, generate grid elements for all specialists
-            generateSpecialistsGrid(
-              initialSpecialistsToShow,
-              specialistsData.length
-            );
-            // Change button text and functionality
-            viewMoreButton.textContent = "View Less";
-            viewMoreButton.classList.add("view-less-specialists");
-            viewMoreButton.classList.remove("view-more-specialists");
-          }
-        });
-
-      // Add event listener to the "View Less" button for specialists
-      document
-        .querySelector(".view-all-btn")
-        .addEventListener("click", function (event) {
-          event.preventDefault();
-          const viewLessButton = document.querySelector(
-            ".view-less-specialists"
-          );
-          if (viewLessButton) {
-            // If "View Less" button is present, revert to original functionality
-            generateSpecialistsGrid(0, initialSpecialistsToShow);
-            viewLessButton.textContent = "View All";
-            viewLessButton.classList.add("view-more-specialists");
-            viewLessButton.classList.remove("view-less-specialists");
-          }
-        });
       // Function to make a POST request on page load
       window.onload = function () {
         searchInput.click();
@@ -608,7 +544,7 @@
             const sliderData = response.data.data
               ? response.data.data.slider
               : null;
-            specialistsData = response.data.data
+            const specialistsData = response.data.data
               ? response.data.data.specialist
               : null;
             console.log(sliderData);
@@ -623,41 +559,42 @@
               : null;
             doctorsData = doctorSpecialistsData;
             // Populate the slider with images
-            const sliderContainer = document.querySelector(".swiper-wrapper");
-            sliderData.forEach((item) => {
-              const slide = document.createElement("div");
-              slide.classList.add("swiper-slide");
-              const img = document.createElement("img");
-              img.src = item.SLIDER_URL;
-              slide.appendChild(img);
-              sliderContainer.appendChild(slide);
-            });
+            // const sliderContainer = document.querySelector(".swiper-wrapper");
+            // sliderData.forEach((item) => {
+            //   const slide = document.createElement("div");
+            //   slide.classList.add("swiper-slide");
+            //   const img = document.createElement("img");
+            //   img.src = item.SLIDER_URL;
+            //   slide.appendChild(img);
+            //   sliderContainer.appendChild(slide);
+            // });
 
-            // Generate grid elements for initial specialists
-            generateSpecialistsGrid(0, initialSpecialistsToShow);
-
-            // for (let i = 0; i < Math.min(specialistsData.length, 6); i++) {
-            //   const specialist = specialistsData[i];
-            //   const specialistDiv = document.createElement("div");
-            //   specialistDiv.classList.add("specialist");
-            //   specialistDiv.addEventListener("click", () => {
-            //     console.log(specialist); // Print specialist data when clicked
-            //   });
-            //   const specialistImg = document.createElement("img");
-            //   specialistImg.src = specialist.PHOTO_URL;
-            //   const specialistName = document.createElement("p");
-            //   specialistName.textContent = specialist.SPECIALIST;
-            //   const specialistDesignation = document.createElement("p");
-            //   specialistDesignation.textContent = specialist.SPECIALITY;
-            //   const totalDoctors = document.createElement("p");
-            //   totalDoctors.textContent = "Total Doctors: " + specialist.TOTAL;
-            //   specialistDiv.appendChild(specialistImg);
-            //   specialistDiv.appendChild(specialistName);
-            //   specialistDiv.appendChild(specialistDesignation);
-            //   specialistDiv.appendChild(totalDoctors);
-            //   specialistsContainer.appendChild(specialistDiv);
-            // }
-            // // Populate the doctors grid for today
+            // Populate the specialists grid
+            const specialistsContainer = document.querySelector(
+              ".specialists-container"
+            );
+            for (let i = 0; i < Math.min(specialistsData.length, 6); i++) {
+              const specialist = specialistsData[i];
+              const specialistDiv = document.createElement("div");
+              specialistDiv.classList.add("specialist");
+              specialistDiv.addEventListener("click", () => {
+                console.log(specialist); // Print specialist data when clicked
+              });
+              const specialistImg = document.createElement("img");
+              specialistImg.src = specialist.PHOTO_URL;
+              const specialistName = document.createElement("p");
+              specialistName.textContent = specialist.SPECIALIST;
+              const specialistDesignation = document.createElement("p");
+              specialistDesignation.textContent = specialist.SPECIALITY;
+              const totalDoctors = document.createElement("p");
+              totalDoctors.textContent = "Total Doctors: " + specialist.TOTAL;
+              specialistDiv.appendChild(specialistImg);
+              specialistDiv.appendChild(specialistName);
+              specialistDiv.appendChild(specialistDesignation);
+              specialistDiv.appendChild(totalDoctors);
+              specialistsContainer.appendChild(specialistDiv);
+            }
+            // Populate the doctors grid for today
             // Populate the doctors grid for today
             const doctorsContainer =
               document.querySelector(".doctors-container");
@@ -747,23 +684,6 @@
               specialistDiv.appendChild(specialistCategory);
               doctorSpecialistsContainer.appendChild(specialistDiv);
             }
-
-            // Initialize Swiper
-            const swiper = new Swiper(".swiper-container", {
-              loop: true, // Enable loop mode
-              autoplay: {
-                delay: 3000, // Auto play delay in milliseconds
-                disableOnInteraction: false, // Enable/disable autoplay on slider interaction
-              },
-              // Navigation arrows
-              navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-              },
-              // pagination: {
-              //     el: '.swiper-pagination', // Specify pagination container
-              // },
-            });
           })
           .catch((error) => {
             // Handle errors
@@ -825,7 +745,58 @@
         });
         console.log(filtered);
 
-        filtered.forEach((doctor) => {
+        if (filtered.length <= 2) {
+          filtered.forEach((doctor) => {
+            const drId = doctor.DR_ID ? doctor.DR_ID : null;
+            console.log(drId);
+            const slotData = fetchData(drId);
+            console.log(slotData);
+            // Using .then() to handle the fulfillment of the promise
+            slotData
+              .then((arrayResult) => {
+                doctor.slotData = arrayResult ? arrayResult : null; // Log the array once the promise is fulfilled
+              })
+              .catch((error) => {
+                console.error("Error fetching array from slotData:", error); // Handle any errors
+              });
+            async function fetchData(drId) {
+              try {
+                const slots = await fetchSlots(drId)
+                  .then((results) => {
+                    return results;
+                  })
+                  .catch((error) => {
+                    // Handle errors if any
+                    console.error("Error fetching array:", error);
+                  });
+                return slots;
+                // Process slot data as needed
+              } catch (error) {
+                console.error("Error fetching slot data:", error);
+                return null;
+              }
+            }
+            console.log(doctor.slotData.length);
+          });
+        }
+        function getFormattedDate(dateString) {
+          const year = dateString.substring(0, 4);
+          const month = dateString.substring(4, 6);
+          const day = dateString.substring(6, 8);
+
+          // Create a Date object using the parsed components
+          const date = new Date(`${year}-${month}-${day}`);
+
+          // Format the date as "DD Month"
+          const options = { day: "numeric", month: "long" };
+          return date.toLocaleDateString("en-US", options);
+        }
+
+        filtered.forEach((doctor, index) => {
+          const drId = doctor.DR_ID ? doctor.DR_ID : null;
+          console.log(drId);
+          const slotData = doctor.slotData ? doctor.slotData: null;
+          console.log(slotData);
           const listItem = document.createElement("li");
 
           const doctorPhotoContainer = document.createElement("div");
@@ -843,9 +814,49 @@
 
           listItem.appendChild(doctorPhotoContainer);
           listItem.appendChild(doctorInfoContainer);
+          slotData.forEach((slot) => {
+            const date = new Date(slot.SCH_DT);
+            const formattedDate = getFormattedDate(slot.SCH_DT);
+            const dayName = slot.SCH_DAY;
+            const slotItem = document.createElement("div");
+            slotItem.classList.add("slotitems")
+            // Determine status text and color based on conditions
+            let statusText, statusColor;
+            if (
+              slot.STATUS === "Booking Available" &&
+              slot.CHK_IN_STS === "UPCOMING"
+            ) {
+              statusText = "Available";
+              statusColor = "#7BF066";
+            } else if (
+              slot.STATUS === "Booking Available" &&
+              slot.CHK_IN_STS === "IN"
+            ) {
+              statusText = "In Clinic";
+              statusColor = "#7BF066";
+            } else {
+              statusText = "Not Available";
+              statusColor = "red";
+            }
 
-          listItem.addEventListener("click", () => {
-            console.log(doctor)
+            // Modify slotItem HTML to call handleSlotClick with slot data
+            slotItem.innerHTML = `
+                        <div class="slot-item">
+                            <div class="date-day">${formattedDate}<br>${dayName}</div>
+                            <div class="status" style="color: ${statusColor};">${statusText}</div>
+                        </div>
+                    `;
+            listItem.appendChild(slotItem);
+            slotItem.addEventListener("click", () => {});
+          });
+
+          doctorPhotoContainer.addEventListener("click", () => {
+            console.log(doctor);
+            const queryParams = new URLSearchParams(doctor).toString();
+            window.location.href = `demo.html?${queryParams}`;
+          });
+          doctorInfoContainer.addEventListener("click", () => {
+            console.log(doctor);
             const queryParams = new URLSearchParams(doctor).toString();
             window.location.href = `demo.html?${queryParams}`;
           });
@@ -854,6 +865,36 @@
         });
 
         searchResults.classList.add("active"); // Show search results
+      }
+
+      // Function to fetch available slots with retry logic
+      async function fetchSlots(drId) {
+        const url = "http://easyhealths.com/api/availdrslot";
+        const params = {
+          DRID: drId,
+          PHARMAID: "8",
+        };
+
+        try {
+          const response = await axios.post(url, params);
+          const data = response.data.data;
+          return data;
+        } catch (error) {
+          if (error.response && error.response.status === 429) {
+            const retryAfter = error.response.headers["retry-after"];
+            if (retryAfter) {
+              const waitTime = parseInt(retryAfter) * 1000; // Convert to milliseconds
+              console.log(
+                `Received 429 error. Retrying after ${retryAfter} seconds...`
+              );
+              await new Promise((resolve) => setTimeout(resolve, waitTime));
+              // Retry the request after waiting
+              return fetchSlots(drId);
+            }
+          }
+          console.error("Error fetching slot data:", error);
+          return null;
+        }
       }
     </script>
   </body>

@@ -97,14 +97,16 @@
         background-color: transparent;
         border: 2px solid black;
         border-radius: 25px;
-        padding: 10px; /* Adjust padding */
+        padding: 5px; /* Adjust padding */
         margin-right: 10px; /* Add margin between slot items */
         margin-bottom: 10px; /* Adjust margin bottom */
         cursor: pointer;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease;
-        width: calc(16.666% - 10px); /* Set width to fit six items in a row */
+        width: calc(20.666% - 10px); /* Set width to fit six items in a row */
         display: inline-block;
+        max-height: 60px;
+        font-size: small;
       }
       /* Display a maximum of six slot timings per row */
       .slot-section {
@@ -122,6 +124,7 @@
       /* Style for availability text */
       .modal-slot-item .availability {
         color: #7bf066; /* Green color */
+        margin: 0;
       }
       #slotModal {
         padding-left: 0px;
@@ -131,7 +134,7 @@
     </style>
   </head>
   <body>
-    <div class="row">
+    <div class="row" style="margin: 0;">
       <div class="col-lg-6">
         <div id="doctorProfileContainer">
           <!-- Doctor's profile will be added dynamically here -->
@@ -145,8 +148,8 @@
       </div>
     </div>
     <div class="modal" id="slotModal" tabindex="-1">
-      <div class="modal-dialog" style="max-width: 100%; margin: 0%">
-        <div class="modal-content">
+      <div class="modal-dialog" style="max-width: 100%; margin: 0%;height: 720px;">
+        <div class="modal-content" style="height: 100%;">
           <button
             type="button"
             class="btn-close"
@@ -210,7 +213,7 @@
           const dateB = new Date(slotData.SCH_DT);
           return dateA - dateB;
         });
-
+        
         for (let i = 0; i < slots.length; i += 2) {
           const slotItemPair = document.createElement("div");
           slotItemPair.classList.add("row", "mb-3");
@@ -334,7 +337,7 @@ modalSlotItems.forEach(slotItem => {
 // Function to handle click event on modal slot item
 function handleModalSlotClick(slotData) {
     // You can perform actions here when a slot item is clicked
-    console.log("Slot clicked:", slotData);
+    console.log(slotData);
     // For example, you can make an appointment, etc.
 }
 

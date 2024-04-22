@@ -277,7 +277,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <!-- Logo -->
       <a class="navbar-brand" href="dashboard.html">
-        <img src="logo.png" alt="Company Logo" />
+        <img src="" alt="Company Logo"  id="companyLogo"/>
       </a>
       <!-- Search and Location Dropdown -->
       <div class="d-flex align-items-center searchfield">
@@ -361,7 +361,7 @@
       </div>
       <!-- User Profile Icon -->
       <div class="user-profile ms-3">
-        <img src="profile-icon.png" alt="User Profile" width="40" height="40" />
+        <img src="profile-icon.png" alt="User Profile" width="40" height="40"/>
         <span class="username">Username</span>
       </div>
     </nav>
@@ -457,7 +457,26 @@
       let searchData = [];
       let doctorData = []; // Array to store data with field_type 'doctor'
       let labTestData = []; // Array to store data with field_type other than 'doctor'
+      let userData = null;
+      document.addEventListener("DOMContentLoaded", function () {
+        // Check if the user is already logged in
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        if (isLoggedIn) {
+          // Retrieve username from localStorage
+          const username = localStorage.getItem("username");
+          // Do something with the logged-in user's data
+          const storedUserData = localStorage.getItem("userData");
 
+          // Access and use the user's data
+          if (storedUserData) {
+            userData = JSON.parse(storedUserData);
+            console.log(userData);
+            // Set the logo URL dynamically
+            const companyLogo = document.getElementById("companyLogo");
+            companyLogo.src = userData.data.LOGO_URL;
+          }
+        }
+      });
       function handleDoctorsBooking() {
         window.location.href = "doctorsBooking.html";
       }
@@ -786,29 +805,28 @@
       // Listen for key presses
       // Listen for key presses
       // Listen for key presses
-document.addEventListener("keydown", function (event) {
-  // Check if the Shift key is pressed along with another key
-  if (event.shiftKey) {
-    console.log('clicked');
-    switch (event.key) {
-      case "D": // Shift + D for Doctors Booking
-        event.preventDefault(); // Prevent default action
-        handleDoctorsBooking();
-        break;
-      case "T": // Shift + L for Lab Test Booking
-        event.preventDefault(); // Prevent default action
-        handleLabTestBooking();
-        break;
-      case "R": // Shift + T for Report Transfer
-        event.preventDefault(); // Prevent default action
-        window.location.href = "reportTransfer.html";
-        break;
-      default:
-        break;
-    }
-  }
-});
-
+      document.addEventListener("keydown", function (event) {
+        // Check if the Shift key is pressed along with another key
+        if (event.shiftKey) {
+          console.log("clicked");
+          switch (event.key) {
+            case "D": // Shift + D for Doctors Booking
+              event.preventDefault(); // Prevent default action
+              handleDoctorsBooking();
+              break;
+            case "T": // Shift + L for Lab Test Booking
+              event.preventDefault(); // Prevent default action
+              handleLabTestBooking();
+              break;
+            case "R": // Shift + T for Report Transfer
+              event.preventDefault(); // Prevent default action
+              window.location.href = "reportTransfer.html";
+              break;
+            default:
+              break;
+          }
+        }
+      });
     </script>
   </body>
 </html>

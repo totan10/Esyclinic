@@ -32,7 +32,6 @@
         top: 0; /* Position at the top */
         width: 100%; /* Full width */
         z-index: 999; /* Ensure it's above other content */
-       
       }
 
       .navbar {
@@ -171,8 +170,6 @@
         object-fit: fill; /* Ensure the image covers the entire slide */
       }
 
-      
-
       .specialists-container {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -276,7 +273,7 @@
         margin: 5px 0;
         text-align: center;
       }
-      .fee-book-container{
+      .fee-book-container {
         height: 40px;
         background-color: #00205b;
         position: relative;
@@ -288,19 +285,18 @@
         color: #fff;
         padding: 10px;
         left: 5px;
-        
       }
 
       .book-now-btn {
         position: absolute;
         right: 5px;
         color: #fff;
-        background-color: #00205b;;
+        background-color: #00205b;
         border: none;
         padding: 5px 10px;
         border-radius: 5px;
-        cursor: pointer; 
-        top: 5px; 
+        cursor: pointer;
+        top: 5px;
       }
 
       .book-now-btn:hover {
@@ -383,6 +379,24 @@
         font-weight: normal; /* Adjust font weight */
         text-align: center;
       }
+      .slotitems{
+        width: 12.99%;
+      }
+      .slot-item {
+        padding: 10px;
+        margin-left: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+        cursor: pointer; /* Add pointer cursor */
+        border-radius: 10px;
+      }
+      .slot-item:hover{
+        color: #f0f0f0;
+        background-color: #007bff;
+      }
+      .slot-item .date-day,.slot-item .status{
+        text-align: center;
+        padding: 4px;
+      }
     </style>
   </head>
   <body>
@@ -397,7 +411,7 @@
       <nav class="navbar">
         <!-- Logo -->
         <a class="navbar-brand" href="#">
-          <img src="logo.png" alt="Company Logo" />
+          <img src="logo.png" alt="Company Logo" id="companyLogo" />
         </a>
         <!-- Search Bar with Search Icon -->
         <div class="input-group searchbar-container">
@@ -486,6 +500,26 @@
 
     <script>
       let doctorsData = [];
+      let userData = null;
+      document.addEventListener("DOMContentLoaded", function () {
+        // Check if the user is already logged in
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        if (isLoggedIn) {
+          // Retrieve username from localStorage
+          const username = localStorage.getItem("username");
+          // Do something with the logged-in user's data
+          const storedUserData = localStorage.getItem("userData");
+          console.log(storedUserData);
+          // Access and use the user's data
+          if (storedUserData) {
+            userData = JSON.parse(storedUserData);
+            console.log(userData);
+            // Set the logo URL dynamically
+            const companyLogo = document.getElementById("companyLogo");
+            companyLogo.src = userData.data.LOGO_URL;
+          }
+        }
+      });
       const searchInput = document.getElementById("searchInput");
       const searchResults = document.getElementById("searchResults");
       // Function to make a POST request on page load
@@ -650,19 +684,6 @@
               specialistDiv.appendChild(specialistCategory);
               doctorSpecialistsContainer.appendChild(specialistDiv);
             }
-
-            // Initialize Swiper
-            // const swiper = new Swiper(".swiper-container", {
-            //   loop: true, // Enable loop mode
-            //   autoplay: {
-            //     delay: 3000, // Auto play delay in milliseconds
-            //     disableOnInteraction: false, // Enable/disable autoplay on slider interaction
-            //   },
-
-            //   // pagination: {
-            //   //     el: '.swiper-pagination', // Specify pagination container
-            //   // },
-            // });
           })
           .catch((error) => {
             // Handle errors
@@ -724,7 +745,58 @@
         });
         console.log(filtered);
 
-        filtered.forEach((doctor) => {
+        if (filtered.length <= 2) {
+          filtered.forEach((doctor) => {
+            const drId = doctor.DR_ID ? doctor.DR_ID : null;
+            console.log(drId);
+            const slotData = fetchData(drId);
+            console.log(slotData);
+            // Using .then() to handle the fulfillment of the promise
+            slotData
+              .then((arrayResult) => {
+                doctor.slotData = arrayResult ? arrayResult : null; // Log the array once the promise is fulfilled
+              })
+              .catch((error) => {
+                console.error("Error fetching array from slotData:", error); // Handle any errors
+              });
+            async function fetchData(drId) {
+              try {
+                const slots = await fetchSlots(drId)
+                  .then((results) => {
+                    return results;
+                  })
+                  .catch((error) => {
+                    // Handle errors if any
+                    console.error("Error fetching array:", error);
+                  });
+                return slots;
+                // Process slot data as needed
+              } catch (error) {
+                console.error("Error fetching slot data:", error);
+                return null;
+              }
+            }
+            console.log(doctor.slotData.length);
+          });
+        }
+        function getFormattedDate(dateString) {
+          const year = dateString.substring(0, 4);
+          const month = dateString.substring(4, 6);
+          const day = dateString.substring(6, 8);
+
+          // Create a Date object using the parsed components
+          const date = new Date(`${year}-${month}-${day}`);
+
+          // Format the date as "DD Month"
+          const options = { day: "numeric", month: "long" };
+          return date.toLocaleDateString("en-US", options);
+        }
+
+        filtered.forEach((doctor, index) => {
+          const drId = doctor.DR_ID ? doctor.DR_ID : null;
+          console.log(drId);
+          const slotData = doctor.slotData ? doctor.slotData: null;
+          console.log(slotData);
           const listItem = document.createElement("li");
 
           const doctorPhotoContainer = document.createElement("div");
@@ -742,9 +814,49 @@
 
           listItem.appendChild(doctorPhotoContainer);
           listItem.appendChild(doctorInfoContainer);
+          slotData.forEach((slot) => {
+            const date = new Date(slot.SCH_DT);
+            const formattedDate = getFormattedDate(slot.SCH_DT);
+            const dayName = slot.SCH_DAY;
+            const slotItem = document.createElement("div");
+            slotItem.classList.add("slotitems")
+            // Determine status text and color based on conditions
+            let statusText, statusColor;
+            if (
+              slot.STATUS === "Booking Available" &&
+              slot.CHK_IN_STS === "UPCOMING"
+            ) {
+              statusText = "Available";
+              statusColor = "#7BF066";
+            } else if (
+              slot.STATUS === "Booking Available" &&
+              slot.CHK_IN_STS === "IN"
+            ) {
+              statusText = "In Clinic";
+              statusColor = "#7BF066";
+            } else {
+              statusText = "Not Available";
+              statusColor = "red";
+            }
 
-          listItem.addEventListener("click", () => {
-            console.log(doctor)
+            // Modify slotItem HTML to call handleSlotClick with slot data
+            slotItem.innerHTML = `
+                        <div class="slot-item">
+                            <div class="date-day">${formattedDate}<br>${dayName}</div>
+                            <div class="status" style="color: ${statusColor};">${statusText}</div>
+                        </div>
+                    `;
+            listItem.appendChild(slotItem);
+            slotItem.addEventListener("click", () => {});
+          });
+
+          doctorPhotoContainer.addEventListener("click", () => {
+            console.log(doctor);
+            const queryParams = new URLSearchParams(doctor).toString();
+            window.location.href = `demo.html?${queryParams}`;
+          });
+          doctorInfoContainer.addEventListener("click", () => {
+            console.log(doctor);
             const queryParams = new URLSearchParams(doctor).toString();
             window.location.href = `demo.html?${queryParams}`;
           });
@@ -753,6 +865,36 @@
         });
 
         searchResults.classList.add("active"); // Show search results
+      }
+
+      // Function to fetch available slots with retry logic
+      async function fetchSlots(drId) {
+        const url = "http://easyhealths.com/api/availdrslot";
+        const params = {
+          DRID: drId,
+          PHARMAID: "8",
+        };
+
+        try {
+          const response = await axios.post(url, params);
+          const data = response.data.data;
+          return data;
+        } catch (error) {
+          if (error.response && error.response.status === 429) {
+            const retryAfter = error.response.headers["retry-after"];
+            if (retryAfter) {
+              const waitTime = parseInt(retryAfter) * 1000; // Convert to milliseconds
+              console.log(
+                `Received 429 error. Retrying after ${retryAfter} seconds...`
+              );
+              await new Promise((resolve) => setTimeout(resolve, waitTime));
+              // Retry the request after waiting
+              return fetchSlots(drId);
+            }
+          }
+          console.error("Error fetching slot data:", error);
+          return null;
+        }
       }
     </script>
   </body>
