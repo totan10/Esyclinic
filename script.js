@@ -38,9 +38,9 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Check if the user is already logged in
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
-  if (isLoggedIn) {
-      // Redirect to dashboard page if already logged in
-     window.location.href = "dashboard.html";
-  }
+//   const isLoggedIn = localStorage.getItem("isLoggedIn");
+//   if (isLoggedIn) {
+//       // Redirect to dashboard page if already logged in
+//      window.location.href = "dashboard.html";
+//   }
 });

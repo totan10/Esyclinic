@@ -70,7 +70,7 @@
       .slot-item {
         background-color: #00b2c8;
         border-radius: 25px;
-        padding: 40px; /* Increase padding */
+        padding: 30px; /* Increase padding */
         margin-bottom: 20px;
         cursor: pointer;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -86,10 +86,11 @@
         color: white;
         text-align: center;
         font-weight: 700;
+        font-size: x-large;
       }
       .status {
         text-align: center;
-        font-size: larger;
+        font-size: x-large;
         font-weight: 700;
       }
       /* Add a new class for slot timings within the modal */
@@ -117,7 +118,7 @@
       /* Style for timing text */
       .modal-slot-item span {
         color: #00b2c8; /* Blue color */
-
+        text-align: center;
         display: block;
         margin-bottom: 5px;
       }
@@ -125,6 +126,7 @@
       .modal-slot-item .availability {
         color: #7bf066; /* Green color */
         margin: 0;
+        text-align: center;
       }
       #slotModal {
         padding-left: 0px;
@@ -213,10 +215,12 @@
           const dateB = new Date(slotData.SCH_DT);
           return dateA - dateB;
         });
-        
+
+        console.log("slots data:",slots);
         for (let i = 0; i < slots.length; i += 2) {
           const slotItemPair = document.createElement("div");
           slotItemPair.classList.add("row", "mb-3");
+          slotItemPair.innerHTML=`<h1>hello</h1>`
           for (let j = i; j < Math.min(i + 2, slots.length); j++) {
             const slot = slots[j];
             const date = new Date(slot.SCH_DT);
@@ -251,8 +255,10 @@
                             <div class="status" style="color: ${statusColor};">${statusText}</div>
                         </div>
                     `;
+                    console.log("Slots",slotItem);
             slotItem.addEventListener("click", () => {
-              handleSlotClick(slot);
+              //handleSlotClick(slot);
+              console.log("hi");
             });
 
             slotItemPair.appendChild(slotItem);
@@ -413,16 +419,16 @@ function handleModalSlotClick(slotData) {
         const sexDiv = document.createElement("div");
         sexDiv.classList.add("sex");
         sexDiv.innerHTML = `<b>Sex:</b> ${doctorData.SEX}`;
-        const appointmentButton = document.createElement("button");
-        appointmentButton.type = "button";
-        appointmentButton.classList.add(
-          "btn",
-          "btn-primary",
-          "book-appointment"
-        );
-        appointmentButton.textContent = "Book Appointment";
-        appointmentButton.dataset.bsToggle = "modal";
-        appointmentButton.dataset.bsTarget = "#appointmentModal";
+        // const appointmentButton = document.createElement("button");
+        // appointmentButton.type = "button";
+        // appointmentButton.classList.add(
+        //   "btn",
+        //   "btn-primary",
+        //   "book-appointment"
+        // );
+        // appointmentButton.textContent = "Book Appointment";
+        // appointmentButton.dataset.bsToggle = "modal";
+        // appointmentButton.dataset.bsTarget = "#appointmentModal";
 
         // Append elements to info column
         infoCol.appendChild(nameHeader);
@@ -435,7 +441,7 @@ function handleModalSlotClick(slotData) {
         infoCol.appendChild(mobileDiv);
         infoCol.appendChild(languageDiv);
         infoCol.appendChild(sexDiv);
-        infoCol.appendChild(appointmentButton);
+        //infoCol.appendChild(appointmentButton);
 
         // Append columns to profile row
         profileRow.appendChild(imageCol);
