@@ -96,18 +96,17 @@
       /* Add a new class for slot timings within the modal */
       .modal-slot-item {
         background-color: transparent;
-        border: 2px solid black;
+        border: 2px solid rgb(54, 53, 53);
         border-radius: 25px;
         padding: 5px; /* Adjust padding */
         margin-right: 10px; /* Add margin between slot items */
         margin-bottom: 10px; /* Adjust margin bottom */
         cursor: pointer;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
         transition: transform 0.3s ease;
-        width: calc(20.666% - 10px); /* Set width to fit six items in a row */
-        display: inline-block;
-        max-height: 60px;
+        /* width: calc(20.666% - 10px); Set width to fit six items in a row */
         font-size: small;
+        width: 23%;
       }
       /* Display a maximum of six slot timings per row */
       .slot-section {
@@ -117,26 +116,46 @@
       }
       /* Style for timing text */
       .modal-slot-item span {
-        color: #00b2c8; /* Blue color */
+        color: #1b18b0; /* Blue color */
         text-align: center;
         display: block;
         margin-bottom: 5px;
+        font-size: medium;
       }
       /* Style for availability text */
       .modal-slot-item .availability {
-        color: #7bf066; /* Green color */
+        color: rgb(3, 83, 3); /* Green color */
         margin: 0;
         text-align: center;
+        font-size: medium;
+      }
+      .modal-slot-item:hover{
+        transform: translateY(-5px);
+        background-color: #00b2c8;
+        
+      }
+      .modal-slot-item span:hover{
+        color: white;
       }
       #slotModal {
         padding-left: 0px;
         width: 50%;
         margin-left: 50%;
       }
+      .slotTime {
+        display: none;
+        transition: max-height 0.5s ease; /* Add transition effect for opening and closing */
+        overflow: hidden; /* Hide overflowing content */
+      }
+
+      .slotTime.active {
+        display: block;
+        max-height: 2000px; /* Adjust the max height as per your content */
+      }
     </style>
   </head>
   <body>
-    <div class="row" style="margin: 0;">
+    <div class="row" style="margin: 0">
       <div class="col-lg-6">
         <div id="doctorProfileContainer">
           <!-- Doctor's profile will be added dynamically here -->
@@ -150,8 +169,11 @@
       </div>
     </div>
     <div class="modal" id="slotModal" tabindex="-1">
-      <div class="modal-dialog" style="max-width: 100%; margin: 0%;height: 720px;">
-        <div class="modal-content" style="height: 100%;">
+      <div
+        class="modal-dialog"
+        style="max-width: 100%; margin: 0%; height: 720px"
+      >
+        <div class="modal-content" style="height: 100%">
           <button
             type="button"
             class="btn-close"
@@ -206,9 +228,10 @@
 
       // Function to generate slot items with dates
       function generateSlotItems(slotData) {
+        console.log(slotData);
         const slotContainer = document.querySelector(".slot-container");
         const slots = slotData;
-        
+
         // Sort slots based on SCH_DT
         slots.sort((a, b) => {
           const dateA = new Date(slotData.SCH_DT);
@@ -216,11 +239,13 @@
           return dateA - dateB;
         });
 
-        console.log("slots data:",slots);
+        console.log("slots data:", slots);
         for (let i = 0; i < slots.length; i += 2) {
           const slotItemPair = document.createElement("div");
+          const slotItemTimings = document.createElement("div");
+          const rowclass = "row" + i;
+          slotItemTimings.classList.add("row", "slotTime", rowclass);
           slotItemPair.classList.add("row", "mb-3");
-          slotItemPair.innerHTML=`<h1>hello</h1>`
           for (let j = i; j < Math.min(i + 2, slots.length); j++) {
             const slot = slots[j];
             const date = new Date(slot.SCH_DT);
@@ -255,99 +280,164 @@
                             <div class="status" style="color: ${statusColor};">${statusText}</div>
                         </div>
                     `;
-                    console.log("Slots",slotItem);
-            slotItem.addEventListener("click", () => {
+            console.log("Slots", slotItem);
+            slotItem.addEventListener("mouseover", () => {
               //handleSlotClick(slot);
-              console.log("hi");
+              console.log(j, rowclass);
+              generateSlotTimes(slot, j, rowclass);
+            });
+            slotItem.addEventListener("mouseout", () => {
+              const slotContainer = document.querySelector(`.${rowclass}`);
+              slotContainer.classList.remove("active"); // Remove 'active' class to trigger transition
             });
 
             slotItemPair.appendChild(slotItem);
             slotItems.push(slotItem);
           }
           slotContainer.appendChild(slotItemPair);
+          slotContainer.appendChild(slotItemTimings);
         }
       }
 
-      // Modify handleSlotClick function to accept slot data
-      function handleSlotClick(slotdata) {
-    // Get the modal element
-    var modal = document.getElementById("slotModal");
-    var modalContent = modal.querySelector(".modal-body");
-    modalContent.innerHTML = "";
-    const slot = slotdata ? slotdata : null;
-
-    // Check if slot object and its properties are defined
-    if (slot && slot.SLOTS) {
-        // Define image URLs for each time period
-        const iconUrls = {
+      function generateSlotTimes(slotData, j, rowclass) {
+        const slottime = document.getElementsByClassName("slotTime");
+        console.log(slottime);
+        for (let i = 0; i < slottime.length; i++) {
+          slottime[i].style.display = "none";
+        }
+        const slotContainer = document.querySelector(`.${rowclass}`);
+        slotContainer.classList.add("active"); // Add 'active' class to trigger transition
+        slotContainer.innerHTML = ``;
+        slotContainer.style.display = "block";
+        const slot = slotData;
+        if (slot && slot.SLOTS) {
+          const iconUrls = {
             Morning: "/morning_icon.jpeg",
             Afternoon: "/afternoon_icon.jpeg",
             Evening: "/evening_icon.jpeg",
-        };
+          };
 
-        // Iterate over each time period array (Morning, Afternoon, Evening)
-        ["Morning", "Afternoon", "Evening"].forEach((timePeriod) => {
+          ["Morning", "Afternoon", "Evening"].forEach((timePeriod) => {
             const slotsForPeriod = slot.SLOTS[0][timePeriod];
-
             if (slotsForPeriod && slotsForPeriod.length > 0) {
-                const iconUrl = iconUrls[timePeriod];
-                modalContent.innerHTML += `<h4><img src="${iconUrl}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
-                modalContent.innerHTML += '<div class="slot-section">';
-                // Iterate over slots for the current time period
-                slotsForPeriod.forEach(function (timeSlot, index) {
-                    if (index % 6 === 0 && index !== 0) {
-                        modalContent.innerHTML += '</div><div class="slot-section">';
-                    }
-
-                    const slotItem = document.createElement("div");
-                    slotItem.classList.add("modal-slot-item");
-                    slotItem.dataset.slot = JSON.stringify(timeSlot);
-                    slotItem.innerHTML = `
+              const iconUrl = iconUrls[timePeriod];
+              slotContainer.innerHTML += `<h4><img src="${iconUrl}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
+              slotContainer.innerHTML += '<div class="slot-section">';
+              // Iterate over slots for the current time period
+              console.log(slotsForPeriod);
+              for (let i = 0; i < slotsForPeriod.length; i += 4) {
+                const slotItemPair = document.createElement("div");
+                slotItemPair.classList.add("row", "mb-3");
+                for (
+                  let j = i;
+                  j < Math.min(i + 4, slotsForPeriod.length);
+                  j++
+                ) {
+                  const timeSlot = slotsForPeriod[j];
+                  const slotItem = document.createElement("div");
+                  slotItem.classList.add("modal-slot-item", "col-md-3");
+                  slotItem.dataset.slot = JSON.stringify(timeSlot);
+                  slotItem.innerHTML = `
                         <span>${timeSlot.FROM} - ${timeSlot.TO}</span>
                         <div class="availability">Available</div>
                     `;
-                    console.log(slotItem);
-                    
-
-                    modalContent.appendChild(slotItem);
-                    // Add click event listener to the slot item
-                    slotItem.addEventListener("click", () => {
-                      console.log(timeSlot);
-                        handleModalSlotClick(timeSlot);
-                    });
-                });
-                modalContent.innerHTML += "</div>";
+                  slotItemPair.appendChild(slotItem);
+                }
+                slotContainer.appendChild(slotItemPair);
+              }
             } else {
-                // Display message if no slots available for the current time period
-                modalContent.innerHTML += `<h4><img src="${iconUrls[timePeriod]}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
-                modalContent.innerHTML += '<div class="no-slots-animation">No slots available</div>';
+              // Display message if no slots available for the current time period
+              slotContainer.innerHTML += `<h4><img src="${iconUrls[timePeriod]}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
+              slotContainer.innerHTML +=
+                '<div class="no-slots-animation">No slots available</div>';
             }
+          });
+        } else {
+          // Handle case where slot data is missing or incorrect
+          slotContainer.innerHTML = "Error: Slot data not available";
+        }
+      }
+      // Modify handleSlotClick function to accept slot data
+      function handleSlotClick(slotdata) {
+        // Get the modal element
+        var modal = document.getElementById("slotModal");
+        var modalContent = modal.querySelector(".modal-body");
+        modalContent.innerHTML = "";
+        const slot = slotdata ? slotdata : null;
+
+        // Check if slot object and its properties are defined
+        if (slot && slot.SLOTS) {
+          // Define image URLs for each time period
+          const iconUrls = {
+            Morning: "/morning_icon.jpeg",
+            Afternoon: "/afternoon_icon.jpeg",
+            Evening: "/evening_icon.jpeg",
+          };
+
+          // Iterate over each time period array (Morning, Afternoon, Evening)
+          ["Morning", "Afternoon", "Evening"].forEach((timePeriod) => {
+            const slotsForPeriod = slot.SLOTS[0][timePeriod];
+
+            if (slotsForPeriod && slotsForPeriod.length > 0) {
+              const iconUrl = iconUrls[timePeriod];
+              modalContent.innerHTML += `<h4><img src="${iconUrl}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
+              modalContent.innerHTML += '<div class="slot-section">';
+              // Iterate over slots for the current time period
+              slotsForPeriod.forEach(function (timeSlot, index) {
+                if (index % 6 === 0 && index !== 0) {
+                  modalContent.innerHTML += '</div><div class="slot-section">';
+                }
+
+                const slotItem = document.createElement("div");
+                slotItem.classList.add("modal-slot-item");
+                slotItem.dataset.slot = JSON.stringify(timeSlot);
+                slotItem.innerHTML = `
+                        <span>${timeSlot.FROM} - ${timeSlot.TO}</span>
+                        <div class="availability">Available</div>
+                    `;
+                console.log(slotItem);
+
+                modalContent.appendChild(slotItem);
+                // Add click event listener to the slot item
+                slotItem.addEventListener("click", () => {
+                  console.log(timeSlot);
+                  handleModalSlotClick(timeSlot);
+                });
+              });
+              modalContent.innerHTML += "</div>";
+            } else {
+              // Display message if no slots available for the current time period
+              modalContent.innerHTML += `<h4><img src="${iconUrls[timePeriod]}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
+              modalContent.innerHTML +=
+                '<div class="no-slots-animation">No slots available</div>';
+            }
+          });
+        } else {
+          // Handle case where slot data is missing or incorrect
+          modalContent.innerHTML = "Error: Slot data not available";
+        }
+        // Attach event listeners after slot items are added
+        const modalSlotItems =
+          modalContent.querySelectorAll(".modal-slot-item");
+        modalSlotItems.forEach((slotItem) => {
+          slotItem.addEventListener("click", () => {
+            console.log(slotItem.dataset.slot);
+            handleModalSlotClick(JSON.parse(slotItem.dataset.slot));
+          });
         });
-    } else {
-        // Handle case where slot data is missing or incorrect
-        modalContent.innerHTML = "Error: Slot data not available";
-    }
-    // Attach event listeners after slot items are added
-const modalSlotItems = modalContent.querySelectorAll('.modal-slot-item');
-modalSlotItems.forEach(slotItem => {
-    slotItem.addEventListener("click", () => {
-        console.log(slotItem.dataset.slot);
-        handleModalSlotClick(JSON.parse(slotItem.dataset.slot));
-    });
-});
-    // Open the modal
-    var modalInstance = new bootstrap.Modal(modal);
-    modalInstance.show();
-}
+        // Open the modal
+        var modalInstance = new bootstrap.Modal(modal);
+        modalInstance.show();
+      }
 
-// Function to handle click event on modal slot item
-function handleModalSlotClick(slotData) {
-    // You can perform actions here when a slot item is clicked
-    console.log(slotData);
-    // For example, you can make an appointment, etc.
-}
+      // Function to handle click event on modal slot item
+      function handleModalSlotClick(slotData) {
+        // You can perform actions here when a slot item is clicked
+        console.log(slotData);
+        // For example, you can make an appointment, etc.
+      }
 
-// Make a POST API call to fetch slot data using Axios
+      // Make a POST API call to fetch slot data using Axios
       async function fetchSlotData(drId) {
         const url = "http://easyhealths.com/api/availdrslot";
         const params = {
@@ -466,8 +556,6 @@ function handleModalSlotClick(slotData) {
       const doctorData = doctor;
       generateDoctorProfilePage(doctorData);
       // Call the function to generate the page
-
-    
     </script>
   </body>
 </html>

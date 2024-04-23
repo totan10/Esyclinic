@@ -278,12 +278,20 @@
                         <span>${timeSlot.FROM} - ${timeSlot.TO}</span>
                         <div class="availability">Available</div>
                     `;
-                    slotItemPair.appendChild(slotItem)
+                      slotItemPair.appendChild(slotItem);
                     }
-                    slotContainer.appendChild(slotItemPair)
+                    slotContainer.appendChild(slotItemPair);
                   }
+                } else {
+                  // Display message if no slots available for the current time period
+                  slotContainer.innerHTML += `<h4><img src="${iconUrls[timePeriod]}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
+                  slotContainer.innerHTML +=
+                    '<div class="no-slots-animation">No slots available</div>';
                 }
               });
+            } else {
+              // Handle case where slot data is missing or incorrect
+              slotContainer.innerHTML = "Error: Slot data not available";
             }
           }
           // Function to parse query string into object
