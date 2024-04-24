@@ -525,10 +525,38 @@
           }
         }
       });
+      function populateDoctors() {
+        const url = "http://easyhealths.com/api/searchDoctorTest";
+        const params = {
+          PHARMA_ID: 8,
+        };
+
+        axios
+          .post(url, params)
+          .then((response) => {
+            const data = response.data.data;
+            console.log(data);
+            const filteredArray = data.filter(
+              (item) => item.FIELD_TYPE === "Doctor"
+            );
+            const filteredDoctors = filteredArray.map((item) => {
+              return item.DETAILS;
+            });
+            console.log(filteredDoctors);
+           doctorsData= filteredDoctors;
+           console.log(doctorsData);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            return null;
+          });
+      }
       const searchInput = document.getElementById("searchInput");
       const searchResults = document.getElementById("searchResults");
       // Function to make a POST request on page load
       window.onload = function () {
+        populateDoctors();
+        console.log(doctorsData);
         searchInput.click();
         searchInput.focus();
         // Your API endpoint URL
@@ -562,7 +590,7 @@
             const doctorSpecialistsData = response.data.data
               ? response.data.data.total_doctor
               : null;
-            doctorsData = doctorSpecialistsData;
+
             // Populate the slider with images
             // const sliderContainer = document.querySelector(".swiper-wrapper");
             // sliderData.forEach((item) => {
@@ -750,39 +778,39 @@
         });
         console.log(filtered);
 
-        if (filtered.length <= 2) {
-          filtered.forEach((doctor) => {
-            const drId = doctor.DR_ID ? doctor.DR_ID : null;
+        // if (filtered.length <= 2) {
+        //   filtered.forEach((doctor) => {
+        //     const drId = doctor.DR_ID ? doctor.DR_ID : null;
 
-            const slotData = fetchData(drId);
+        //     const slotData = fetchData(drId);
 
-            // Using .then() to handle the fulfillment of the promise
-            slotData
-              .then((arrayResult) => {
-                doctor.slotData = arrayResult ? arrayResult : null; // Log the array once the promise is fulfilled
-              })
-              .catch((error) => {
-                console.error("Error fetching array from slotData:", error); // Handle any errors
-              });
-            async function fetchData(drId) {
-              try {
-                const slots = await fetchSlots(drId)
-                  .then((results) => {
-                    return results;
-                  })
-                  .catch((error) => {
-                    // Handle errors if any
-                    console.error("Error fetching array:", error);
-                  });
-                return slots;
-                // Process slot data as needed
-              } catch (error) {
-                console.error("Error fetching slot data:", error);
-                return null;
-              }
-            }
-          });
-        }
+        //     // Using .then() to handle the fulfillment of the promise
+        //     slotData
+        //       .then((arrayResult) => {
+        //         doctor.slotData = arrayResult ? arrayResult : null; // Log the array once the promise is fulfilled
+        //       })
+        //       .catch((error) => {
+        //         console.error("Error fetching array from slotData:", error); // Handle any errors
+        //       });
+        //     async function fetchData(drId) {
+        //       try {
+        //         const slots = await fetchSlots(drId)
+        //           .then((results) => {
+        //             return results;
+        //           })
+        //           .catch((error) => {
+        //             // Handle errors if any
+        //             console.error("Error fetching array:", error);
+        //           });
+        //         return slots;
+        //         // Process slot data as needed
+        //       } catch (error) {
+        //         console.error("Error fetching slot data:", error);
+        //         return null;
+        //       }
+        //     }
+        //   });
+        // }
         function getFormattedDate(dateString) {
           const year = dateString.substring(0, 4);
           const month = dateString.substring(4, 6);
@@ -799,7 +827,7 @@
         filtered.forEach((doctor, index) => {
           const drId = doctor.DR_ID ? doctor.DR_ID : null;
           console.log(drId);
-          const slotData = doctor.slotData ? doctor.slotData : null;
+          const slotData = doctor.SCH_DT ? doctor.SCH_DT : null;
           console.log(slotData);
           const listItem = document.createElement("li");
 
@@ -853,14 +881,13 @@
             listItem.appendChild(slotItem);
             slotItem.addEventListener("click", () => {
               const doctordata = doctor ? doctor : null;
-              doctordata.slotData = slot ? slot : null;
-              console.log(doctordata);
+              
               // Function to convert object to query string
               function objectToQueryString(obj) {
                 const keyValuePairs = [];
                 for (const key in obj) {
                   if (Object.hasOwnProperty.call(obj, key)) {
-                    if (key === "slotData") {
+                    if (key === "SCH_DT") {
                       // Convert slotData object to JSON string
                       keyValuePairs.push(
                         `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`

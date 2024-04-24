@@ -103,16 +103,19 @@
         margin-bottom: 10px; /* Adjust margin bottom */
         cursor: pointer;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-        transition: transform 0.3s ease;
-        /* width: calc(20.666% - 10px); Set width to fit six items in a row */
-        font-size: small;
+        transition: transform 0.3s ease, background-color 0.3s ease; /* Add transition for transform and background-color */
         width: 23%;
       }
       /* Display a maximum of six slot timings per row */
       .slot-section {
-        display: inline-block;
+        display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
+        opacity: 0; /* Initially hide the slots */
+        transition: opacity 0.3s ease; /* Add transition effect for opacity */
+      }
+      .slot-section.active {
+        opacity: 1; /* Show the slots when active */
       }
       /* Style for timing text */
       .modal-slot-item span {
@@ -121,6 +124,7 @@
         display: block;
         margin-bottom: 5px;
         font-size: medium;
+        transition: color 0.3s ease; /* Add transition for color change */
       }
       /* Style for availability text */
       .modal-slot-item .availability {
@@ -129,13 +133,12 @@
         text-align: center;
         font-size: medium;
       }
-      .modal-slot-item:hover{
+      .modal-slot-item:hover {
         transform: translateY(-5px);
-        background-color: #00b2c8;
-        
+        background-color: #00b2c8; /* Change background color on hover */
       }
-      .modal-slot-item span:hover{
-        color: white;
+      .modal-slot-item:hover span {
+        color: white; /* Change text color on hover */
       }
       #slotModal {
         padding-left: 0px;
@@ -144,13 +147,15 @@
       }
       .slotTime {
         display: none;
-        transition: max-height 0.5s ease; /* Add transition effect for opening and closing */
+        max-height: 0;
+        transition: max-height 1s ease; /* Add transition effect for opening and closing */
         overflow: hidden; /* Hide overflowing content */
       }
 
       .slotTime.active {
         display: block;
         max-height: 2000px; /* Adjust the max height as per your content */
+        transition: max-height 1s ease;
       }
     </style>
   </head>
@@ -281,12 +286,12 @@
                         </div>
                     `;
             console.log("Slots", slotItem);
-            slotItem.addEventListener("mouseover", () => {
+            slotItem.addEventListener("mouseenter", () => {
               //handleSlotClick(slot);
               console.log(j, rowclass);
               generateSlotTimes(slot, j, rowclass);
             });
-            slotItem.addEventListener("mouseout", () => {
+            slotItem.addEventListener("click", () => {
               const slotContainer = document.querySelector(`.${rowclass}`);
               slotContainer.classList.remove("active"); // Remove 'active' class to trigger transition
             });
@@ -358,79 +363,79 @@
         }
       }
       // Modify handleSlotClick function to accept slot data
-      function handleSlotClick(slotdata) {
-        // Get the modal element
-        var modal = document.getElementById("slotModal");
-        var modalContent = modal.querySelector(".modal-body");
-        modalContent.innerHTML = "";
-        const slot = slotdata ? slotdata : null;
+      // function handleSlotClick(slotdata) {
+      //   // Get the modal element
+      //   var modal = document.getElementById("slotModal");
+      //   var modalContent = modal.querySelector(".modal-body");
+      //   modalContent.innerHTML = "";
+      //   const slot = slotdata ? slotdata : null;
 
-        // Check if slot object and its properties are defined
-        if (slot && slot.SLOTS) {
-          // Define image URLs for each time period
-          const iconUrls = {
-            Morning: "/morning_icon.jpeg",
-            Afternoon: "/afternoon_icon.jpeg",
-            Evening: "/evening_icon.jpeg",
-          };
+      //   // Check if slot object and its properties are defined
+      //   if (slot && slot.SLOTS) {
+      //     // Define image URLs for each time period
+      //     const iconUrls = {
+      //       Morning: "/morning_icon.jpeg",
+      //       Afternoon: "/afternoon_icon.jpeg",
+      //       Evening: "/evening_icon.jpeg",
+      //     };
 
-          // Iterate over each time period array (Morning, Afternoon, Evening)
-          ["Morning", "Afternoon", "Evening"].forEach((timePeriod) => {
-            const slotsForPeriod = slot.SLOTS[0][timePeriod];
+      //     // Iterate over each time period array (Morning, Afternoon, Evening)
+      //     ["Morning", "Afternoon", "Evening"].forEach((timePeriod) => {
+      //       const slotsForPeriod = slot.SLOTS[0][timePeriod];
 
-            if (slotsForPeriod && slotsForPeriod.length > 0) {
-              const iconUrl = iconUrls[timePeriod];
-              modalContent.innerHTML += `<h4><img src="${iconUrl}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
-              modalContent.innerHTML += '<div class="slot-section">';
-              // Iterate over slots for the current time period
-              slotsForPeriod.forEach(function (timeSlot, index) {
-                if (index % 6 === 0 && index !== 0) {
-                  modalContent.innerHTML += '</div><div class="slot-section">';
-                }
+      //       if (slotsForPeriod && slotsForPeriod.length > 0) {
+      //         const iconUrl = iconUrls[timePeriod];
+      //         modalContent.innerHTML += `<h4><img src="${iconUrl}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
+      //         modalContent.innerHTML += '<div class="slot-section">';
+      //         // Iterate over slots for the current time period
+      //         slotsForPeriod.forEach(function (timeSlot, index) {
+      //           if (index % 6 === 0 && index !== 0) {
+      //             modalContent.innerHTML += '</div><div class="slot-section">';
+      //           }
 
-                const slotItem = document.createElement("div");
-                slotItem.classList.add("modal-slot-item");
-                slotItem.dataset.slot = JSON.stringify(timeSlot);
-                slotItem.innerHTML = `
-                        <span>${timeSlot.FROM} - ${timeSlot.TO}</span>
-                        <div class="availability">Available</div>
-                    `;
-                console.log(slotItem);
+      //           const slotItem = document.createElement("div");
+      //           slotItem.classList.add("modal-slot-item");
+      //           slotItem.dataset.slot = JSON.stringify(timeSlot);
+      //           slotItem.innerHTML = `
+      //                   <span>${timeSlot.FROM} - ${timeSlot.TO}</span>
+      //                   <div class="availability">Available</div>
+      //               `;
+      //           console.log(slotItem);
 
-                modalContent.appendChild(slotItem);
-                // Add click event listener to the slot item
-                slotItem.addEventListener("click", () => {
-                  console.log(timeSlot);
-                  handleModalSlotClick(timeSlot);
-                });
-              });
-              modalContent.innerHTML += "</div>";
-            } else {
-              // Display message if no slots available for the current time period
-              modalContent.innerHTML += `<h4><img src="${iconUrls[timePeriod]}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
-              modalContent.innerHTML +=
-                '<div class="no-slots-animation">No slots available</div>';
-            }
-          });
-        } else {
-          // Handle case where slot data is missing or incorrect
-          modalContent.innerHTML = "Error: Slot data not available";
-        }
-        // Attach event listeners after slot items are added
-        const modalSlotItems =
-          modalContent.querySelectorAll(".modal-slot-item");
-        modalSlotItems.forEach((slotItem) => {
-          slotItem.addEventListener("click", () => {
-            console.log(slotItem.dataset.slot);
-            handleModalSlotClick(JSON.parse(slotItem.dataset.slot));
-          });
-        });
-        // Open the modal
-        var modalInstance = new bootstrap.Modal(modal);
-        modalInstance.show();
-      }
+      //           modalContent.appendChild(slotItem);
+      //           // Add click event listener to the slot item
+      //           slotItem.addEventListener("click", () => {
+      //             console.log(timeSlot);
+      //             handleModalSlotClick(timeSlot);
+      //           });
+      //         });
+      //         modalContent.innerHTML += "</div>";
+      //       } else {
+      //         // Display message if no slots available for the current time period
+      //         modalContent.innerHTML += `<h4><img src="${iconUrls[timePeriod]}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
+      //         modalContent.innerHTML +=
+      //           '<div class="no-slots-animation">No slots available</div>';
+      //       }
+      //     });
+      //   } else {
+      //     // Handle case where slot data is missing or incorrect
+      //     modalContent.innerHTML = "Error: Slot data not available";
+      //   }
+      //   // Attach event listeners after slot items are added
+      //   const modalSlotItems =
+      //     modalContent.querySelectorAll(".modal-slot-item");
+      //   modalSlotItems.forEach((slotItem) => {
+      //     slotItem.addEventListener("click", () => {
+      //       console.log(slotItem.dataset.slot);
+      //       handleModalSlotClick(JSON.parse(slotItem.dataset.slot));
+      //     });
+      //   });
+      //   // Open the modal
+      //   var modalInstance = new bootstrap.Modal(modal);
+      //   modalInstance.show();
+      // }
 
-      // Function to handle click event on modal slot item
+      // // Function to handle click event on modal slot item
       function handleModalSlotClick(slotData) {
         // You can perform actions here when a slot item is clicked
         console.log(slotData);
