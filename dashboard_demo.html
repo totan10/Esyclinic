@@ -535,16 +535,16 @@
           .post(url, params)
           .then((response) => {
             const data = response.data.data;
-            console.log(data);
-            const filteredArray = data.filter(
-              (item) => item.FIELD_TYPE === "Doctor"
-            );
-            const filteredDoctors = filteredArray.map((item) => {
-              return item.DETAILS;
-            });
-            console.log(filteredDoctors);
-           doctorsData= filteredDoctors;
-           console.log(doctorsData);
+            // console.log(data);
+            // const filteredArray = data.filter(
+            //   (item) => item.FIELD_TYPE === "Doctor"
+            // );
+            // const filteredDoctors = filteredArray.map((item) => {
+            //   return item.DETAILS;
+            // });
+            // console.log(filteredDoctors);
+            doctorsData = data;
+            console.log(doctorsData);
           })
           .catch((error) => {
             console.error("Error:", error);
@@ -757,7 +757,7 @@
         }
 
         const filteredDoctors = doctorsData.filter((item) => {
-          const cleanItemName = item.DR_NAME.toLowerCase();
+          const cleanItemName = item.ITEM_NAME.toLowerCase();
           return cleanItemName.includes(query.toLowerCase());
         });
 
@@ -770,8 +770,8 @@
           return;
         }
         const filtered = filteredDoctors.sort((a, b) => {
-          const cleanAItemName = a.DR_NAME.toLowerCase();
-          const cleanBItemName = b.DR_NAME.toLowerCase();
+          const cleanAItemName = a.ITEM_NAME.toLowerCase();
+          const cleanBItemName = b.ITEM_NAME.toLowerCase();
           const aIndex = cleanAItemName.indexOf(query.toLowerCase());
           const bIndex = cleanBItemName.indexOf(query.toLowerCase());
           return aIndex - bIndex;
@@ -823,104 +823,108 @@
           const options = { day: "numeric", month: "long" };
           return date.toLocaleDateString("en-US", options);
         }
-
         filtered.forEach((doctor, index) => {
-          const drId = doctor.DR_ID ? doctor.DR_ID : null;
-          console.log(drId);
-          const slotData = doctor.SCH_DT ? doctor.SCH_DT : null;
-          console.log(slotData);
-          const listItem = document.createElement("li");
+          if (doctor.FIELD_TYPE === "Doctor") {
+            doctor=doctor.DETAILS
+            const drId = doctor.DR_ID ? doctor.DR_ID : null;
+            console.log(drId);
+            const slotData = doctor.SCH_DT ? doctor.SCH_DT : null;
+            console.log(slotData);
+            const listItem = document.createElement("li");
 
-          const doctorPhotoContainer = document.createElement("div");
-          doctorPhotoContainer.classList.add("doctor-photo");
-          doctorPhotoContainer.innerHTML = `
+            const doctorPhotoContainer = document.createElement("div");
+            doctorPhotoContainer.classList.add("doctor-photo");
+            doctorPhotoContainer.innerHTML = `
           <img src="${doctor.DR_PHOTO}" alt="${doctor.DR_PHOTO}" class="me-3">
         `;
 
-          const doctorInfoContainer = document.createElement("div");
-          doctorInfoContainer.classList.add("doctor-info");
-          doctorInfoContainer.innerHTML = `
+            const doctorInfoContainer = document.createElement("div");
+            doctorInfoContainer.classList.add("doctor-info");
+            doctorInfoContainer.innerHTML = `
           <h5>${doctor.DR_NAME}</h5>
           <p>${doctor.D_CATG}</p>
         `;
 
-          listItem.appendChild(doctorPhotoContainer);
-          listItem.appendChild(doctorInfoContainer);
-          slotData.forEach((slot) => {
-            const date = new Date(slot.SCH_DT);
-            const formattedDate = getFormattedDate(slot.SCH_DT);
-            const dayName = slot.SCH_DAY;
-            const slotItem = document.createElement("div");
-            slotItem.classList.add("slotitems");
-            // Determine status text and color based on conditions
-            let statusText, statusColor;
-            if (
-              slot.STATUS === "Booking Available" &&
-              slot.CHK_IN_STS === "UPCOMING"
-            ) {
-              statusText = "Available";
-              statusColor = "green";
-            } else if (
-              slot.STATUS === "Booking Available" &&
-              slot.CHK_IN_STS === "IN"
-            ) {
-              statusText = "In Clinic";
-              statusColor = "green";
-            } else {
-              statusText = "Not Available";
-              statusColor = "red";
-            }
+            listItem.appendChild(doctorPhotoContainer);
+            listItem.appendChild(doctorInfoContainer);
+            slotData.forEach((slot) => {
+              const date = new Date(slot.SCH_DT);
+              const formattedDate = getFormattedDate(slot.SCH_DT);
+              const dayName = slot.SCH_DAY;
+              const slotItem = document.createElement("div");
+              slotItem.classList.add("slotitems");
+              // Determine status text and color based on conditions
+              let statusText, statusColor;
+              if (
+                slot.STATUS === "Booking Available" &&
+                slot.CHK_IN_STS === "UPCOMING"
+              ) {
+                statusText = "Available";
+                statusColor = "green";
+              } else if (
+                slot.STATUS === "Booking Available" &&
+                slot.CHK_IN_STS === "IN"
+              ) {
+                statusText = "In Clinic";
+                statusColor = "green";
+              } else {
+                statusText = "Not Available";
+                statusColor = "red";
+              }
 
-            // Modify slotItem HTML to call handleSlotClick with slot data
-            slotItem.innerHTML = `
+              // Modify slotItem HTML to call handleSlotClick with slot data
+              slotItem.innerHTML = `
                         <div class="slot-item">
                             <div class="date-day">${formattedDate}<br>${dayName}</div>
                             <div class="status" style="color: ${statusColor};">${statusText}</div>
                         </div>
                     `;
-            listItem.appendChild(slotItem);
-            slotItem.addEventListener("click", () => {
-              const doctordata = doctor ? doctor : null;
-              
-              // Function to convert object to query string
-              function objectToQueryString(obj) {
-                const keyValuePairs = [];
-                for (const key in obj) {
-                  if (Object.hasOwnProperty.call(obj, key)) {
-                    if (key === "SCH_DT") {
-                      // Convert slotData object to JSON string
-                      keyValuePairs.push(
-                        `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
-                      );
-                    } else {
-                      keyValuePairs.push(
-                        `${key}=${encodeURIComponent(obj[key])}`
-                      );
+              listItem.appendChild(slotItem);
+              slotItem.addEventListener("click", () => {
+                const doctordata = doctor ? doctor : null;
+
+                // Function to convert object to query string
+                function objectToQueryString(obj) {
+                  const keyValuePairs = [];
+                  for (const key in obj) {
+                    if (Object.hasOwnProperty.call(obj, key)) {
+                      if (key === "SCH_DT") {
+                        // Convert slotData object to JSON string
+                        keyValuePairs.push(
+                          `${key}=${encodeURIComponent(
+                            JSON.stringify(obj[key])
+                          )}`
+                        );
+                      } else {
+                        keyValuePairs.push(
+                          `${key}=${encodeURIComponent(obj[key])}`
+                        );
+                      }
                     }
                   }
+                  return keyValuePairs.join("&");
                 }
-                return keyValuePairs.join("&");
-              }
 
-              // Convert object to query string
-              const queryParams = objectToQueryString(doctordata);
-              console.log(queryParams);
-              window.location.href = `doctor_profile_with_slots.html?${queryParams}`;
+                // Convert object to query string
+                const queryParams = objectToQueryString(doctordata);
+                console.log(queryParams);
+                window.location.href = `doctor_profile_with_slots.html?${queryParams}`;
+              });
             });
-          });
 
-          doctorPhotoContainer.addEventListener("click", () => {
-            console.log(doctor);
-            const queryParams = new URLSearchParams(doctor).toString();
-            window.location.href = `demo.html?${queryParams}`;
-          });
-          doctorInfoContainer.addEventListener("click", () => {
-            console.log(doctor);
-            const queryParams = new URLSearchParams(doctor).toString();
-            window.location.href = `demo.html?${queryParams}`;
-          });
+            doctorPhotoContainer.addEventListener("click", () => {
+              console.log(doctor);
+              const queryParams = new URLSearchParams(doctor).toString();
+              window.location.href = `demo.html?${queryParams}`;
+            });
+            doctorInfoContainer.addEventListener("click", () => {
+              console.log(doctor);
+              const queryParams = new URLSearchParams(doctor).toString();
+              window.location.href = `demo.html?${queryParams}`;
+            });
 
-          searchResults.appendChild(listItem);
+            searchResults.appendChild(listItem);
+          }
         });
 
         searchResults.classList.add("active"); // Show search results
