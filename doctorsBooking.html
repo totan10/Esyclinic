@@ -379,7 +379,7 @@
         font-weight: normal; /* Adjust font weight */
         text-align: center;
       }
-      .slotitems{
+      .slotitems {
         width: 12.99%;
       }
       .slot-item {
@@ -390,11 +390,12 @@
         border-radius: 10px;
         transition: background-color 1s, color 1s;
       }
-      .slot-item:hover{
+      .slot-item:hover {
         color: #f0f0f0;
         background-color: #007bff;
       }
-      .slot-item .date-day,.slot-item .status{
+      .slot-item .date-day,
+      .slot-item .status {
         text-align: center;
         padding: 4px;
       }
@@ -445,7 +446,10 @@
     </div> -->
 
     <!-- Meet our specialist -->
-    <div class="header" style="background-color: #00205b; color: white;margin-top: 100px;" >
+    <div
+      class="header"
+      style="background-color: #00205b; color: white; margin-top: 100px"
+    >
       Find Doctor By specialists
       <div class="view-all-btn">
         <a href="#">View All</a>
@@ -521,10 +525,38 @@
           }
         }
       });
+      function populateDoctors() {
+        const url = "http://easyhealths.com/api/searchDoctorTest";
+        const params = {
+          PHARMA_ID: 8,
+        };
+
+        axios
+          .post(url, params)
+          .then((response) => {
+            const data = response.data.data;
+            // console.log(data);
+            // const filteredArray = data.filter(
+            //   (item) => item.FIELD_TYPE === "Doctor"
+            // );
+            // const filteredDoctors = filteredArray.map((item) => {
+            //   return item.DETAILS;
+            // });
+            // console.log(filteredDoctors);
+            doctorsData = data;
+            console.log(doctorsData);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            return null;
+          });
+      }
       const searchInput = document.getElementById("searchInput");
       const searchResults = document.getElementById("searchResults");
       // Function to make a POST request on page load
       window.onload = function () {
+        populateDoctors();
+        console.log(doctorsData);
         searchInput.click();
         searchInput.focus();
         // Your API endpoint URL
@@ -558,7 +590,7 @@
             const doctorSpecialistsData = response.data.data
               ? response.data.data.total_doctor
               : null;
-            doctorsData = doctorSpecialistsData;
+
             // Populate the slider with images
             // const sliderContainer = document.querySelector(".swiper-wrapper");
             // sliderData.forEach((item) => {
@@ -725,7 +757,7 @@
         }
 
         const filteredDoctors = doctorsData.filter((item) => {
-          const cleanItemName = item.DR_NAME.toLowerCase();
+          const cleanItemName = item.ITEM_NAME.toLowerCase();
           return cleanItemName.includes(query.toLowerCase());
         });
 
@@ -738,47 +770,47 @@
           return;
         }
         const filtered = filteredDoctors.sort((a, b) => {
-          const cleanAItemName = a.DR_NAME.toLowerCase();
-          const cleanBItemName = b.DR_NAME.toLowerCase();
+          const cleanAItemName = a.ITEM_NAME.toLowerCase();
+          const cleanBItemName = b.ITEM_NAME.toLowerCase();
           const aIndex = cleanAItemName.indexOf(query.toLowerCase());
           const bIndex = cleanBItemName.indexOf(query.toLowerCase());
           return aIndex - bIndex;
         });
         console.log(filtered);
 
-        if (filtered.length <= 2) {
-          filtered.forEach((doctor) => {
-            const drId = doctor.DR_ID ? doctor.DR_ID : null;
-            console.log(drId);
-            const slotData = fetchData(drId);
-            console.log(slotData);
-            // Using .then() to handle the fulfillment of the promise
-            slotData
-              .then((arrayResult) => {
-                doctor.slotData = arrayResult ? arrayResult : null; // Log the array once the promise is fulfilled
-              })
-              .catch((error) => {
-                console.error("Error fetching array from slotData:", error); // Handle any errors
-              });
-            async function fetchData(drId) {
-              try {
-                const slots = await fetchSlots(drId)
-                  .then((results) => {
-                    return results;
-                  })
-                  .catch((error) => {
-                    // Handle errors if any
-                    console.error("Error fetching array:", error);
-                  });
-                return slots;
-                // Process slot data as needed
-              } catch (error) {
-                console.error("Error fetching slot data:", error);
-                return null;
-              }
-            }
-          });
-        }
+        // if (filtered.length <= 2) {
+        //   filtered.forEach((doctor) => {
+        //     const drId = doctor.DR_ID ? doctor.DR_ID : null;
+
+        //     const slotData = fetchData(drId);
+
+        //     // Using .then() to handle the fulfillment of the promise
+        //     slotData
+        //       .then((arrayResult) => {
+        //         doctor.slotData = arrayResult ? arrayResult : null; // Log the array once the promise is fulfilled
+        //       })
+        //       .catch((error) => {
+        //         console.error("Error fetching array from slotData:", error); // Handle any errors
+        //       });
+        //     async function fetchData(drId) {
+        //       try {
+        //         const slots = await fetchSlots(drId)
+        //           .then((results) => {
+        //             return results;
+        //           })
+        //           .catch((error) => {
+        //             // Handle errors if any
+        //             console.error("Error fetching array:", error);
+        //           });
+        //         return slots;
+        //         // Process slot data as needed
+        //       } catch (error) {
+        //         console.error("Error fetching slot data:", error);
+        //         return null;
+        //       }
+        //     }
+        //   });
+        // }
         function getFormattedDate(dateString) {
           const year = dateString.substring(0, 4);
           const month = dateString.substring(4, 6);
@@ -791,79 +823,158 @@
           const options = { day: "numeric", month: "long" };
           return date.toLocaleDateString("en-US", options);
         }
-
         filtered.forEach((doctor, index) => {
-          const drId = doctor.DR_ID ? doctor.DR_ID : null;
-          console.log(drId);
-          const slotData = doctor.slotData ? doctor.slotData: null;
-          console.log(slotData);
-          const listItem = document.createElement("li");
+          if (doctor.FIELD_TYPE === "Doctor") {
+            doctor=doctor.DETAILS
+            const drId = doctor.DR_ID ? doctor.DR_ID : null;
+            console.log(drId);
+            const slotData = doctor.SCH_DT ? doctor.SCH_DT : null;
+            console.log(slotData);
+            const listItem = document.createElement("li");
 
-          const doctorPhotoContainer = document.createElement("div");
-          doctorPhotoContainer.classList.add("doctor-photo");
-          doctorPhotoContainer.innerHTML = `
+            const doctorPhotoContainer = document.createElement("div");
+            doctorPhotoContainer.classList.add("doctor-photo");
+            doctorPhotoContainer.innerHTML = `
           <img src="${doctor.DR_PHOTO}" alt="${doctor.DR_PHOTO}" class="me-3">
         `;
 
-          const doctorInfoContainer = document.createElement("div");
-          doctorInfoContainer.classList.add("doctor-info");
-          doctorInfoContainer.innerHTML = `
+            const doctorInfoContainer = document.createElement("div");
+            doctorInfoContainer.classList.add("doctor-info");
+            doctorInfoContainer.innerHTML = `
           <h5>${doctor.DR_NAME}</h5>
           <p>${doctor.D_CATG}</p>
         `;
 
-          listItem.appendChild(doctorPhotoContainer);
-          listItem.appendChild(doctorInfoContainer);
-          slotData.forEach((slot) => {
-            const date = new Date(slot.SCH_DT);
-            const formattedDate = getFormattedDate(slot.SCH_DT);
-            const dayName = slot.SCH_DAY;
-            const slotItem = document.createElement("div");
-            slotItem.classList.add("slotitems")
-            // Determine status text and color based on conditions
-            let statusText, statusColor;
-            if (
-              slot.STATUS === "Booking Available" &&
-              slot.CHK_IN_STS === "UPCOMING"
-            ) {
-              statusText = "Available";
-              statusColor = "green";
-            } else if (
-              slot.STATUS === "Booking Available" &&
-              slot.CHK_IN_STS === "IN"
-            ) {
-              statusText = "In Clinic";
-              statusColor = "green";
-            } else {
-              statusText = "Not Available";
-              statusColor = "red";
-            }
+            listItem.appendChild(doctorPhotoContainer);
+            listItem.appendChild(doctorInfoContainer);
+            slotData.forEach((slot) => {
+              const date = new Date(slot.SCH_DT);
+              const formattedDate = getFormattedDate(slot.SCH_DT);
+              const dayName = slot.SCH_DAY;
+              const slotItem = document.createElement("div");
+              slotItem.classList.add("slotitems");
+              // Determine status text and color based on conditions
+              let statusText, statusColor;
+              if (
+                slot.STATUS === "Booking Available" &&
+                slot.CHK_IN_STS === "UPCOMING"
+              ) {
+                statusText = "Available";
+                statusColor = "green";
+              } else if (
+                slot.STATUS === "Booking Available" &&
+                slot.CHK_IN_STS === "IN"
+              ) {
+                statusText = "In Clinic";
+                statusColor = "green";
+              } else {
+                statusText = "Not Available";
+                statusColor = "red";
+              }
 
-            // Modify slotItem HTML to call handleSlotClick with slot data
-            slotItem.innerHTML = `
+              // Modify slotItem HTML to call handleSlotClick with slot data
+              slotItem.innerHTML = `
                         <div class="slot-item">
                             <div class="date-day">${formattedDate}<br>${dayName}</div>
                             <div class="status" style="color: ${statusColor};">${statusText}</div>
                         </div>
                     `;
-            listItem.appendChild(slotItem);
-            slotItem.addEventListener("click", () => {
-              console.log(slot);
+              listItem.appendChild(slotItem);
+              slotItem.addEventListener("click", () => {
+                const doctordata = doctor ? doctor : null;
+                console.log(doctor);
+                // Function to convert object to query string
+                function objectToQueryString(obj) {
+                  const keyValuePairs = [];
+                  for (const key in obj) {
+                    if (Object.hasOwnProperty.call(obj, key)) {
+                      if (key === "SCH_DT") {
+                        // Convert slotData object to JSON string
+                        keyValuePairs.push(
+                          `${key}=${encodeURIComponent(
+                            JSON.stringify(obj[key])
+                          )}`
+                        );
+                      } else {
+                        keyValuePairs.push(
+                          `${key}=${encodeURIComponent(obj[key])}`
+                        );
+                      }
+                    }
+                  }
+                  return keyValuePairs.join("&");
+                }
+
+                // Convert object to query string
+                const queryParams = objectToQueryString(doctordata);
+                console.log(queryParams);
+                window.location.href = `doctor_profile_with_slots.html?${queryParams}`;
+              });
             });
-          });
 
-          doctorPhotoContainer.addEventListener("click", () => {
-            console.log(doctor);
-            const queryParams = new URLSearchParams(doctor).toString();
-            //window.location.href = `demo.html?${queryParams}`;
-          });
-          doctorInfoContainer.addEventListener("click", () => {
-            console.log(doctor);
-            const queryParams = new URLSearchParams(doctor).toString();
-            window.location.href = `demo.html?${queryParams}`;
-          });
+            doctorPhotoContainer.addEventListener("click", () => {
+              const doctordata = doctor ? doctor : null;
+                console.log(doctor);
+                // Function to convert object to query string
+                function objectToQueryString(obj) {
+                  const keyValuePairs = [];
+                  for (const key in obj) {
+                    if (Object.hasOwnProperty.call(obj, key)) {
+                      if (key === "SCH_DT") {
+                        // Convert slotData object to JSON string
+                        keyValuePairs.push(
+                          `${key}=${encodeURIComponent(
+                            JSON.stringify(obj[key])
+                          )}`
+                        );
+                      } else {
+                        keyValuePairs.push(
+                          `${key}=${encodeURIComponent(obj[key])}`
+                        );
+                      }
+                    }
+                  }
+                  return keyValuePairs.join("&");
+                }
 
-          searchResults.appendChild(listItem);
+                // Convert object to query string
+                const queryParams = objectToQueryString(doctordata);
+                console.log(queryParams);
+                window.location.href = `demo.html?${queryParams}`;
+            });
+            doctorInfoContainer.addEventListener("click", () => {
+              const doctordata = doctor ? doctor : null;
+                console.log(doctor);
+                // Function to convert object to query string
+                function objectToQueryString(obj) {
+                  const keyValuePairs = [];
+                  for (const key in obj) {
+                    if (Object.hasOwnProperty.call(obj, key)) {
+                      if (key === "SCH_DT") {
+                        // Convert slotData object to JSON string
+                        keyValuePairs.push(
+                          `${key}=${encodeURIComponent(
+                            JSON.stringify(obj[key])
+                          )}`
+                        );
+                      } else {
+                        keyValuePairs.push(
+                          `${key}=${encodeURIComponent(obj[key])}`
+                        );
+                      }
+                    }
+                  }
+                  return keyValuePairs.join("&");
+                }
+
+                // Convert object to query string
+                const queryParams = objectToQueryString(doctordata);
+                console.log(queryParams);
+                window.location.href = `demo.html?${queryParams}`;
+            });
+
+            searchResults.appendChild(listItem);
+          }
         });
 
         searchResults.classList.add("active"); // Show search results
