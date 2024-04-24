@@ -549,17 +549,32 @@
         container.appendChild(profileRow);
         // Append container to body
         profileContainer.appendChild(container);
-        slotData = await fetchSlotData(doctorData.DR_ID);
-        slotData = slotData.data;
+        // slotData = await fetchSlotData(doctorData.DR_ID);
+        // slotData = slotData.data;
+        slotData=doctordata.SCH_DT
         // Call the function to generate slot items with dates
         generateSlotItems(slotData);
       }
+      // Function to parse query string into object
+      function queryStringToObject(queryString) {
+            const params = new URLSearchParams(queryString);
+            const obj = {};
+
+            for (const [key, value] of params) {
+              if (key === "SCH_DT") {
+                // Parse slotData JSON string into object
+                obj[key] = JSON.parse(decodeURIComponent(value));
+              } else {
+                obj[key] = decodeURIComponent(value);
+              }
+            }
+
+            return obj;
+          }
       // Parse URL parameters to get doctor's data
       const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      const doctor = Object.fromEntries(urlParams.entries());
-      const doctorData = doctor;
-      generateDoctorProfilePage(doctorData);
+      const doctordata = queryStringToObject(queryString);
+      generateDoctorProfilePage(doctordata);
       // Call the function to generate the page
     </script>
   </body>
