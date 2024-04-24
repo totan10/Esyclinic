@@ -981,34 +981,34 @@
       }
 
       // Function to fetch available slots with retry logic
-      async function fetchSlots(drId) {
-        const url = "http://easyhealths.com/api/availdrslot";
-        const params = {
-          DRID: drId,
-          PHARMAID: "8",
-        };
+    //   async function fetchSlots(drId) {
+    //     const url = "http://easyhealths.com/api/availdrslot";
+    //     const params = {
+    //       DRID: drId,
+    //       PHARMAID: "8",
+    //     };
 
-        try {
-          const response = await axios.post(url, params);
-          const data = response.data.data;
-          return data;
-        } catch (error) {
-          if (error.response && error.response.status === 429) {
-            const retryAfter = error.response.headers["retry-after"];
-            if (retryAfter) {
-              const waitTime = parseInt(retryAfter) * 1000; // Convert to milliseconds
-              console.log(
-                `Received 429 error. Retrying after ${retryAfter} seconds...`
-              );
-              await new Promise((resolve) => setTimeout(resolve, waitTime));
-              // Retry the request after waiting
-              return fetchSlots(drId);
-            }
-          }
-          console.error("Error fetching slot data:", error);
-          return null;
-        }
-      }
+    //     try {
+    //       const response = await axios.post(url, params);
+    //       const data = response.data.data;
+    //       return data;
+    //     } catch (error) {
+    //       if (error.response && error.response.status === 429) {
+    //         const retryAfter = error.response.headers["retry-after"];
+    //         if (retryAfter) {
+    //           const waitTime = parseInt(retryAfter) * 1000; // Convert to milliseconds
+    //           console.log(
+    //             `Received 429 error. Retrying after ${retryAfter} seconds...`
+    //           );
+    //           await new Promise((resolve) => setTimeout(resolve, waitTime));
+    //           // Retry the request after waiting
+    //           return fetchSlots(drId);
+    //         }
+    //       }
+    //       console.error("Error fetching slot data:", error);
+    //       return null;
+    //     }
+    //   }
     </script>
   </body>
 </html>

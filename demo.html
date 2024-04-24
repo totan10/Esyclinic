@@ -217,6 +217,7 @@
     <script>
       let slotData = [];
       let slotItems = [];
+      let SLOTS=[]
       // Function to get formatted date string in "DD Month" format
       function getFormattedDate(dateString) {
         const year = dateString.substring(0, 4);
@@ -285,10 +286,15 @@
                             <div class="status" style="color: ${statusColor};">${statusText}</div>
                         </div>
                     `;
-            console.log("Slots", slotItem);
+            
             slotItem.addEventListener("mouseenter", () => {
               //handleSlotClick(slot);
-              console.log(j, rowclass);
+              
+             
+             fetchSlotTimings(doctordata.DR_ID, slot.ID)
+             console.log(SLOTS);
+             slot.SLOTS=SLOTS?SLOTS:null
+             console.log(slot);
               generateSlotTimes(slot, j, rowclass);
             });
             slotItem.addEventListener("click", () => {
@@ -303,18 +309,38 @@
           slotContainer.appendChild(slotItemTimings);
         }
       }
+      async  function fetchSlotTimings(drId,slotId) {
+        const url = "http://easyhealths.com/api/vuslot";
+        const params = {
+          DR_ID: drId,
+          PHARMA_ID: "8",
+          APPNT_ID:slotId
+        };
 
+        try {
+          const response =await axios.post(url, params);
+          const data = response.data.Data?response.data.Data:null; 
+          SLOTS[0]= data;
+          console.log(SLOTS);
+          return SLOTS
+        } catch (error) {
+          console.error("Error fetching slot data:", error);
+          return null;
+        }
+      }
       function generateSlotTimes(slotData, j, rowclass) {
+        console.log(slotData);
         const slottime = document.getElementsByClassName("slotTime");
-        console.log(slottime);
         for (let i = 0; i < slottime.length; i++) {
           slottime[i].style.display = "none";
         }
+
         const slotContainer = document.querySelector(`.${rowclass}`);
         slotContainer.classList.add("active"); // Add 'active' class to trigger transition
         slotContainer.innerHTML = ``;
         slotContainer.style.display = "block";
         const slot = slotData;
+        console.log(slot);
         if (slot && slot.SLOTS) {
           const iconUrls = {
             Morning: "/morning_icon.jpeg",
@@ -323,7 +349,9 @@
           };
 
           ["Morning", "Afternoon", "Evening"].forEach((timePeriod) => {
+            
             const slotsForPeriod = slot.SLOTS[0][timePeriod];
+            console.log(slotsForPeriod);
             if (slotsForPeriod && slotsForPeriod.length > 0) {
               const iconUrl = iconUrls[timePeriod];
               slotContainer.innerHTML += `<h4><img src="${iconUrl}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
