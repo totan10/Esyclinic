@@ -258,6 +258,246 @@
           opacity: 1;
         }
       }
+
+      .popup-overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        visibility: hidden;
+      }
+
+      .popup {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        text-align: center;
+      }
+
+      .popup button:hover {
+        transform: translateY(-5px);
+        color: #15b9ce;
+        background-color: #ffffff;
+        border: 2px solid #15b9ce;
+      }
+
+      .popup button:active {
+        transform: translateY(2px);
+      }
+
+      .popup button:focus {
+        outline: none;
+      }
+
+      .popup button {
+        position: relative;
+        background-color: #15b9ce; /* Green */
+        border: none;
+        font-size: 20px;
+        color: #ffffff;
+        text-align: center;
+        transition-duration: 0.4s;
+        overflow: hidden;
+        cursor: pointer;
+        border-radius: 15px;
+        margin: 10px;
+        padding: 10px 20px;
+        transition: transform 0.3s;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .popup button:after {
+        content: "";
+        background: #90ee90; /* Light Green */
+        display: block;
+        position: absolute;
+        padding-top: 300%;
+        padding-left: 350%;
+        margin-left: -20px !important;
+        margin-top: -120%;
+        opacity: 0;
+        transition: all 0.8s;
+      }
+
+      .popup button:active:after {
+        padding: 0;
+        margin: 0;
+        opacity: 1;
+        transition: 0s;
+      }
+      .booking-confirmation {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        display: none;
+      }
+
+      /* CSS for booking confirmation */
+      .booking-confirmation {
+        position: fixed;
+        width: 50%;
+
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .confirmation-heading {
+        margin-top: 0;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #72d3e4;
+      }
+
+      .info-container {
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 15px;
+        background-color: #f0f0f0;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border: 2px solid #4bb0bb;
+      }
+      .info-container span {
+        font-weight: 700;
+      }
+      .info-container h4 {
+        font-weight: 700;
+      }
+      .patient-info,
+      .appointment-info {
+        margin-bottom: 20px;
+      }
+
+      .buttons-container {
+        display: flex;
+        justify-content: space-around;
+      }
+      .booking-button {
+        background-color: #007bff;
+      }
+      .cancel-button {
+        background-color: #cc0000;
+      }
+      .booking-button,
+      .cancel-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .booking-button::before,
+      .cancel-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 300%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        z-index: -1;
+      }
+
+      .booking-button:hover::before,
+      .cancel-button:hover::before {
+        left: 0;
+      }
+
+      .booking-button:hover {
+        color: #007bff;
+        background-color: #fff;
+        border: 1px solid #007bff;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .cancel-button:hover {
+        color: #ff4d4d;
+        background-color: #fff;
+        border: 1px solid #cc0000;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .booking-button::after,
+      .cancel-button::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 300%;
+        height: 300%;
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        z-index: -1;
+        transform: translate(-50%, -50%) rotate(45deg);
+      }
+
+      .booking-button:hover::after,
+      .cancel-button:hover::after {
+        width: 200%;
+        height: 200%;
+      }
+
+      /* Style for success button */
+      .success-button {
+        background-color: #007bff; /* Blue background color */
+        color: #fff; /* White text color */
+      }
+
+      /* Style for failure button */
+      .failure-button {
+        background-color: #ff4d4d; /* Red background color */
+        color: #fff; /* White text color */
+      }
+      /* Add this CSS for the success and failure buttons */
+      .success-button,
+      .failure-button {
+        position: relative;
+        background-color: #007bff; /* Default background color */
+        color: #fff; /* Default text color */
+        border: none;
+        font-size: 20px;
+        text-align: center;
+        transition: background-color 0.3s, transform 0.3s;
+        overflow: hidden;
+        cursor: pointer;
+        border-radius: 15px;
+        margin: 10px;
+        padding: 10px 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .failure-button:hover {
+        transform: translateY(-5px);
+      }
+      .success-button:hover {
+        transform: translateY(-5px);
+      }
+      .success-button:active,
+      .failure-button:active {
+        transform: translateY(2px);
+      }
+
+      .success-button:focus,
+      .failure-button:focus {
+        outline: none;
+      }
     </style>
   </head>
   <body>
@@ -309,6 +549,20 @@
             </form>
           </div>
         </div>
+        <div class="popup-overlay" id="popupOverlay">
+          <div class="popup" id="mainPopup">
+            <p>Please select an option:</p>
+            <button id="doctorVisitBtn">Doctor Visit</button>
+            <button id="reportBtn">Report</button>
+          </div>
+
+          <div class="popup" id="subPopup">
+            <p>Choose payment method:</p>
+            <button id="payToClinicBtn">Pay to Clinic</button>
+            <button id="payToDoctorBtn">Pay to Doctor</button>
+          </div>
+        </div>
+        <div class="container booking-confirmation"></div>
       </div>
     </div>
 
@@ -333,15 +587,17 @@
           const username = localStorage.getItem("username");
           // Do something with the logged-in user's data
           const storedUserData = localStorage.getItem("userData");
-
+          console.log(storedUserData);
           // Access and use the user's data
           if (storedUserData) {
             userData = JSON.parse(storedUserData).data;
             console.log(userData);
             // Set the logo URL dynamically
           }
+          console.log(userData);
         }
       });
+
       // Function to get formatted date string in "DD Month" format
       function getFormattedDate(dateString) {
         const year = dateString.substring(0, 4);
@@ -358,7 +614,7 @@
 
       // Function to generate slot items with dates
       function generateSlotItems(slotData) {
-        console.log(slotData);
+        //console.log(slotData);
         const slotContainer = document.querySelector(".slot-container");
         const slots = slotData;
 
@@ -369,7 +625,7 @@
           return dateA - dateB;
         });
 
-        console.log("slots data:", slots);
+        //console.log("slots data:", slots);
         for (let i = 0; i < slots.length; i += 2) {
           const slotItemPair = document.createElement("div");
           const slotItemTimings = document.createElement("div");
@@ -411,16 +667,16 @@
                         </div>
                     `;
 
-            slotItem.addEventListener("mouseenter", () => {
+            slotItem.addEventListener("click", () => {
               //handleSlotClick(slot);
 
               fetchSlotTimings(doctordata.DR_ID, slot.ID);
-              console.log(SLOTS);
+              //console.log(SLOTS);
               slot.SLOTS = SLOTS ? SLOTS : null;
-              console.log(slot);
+              //console.log(slot);
               generateSlotTimes(slot, j, rowclass);
             });
-            slotItem.addEventListener("click", () => {
+            slotItem.addEventListener("dblclick", () => {
               const slotContainer = document.querySelector(`.${rowclass}`);
               slotContainer.classList.remove("active"); // Remove 'active' class to trigger transition
             });
@@ -444,7 +700,7 @@
           const response = await axios.post(url, params);
           const data = response.data.Data ? response.data.Data : null;
           SLOTS[0] = data;
-          console.log(SLOTS);
+          //console.log(SLOTS);
           return SLOTS;
         } catch (error) {
           console.error("Error fetching slot data:", error);
@@ -452,7 +708,7 @@
         }
       }
       function generateSlotTimes(slotData, j, rowclass) {
-        console.log(slotData);
+        //console.log(slotData);
         const slottime = document.getElementsByClassName("slotTime");
         for (let i = 0; i < slottime.length; i++) {
           slottime[i].style.display = "none";
@@ -463,7 +719,7 @@
         slotContainer.innerHTML = ``;
         slotContainer.style.display = "block";
         const slot = slotData;
-        console.log(slot);
+        //console.log(slot);
         if (slot && slot.SLOTS) {
           const iconUrls = {
             Morning: "/morning_icon.jpeg",
@@ -473,13 +729,13 @@
 
           ["Morning", "Afternoon", "Evening"].forEach((timePeriod) => {
             const slotsForPeriod = slot.SLOTS[0][timePeriod];
-            console.log(slotsForPeriod);
+            //console.log(slotsForPeriod);
             if (slotsForPeriod && slotsForPeriod.length > 0) {
               const iconUrl = iconUrls[timePeriod];
               slotContainer.innerHTML += `<h4><img src="${iconUrl}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
               slotContainer.innerHTML += '<div class="slot-section">';
               // Iterate over slots for the current time period
-              console.log(slotsForPeriod);
+              //console.log(slotsForPeriod);
               for (let i = 0; i < slotsForPeriod.length; i += 4) {
                 const slotItemPair = document.createElement("div");
                 slotItemPair.classList.add("row", "mb-3");
@@ -497,17 +753,10 @@
                         <div class="availability">Available</div>
                     `;
                   slotItemPair.appendChild(slottimeItem);
-                  // slottimeItem.addEventListener("click", () => {
-                  //   console.log(timeSlot);
-                  //   openBookingForm(timeSlot);
-                  //   console.log(timeSlot);
-                  // });
-                  // slottimeItem.addEventListener("click", (event) => {
-
-                  // });
-                  console.log(JSON.parse(slottimeItem.dataset.slot));
+                  // console.log(JSON.parse(slottimeItem.dataset.slot));
+                  console.log(slottimeItem);
                   slottimeItem.onclick = function () {
-                    console.log("inside the function");
+                    //console.log("inside the function");
 
                     const clickedSlotData = JSON.parse(
                       slottimeItem.dataset.slot
@@ -517,6 +766,7 @@
                 }
                 slotContainer.appendChild(slotItemPair);
               }
+              //slotContainer.innerHTML="</div>"
             } else {
               // Display message if no slots available for the current time period
               slotContainer.innerHTML += `<h4><img src="${iconUrls[timePeriod]}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
@@ -530,7 +780,6 @@
         }
         // Attach event listener to slot time items
         const slotTimeItems = document.querySelectorAll(".modal-slot-item");
-        slotTimeItems.forEach((slotTimeItem) => {});
       }
 
       // // Function to handle click event on modal slot item
@@ -870,15 +1119,16 @@
           if (isValid) {
             // Make an API call to book appointment
             // You can add your API endpoint here
-
+            console.log(userData);
             const patientDetails = {
               FAMILY_ID: patientFamilyIdFromDataset,
               PATIENT_ID: patientId,
+              PATIENT_NAME: patientNameFromDataset,
               MOBILE: patientMobile,
               DR_ID: doctordata.DR_ID,
               DR_NAME: doctordata.DR_NAME,
               APNT_DT: slotTiming.SCH_DT,
-              PHARMA_ID: userData.PHARMA_ID,
+              PHARMA_ID: userData.PHARMA_ID ? userData.PHARMA_ID : null,
               PHARMA_NAME: userData.PHARMA_NAME,
               APNT_ID: slotTiming.ID,
               FROM: slotdetails.FROM,
@@ -886,12 +1136,13 @@
               DR_FEES: doctordata.DR_FEES,
             };
             console.log(patientDetails);
+            showMainPopup(patientDetails, patientSexFromDataset);
             // Reset form fields
             this.reset();
 
             // Hide booking form after submission
             document.querySelector(".booking-form").style.display = "none";
-            document.querySelector(".slot-container").style.display = "block";
+            // document.querySelector(".slot-container").style.display = "block";
           }
         });
 
@@ -915,6 +1166,231 @@
         patientAgeInput.setAttribute("readonly", true);
         patientGenderInput.setAttribute("readonly", true);
       });
+
+      // Function to show the main popup
+      function showMainPopup(patientDetails, patientSexFromDataset) {
+        document.querySelector(".slot-container").style.display = "none";
+        document.getElementById("popupOverlay").style.visibility = "visible";
+        document.getElementById("mainPopup").style.display = "block";
+        document.getElementById("subPopup").style.display = "none";
+
+        // Handle Doctor Visit button click
+        document
+          .getElementById("doctorVisitBtn")
+          .addEventListener("click", function () {
+            patientDetails.BOOKING_TYPE = "drvisit";
+            hideMainPopup();
+
+            openBookingConfirmation(
+              patientDetails,
+              patientSexFromDataset,
+              patientSexFromDataset
+            );
+          });
+
+        function openBookingConfirmation(
+          patientDetails,
+          patientSexFromDataset,
+          patientAgeFromDataset
+        ) {
+          document.querySelector(".slot-container").style.display = "none";
+          console.log(patientDetails);
+          // Get the booking confirmation container
+          const bookingConfirm = document.querySelector(
+            ".booking-confirmation"
+          );
+
+          // Clear any previous content
+          bookingConfirm.innerHTML = "";
+          bookingConfirm.innerHTML = `<h2 class="confirmation-heading">
+            Please Confirm Appointment Details
+          </h2>`;
+          // Create upper part for patient info
+          const upperPart = document.createElement("div");
+          upperPart.classList.add("patient-info", "info-container");
+
+          let bookingDate = patientDetails.APNT_DT;
+          var year = bookingDate.substring(0, 4);
+          var month = bookingDate.substring(4, 6);
+          var day = bookingDate.substring(6, 8);
+
+          // Format the date into dd-mm-yyyy format
+          bookingDate = day + "-" + month + "-" + year;
+          let purpose = null;
+          if (patientDetails.BOOKING_TYPE === "drvisit") {
+            purpose = "Doctor Visit";
+          }
+          // Create lower part for doctor and appointment info
+          const lowerPart = document.createElement("div");
+          lowerPart.classList.add("appointment-info", "info-container");
+          lowerPart.innerHTML = `
+    <p><span>Patient</span>           : ${patientDetails.PATIENT_NAME}</p>
+    <p><span>Age</span>               : ${patientAgeFromDataset}</p>
+    <p><span>Gender</span>            : ${patientSexFromDataset}</p>
+    <p><span>Contact Number</span>    : ${patientDetails.MOBILE}</p>
+    <h4>Doctor Fees     : ₹ ${patientDetails.DR_FEES}</h4>
+    
+    `;
+
+          upperPart.innerHTML = `
+          <p><span>Doctor</span>            : ${patientDetails.DR_NAME}</p>
+    <p><span>Chamber</span>           :${patientDetails.PHARMA_NAME}</p>
+    <p><span>Booking Date </span>     : ${bookingDate}</p>
+    <p><span>Timing </span>           : ${patientDetails.FROM} - ${patientDetails.TO}</p>
+    <p><span>Booking Purpose</span>   :${purpose}</p>
+          
+  
+  `;
+          // Append upper and lower parts to the booking confirmation container
+          bookingConfirm.appendChild(upperPart);
+          bookingConfirm.appendChild(lowerPart);
+
+          // Create buttons container
+          const buttonsContainer = document.createElement("div");
+          buttonsContainer.classList.add("buttons-container");
+
+          // Create Book Appointment button
+          const bookAppointmentBtn = document.createElement("button");
+          bookAppointmentBtn.classList.add("booking-button");
+          bookAppointmentBtn.textContent = "Book Appointment";
+          //bookAppointmentBtn.style.backgroundColor = "#007bff"; // Blue color
+          bookAppointmentBtn.addEventListener("click", function () {
+            // Handle booking appointment
+            showSubPopup(
+              patientDetails,
+              patientSexFromDataset,
+              patientSexFromDataset
+            );
+          });
+
+          // Create Cancel button
+          const cancelButton = document.createElement("button");
+          cancelButton.classList.add("cancel-button");
+          cancelButton.textContent = "Cancel";
+          //cancelButton.style.backgroundColor = "#ff4d4d"; // Red color
+          cancelButton.addEventListener("click", function () {
+            // Handle canceling appointment
+            console.log("Canceling appointment...");
+          });
+
+          // Append buttons to the buttons container
+          buttonsContainer.appendChild(bookAppointmentBtn);
+          buttonsContainer.appendChild(cancelButton);
+
+          // Append buttons container to the booking confirmation container
+          bookingConfirm.appendChild(buttonsContainer);
+
+          // Show the booking confirmation container
+          bookingConfirm.style.display = "block";
+        }
+
+        // Handle Report button click
+        document
+          .getElementById("reportBtn")
+          .addEventListener("click", function () {
+            patientDetails.BOOKING_TYPE = "report";
+            hideMainPopup();
+            console.log(`patient details`, patientDetails);
+            // Perform logic for generating report
+            console.log("Generating Report");
+          });
+      }
+
+      // Function to hide the main popup
+      function hideMainPopup() {
+        //document.getElementById("popupOverlay").style.visibility = "hidden";
+        document.getElementById("mainPopup").style.display = "none";
+        document.getElementById("popupOverlay").style.visibility = "hidden";
+      }
+      async function bookAppointment(url, params) {
+        try {
+          const response = await axios.post(url, params);
+          console.log(response.data);
+          const responseData = response.data;
+          return responseData;
+        } catch (error) {
+          console.error("Error fetching slot data:", error);
+          return null;
+        }
+      }
+      // Function to show the sub popup
+      async function showSubPopup(patientDetails, gender, age) {
+        document.getElementById("popupOverlay").style.visibility = "visible";
+        document.getElementById("subPopup").style.display = "block";
+        // Handle Pay to Clinic button click
+        document
+          .getElementById("payToClinicBtn")
+          .addEventListener("click", function () {
+            hideSubPopup();
+            console.log(patientDetails);
+            const url = "http://easyhealths.com/api/booking";
+            const params = patientDetails;
+            // Call bookAppointment and handle the promise
+            bookAppointment(url, params)
+              .then((responseData) => {
+                console.log(responseData); // This should now log the actual response data
+                if (responseData.Success) {
+                  showSuccessPopup("Booking Successful. Payment done");
+                } else {
+                  showFailurePopup("Patient already booked");
+                }
+              })
+              .catch((error) => {
+                console.error("Error fetching slot data:", error);
+              });
+
+            // Perform logic for paying to clinic
+            console.log("Paying to Clinic");
+          });
+
+        // Handle Pay to Doctor button click
+        document
+          .getElementById("payToDoctorBtn")
+          .addEventListener("click", function () {
+            hideSubPopup();
+            // Perform logic for paying to doctor
+            console.log("Paying to Doctor");
+          });
+      }
+      // Function to show success popup
+      function showSuccessPopup(message) {
+        const successPopup = document.createElement("div");
+        successPopup.classList.add("popup");
+        successPopup.id = "successPopup"; // Assign an id for styling
+        successPopup.innerHTML = `<p>${message}</p>`;
+        successPopup.innerHTML += `<button id="successBtn" class="success-button">OK</button>`; // Add class for styling
+        document.getElementById("popupOverlay").appendChild(successPopup);
+        document.getElementById("popupOverlay").style.visibility = "visible";
+
+        // Add event listener for the success button
+        const successBtn = document.getElementById("successBtn");
+        successBtn.addEventListener("click", function () {
+          location.reload(); // Reload the page on button click
+        });
+      }
+
+      // Function to show failure popup
+      function showFailurePopup(message) {
+        const failurePopup = document.createElement("div");
+        failurePopup.classList.add("popup");
+        failurePopup.id = "failurePopup"; // Assign an id for styling
+        failurePopup.innerHTML = `<p>${message}</p>`;
+        failurePopup.innerHTML += `<button id="failureBtn" class="failure-button">OK</button>`; // Add class for styling
+        document.getElementById("popupOverlay").appendChild(failurePopup);
+        document.getElementById("popupOverlay").style.visibility = "visible";
+
+        // Add event listener for the failure button
+        const failureBtn = document.getElementById("failureBtn");
+        failureBtn.addEventListener("click", function () {
+          location.reload(); // Reload the page on button click
+        });
+      }
+
+      // Function to hide the sub popup
+      function hideSubPopup() {
+        document.getElementById("popupOverlay").style.visibility = "hidden";
+        document.getElementById("subPopup").style.display = "none";
+      }
     </script>
   </body>
 </html>
