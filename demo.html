@@ -75,6 +75,8 @@
         cursor: pointer;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease;
+        z-index: 0;
+        position: relative;
       }
       .slot-item:hover {
         transform: translateY(-5px);
@@ -105,6 +107,7 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
         transition: transform 0.3s ease, background-color 0.3s ease; /* Add transition for transform and background-color */
         width: 23%;
+        z-index: 991;
       }
       /* Display a maximum of six slot timings per row */
       .slot-section {
@@ -140,11 +143,6 @@
       .modal-slot-item:hover span {
         color: white; /* Change text color on hover */
       }
-      #slotModal {
-        padding-left: 0px;
-        width: 50%;
-        margin-left: 50%;
-      }
       .slotTime {
         display: none;
         max-height: 0;
@@ -156,11 +154,114 @@
         display: block;
         max-height: 2000px; /* Adjust the max height as per your content */
         transition: max-height 1s ease;
+        position: relative;
+        z-index: 3;
+      }
+
+      .booking-form {
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        height: 60%;
+        position: relative;
+      }
+      .booking-form input[type="text"],
+      .booking-form input[type="tel"],
+      .booking-form select,
+      #patientAge {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      }
+      .booking-form input[type="submit"] {
+        /* width: 100%; */
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.15s ease-in-out;
+        position: absolute;
+        bottom: 20px;
+        left: 25%;
+      }
+      .booking-form input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+
+      #cancelButton {
+        padding: 10px;
+        background-color: #ff4d4d; /* Red background */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 20%;
+        transition: background-color 0.15s ease-in-out;
+        position: absolute;
+        bottom: 20px;
+        right: 25%;
+      }
+
+      #cancelButton:hover {
+        background-color: #cc0000; /* Darker red on hover */
+      }
+
+      /* CSS animations for form elements */
+      .booking-form input[type="text"],
+      .booking-form input[type="tel"],
+      .booking-form select,
+      #patientAge,
+      #patientDropdown .booking-form input[type="submit"],
+      #cancelButton {
+        transition: transform 0.3s ease-in-out;
+      }
+      #patientDropdown {
+        display: none;
+      }
+      .booking-form input[type="text"]:focus,
+      .booking-form input[type="tel"]:focus,
+      .booking-form select:focus,
+      #patientAge:focus,
+      #patientDropdown:focus .booking-form input[type="submit"]:focus,
+      #cancelButton:focus {
+        transform: scale(1.05); /* Scale up on focus */
+      }
+
+      /* Set height of the booking form to match the screen height */
+      .booking-container {
+        height: 100vh;
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Add animation to the booking form */
+      .booking-form {
+        animation: slideInFromLeft 1s ease;
+      }
+
+      @keyframes slideInFromLeft {
+        0% {
+          transform: translateX(-100%);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0);
+          opacity: 1;
+        }
       }
     </style>
   </head>
   <body>
-    <div class="row" style="margin: 0">
+    <div class="row" style="margin: 0; height: 100vh">
       <div class="col-lg-6">
         <div id="doctorProfileContainer">
           <!-- Doctor's profile will be added dynamically here -->
@@ -171,39 +272,42 @@
           <h3 class="text-primary mb-3">Available Booking Dates</h3>
           <!-- Slots will be added dynamically here -->
         </div>
-      </div>
-    </div>
-    <div class="modal" id="slotModal" tabindex="-1">
-      <div
-        class="modal-dialog"
-        style="max-width: 100%; margin: 0%; height: 720px"
-      >
-        <div class="modal-content" style="height: 100%">
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-          <h5
-            class="modal-title"
-            style="
-              background-color: #f2f2f2;
-              color: #3a81ba;
-              text-align: center;
-              font-weight: 700;
-              margin: 10px;
-              border-radius: 10px;
-            "
-          >
-            Select Preferred Time
-          </h5>
-          <div class="modal-body">
-            <!-- Slot data will be displayed here -->
+        <div class="container booking-container">
+          <!-- Appointment Booking Form -->
+          <div class="booking-form">
+            <h3 class="mb-4">Book Appointment</h3>
+            <form id="appointmentForm">
+              <input
+                type="tel"
+                id="patientMobile"
+                placeholder="Your Mobile Number"
+                required
+              />
+              <select id="patientDropdown" required>
+                <option value="">Select Patient</option>
+              </select>
+              <input
+                type="text"
+                id="patientName"
+                placeholder="Your Name"
+                required
+              />
+              <select id="patientGender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              <input
+                type="number"
+                id="patientAge"
+                placeholder="Your Age"
+                required
+              />
+              <input type="submit" value="Book Appointment" />
+              <button type="button" id="cancelButton">Cancel</button>
+            </form>
           </div>
-          <!-- <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div> -->
         </div>
       </div>
     </div>
@@ -217,7 +321,27 @@
     <script>
       let slotData = [];
       let slotItems = [];
-      let SLOTS=[]
+      let SLOTS = [];
+      let userData = null;
+      let slotdetails = null;
+      let slotTiming = null;
+      document.addEventListener("DOMContentLoaded", function () {
+        // Check if the user is already logged in
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        if (isLoggedIn) {
+          // Retrieve username from localStorage
+          const username = localStorage.getItem("username");
+          // Do something with the logged-in user's data
+          const storedUserData = localStorage.getItem("userData");
+
+          // Access and use the user's data
+          if (storedUserData) {
+            userData = JSON.parse(storedUserData).data;
+            console.log(userData);
+            // Set the logo URL dynamically
+          }
+        }
+      });
       // Function to get formatted date string in "DD Month" format
       function getFormattedDate(dateString) {
         const year = dateString.substring(0, 4);
@@ -286,15 +410,14 @@
                             <div class="status" style="color: ${statusColor};">${statusText}</div>
                         </div>
                     `;
-            
+
             slotItem.addEventListener("mouseenter", () => {
               //handleSlotClick(slot);
-              
-             
-             fetchSlotTimings(doctordata.DR_ID, slot.ID)
-             console.log(SLOTS);
-             slot.SLOTS=SLOTS?SLOTS:null
-             console.log(slot);
+
+              fetchSlotTimings(doctordata.DR_ID, slot.ID);
+              console.log(SLOTS);
+              slot.SLOTS = SLOTS ? SLOTS : null;
+              console.log(slot);
               generateSlotTimes(slot, j, rowclass);
             });
             slotItem.addEventListener("click", () => {
@@ -309,20 +432,20 @@
           slotContainer.appendChild(slotItemTimings);
         }
       }
-      async  function fetchSlotTimings(drId,slotId) {
+      async function fetchSlotTimings(drId, slotId) {
         const url = "http://easyhealths.com/api/vuslot";
         const params = {
           DR_ID: drId,
           PHARMA_ID: "8",
-          APPNT_ID:slotId
+          APPNT_ID: slotId,
         };
 
         try {
-          const response =await axios.post(url, params);
-          const data = response.data.Data?response.data.Data:null; 
-          SLOTS[0]= data;
+          const response = await axios.post(url, params);
+          const data = response.data.Data ? response.data.Data : null;
+          SLOTS[0] = data;
           console.log(SLOTS);
-          return SLOTS
+          return SLOTS;
         } catch (error) {
           console.error("Error fetching slot data:", error);
           return null;
@@ -349,7 +472,6 @@
           };
 
           ["Morning", "Afternoon", "Evening"].forEach((timePeriod) => {
-            
             const slotsForPeriod = slot.SLOTS[0][timePeriod];
             console.log(slotsForPeriod);
             if (slotsForPeriod && slotsForPeriod.length > 0) {
@@ -367,14 +489,31 @@
                   j++
                 ) {
                   const timeSlot = slotsForPeriod[j];
-                  const slotItem = document.createElement("div");
-                  slotItem.classList.add("modal-slot-item", "col-md-3");
-                  slotItem.dataset.slot = JSON.stringify(timeSlot);
-                  slotItem.innerHTML = `
+                  const slottimeItem = document.createElement("div");
+                  slottimeItem.classList.add("modal-slot-item", "col-md-3");
+                  slottimeItem.dataset.slot = JSON.stringify(timeSlot);
+                  slottimeItem.innerHTML = `
                         <span>${timeSlot.FROM} - ${timeSlot.TO}</span>
                         <div class="availability">Available</div>
                     `;
-                  slotItemPair.appendChild(slotItem);
+                  slotItemPair.appendChild(slottimeItem);
+                  // slottimeItem.addEventListener("click", () => {
+                  //   console.log(timeSlot);
+                  //   openBookingForm(timeSlot);
+                  //   console.log(timeSlot);
+                  // });
+                  // slottimeItem.addEventListener("click", (event) => {
+
+                  // });
+                  console.log(JSON.parse(slottimeItem.dataset.slot));
+                  slottimeItem.onclick = function () {
+                    console.log("inside the function");
+
+                    const clickedSlotData = JSON.parse(
+                      slottimeItem.dataset.slot
+                    );
+                    openBookingForm(clickedSlotData, slot);
+                  };
                 }
                 slotContainer.appendChild(slotItemPair);
               }
@@ -389,104 +528,16 @@
           // Handle case where slot data is missing or incorrect
           slotContainer.innerHTML = "Error: Slot data not available";
         }
+        // Attach event listener to slot time items
+        const slotTimeItems = document.querySelectorAll(".modal-slot-item");
+        slotTimeItems.forEach((slotTimeItem) => {});
       }
-      // Modify handleSlotClick function to accept slot data
-      // function handleSlotClick(slotdata) {
-      //   // Get the modal element
-      //   var modal = document.getElementById("slotModal");
-      //   var modalContent = modal.querySelector(".modal-body");
-      //   modalContent.innerHTML = "";
-      //   const slot = slotdata ? slotdata : null;
-
-      //   // Check if slot object and its properties are defined
-      //   if (slot && slot.SLOTS) {
-      //     // Define image URLs for each time period
-      //     const iconUrls = {
-      //       Morning: "/morning_icon.jpeg",
-      //       Afternoon: "/afternoon_icon.jpeg",
-      //       Evening: "/evening_icon.jpeg",
-      //     };
-
-      //     // Iterate over each time period array (Morning, Afternoon, Evening)
-      //     ["Morning", "Afternoon", "Evening"].forEach((timePeriod) => {
-      //       const slotsForPeriod = slot.SLOTS[0][timePeriod];
-
-      //       if (slotsForPeriod && slotsForPeriod.length > 0) {
-      //         const iconUrl = iconUrls[timePeriod];
-      //         modalContent.innerHTML += `<h4><img src="${iconUrl}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
-      //         modalContent.innerHTML += '<div class="slot-section">';
-      //         // Iterate over slots for the current time period
-      //         slotsForPeriod.forEach(function (timeSlot, index) {
-      //           if (index % 6 === 0 && index !== 0) {
-      //             modalContent.innerHTML += '</div><div class="slot-section">';
-      //           }
-
-      //           const slotItem = document.createElement("div");
-      //           slotItem.classList.add("modal-slot-item");
-      //           slotItem.dataset.slot = JSON.stringify(timeSlot);
-      //           slotItem.innerHTML = `
-      //                   <span>${timeSlot.FROM} - ${timeSlot.TO}</span>
-      //                   <div class="availability">Available</div>
-      //               `;
-      //           console.log(slotItem);
-
-      //           modalContent.appendChild(slotItem);
-      //           // Add click event listener to the slot item
-      //           slotItem.addEventListener("click", () => {
-      //             console.log(timeSlot);
-      //             handleModalSlotClick(timeSlot);
-      //           });
-      //         });
-      //         modalContent.innerHTML += "</div>";
-      //       } else {
-      //         // Display message if no slots available for the current time period
-      //         modalContent.innerHTML += `<h4><img src="${iconUrls[timePeriod]}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
-      //         modalContent.innerHTML +=
-      //           '<div class="no-slots-animation">No slots available</div>';
-      //       }
-      //     });
-      //   } else {
-      //     // Handle case where slot data is missing or incorrect
-      //     modalContent.innerHTML = "Error: Slot data not available";
-      //   }
-      //   // Attach event listeners after slot items are added
-      //   const modalSlotItems =
-      //     modalContent.querySelectorAll(".modal-slot-item");
-      //   modalSlotItems.forEach((slotItem) => {
-      //     slotItem.addEventListener("click", () => {
-      //       console.log(slotItem.dataset.slot);
-      //       handleModalSlotClick(JSON.parse(slotItem.dataset.slot));
-      //     });
-      //   });
-      //   // Open the modal
-      //   var modalInstance = new bootstrap.Modal(modal);
-      //   modalInstance.show();
-      // }
 
       // // Function to handle click event on modal slot item
       function handleModalSlotClick(slotData) {
         // You can perform actions here when a slot item is clicked
         console.log(slotData);
         // For example, you can make an appointment, etc.
-      }
-
-      // Make a POST API call to fetch slot data using Axios
-      async function fetchSlotData(drId) {
-        const url = "http://easyhealths.com/api/availdrslot";
-        const params = {
-          DRID: drId,
-          PHARMAID: "8",
-        };
-
-        try {
-          const response = await axios.post(url, params);
-          // Axios automatically throws an error for non-2xx responses, so no need for explicit check
-          const data = response.data;
-          return data;
-        } catch (error) {
-          console.error("Error fetching slot data:", error);
-          return null;
-        }
       }
 
       // Create a function to generate the doctor's profile page
@@ -579,31 +630,291 @@
         profileContainer.appendChild(container);
         // slotData = await fetchSlotData(doctorData.DR_ID);
         // slotData = slotData.data;
-        slotData=doctordata.SCH_DT
+        slotData = doctordata.SCH_DT;
         // Call the function to generate slot items with dates
         generateSlotItems(slotData);
       }
       // Function to parse query string into object
       function queryStringToObject(queryString) {
-            const params = new URLSearchParams(queryString);
-            const obj = {};
+        const params = new URLSearchParams(queryString);
+        const obj = {};
 
-            for (const [key, value] of params) {
-              if (key === "SCH_DT") {
-                // Parse slotData JSON string into object
-                obj[key] = JSON.parse(decodeURIComponent(value));
-              } else {
-                obj[key] = decodeURIComponent(value);
-              }
-            }
-
-            return obj;
+        for (const [key, value] of params) {
+          if (key === "SCH_DT") {
+            // Parse slotData JSON string into object
+            obj[key] = JSON.parse(decodeURIComponent(value));
+          } else {
+            obj[key] = decodeURIComponent(value);
           }
+        }
+
+        return obj;
+      }
       // Parse URL parameters to get doctor's data
       const queryString = window.location.search;
       const doctordata = queryStringToObject(queryString);
       generateDoctorProfilePage(doctordata);
-      // Call the function to generate the page
+      console.log(doctordata);
+      function openBookingForm(slotData, slot) {
+        slotdetails = slotData;
+        slotTiming = slot;
+        console.log("Inside Booking form");
+        const slotContainer = document.querySelector(".slot-container");
+        const bookingContainer = document.querySelector(".booking-container");
+        slotContainer.style.display = "none";
+        bookingContainer.style.display = "block";
+        const bookingForm = document.querySelector(".booking-form");
+
+        bookingForm.style.display = "block"; // Show booking form
+      }
+
+      document
+        .getElementById("patientMobile")
+        .addEventListener("input", function (event) {
+          const mobileNumber = event.target.value;
+          if (mobileNumber.length === 10 && !isNaN(mobileNumber)) {
+            // Call function to handle mobile number with 10 digits
+            handleMobileNumberWith10Digits(mobileNumber);
+          }
+        });
+
+      async function handleMobileNumberWith10Digits(mobile) {
+        const url = "http://easyhealths.com/api/srchmob";
+        const params = {
+          MOBILE: mobile,
+        };
+
+        try {
+          const response = await axios.post(url, params);
+          const patients = response.data.data ? response.data.data : [];
+
+          // Clear any previous dropdown options
+          const selectElement = document.getElementById("patientDropdown");
+          selectElement.innerHTML = "";
+          console.log(patients);
+          if (patients.length > 0) {
+            // Show the dropdown/select element
+            selectElement.style.display = "block";
+
+            // Create default option
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.text = "Select Patient";
+            selectElement.appendChild(defaultOption);
+
+            // Populate dropdown options with patient data
+            patients.forEach((patient) => {
+              const option = document.createElement("option");
+              option.value = patient.ID; // Store patient ID as option value
+
+              // Store other patient details as data attributes
+              option.dataset.name = patient.NAME;
+              option.dataset.age = patient.AGE;
+              option.dataset.sex = patient.SEX;
+              option.dataset.familyId = patient.FAMILY_ID;
+              // Set text content for the option
+              option.textContent = `${patient.NAME} - Age: ${patient.AGE}, Sex: ${patient.SEX}`;
+
+              selectElement.appendChild(option);
+            });
+          } else {
+            // Hide the dropdown/select element if no data is available
+            selectElement.style.display = "none";
+            // Make name and age fields editable
+            const patientNameInput = document.getElementById("patientName");
+            const patientAgeInput = document.getElementById("patientAge");
+
+            patientNameInput.removeAttribute("readonly");
+            patientAgeInput.removeAttribute("readonly");
+          }
+        } catch (error) {
+          console.error("Error fetching patient data:", error);
+        }
+      }
+      // Function to check if a string contains only alphabets
+      function isValidName(name) {
+        return /^[a-zA-Z]+$/.test(name);
+      }
+
+      // Function to check if a mobile number is valid (exactly 10 digits)
+      function isValidMobile(mobile) {
+        return /^\d{10}$/.test(mobile);
+      }
+
+      // Function to check if age is not negative
+      function isValidAge(age) {
+        return age >= 0;
+      }
+
+      // Function to display error message
+      function displayError(inputField, message) {
+        const parentElement = inputField.parentElement;
+        const errorElement = parentElement.querySelector(".error-message");
+
+        // Create error message element if not already present
+        if (!errorElement) {
+          const errorMessage = document.createElement("div");
+          errorMessage.classList.add("error-message");
+          parentElement.appendChild(errorMessage);
+          errorElement = errorMessage;
+        }
+
+        // Display error message
+        errorElement.textContent = message;
+      }
+
+      // Function to clear error message
+      function clearError(inputField) {
+        const parentElement = inputField.parentElement;
+        const errorElement = parentElement.querySelector(".error-message");
+
+        // Clear error message
+        if (errorElement) {
+          parentElement.removeChild(errorElement);
+        }
+      }
+
+      // Add event listeners to input fields for validation
+      document
+        .getElementById("patientName")
+        .addEventListener("input", function (event) {
+          const name = event.target.value;
+          if (!isValidName(name)) {
+            displayError(event.target, "Name should only contain alphabets.");
+          } else {
+            clearError(event.target);
+          }
+        });
+
+      document
+        .getElementById("patientMobile")
+        .addEventListener("input", function (event) {
+          const mobile = event.target.value;
+          if (!isValidMobile(mobile)) {
+            displayError(
+              event.target,
+              "Mobile number should be exactly 10 digits."
+            );
+          } else {
+            clearError(event.target);
+          }
+        });
+
+      document
+        .getElementById("patientAge")
+        .addEventListener("input", function (event) {
+          const age = parseInt(event.target.value);
+          if (!isValidAge(age)) {
+            displayError(event.target, "Age cannot be negative.");
+          } else {
+            clearError(event.target);
+          }
+        });
+
+      // Modify form submission event listener to include validation
+      document
+        .getElementById("appointmentForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Prevent default form submission
+
+          const patientName = document.getElementById("patientName").value;
+          const patientMobile = document.getElementById("patientMobile").value;
+          const patientGender = document.getElementById("patientGender").value;
+          const patientAge = parseInt(
+            document.getElementById("patientAge").value
+          );
+          const patientDropdown = document.getElementById("patientDropdown");
+          const selectedOption =
+            patientDropdown.options[patientDropdown.selectedIndex];
+
+          // Retrieve data from dataset attributes of the selected option
+          const patientId = selectedOption.value; // This would be the entire patient object as a JSON string
+          const patientNameFromDataset = selectedOption.dataset.name;
+          const patientAgeFromDataset = selectedOption.dataset.age;
+          const patientSexFromDataset = selectedOption.dataset.sex;
+          const patientFamilyIdFromDataset = selectedOption.dataset.familyId;
+          // Perform validation before submitting the form
+          let isValid = true;
+
+          if (!isValidName(patientName)) {
+            displayError(
+              document.getElementById("patientName"),
+              "Name should only contain alphabets."
+            );
+            isValid = false;
+          } else {
+            clearError(document.getElementById("patientName"));
+          }
+
+          if (!isValidMobile(patientMobile)) {
+            displayError(
+              document.getElementById("patientMobile"),
+              "Mobile number should be exactly 10 digits."
+            );
+            isValid = false;
+          } else {
+            clearError(document.getElementById("patientMobile"));
+          }
+
+          if (!isValidAge(patientAge)) {
+            displayError(
+              document.getElementById("patientAge"),
+              "Age cannot be negative."
+            );
+            isValid = false;
+          } else {
+            clearError(document.getElementById("patientAge"));
+          }
+
+          // If all fields are valid, submit the form
+          if (isValid) {
+            // Make an API call to book appointment
+            // You can add your API endpoint here
+
+            const patientDetails = {
+              FAMILY_ID: patientFamilyIdFromDataset,
+              PATIENT_ID: patientId,
+              MOBILE: patientMobile,
+              DR_ID: doctordata.DR_ID,
+              DR_NAME: doctordata.DR_NAME,
+              APNT_DT: slotTiming.SCH_DT,
+              PHARMA_ID: userData.PHARMA_ID,
+              PHARMA_NAME: userData.PHARMA_NAME,
+              APNT_ID: slotTiming.ID,
+              FROM: slotdetails.FROM,
+              TO: slotdetails.TO,
+              DR_FEES: doctordata.DR_FEES,
+            };
+            console.log(patientDetails);
+            // Reset form fields
+            this.reset();
+
+            // Hide booking form after submission
+            document.querySelector(".booking-form").style.display = "none";
+            document.querySelector(".slot-container").style.display = "block";
+          }
+        });
+
+      // Add event listener to the patient dropdown
+      const patientDropdown = document.getElementById("patientDropdown");
+      patientDropdown.addEventListener("change", function () {
+        // Get the selected option from the dropdown
+        const selectedOption = this.options[this.selectedIndex];
+
+        // Populate input fields with selected patient data
+        const patientNameInput = document.getElementById("patientName");
+        const patientAgeInput = document.getElementById("patientAge");
+        const patientGenderInput = document.getElementById("patientGender");
+
+        patientNameInput.value = selectedOption.dataset.name; // Populate name input field
+        patientAgeInput.value = selectedOption.dataset.age; // Populate age input field
+        patientGenderInput.value = selectedOption.dataset.sex; // Populate gender input field
+
+        // Make input fields non-editable
+        patientNameInput.setAttribute("readonly", true);
+        patientAgeInput.setAttribute("readonly", true);
+        patientGenderInput.setAttribute("readonly", true);
+      });
     </script>
   </body>
 </html>
