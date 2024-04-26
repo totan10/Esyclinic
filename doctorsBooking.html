@@ -825,7 +825,7 @@
         }
         filtered.forEach((doctor, index) => {
           if (doctor.FIELD_TYPE === "Doctor") {
-            doctor=doctor.DETAILS
+            doctor = doctor.DETAILS;
             const drId = doctor.DR_ID ? doctor.DR_ID : null;
             console.log(drId);
             const slotData = doctor.SCH_DT ? doctor.SCH_DT : null;
@@ -881,25 +881,20 @@
                     `;
               listItem.appendChild(slotItem);
               slotItem.addEventListener("click", () => {
+                console.log(slot);
+                doctor.SlotId = slot.ID ? slot.ID : null;
+                delete doctor.SCH_DT;
                 const doctordata = doctor ? doctor : null;
                 console.log(doctor);
+
                 // Function to convert object to query string
                 function objectToQueryString(obj) {
                   const keyValuePairs = [];
                   for (const key in obj) {
                     if (Object.hasOwnProperty.call(obj, key)) {
-                      if (key === "SCH_DT") {
-                        // Convert slotData object to JSON string
-                        keyValuePairs.push(
-                          `${key}=${encodeURIComponent(
-                            JSON.stringify(obj[key])
-                          )}`
-                        );
-                      } else {
-                        keyValuePairs.push(
+                      keyValuePairs.push(
                           `${key}=${encodeURIComponent(obj[key])}`
                         );
-                      }
                     }
                   }
                   return keyValuePairs.join("&");
@@ -908,69 +903,66 @@
                 // Convert object to query string
                 const queryParams = objectToQueryString(doctordata);
                 console.log(queryParams);
-                window.location.href = `doctor_profile_with_slots.html?${queryParams}`;
+
+                //window.location.href = `doctor_profile_with_slots.html?${queryParams}`;
               });
             });
 
             doctorPhotoContainer.addEventListener("click", () => {
               const doctordata = doctor ? doctor : null;
-                console.log(doctor);
-                // Function to convert object to query string
-                function objectToQueryString(obj) {
-                  const keyValuePairs = [];
-                  for (const key in obj) {
-                    if (Object.hasOwnProperty.call(obj, key)) {
-                      if (key === "SCH_DT") {
-                        // Convert slotData object to JSON string
-                        keyValuePairs.push(
-                          `${key}=${encodeURIComponent(
-                            JSON.stringify(obj[key])
-                          )}`
-                        );
-                      } else {
-                        keyValuePairs.push(
-                          `${key}=${encodeURIComponent(obj[key])}`
-                        );
-                      }
+              console.log(doctor);
+              // Function to convert object to query string
+              function objectToQueryString(obj) {
+                const keyValuePairs = [];
+                for (const key in obj) {
+                  if (Object.hasOwnProperty.call(obj, key)) {
+                    if (key === "SCH_DT") {
+                      // Convert slotData object to JSON string
+                      keyValuePairs.push(
+                        `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
+                      );
+                    } else {
+                      keyValuePairs.push(
+                        `${key}=${encodeURIComponent(obj[key])}`
+                      );
                     }
                   }
-                  return keyValuePairs.join("&");
                 }
+                return keyValuePairs.join("&");
+              }
 
-                // Convert object to query string
-                const queryParams = objectToQueryString(doctordata);
-                console.log(queryParams);
-                window.location.href = `demo.html?${queryParams}`;
+              // Convert object to query string
+              const queryParams = objectToQueryString(doctordata);
+              console.log(queryParams);
+              window.location.href = `demo.html?${queryParams}`;
             });
             doctorInfoContainer.addEventListener("click", () => {
               const doctordata = doctor ? doctor : null;
-                console.log(doctor);
-                // Function to convert object to query string
-                function objectToQueryString(obj) {
-                  const keyValuePairs = [];
-                  for (const key in obj) {
-                    if (Object.hasOwnProperty.call(obj, key)) {
-                      if (key === "SCH_DT") {
-                        // Convert slotData object to JSON string
-                        keyValuePairs.push(
-                          `${key}=${encodeURIComponent(
-                            JSON.stringify(obj[key])
-                          )}`
-                        );
-                      } else {
-                        keyValuePairs.push(
-                          `${key}=${encodeURIComponent(obj[key])}`
-                        );
-                      }
+              console.log(doctor);
+              // Function to convert object to query string
+              function objectToQueryString(obj) {
+                const keyValuePairs = [];
+                for (const key in obj) {
+                  if (Object.hasOwnProperty.call(obj, key)) {
+                    if (key === "SCH_DT") {
+                      // Convert slotData object to JSON string
+                      keyValuePairs.push(
+                        `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
+                      );
+                    } else {
+                      keyValuePairs.push(
+                        `${key}=${encodeURIComponent(obj[key])}`
+                      );
                     }
                   }
-                  return keyValuePairs.join("&");
                 }
+                return keyValuePairs.join("&");
+              }
 
-                // Convert object to query string
-                const queryParams = objectToQueryString(doctordata);
-                console.log(queryParams);
-                window.location.href = `demo.html?${queryParams}`;
+              // Convert object to query string
+              const queryParams = objectToQueryString(doctordata);
+              console.log(queryParams);
+              window.location.href = `demo.html?${queryParams}`;
             });
 
             searchResults.appendChild(listItem);
@@ -979,7 +971,6 @@
 
         searchResults.classList.add("active"); // Show search results
       }
-
     </script>
   </body>
 </html>
