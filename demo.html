@@ -99,15 +99,15 @@
       .modal-slot-item {
         background-color: transparent;
         border: 2px solid rgb(54, 53, 53);
-        border-radius: 25px;
+        border-radius: 10px;
         padding: 5px; /* Adjust padding */
-        margin-right: 10px; /* Add margin between slot items */
+        margin-right: 5px; /* Add margin between slot items */
         margin-bottom: 10px; /* Adjust margin bottom */
         cursor: pointer;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
         transition: transform 0.3s ease, background-color 0.3s ease; /* Add transition for transform and background-color */
-        width: 23%;
-        z-index: 991;
+        width: 24%;
+        
       }
       /* Display a maximum of six slot timings per row */
       .slot-section {
@@ -131,17 +131,23 @@
       }
       /* Style for availability text */
       .modal-slot-item .availability {
-        color: rgb(3, 83, 3); /* Green color */
+        color: rgb(3 207 3); /* Green color */
         margin: 0;
         text-align: center;
         font-size: medium;
+        transition: color 0.3s ease;
       }
       .modal-slot-item:hover {
         transform: translateY(-5px);
         background-color: #00b2c8; /* Change background color on hover */
+        border: none;
       }
       .modal-slot-item:hover span {
         color: white; /* Change text color on hover */
+      }
+      .modal-slot-item:hover .availability {
+        color: greenyellow;
+        font-weight: 700;
       }
       .slotTime {
         display: none;
@@ -191,6 +197,7 @@
         position: absolute;
         bottom: 20px;
         left: 25%;
+        width: 150px;
       }
       .booking-form input[type="submit"]:hover {
         background-color: #0056b3;
@@ -544,8 +551,10 @@
                 placeholder="Your Age"
                 required
               />
-              <input type="submit" value="Book Appointment" />
-              <button type="button" id="cancelButton">Cancel</button>
+              <input type="submit" value="Proceed" />
+              <button type="button" id="cancelButton" onclick="closeForm()">
+                Cancel
+              </button>
             </form>
           </div>
         </div>
@@ -557,8 +566,8 @@
           </div>
 
           <div class="popup" id="subPopup">
-            <p>Choose payment method:</p>
-            <button id="payToClinicBtn">Pay to Clinic</button>
+            <p>Choose Payment Method:</p>
+            <button id="payToClinicBtn">Receive Payment</button>
             <button id="payToDoctorBtn">Pay to Doctor</button>
           </div>
         </div>
@@ -575,7 +584,7 @@
     <script>
       let slotData = [];
       let slotItems = [];
-      let SLOTS = [];
+      //let SLOTS = [];
       let userData = null;
       let slotdetails = null;
       let slotTiming = null;
@@ -610,6 +619,25 @@
         // Format the date as "DD Month"
         const options = { day: "numeric", month: "long" };
         return date.toLocaleDateString("en-US", options);
+      }
+
+      async function fetchSlotTimings(drId, slotId) {
+        const url = "http://easyhealths.com/api/vuslot";
+        const params = {
+          DR_ID: drId,
+          PHARMA_ID: "8",
+          APPNT_ID: slotId,
+        };
+
+        try {
+          const response = await axios.post(url, params);
+          const data = response.data.Data ? response.data.Data : null;
+          console.log(data);
+          return data;
+        } catch (error) {
+          console.error("Error fetching slot data:", error);
+          return null;
+        }
       }
 
       // Function to generate slot items with dates
@@ -667,18 +695,22 @@
                         </div>
                     `;
 
-            slotItem.addEventListener("click", () => {
+            slotItem.addEventListener("mouseenter", () => {
               //handleSlotClick(slot);
 
-              fetchSlotTimings(doctordata.DR_ID, slot.ID);
+              //fetchSlotTimings(doctordata.DR_ID, slot.ID);
               //console.log(SLOTS);
-              slot.SLOTS = SLOTS ? SLOTS : null;
-              //console.log(slot);
+              // slot.SLOTS = SLOTS ? SLOTS : null;
+              // console.log(slot);
+              // //console.log(slot);
+              // if(slot.SLOTS[0]){
+
+              // }
               generateSlotTimes(slot, j, rowclass);
             });
             slotItem.addEventListener("dblclick", () => {
-              const slotContainer = document.querySelector(`.${rowclass}`);
-              slotContainer.classList.remove("active"); // Remove 'active' class to trigger transition
+              const slotTimeContainer = document.querySelector(`.${rowclass}`);
+              slotTimeContainer.classList.remove("active"); // Remove 'active' class to trigger transition
             });
 
             slotItemPair.appendChild(slotItem);
@@ -688,26 +720,15 @@
           slotContainer.appendChild(slotItemTimings);
         }
       }
-      async function fetchSlotTimings(drId, slotId) {
-        const url = "http://easyhealths.com/api/vuslot";
-        const params = {
-          DR_ID: drId,
-          PHARMA_ID: "8",
-          APPNT_ID: slotId,
-        };
 
-        try {
-          const response = await axios.post(url, params);
-          const data = response.data.Data ? response.data.Data : null;
-          SLOTS[0] = data;
-          //console.log(SLOTS);
-          return SLOTS;
-        } catch (error) {
-          console.error("Error fetching slot data:", error);
-          return null;
-        }
-      }
-      function generateSlotTimes(slotData, j, rowclass) {
+      async function generateSlotTimes(slotData, j, rowclass) {
+        const SLOTS = await fetchSlotTimings(doctordata.DR_ID, slotData.ID);
+
+        let slotsTime = [];
+        slotsTime.push(SLOTS);
+        console.log(slotsTime);
+        slotData.SLOTS = slotsTime;
+        console.log(slotData);
         //console.log(slotData);
         const slottime = document.getElementsByClassName("slotTime");
         for (let i = 0; i < slottime.length; i++) {
@@ -720,73 +741,73 @@
         slotContainer.style.display = "block";
         const slot = slotData;
         //console.log(slot);
-        if (slot && slot.SLOTS) {
+        if (slot && slot.SLOTS[0]) {
           const iconUrls = {
             Morning: "/morning_icon.jpeg",
             Afternoon: "/afternoon_icon.jpeg",
             Evening: "/evening_icon.jpeg",
           };
-
-          ["Morning", "Afternoon", "Evening"].forEach((timePeriod) => {
-            const slotsForPeriod = slot.SLOTS[0][timePeriod];
-            //console.log(slotsForPeriod);
-            if (slotsForPeriod && slotsForPeriod.length > 0) {
-              const iconUrl = iconUrls[timePeriod];
-              slotContainer.innerHTML += `<h4><img src="${iconUrl}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
-              slotContainer.innerHTML += '<div class="slot-section">';
-              // Iterate over slots for the current time period
-              //console.log(slotsForPeriod);
-              for (let i = 0; i < slotsForPeriod.length; i += 4) {
-                const slotItemPair = document.createElement("div");
-                slotItemPair.classList.add("row", "mb-3");
-                for (
-                  let j = i;
-                  j < Math.min(i + 4, slotsForPeriod.length);
-                  j++
-                ) {
-                  const timeSlot = slotsForPeriod[j];
-                  const slottimeItem = document.createElement("div");
-                  slottimeItem.classList.add("modal-slot-item", "col-md-3");
-                  slottimeItem.dataset.slot = JSON.stringify(timeSlot);
-                  slottimeItem.innerHTML = `
+          console.log(slot.SLOTS[0]);
+          if (slot.SLOTS[0]) {
+            ["Morning", "Afternoon", "Evening"].forEach((timePeriod) => {
+              const slotsForPeriod = slot.SLOTS[0][timePeriod];
+              console.log(slotsForPeriod);
+              if (slotsForPeriod && slotsForPeriod.length > 0) {
+                const timingCOntainer = document.createElement("div");
+                const iconUrl = iconUrls[timePeriod];
+                timingCOntainer.innerHTML += `<h4><img src="${iconUrl}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
+                // timingCOntainer.innerHTML += '<div class="slot-section">';
+                // Iterate over slots for the current time period
+                //console.log(slotsForPeriod);
+                for (let i = 0; i < slotsForPeriod.length; i += 4) {
+                  const slotItemPair = document.createElement("div");
+                  slotItemPair.classList.add("row", "mb-3");
+                  for (
+                    let j = i;
+                    j < Math.min(i + 4, slotsForPeriod.length);
+                    j++
+                  ) {
+                    const timeSlot = slotsForPeriod[j];
+                    const slottimeItem = document.createElement("div");
+                    slottimeItem.classList.add("modal-slot-item", "col-md-3");
+                    slottimeItem.dataset.slot = JSON.stringify(timeSlot);
+                    slottimeItem.innerHTML = `
                         <span>${timeSlot.FROM} - ${timeSlot.TO}</span>
                         <div class="availability">Available</div>
                     `;
-                  slotItemPair.appendChild(slottimeItem);
-                  // console.log(JSON.parse(slottimeItem.dataset.slot));
-                  console.log(slottimeItem);
-                  slottimeItem.onclick = function () {
-                    //console.log("inside the function");
+                    slotItemPair.appendChild(slottimeItem);
+                    // console.log(JSON.parse(slottimeItem.dataset.slot));
+                    console.log(slottimeItem);
+                    slottimeItem.onclick = function () {
+                      //console.log("inside the function");
 
-                    const clickedSlotData = JSON.parse(
-                      slottimeItem.dataset.slot
-                    );
-                    openBookingForm(clickedSlotData, slot);
-                  };
+                      const clickedSlotData = JSON.parse(
+                        slottimeItem.dataset.slot
+                      );
+                      openBookingForm(clickedSlotData, slot);
+                    };
+                  }
+                  timingCOntainer.appendChild(slotItemPair);
                 }
-                slotContainer.appendChild(slotItemPair);
+                slotContainer.appendChild(timingCOntainer);
+                //slotContainer.innerHTML="</div>"
+              } else {
+                const timingCOntainer = document.createElement("div");
+                // Display message if no slots available for the current time period
+                timingCOntainer.innerHTML += `<h4><img src="${iconUrls[timePeriod]}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
+                timingCOntainer.innerHTML +=
+                  '<div class="no-slots-animation">No slots available</div>';
+                  slotContainer.appendChild(timingCOntainer)
               }
-              //slotContainer.innerHTML="</div>"
-            } else {
-              // Display message if no slots available for the current time period
-              slotContainer.innerHTML += `<h4><img src="${iconUrls[timePeriod]}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
-              slotContainer.innerHTML +=
-                '<div class="no-slots-animation">No slots available</div>';
-            }
-          });
-        } else {
-          // Handle case where slot data is missing or incorrect
-          slotContainer.innerHTML = "Error: Slot data not available";
+            });
+          } else {
+            // Handle case where slot data is missing or incorrect
+            slotContainer.innerHTML = "Error: Slot data not available";
+          }
         }
+
         // Attach event listener to slot time items
         const slotTimeItems = document.querySelectorAll(".modal-slot-item");
-      }
-
-      // // Function to handle click event on modal slot item
-      function handleModalSlotClick(slotData) {
-        // You can perform actions here when a slot item is clicked
-        console.log(slotData);
-        // For example, you can make an appointment, etc.
       }
 
       // Create a function to generate the doctor's profile page
@@ -904,6 +925,8 @@
       const doctordata = queryStringToObject(queryString);
       generateDoctorProfilePage(doctordata);
       console.log(doctordata);
+
+      //Function to create booking form
       function openBookingForm(slotData, slot) {
         slotdetails = slotData;
         slotTiming = slot;
@@ -916,14 +939,29 @@
 
         bookingForm.style.display = "block"; // Show booking form
       }
-
       document
         .getElementById("patientMobile")
         .addEventListener("input", function (event) {
-          const mobileNumber = event.target.value;
-          if (mobileNumber.length === 10 && !isNaN(mobileNumber)) {
+          const mobile = event.target.value;
+          if(mobile.length<=9||mobile.length>10){
+            const defaultOption = document.createElement("option");
+            defaultOption.style.display="none"
+            const patientDropdown = document.getElementById("patientDropdown");
+            patientDropdown.style.display="none"
+          }
+          if (!isValidMobile(mobile)) {
+            displayError(
+              event.target,
+              "Mobile number should be exactly 10 digits."
+            );
+            const patientDropdown = document.getElementById("patientDropdown");
+            patientDropdown.style.display="none"
+          } else {
+            if (mobile.length === 10 && !isNaN(mobile)) {
             // Call function to handle mobile number with 10 digits
-            handleMobileNumberWith10Digits(mobileNumber);
+            handleMobileNumberWith10Digits(mobile);
+          }
+            clearError(event.target);
           }
         });
 
@@ -969,6 +1007,8 @@
           } else {
             // Hide the dropdown/select element if no data is available
             selectElement.style.display = "none";
+            const defaultOption = document.createElement("option");
+            defaultOption.style.display="none"
             // Make name and age fields editable
             const patientNameInput = document.getElementById("patientName");
             const patientAgeInput = document.getElementById("patientAge");
@@ -1035,20 +1075,7 @@
           }
         });
 
-      document
-        .getElementById("patientMobile")
-        .addEventListener("input", function (event) {
-          const mobile = event.target.value;
-          if (!isValidMobile(mobile)) {
-            displayError(
-              event.target,
-              "Mobile number should be exactly 10 digits."
-            );
-          } else {
-            clearError(event.target);
-          }
-        });
-
+  
       document
         .getElementById("patientAge")
         .addEventListener("input", function (event) {
@@ -1060,6 +1087,15 @@
           }
         });
 
+      function closeForm() {
+        const slotContainer = document.querySelector(".slot-container");
+        const bookingContainer = document.querySelector(".booking-container");
+        slotContainer.style.display = "block";
+        bookingContainer.style.display = "none";
+        const bookingForm = document.querySelector(".booking-form");
+
+        bookingForm.style.display = "none"; // Show booking form
+      }
       // Modify form submission event listener to include validation
       document
         .getElementById("appointmentForm")
@@ -1254,23 +1290,20 @@
           bookAppointmentBtn.classList.add("booking-button");
           bookAppointmentBtn.textContent = "Book Appointment";
           //bookAppointmentBtn.style.backgroundColor = "#007bff"; // Blue color
-          bookAppointmentBtn.addEventListener("click", function () {
-            // Handle booking appointment
-            showSubPopup(
-              patientDetails,
-              patientSexFromDataset,
-              patientSexFromDataset
-            );
-          });
-
           // Create Cancel button
           const cancelButton = document.createElement("button");
           cancelButton.classList.add("cancel-button");
           cancelButton.textContent = "Cancel";
           //cancelButton.style.backgroundColor = "#ff4d4d"; // Red color
           cancelButton.addEventListener("click", function () {
-            // Handle canceling appointment
-            console.log("Canceling appointment...");
+            const slotContainer = document.querySelector(".slot-container");
+            const bookingContainer =
+              document.querySelector(".booking-container");
+            slotContainer.style.display = "none";
+            bookingContainer.style.display = "block";
+            const bookingForm = document.querySelector(".booking-form");
+            bookingConfirm.style.display = "none";
+            bookingForm.style.display = "block"; // Show booking form
           });
 
           // Append buttons to the buttons container
@@ -1282,6 +1315,15 @@
 
           // Show the booking confirmation container
           bookingConfirm.style.display = "block";
+
+          bookAppointmentBtn.addEventListener("click", function () {
+            // Handle booking appointment
+            showSubPopup(
+              patientDetails,
+              patientSexFromDataset,
+              patientSexFromDataset
+            );
+          });
         }
 
         // Handle Report button click
@@ -1330,9 +1372,11 @@
               .then((responseData) => {
                 console.log(responseData); // This should now log the actual response data
                 if (responseData.Success) {
-                  showSuccessPopup("Booking Successful. Payment done");
+                  const bookingId=responseData.data?responseData.data.APPNT_TOKEN:null
+                  showSuccessPopup("Booking Successful. Payment done",bookingId);
                 } else {
-                  showFailurePopup("Patient already booked");
+                  const bookingId=responseData.data?responseData.data.APPNT_TOKEN:null
+                  showFailurePopup("Patient already booked",bookingId);
                 }
               })
               .catch((error) => {
@@ -1353,11 +1397,11 @@
           });
       }
       // Function to show success popup
-      function showSuccessPopup(message) {
+      function showSuccessPopup(message, bookingId) {
         const successPopup = document.createElement("div");
         successPopup.classList.add("popup");
         successPopup.id = "successPopup"; // Assign an id for styling
-        successPopup.innerHTML = `<p>${message}</p>`;
+        successPopup.innerHTML = `<p>${message}</p><p>Booking Id: ${bookingId}</p>`;
         successPopup.innerHTML += `<button id="successBtn" class="success-button">OK</button>`; // Add class for styling
         document.getElementById("popupOverlay").appendChild(successPopup);
         document.getElementById("popupOverlay").style.visibility = "visible";
@@ -1370,11 +1414,11 @@
       }
 
       // Function to show failure popup
-      function showFailurePopup(message) {
+      function showFailurePopup(message, bookingId) {
         const failurePopup = document.createElement("div");
         failurePopup.classList.add("popup");
         failurePopup.id = "failurePopup"; // Assign an id for styling
-        failurePopup.innerHTML = `<p>${message}</p>`;
+        failurePopup.innerHTML = `<p>${message}</p><p>Booking Id: ${bookingId}</p>`;
         failurePopup.innerHTML += `<button id="failureBtn" class="failure-button">OK</button>`; // Add class for styling
         document.getElementById("popupOverlay").appendChild(failurePopup);
         document.getElementById("popupOverlay").style.visibility = "visible";
