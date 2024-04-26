@@ -886,25 +886,34 @@
                 delete doctor.SCH_DT;
                 const doctordata = doctor ? doctor : null;
                 console.log(doctor);
+                const object1String = JSON.stringify(doctordata);
+                const object2String = JSON.stringify(slot);
+                const baseUrl = "/doctor_profile_with_slots.html"; // Base URL of the destination page
+                const queryParams = new URLSearchParams({
+                  data1: object1String,
+                  data2: object2String,
+                });
+
+                const url = `${baseUrl}?${queryParams}`;
 
                 // Function to convert object to query string
-                function objectToQueryString(obj) {
-                  const keyValuePairs = [];
-                  for (const key in obj) {
-                    if (Object.hasOwnProperty.call(obj, key)) {
-                      keyValuePairs.push(
-                          `${key}=${encodeURIComponent(obj[key])}`
-                        );
-                    }
-                  }
-                  return keyValuePairs.join("&");
-                }
+                // function objectToQueryString(obj) {
+                //   const keyValuePairs = [];
+                //   for (const key in obj) {
+                //     if (Object.hasOwnProperty.call(obj, key)) {
+                //       keyValuePairs.push(
+                //           `${key}=${encodeURIComponent(obj[key])}`
+                //         );
+                //     }
+                //   }
+                //   return keyValuePairs.join("&");
+                // }
 
                 // Convert object to query string
-                const queryParams = objectToQueryString(doctordata);
-                console.log(queryParams);
+                // const queryParams = objectToQueryString(doctordata);
+                // console.log(queryParams);
 
-                //window.location.href = `doctor_profile_with_slots.html?${queryParams}`;
+                window.location.href = url;
               });
             });
 

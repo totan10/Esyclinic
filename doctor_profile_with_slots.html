@@ -589,7 +589,8 @@
         <script>
           let slots = null;
           let userData = null;
-          
+          let slotdetails = null;
+          let  slotTiming = null;
           // Create a function to generate the doctor's profile page
           function generateDoctorProfilePage(doctorData) {
             console.log(doctorData);
@@ -754,8 +755,10 @@
 
                         const clickedSlotData = JSON.parse(
                           slottimeItem.dataset.slot
+                          
                         );
-                        openBookingForm(clickedSlotData, slot);
+                        console.log(clickedSlotData);
+                        openBookingForm(clickedSlotData, slotData);
                       };
                     }
                     timingCOntainer.appendChild(slotItemPair);
@@ -800,6 +803,7 @@
           function openBookingForm(slotData, slot) {
             slotdetails = slotData;
             slotTiming = slot;
+            console.log(slotTiming);
             console.log("Inside Booking form");
             const slotContainer = document.querySelector(".slot-container");
             const bookingContainer =
@@ -1046,7 +1050,7 @@
                   APNT_DT: slotTiming.SCH_DT,
                   PHARMA_ID: userData.PHARMA_ID ? userData.PHARMA_ID : null,
                   PHARMA_NAME: userData.PHARMA_NAME,
-                  APNT_ID: doctordata.ID,
+                  APNT_ID: slotTiming.ID,
                   FROM: slotdetails.FROM,
                   TO: slotdetails.TO,
                   DR_FEES: doctordata.DR_FEES,
@@ -1344,14 +1348,29 @@
             return obj;
           }
           // Parse URL parameters to get doctor's data
-          const queryString = window.location.search;
-          // Parse query string into object
-          const doctordata = queryStringToObject(queryString);
+          // const queryString = window.location.search;
+          // // Parse query string into object
+          // const doctordata = queryStringToObject(queryString);
 
           // Retrieve slotData object
-          const slotData = doctordata.slotData;
+          //const slotData = doctordata.slotData;
 
-          console.log(slotData);
+          //console.log(slotData);
+          // Get the URLSearchParams object from the current URL
+          const queryParams = new URLSearchParams(window.location.search);
+
+          // Retrieve the JSON strings from the query parameters
+          const object1String = queryParams.get("data1");
+          const object2String = queryParams.get("data2");
+
+          // Parse the JSON strings back into JavaScript objects
+          const doctordata = JSON.parse(object1String);
+          const slotData = JSON.parse(object2String);
+
+          // Now you can use object1 and object2 as needed
+          console.log(doctordata); // { name: "John", age: 30 }
+          console.log(slotData); // { city: "New York", country: "USA" }
+
           generateDoctorProfilePage(doctordata);
           // Call the function to generate the page
         </script>
