@@ -107,7 +107,6 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
         transition: transform 0.3s ease, background-color 0.3s ease; /* Add transition for transform and background-color */
         width: 24%;
-        
       }
       /* Display a maximum of six slot timings per row */
       .slot-section {
@@ -171,8 +170,7 @@
         border-radius: 10px;
         background-color: #fff;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        height: 60%;
-        position: relative;
+        /* height: 60%; */
       }
       .booking-form input[type="text"],
       .booking-form input[type="tel"],
@@ -185,6 +183,9 @@
         border-radius: 5px;
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
       }
+      .buttonContainer{
+        margin-top: 20px;
+      }
       .booking-form input[type="submit"] {
         /* width: 100%; */
         padding: 10px;
@@ -194,9 +195,10 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.15s ease-in-out;
-        position: absolute;
+        margin-left: 100px;
+        /* position: absolute;
         bottom: 20px;
-        left: 25%;
+        left: 25%; */
         width: 150px;
       }
       .booking-form input[type="submit"]:hover {
@@ -212,9 +214,10 @@
         cursor: pointer;
         width: 20%;
         transition: background-color 0.15s ease-in-out;
-        position: absolute;
+        margin-left: 100px;
+        /* position: absolute;
         bottom: 20px;
-        right: 25%;
+        right: 25%; */
       }
 
       #cancelButton:hover {
@@ -551,10 +554,12 @@
                 placeholder="Your Age"
                 required
               />
-              <input type="submit" value="Proceed" />
-              <button type="button" id="cancelButton" onclick="closeForm()">
-                Cancel
-              </button>
+              <div class="buttonContainer">
+                <input type="submit" value="Proceed" />
+                <button type="button" id="cancelButton" onclick="closeForm()">
+                  Cancel
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -581,6 +586,7 @@
     ></script>
     <!-- Add this script tag to include Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
       let slotData = [];
       let slotItems = [];
@@ -797,7 +803,7 @@
                 timingCOntainer.innerHTML += `<h4><img src="${iconUrls[timePeriod]}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
                 timingCOntainer.innerHTML +=
                   '<div class="no-slots-animation">No slots available</div>';
-                  slotContainer.appendChild(timingCOntainer)
+                slotContainer.appendChild(timingCOntainer);
               }
             });
           } else {
@@ -943,11 +949,11 @@
         .getElementById("patientMobile")
         .addEventListener("input", function (event) {
           const mobile = event.target.value;
-          if(mobile.length<=9||mobile.length>10){
+          if (mobile.length <= 9 || mobile.length > 10) {
             const defaultOption = document.createElement("option");
-            defaultOption.style.display="none"
+            defaultOption.style.display = "none";
             const patientDropdown = document.getElementById("patientDropdown");
-            patientDropdown.style.display="none"
+            patientDropdown.style.display = "none";
           }
           if (!isValidMobile(mobile)) {
             displayError(
@@ -955,12 +961,12 @@
               "Mobile number should be exactly 10 digits."
             );
             const patientDropdown = document.getElementById("patientDropdown");
-            patientDropdown.style.display="none"
+            patientDropdown.style.display = "none";
           } else {
             if (mobile.length === 10 && !isNaN(mobile)) {
-            // Call function to handle mobile number with 10 digits
-            handleMobileNumberWith10Digits(mobile);
-          }
+              // Call function to handle mobile number with 10 digits
+              handleMobileNumberWith10Digits(mobile);
+            }
             clearError(event.target);
           }
         });
@@ -1008,7 +1014,7 @@
             // Hide the dropdown/select element if no data is available
             selectElement.style.display = "none";
             const defaultOption = document.createElement("option");
-            defaultOption.style.display="none"
+            defaultOption.style.display = "none";
             // Make name and age fields editable
             const patientNameInput = document.getElementById("patientName");
             const patientAgeInput = document.getElementById("patientAge");
@@ -1075,7 +1081,6 @@
           }
         });
 
-  
       document
         .getElementById("patientAge")
         .addEventListener("input", function (event) {
@@ -1372,11 +1377,18 @@
               .then((responseData) => {
                 console.log(responseData); // This should now log the actual response data
                 if (responseData.Success) {
-                  const bookingId=responseData.data?responseData.data.APPNT_TOKEN:null
-                  showSuccessPopup("Booking Successful. Payment done",bookingId);
+                  const bookingId = responseData.data
+                    ? responseData.data.APPNT_TOKEN
+                    : null;
+                  showSuccessPopup(
+                    "Booking Successful. Payment done",
+                    bookingId
+                  );
                 } else {
-                  const bookingId=responseData.data?responseData.data.APPNT_TOKEN:null
-                  showFailurePopup("Patient already booked",bookingId);
+                  const bookingId = responseData.data
+                    ? responseData.data.APPNT_TOKEN
+                    : null;
+                  showFailurePopup("Patient already booked", bookingId);
                 }
               })
               .catch((error) => {
@@ -1392,8 +1404,38 @@
           .getElementById("payToDoctorBtn")
           .addEventListener("click", function () {
             hideSubPopup();
-            // Perform logic for paying to doctor
-            console.log("Paying to Doctor");
+            hideSubPopup();
+            console.log(patientDetails);
+            const url = "http://easyhealths.com/api/booking";
+            const params = patientDetails;
+            // Call bookAppointment and handle the promise
+            bookAppointment(url, params)
+              .then((responseData) => {
+                console.log(responseData); // This should now log the actual response data
+                if (responseData.Success) {
+                  const bookingId = responseData.data
+                    ? responseData.data.APPNT_TOKEN
+                    : null;
+                  showSuccessPopup(
+                    `Booking Successful.\nPay ₹ ${patientDetails.DR_FEES} to Doctor`,
+                    bookingId
+                  );
+                } else {
+                  const bookingId = responseData.data
+                    ? responseData.data.APPNT_TOKEN
+                    : null;
+                  showFailurePopup(
+                    `Patient already booked.\nPay ₹ ${patientDetails.DR_FEES}`,
+                    bookingId
+                  );
+                }
+              })
+              .catch((error) => {
+                console.error("Error fetching slot data:", error);
+              });
+
+            // Perform logic for paying to clinic
+            console.log("Paying to Clinic");
           });
       }
       // Function to show success popup

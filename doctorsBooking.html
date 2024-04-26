@@ -665,7 +665,9 @@
               doctorDiv.appendChild(doctorName);
               doctorDiv.appendChild(doctorDetails);
               doctorDiv.appendChild(feeBookContainer); // Append fee and book container
-
+              doctorDiv.addEventListener("click",()=>{
+                console.log(doctor);
+              })
               doctorsContainer.appendChild(doctorDiv);
             }
 
