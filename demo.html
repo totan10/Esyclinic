@@ -13,13 +13,13 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
       rel="stylesheet"
     />
-
     <style>
       /* Add custom styles here */
       body {
         margin: 0;
         padding: 0;
         background-color: #f8f9fa;
+        font-family: Arial, sans-serif;
       }
       #doctorProfileContainer {
         margin: 0;
@@ -183,7 +183,7 @@
         border-radius: 5px;
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
       }
-      .buttonContainer{
+      .buttonContainer {
         margin-top: 20px;
       }
       .booking-form input[type="submit"] {
@@ -508,7 +508,106 @@
       .failure-button:focus {
         outline: none;
       }
+
+      #content {
+        width: 210mm; /* A4 width */
+        height: 297mm; /* A4 height */
+        padding: 10mm;
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      .clinicDetails {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .clinicDetails h2 {
+        color: cyan; /* Header color */
+        margin: 0;
+      }
+
+      .clinicDetails p {
+        margin: 5px 0;
+      }
+
+      .clinicDetails img {
+        max-width: 150px;
+        height: auto;
+        margin-top: -20px;
+      }
+
+      .detailsContainer {
+        display: flex;
+        justify-content: space-between;
+        border-radius: 10px;
+        border: 1px solid black;
+        padding: 10px;
+      }
+
+      .column {
+        width: 30%;
+        padding: 5px;
+      }
+
+      .column h6 {
+        color: rgb(30, 140, 231); /* Header color */
+        margin: 0;
+      }
+
+      .column p {
+        margin: 5px 0;
+        font-size: smaller;
+      }
+
+      .clinicalNotes {
+        margin-top: 10px;
+        border: 1px solid black;
+        border-radius: 10px;
+        /* padding: 10px; */
+      }
+
+      .clinicalNotesContainer {
+        display: flex;
+        justify-content: space-between;
+        height: 750px;
+      }
+
+      .clinicalNote {
+        width: 33%;
+        /* padding: 10px; */
+        box-sizing: border-box;
+        border-right: 1px solid #131212; /* Border between columns */
+        height: 100%;
+      }
+
+      .clinicalNote:last-child {
+        border-right: none; /* Remove border on the last column */
+        width: 67%;
+      }
+
+      .clinicalNote h5 {
+        margin: 0px;
+        padding: 3px;
+        text-align: center;
+        border-bottom: 1px solid black;
+      }
+
+      @media print {
+        body {
+          margin: 0;
+          padding: 0;
+        }
+
+        #content {
+          width: 210mm;
+          min-height: 297mm;
+          padding: 20mm;
+          box-sizing: border-box;
+        }
+      }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
   </head>
   <body>
     <div class="row" style="margin: 0; height: 100vh">
@@ -580,13 +679,19 @@
       </div>
     </div>
 
+    <div id="printableContent" style="display: none">
+      <!-- Content to be printed as PDF -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
       crossorigin="anonymous"
     ></script>
     <!-- Add this script tag to include Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.js"></script>
+
     <script>
       let slotData = [];
       let slotItems = [];
@@ -625,6 +730,17 @@
         // Format the date as "DD Month"
         const options = { day: "numeric", month: "long" };
         return date.toLocaleDateString("en-US", options);
+      }
+      function formatDate(inputDate) {
+        // Extract year, month, and day from the input string
+        const year = inputDate.substring(0, 4);
+        const month = inputDate.substring(4, 6);
+        const day = inputDate.substring(6, 8);
+
+        // Form the date in dd-mm-yyyy format
+        const formattedDate = `${day}-${month}-${year}`;
+
+        return formattedDate;
       }
 
       async function fetchSlotTimings(drId, slotId) {
@@ -695,11 +811,11 @@
 
             // Modify slotItem HTML to call handleSlotClick with slot data
             slotItem.innerHTML = `
-                        <div class="slot-item">
-                            <div class="date-day">${formattedDate}<br>${dayName}</div>
-                            <div class="status" style="color: ${statusColor};">${statusText}</div>
-                        </div>
-                    `;
+                            <div class="slot-item">
+                                <div class="date-day">${formattedDate}<br>${dayName}</div>
+                                <div class="status" style="color: ${statusColor};">${statusText}</div>
+                            </div>
+                        `;
 
             slotItem.addEventListener("mouseenter", () => {
               //handleSlotClick(slot);
@@ -778,9 +894,9 @@
                     slottimeItem.classList.add("modal-slot-item", "col-md-3");
                     slottimeItem.dataset.slot = JSON.stringify(timeSlot);
                     slottimeItem.innerHTML = `
-                        <span>${timeSlot.FROM} - ${timeSlot.TO}</span>
-                        <div class="availability">Available</div>
-                    `;
+                            <span>${timeSlot.FROM} - ${timeSlot.TO}</span>
+                            <div class="availability">Available</div>
+                        `;
                     slotItemPair.appendChild(slottimeItem);
                     // console.log(JSON.parse(slottimeItem.dataset.slot));
                     console.log(slottimeItem);
@@ -1177,7 +1293,7 @@
               DR_FEES: doctordata.DR_FEES,
             };
             console.log(patientDetails);
-            showMainPopup(patientDetails, patientSexFromDataset);
+            showMainPopup(patientDetails, patientSexFromDataset,patientAgeFromDataset);
             // Reset form fields
             this.reset();
 
@@ -1209,7 +1325,7 @@
       });
 
       // Function to show the main popup
-      function showMainPopup(patientDetails, patientSexFromDataset) {
+      function showMainPopup(patientDetails, patientSexFromDataset,patientAgeFromDataset) {
         document.querySelector(".slot-container").style.display = "none";
         document.getElementById("popupOverlay").style.visibility = "visible";
         document.getElementById("mainPopup").style.display = "block";
@@ -1225,7 +1341,7 @@
             openBookingConfirmation(
               patientDetails,
               patientSexFromDataset,
-              patientSexFromDataset
+              patientAgeFromDataset
             );
           });
 
@@ -1244,8 +1360,8 @@
           // Clear any previous content
           bookingConfirm.innerHTML = "";
           bookingConfirm.innerHTML = `<h2 class="confirmation-heading">
-            Please Confirm Appointment Details
-          </h2>`;
+                Please Confirm Appointment Details
+              </h2>`;
           // Create upper part for patient info
           const upperPart = document.createElement("div");
           upperPart.classList.add("patient-info", "info-container");
@@ -1265,23 +1381,23 @@
           const lowerPart = document.createElement("div");
           lowerPart.classList.add("appointment-info", "info-container");
           lowerPart.innerHTML = `
-    <p><span>Patient</span>           : ${patientDetails.PATIENT_NAME}</p>
-    <p><span>Age</span>               : ${patientAgeFromDataset}</p>
-    <p><span>Gender</span>            : ${patientSexFromDataset}</p>
-    <p><span>Contact Number</span>    : ${patientDetails.MOBILE}</p>
-    <h4>Doctor Fees     : ₹ ${patientDetails.DR_FEES}</h4>
-    
-    `;
+        <p><span>Patient</span>           : ${patientDetails.PATIENT_NAME}</p>
+        <p><span>Age</span>               : ${patientAgeFromDataset}</p>
+        <p><span>Gender</span>            : ${patientSexFromDataset}</p>
+        <p><span>Contact Number</span>    : ${patientDetails.MOBILE}</p>
+        <h4>Doctor Fees     : ₹ ${patientDetails.DR_FEES}</h4>
+
+        `;
 
           upperPart.innerHTML = `
-          <p><span>Doctor</span>            : ${patientDetails.DR_NAME}</p>
-    <p><span>Chamber</span>           :${patientDetails.PHARMA_NAME}</p>
-    <p><span>Booking Date </span>     : ${bookingDate}</p>
-    <p><span>Timing </span>           : ${patientDetails.FROM} - ${patientDetails.TO}</p>
-    <p><span>Booking Purpose</span>   :${purpose}</p>
-          
-  
-  `;
+              <p><span>Doctor</span>            : ${patientDetails.DR_NAME}</p>
+        <p><span>Chamber</span>           :${patientDetails.PHARMA_NAME}</p>
+        <p><span>Booking Date </span>     : ${bookingDate}</p>
+        <p><span>Timing </span>           : ${patientDetails.FROM} - ${patientDetails.TO}</p>
+        <p><span>Booking Purpose</span>   :${purpose}</p>
+
+
+      `;
           // Append upper and lower parts to the booking confirmation container
           bookingConfirm.appendChild(upperPart);
           bookingConfirm.appendChild(lowerPart);
@@ -1326,7 +1442,7 @@
             showSubPopup(
               patientDetails,
               patientSexFromDataset,
-              patientSexFromDataset
+              patientAgeFromDataset
             );
           });
         }
@@ -1382,13 +1498,22 @@
                     : null;
                   showSuccessPopup(
                     "Booking Successful. Payment done",
-                    bookingId
+                    bookingId,
+                    patientDetails,
+                    age,
+                    gender
                   );
                 } else {
                   const bookingId = responseData.data
                     ? responseData.data.APPNT_TOKEN
                     : null;
-                  showFailurePopup("Patient already booked", bookingId);
+                  showFailurePopup(
+                    "Patient already booked",
+                    bookingId,
+                    patientDetails,
+                    age,
+                    gender
+                  );
                 }
               })
               .catch((error) => {
@@ -1418,15 +1543,22 @@
                     : null;
                   showSuccessPopup(
                     `Booking Successful.\nPay ₹ ${patientDetails.DR_FEES} to Doctor`,
-                    bookingId
+                    bookingId,
+                    patientDetails,
+                    age,
+                    gender
                   );
                 } else {
                   const bookingId = responseData.data
                     ? responseData.data.APPNT_TOKEN
                     : null;
+                  console.log(patientDetails);
                   showFailurePopup(
                     `Patient already booked.\nPay ₹ ${patientDetails.DR_FEES}`,
-                    bookingId
+                    bookingId,
+                    patientDetails,
+                    age,
+                    gender
                   );
                 }
               })
@@ -1439,7 +1571,13 @@
           });
       }
       // Function to show success popup
-      function showSuccessPopup(message, bookingId) {
+      function showSuccessPopup(
+        message,
+        bookingId,
+        patientDetails,
+        age,
+        gender
+      ) {
         const successPopup = document.createElement("div");
         successPopup.classList.add("popup");
         successPopup.id = "successPopup"; // Assign an id for styling
@@ -1451,12 +1589,43 @@
         // Add event listener for the success button
         const successBtn = document.getElementById("successBtn");
         successBtn.addEventListener("click", function () {
-          location.reload(); // Reload the page on button click
+          let formattedDate = formatDate(patientDetails.APNT_DT);
+          const visitTime = patientDetails.FROM + `-` + patientDetails.TO;
+          const doctorData = {
+            DR_NAME: patientDetails.DR_NAME,
+            DR_ID: patientDetails.DR_ID,
+            DESIGNATION: doctordata.DESIGNATION,
+            VisitDate: formattedDate,
+            VisitTime: visitTime,
+          };
+          const patientdetails = {
+            PATIENT_NAME: patientDetails.PATIENT_NAME,
+            Booking_ID: bookingId,
+            Age: age,
+            Gender: gender,
+            Mobile: patientDetails.Mobile,
+          };
+          const clinicData = {
+            PHARMA_NAME: userData.PHARMA_NAME,
+            ADDRESS: userData.ADDRESS,
+            CITY: userData.CITY,
+            STATE: userData.STATE,
+            PIN: userData.PIN,
+            LOGO_URL: userData.LOGO_URL,
+          };
+          generatePDF(doctorData, clinicData, patientdetails);
+          //location.reload(); // Reload the page on button click
         });
       }
 
       // Function to show failure popup
-      function showFailurePopup(message, bookingId) {
+      function showFailurePopup(
+        message,
+        bookingId,
+        patientDetails,
+        age,
+        gender
+      ) {
         const failurePopup = document.createElement("div");
         failurePopup.classList.add("popup");
         failurePopup.id = "failurePopup"; // Assign an id for styling
@@ -1468,7 +1637,33 @@
         // Add event listener for the failure button
         const failureBtn = document.getElementById("failureBtn");
         failureBtn.addEventListener("click", function () {
-          location.reload(); // Reload the page on button click
+          console.log(patientDetails);
+          let formattedDate = formatDate(patientDetails.APNT_DT);
+          const visitTime = patientDetails.FROM + `-` + patientDetails.TO;
+          const doctorData = {
+            DR_NAME: patientDetails.DR_NAME,
+            DR_ID: patientDetails.DR_ID,
+            DESIGNATION: doctordata.DESIGNATION,
+            VisitDate: formattedDate,
+            VisitTime: visitTime,
+          };
+          const patientdetails = {
+            PATIENT_NAME: patientDetails.PATIENT_NAME,
+            Booking_ID: bookingId,
+            Age: age,
+            Gender: gender,
+            Mobile: patientDetails.MOBILE,
+          };
+          const clinicData = {
+            PHARMA_NAME: userData.PHARMA_NAME,
+            ADDRESS: userData.ADDRESS,
+            CITY: userData.CITY,
+            STATE: userData.STATE,
+            PIN: userData.PIN,
+            LOGO_URL: userData.LOGO_URL,
+          };
+          generatePDF(doctorData, clinicData, patientdetails);
+          //location.reload(); // Reload the page on button click
         });
       }
 
@@ -1476,6 +1671,105 @@
       function hideSubPopup() {
         document.getElementById("popupOverlay").style.visibility = "hidden";
         document.getElementById("subPopup").style.display = "none";
+      }
+
+   
+
+      function generatePDF(doctorData, clinicData, patientDetails) {
+        const imageUrl = "http://easyhealths.com/storage/app/cliniclogo/8L.jpg";
+        
+        const element = document.createElement("div");
+
+        // Construct the HTML content for the PDF
+        element.innerHTML = ` <div id="content">
+        <div class="clinicDetails">
+            <img src="suraksha.jpg" alt="Clinic Logo">
+            <h2>${userData.PHARMA_NAME}</h2>
+            <p><strong>${userData.ADDRESS}</strong></p>
+        </div>
+        <div class="detailsContainer">
+            
+            <div class="column doctorDetails">
+                <h6>Doctor Details</h6>
+                <p><strong>Name:</strong> ${doctorData.DR_NAME}</p>
+                <p><strong>Doctor ID:</strong> ${doctorData.DR_ID}</p>
+                <p><strong>Designation:</strong> ${doctorData.DESIGNATION}</p>
+            </div>
+            <div class="column patientDetails">
+                <h6>Patient Details</h6>
+                <p><strong>Name:</strong>${patientDetails.PATIENT_NAME}</p>
+                <p><strong>Age:</strong> ${patientDetails.Age}</p>
+                <p><strong>Gender:</strong> ${patientDetails.Gender}</p>
+                <p><strong>Mobile:</strong> ${patientDetails.Mobile}</p>
+            </div>
+            <div class="column appointmentDetails">
+                <h6>Appointment Details</h6> 
+                <p><strong>Booking ID:</strong> ${patientDetails.Booking_ID}</p>
+                <p><strong>Visit Date:</strong> ${doctorData.VisitDate}</p>
+                <p><strong>Visit Time:</strong>  ${doctorData.VisitTime}</p>
+            </div>
+        </div>
+
+        <!-- Rounded bordered rectangular table for clinical notes and advice -->
+        <div class="clinicalNotes">
+            <div class="clinicalNotesContainer">
+                <div class="clinicalNote">
+                    <!-- First column content (Clinical Notes) -->
+                    <h5>Clinical Notes</h5>
+                    <!-- Add clinical notes content here -->
+                </div>
+                <div class="clinicalNote">
+                    <!-- Second column content (Advice) -->
+                    <h5>Advice</h5>
+                    <!-- Add advice content here -->
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+        // // Apply additional styles for PDF rendering
+        // element.style.padding = "10px";
+        // element.style.border = "1px solid #ccc";
+        // element.style.borderRadius = "10px";
+
+        // Configure PDF options
+        // Ensure the image is fully loaded before generating the PDF
+        // Preload the image and wait for it to load completely
+        const clinicLogo = new Image();
+        clinicLogo.src = clinicData.LOGO_URL;
+
+        clinicLogo.onload = function () {
+          // Once the image is loaded, proceed with generating the PDF
+          const opt = {
+            filename: `booking_confirmation_${patientDetails.Booking_ID}.pdf`,
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 1.5 }, // Adjust scale based on testing
+            jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+          };
+
+          // Use html2pdf to generate PDF from the element containing the image
+          html2pdf()
+            .set(opt)
+            .from(element)
+            .toPdf()
+            .output("datauristring")
+            .then(function (pdfDataUri) {
+              const pdfWindow = window.open();
+              pdfWindow.document.write(
+                '<iframe width="100%" height="100%" src="' +
+                  pdfDataUri +
+                  '" frameborder="0"></iframe>'
+              );
+              pdfWindow.document.close();
+
+              // Automatically focus the new window/tab
+              pdfWindow.focus();
+            });
+        };
+
+        clinicLogo.onerror = function () {
+          console.error("Failed to load clinic logo:", clinicData.LOGO_URL);
+        };
       }
     </script>
   </body>
