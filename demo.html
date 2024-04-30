@@ -570,7 +570,7 @@
       .clinicalNotesContainer {
         display: flex;
         justify-content: space-between;
-        height: 750px;
+        height: 740px;
       }
 
       .clinicalNote {
@@ -683,7 +683,10 @@
       <!-- Content to be printed as PDF -->
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
       crossorigin="anonymous"
@@ -961,8 +964,11 @@
         const designationPara = document.createElement("p");
         designationPara.classList.add("designation");
         designationPara.textContent = doctorData.DESIGNATION;
+        const registrationNoDiv = document.createElement("div");
+        registrationNoDiv.classList.add("specialization");
+        registrationNoDiv.innerHTML = `<b>Registration No:</b> ${doctorData.REGN_NO}`;
         const specializationDiv = document.createElement("div");
-        specializationDiv.classList.add("specialization");
+        registrationNoDiv.classList.add("specialization");
         specializationDiv.innerHTML = `<b>Specialization:</b> ${doctorData.D_CATG}`;
         const experienceDiv = document.createElement("div");
         experienceDiv.classList.add("experience");
@@ -999,6 +1005,7 @@
         // Append elements to info column
         infoCol.appendChild(nameHeader);
         infoCol.appendChild(designationPara);
+        infoCol.appendChild(registrationNoDiv);
         infoCol.appendChild(specializationDiv);
         infoCol.appendChild(experienceDiv);
         infoCol.appendChild(qualificationDiv);
@@ -1293,7 +1300,11 @@
               DR_FEES: doctordata.DR_FEES,
             };
             console.log(patientDetails);
-            showMainPopup(patientDetails, patientSexFromDataset,patientAgeFromDataset);
+            showMainPopup(
+              patientDetails,
+              patientSexFromDataset,
+              patientAgeFromDataset
+            );
             // Reset form fields
             this.reset();
 
@@ -1325,7 +1336,11 @@
       });
 
       // Function to show the main popup
-      function showMainPopup(patientDetails, patientSexFromDataset,patientAgeFromDataset) {
+      function showMainPopup(
+        patientDetails,
+        patientSexFromDataset,
+        patientAgeFromDataset
+      ) {
         document.querySelector(".slot-container").style.display = "none";
         document.getElementById("popupOverlay").style.visibility = "visible";
         document.getElementById("mainPopup").style.display = "block";
@@ -1376,6 +1391,9 @@
           let purpose = null;
           if (patientDetails.BOOKING_TYPE === "drvisit") {
             purpose = "Doctor Visit";
+          }
+          else{
+            purpose="Reporting"
           }
           // Create lower part for doctor and appointment info
           const lowerPart = document.createElement("div");
@@ -1452,10 +1470,16 @@
           .getElementById("reportBtn")
           .addEventListener("click", function () {
             patientDetails.BOOKING_TYPE = "report";
+            patientDetails.DR_FEES=`0`
             hideMainPopup();
             console.log(`patient details`, patientDetails);
             // Perform logic for generating report
             console.log("Generating Report");
+            openBookingConfirmation(
+              patientDetails,
+              patientSexFromDataset,
+              patientAgeFromDataset
+            );
           });
       }
 
@@ -1594,6 +1618,7 @@
           const doctorData = {
             DR_NAME: patientDetails.DR_NAME,
             DR_ID: patientDetails.DR_ID,
+            REGN_NO: doctordata.REGN_NO,
             DESIGNATION: doctordata.DESIGNATION,
             VisitDate: formattedDate,
             VisitTime: visitTime,
@@ -1644,6 +1669,7 @@
             DR_NAME: patientDetails.DR_NAME,
             DR_ID: patientDetails.DR_ID,
             DESIGNATION: doctordata.DESIGNATION,
+            REGN_NO: doctordata.REGN_NO,
             VisitDate: formattedDate,
             VisitTime: visitTime,
           };
@@ -1673,17 +1699,35 @@
         document.getElementById("subPopup").style.display = "none";
       }
 
-   
-
       function generatePDF(doctorData, clinicData, patientDetails) {
         const imageUrl = "http://easyhealths.com/storage/app/cliniclogo/8L.jpg";
-        
-        const element = document.createElement("div");
 
+        // Encode the URL to Base64
+        let base64Url = btoa(imageUrl);
+        base64Url=`data:image/png;base64,`+base64Url
+        const element = document.createElement("div");
+        const base6dimage = `data:image/png;base64,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`;
+        let base64data = "";
+        fetch(imageUrl)
+          .then((response) => response.blob()) // Convert the response to a Blob object
+          .then((blob) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob); // Convert the Blob into Base64
+            reader.onloadend = function () {
+              base64data = reader.result;
+              console.log(base64data);
+              document.getElementById("base64").textContent = base64data;
+            };
+          })
+          .catch((error) =>
+            console.error("Error converting image to Base64:", error)
+          );
+
+        console.log(base64Url);
         // Construct the HTML content for the PDF
         element.innerHTML = ` <div id="content">
         <div class="clinicDetails">
-            <img src="suraksha.jpg" alt="Clinic Logo">
+           <img src="${base64Url}" alt="clinic logo" />
             <h2>${userData.PHARMA_NAME}</h2>
             <p><strong>${userData.ADDRESS}</strong></p>
         </div>
@@ -1693,6 +1737,7 @@
                 <h6>Doctor Details</h6>
                 <p><strong>Name:</strong> ${doctorData.DR_NAME}</p>
                 <p><strong>Doctor ID:</strong> ${doctorData.DR_ID}</p>
+                <p><strong>Registration No:</strong> ${doctorData.REGN_NO}</p>
                 <p><strong>Designation:</strong> ${doctorData.DESIGNATION}</p>
             </div>
             <div class="column patientDetails">
@@ -1735,41 +1780,33 @@
         // Configure PDF options
         // Ensure the image is fully loaded before generating the PDF
         // Preload the image and wait for it to load completely
-        const clinicLogo = new Image();
-        clinicLogo.src = clinicData.LOGO_URL;
-
-        clinicLogo.onload = function () {
-          // Once the image is loaded, proceed with generating the PDF
-          const opt = {
-            filename: `booking_confirmation_${patientDetails.Booking_ID}.pdf`,
-            image: { type: "jpeg", quality: 0.98 },
-            html2canvas: { scale: 1.5 }, // Adjust scale based on testing
-            jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
-          };
-
-          // Use html2pdf to generate PDF from the element containing the image
-          html2pdf()
-            .set(opt)
-            .from(element)
-            .toPdf()
-            .output("datauristring")
-            .then(function (pdfDataUri) {
-              const pdfWindow = window.open();
-              pdfWindow.document.write(
-                '<iframe width="100%" height="100%" src="' +
-                  pdfDataUri +
-                  '" frameborder="0"></iframe>'
-              );
-              pdfWindow.document.close();
-
-              // Automatically focus the new window/tab
-              pdfWindow.focus();
-            });
+        // Once the image is loaded, proceed with generating the PDF
+        const opt = {
+          filename: `booking_confirmation_${patientDetails.Booking_ID}.pdf`,
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 1.5 }, // Adjust scale based on testing
+          jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
         };
+        console.log(element);
+        html2pdf()
+          .set(opt)
+          .from(element)
+          .toPdf()
+          .output("datauristring")
+          .then(function (pdfDataUri) {
+            const pdfWindow = window.open();
+            pdfWindow.document.write(
+              '<iframe width="100%" height="100%" src="' +
+                pdfDataUri +
+                '" frameborder="0"></iframe>'
+            );
+            pdfWindow.document.close();
 
-        clinicLogo.onerror = function () {
-          console.error("Failed to load clinic logo:", clinicData.LOGO_URL);
-        };
+            // Automatically focus the new window/tab
+
+            pdfWindow.focus();
+            //location.reload();
+          });
       }
     </script>
   </body>

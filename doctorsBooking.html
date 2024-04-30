@@ -519,16 +519,18 @@
           if (storedUserData) {
             userData = JSON.parse(storedUserData);
             console.log(userData);
+            userData=userData.data
             // Set the logo URL dynamically
             const companyLogo = document.getElementById("companyLogo");
-            companyLogo.src = userData.data.LOGO_URL;
+            companyLogo.src = userData.LOGO_URL;
           }
         }
       });
       function populateDoctors() {
+        const PHARMA_ID=userData?userData.PHARMA_ID:null
         const url = "http://easyhealths.com/api/searchDoctorTest";
         const params = {
-          PHARMA_ID: 8,
+          PHARMA_ID: PHARMA_ID,
         };
 
         axios
@@ -565,7 +567,7 @@
         // Data to be sent in the request body
         const postData = {
           // Add any necessary data for the API call
-          PHARMAID: 8,
+          PHARMAID: userData.PHARMA_ID,
         };
 
         // Making a POST request using Axios
