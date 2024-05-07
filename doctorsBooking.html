@@ -1,989 +1,1099 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Doctor's Booking</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/swiper/swiper-bundle.min.css"
-    />
-    <style>
-      /* Custom CSS */
-      body {
-        margin: 0;
-        padding: 0;
-      }
-      .header {
-        background-color: #00205b; /* Dark blue background */
-        height: 40px; /* Height of the header */
-        color: white; /* Text color */
-        text-align: center; /* Center align text */
-        font-size: 24px; /* Font size */
-      }
 
-      /* Custom CSS */
-      .navbar-container {
-        position: fixed; /* Fix the navbar container */
-        top: 0; /* Position at the top */
-        width: 100%; /* Full width */
-        z-index: 999; /* Ensure it's above other content */
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doctor's Booking</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+  <style>
+    /* Custom CSS */
+    body {
+      margin: 0;
+      padding: 0;
+    }
 
-      .navbar {
-        background-color: #f8f9fa; /* Navbar background color */
-        padding: 10px; /* Padding for navbar content */
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-      }
+    .header {
+      background-color: #00205b;
+      padding-top: 7px;
+      /* Dark blue background */
+      height: 40px;
+      /* Height of the header */
+      color: white;
+      /* Text color */
+      text-align: center;
+      /* Center align text */
+      font-size: 24px;
+      display: none;
+    }
 
-      .searchbar-container {
-        position: relative;
-        width: 60%; /* Search bar takes 60% of the navbar width */
-      }
+    /* Custom CSS */
+    .navbar-container {
+      position: fixed;
+      /* Fix the navbar container */
+      top: 0;
+      /* Position at the top */
+      width: 100%;
+      /* Full width */
+      z-index: 999;
+      /* Ensure it's above other content */
+    }
 
-      .searchbar {
-        width: calc(100% - 40px); /* Adjusted width considering icon padding */
-        padding: 10px 30px 10px 10px; /* Adjust padding to your preference */
-        font-size: 16px;
-        outline: none;
-        border: none;
-        border-radius: 20px; /* Rounded corners */
-        border: 2px solid #ccc; /* Border around search bar */
-      }
+    .navbar {
+      background-color: #f8f9fa;
+      /* Navbar background color */
+      padding: 10px;
+      /* Padding for navbar content */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
+      /* Add shadow effect */
+    }
 
-      /* Other styles remain the same */
+    .searchbar-container {
+      position: relative;
+      width: 60%;
+      /* Search bar takes 60% of the navbar width */
+    }
 
-      .navbar-brand img {
-        max-height: 60px;
-        margin-right: 10px;
-      }
+    .searchbar {
+      width: calc(100% - 40px);
+      /* Adjusted width considering icon padding */
+      padding: 10px 30px 10px 10px;
+      /* Adjust padding to your preference */
+      font-size: 16px;
+      outline: none;
+      border: none;
+      border-radius: 20px;
+      /* Rounded corners */
+      border: 2px solid #ccc;
+      /* Border around search bar */
+    }
 
-      .searchbar:focus {
-        border-color: #007bff; /* Border color when focused */
-      }
+    /* Other styles remain the same */
 
-      .searchbar:focus + .input-group-text {
-        color: #007bff; /* Icon color when search bar is focused */
-      }
+    .navbar-brand img {
+      max-height: 60px;
+      margin-right: 10px;
+    }
 
-      #searchResults {
-        list-style-type: none;
-        padding: 0;
-        position: absolute;
-        z-index: 1;
-        width: 100%;
-        background-color: #fff;
-        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
-        overflow-y: auto; /* Add scrollbar if needed */
-        max-height: 150px; /* Limit max height to show scrollbar */
-        display: none; /* Hide by default */
-        top: 25px;
-      }
+    .searchbar:focus {
+      border-color: #007bff;
+      /* Border color when focused */
+    }
 
-      #searchResults.active {
-        display: block; /* Show when active */
-      }
+    .searchbar:focus+.input-group-text {
+      color: #007bff;
+      /* Icon color when search bar is focused */
+    }
 
-      #searchResults li {
-        padding: 10px;
-        background-color: #f9f9f9;
-        border-bottom: 1px solid #ddd;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-      }
-      #searchResults li:hover {
-        background-color: #f3f3f3;
-      }
+    #searchResults {
+      list-style-type: none;
+      padding: 0;
+      position: absolute;
+      z-index: 1;
+      width: 100%;
+      background-color: #fff;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+      /* Add scrollbar if needed */
+      max-height: 150px;
+      /* Limit max height to show scrollbar */
+      display: none;
+      /* Hide by default */
+      top: 25px;
+    }
 
-      .doctor-info {
-        margin-left: 10px;
-      }
+    #searchResults.active {
+      display: block;
+      /* Show when active */
+    }
 
-      .doctor-info h5 {
-        margin: 0;
-      }
+    #searchResults li {
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-bottom: 1px solid #ddd;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
 
-      .doctor-info p {
-        margin: 5px 0;
-      }
+    #searchResults li:hover {
+      background-color: #f3f3f3;
+    }
 
-      .doctor-photo {
-        width: 60px;
-        height: 60px;
-        border-radius: 10%;
-        background-color: #ddd;
-        overflow: hidden;
-      }
+    .doctor-info {
+      margin-left: 10px;
+    }
 
-      .doctor-photo img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
+    .doctor-info h5 {
+      margin: 0;
+    }
 
-      .no-results {
-        padding: 10px;
-        text-align: center;
-      }
+    .doctor-info p {
+      margin: 5px 0;
+    }
 
-      .input-group-text {
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        display: flex;
-        align-items: center;
-        padding: 10px; /* Adjust padding to your preference */
-      }
+    .doctor-photo {
+      width: 60px;
+      height: 60px;
+      border-radius: 10%;
+      background-color: #ddd;
+      overflow: hidden;
+    }
 
-      .input-group-text i {
-        color: #ccc; /* Icon color */
-        border: none;
-      }
+    .doctor-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-      .profile-icon {
-        margin-left: 20px; /* Margin between search bar and profile icon */
-        font-size: 24px; /* Font size for profile icon */
-        cursor: pointer;
-      }
+    .no-results {
+      padding: 10px;
+      text-align: center;
+    }
 
-      .swiper-container {
-        margin-top: 50px;
-        width: 100%;
-        height: 400px; /* Adjust height of the slider */
-      }
+    .input-group-text {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      /* Adjust padding to your preference */
+    }
 
-      .swiper-slide img {
-        width: 100%;
-        height: 100%;
-        object-fit: fill; /* Ensure the image covers the entire slide */
-      }
+    .input-group-text i {
+      color: #ccc;
+      /* Icon color */
+      border: none;
+    }
 
-      .specialists-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 10px; /* Adjust the gap between grid items */
-        padding: 20px;
-        justify-content: center;
-      }
+    .profile-icon {
+      margin-left: 20px;
+      /* Margin between search bar and profile icon */
+      font-size: 24px;
+      /* Font size for profile icon */
+      cursor: pointer;
+    }
 
-      .specialist {
-        text-align: center;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-        cursor: pointer; /* Add pointer cursor */
-        background-color: #f0f0f0;
-      }
+    .swiper-container {
+      margin-top: 50px;
+      width: 100%;
+      height: 400px;
+      /* Adjust height of the slider */
+    }
 
-      .specialist img {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        border-radius: 50%;
-        margin-bottom: 10px;
-      }
+    .swiper-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      /* Ensure the image covers the entire slide */
+    }
 
-      .specialist p {
-        margin: 5px 0; /* Reduce the gap between p tags and image */
-        line-height: 1.2; /* Ensure consistent line height */
-        color: #333; /* Adjust text color */
-        font-size: 14px; /* Adjust font size */
-        font-weight: 500; /* Adjust font weight */
-        text-align: center;
-      }
+    .specialists-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      /* Adjust the gap between grid items */
+      padding: 20px;
+      justify-content: center;
+    }
 
-      .view-all-btn {
-        text-align: right;
-        margin-right: 20px;
-        margin-top: 10px;
-      }
+    .specialist {
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      /* Add shadow effect */
+      cursor: pointer;
+      /* Add pointer cursor */
+      background-color: #f0f0f0;
+    }
 
-      .view-all-btn a {
-        color: #00205b;
-        text-decoration: none;
-        font-weight: bold;
-      }
+    .specialist img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
 
-      /* Custom CSS for Doctors Grid for Today */
-      .doctors-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 10px; /* Adjust the gap between grid items */
-        padding: 20px;
-        justify-content: center;
-      }
+    .specialist p {
+      margin: 5px 0;
+      /* Reduce the gap between p tags and image */
+      line-height: 1.2;
+      /* Ensure consistent line height */
+      color: #333;
+      /* Adjust text color */
+      font-size: 14px;
+      /* Adjust font size */
+      font-weight: 500;
+      /* Adjust font weight */
+      text-align: center;
+    }
 
-      .doctor {
-        text-align: center;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-        cursor: pointer; /* Add pointer cursor */
-        background: #f0f0f0; /* Gradient background */
-      }
+    .view-all-btn {
+      text-align: right;
+      margin-right: 20px;
+      margin-top: 10px;
+    }
 
-      .specialist,
-      .doctor,
-      .symptom,
-      .doctor-specialist {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-      }
-      /* For Specialists Grid, Doctors Grid, Symptoms Grid, and Doctor Specialists Grid */
-      .specialist:hover,
-      .doctor:hover,
-      .symptom:hover,
-      .doctor-specialist:hover {
-        transform: translateY(-5px) scale(1.05);
-        transition: transform 0.3s ease;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        background-color: #baacac;
-        color: #f3f3f3;
-      }
-      .specialist:hover,
-      .doctor:hover,
-      .symptom:hover,
-      .doctor-specialist p:hover {
-        color: #f3f3f3;
-      }
-      .doctor img {
-        width: 100%;
-        height: 200px; /* Ensure proper image aspect ratio */
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-      }
+    .view-all-btn a {
+      color: #00205b;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-      .doctor-details {
-        padding: 10px;
-      }
+    /* Custom CSS for Doctors Grid for Today */
+    .doctors-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      /* Adjust the gap between grid items */
+      padding-bottom: 20px;
+      justify-content: center;
+      margin-top: 50px;
+    }
 
-      .doctor p {
-        margin: 5px 0;
-        text-align: center;
-      }
-      .fee-book-container {
+    .doctor {
+      margin-top: 35px;
+        padding: 0 3px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      /* Add shadow effect */
+      cursor: pointer;
+      /* Add pointer cursor */
+      background: #f0f0f0;
+      /* Gradient background */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      /* align-items: center; */
+    }
+
+    .specialist,
+    .doctor,
+    .symptom,
+    .doctor-specialist {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.4s ease;
+    }
+
+    /* For Specialists Grid, Doctors Grid, Symptoms Grid, and Doctor Specialists Grid */
+    .specialist:hover,
+    .doctor:hover,
+    .symptom:hover,
+    .doctor-specialist:hover {
+      transform: translateY(-5px) scale(1.05);
+      transition: transform 0.3s ease;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      background-color: #baacac;
+      color: #f3f3f3;
+    }
+
+    .specialist:hover,
+    .doctor:hover,
+    .symptom:hover,
+    .doctor-specialist p:hover {
+      color: #f3f3f3;
+    }
+
+    .doctor img {
+      width: 60%;
+      height: 100px;
+      /* Ensure proper image aspect ratio */
+      border-radius: 50%;
+      margin-top: -50px;
+      margin-left: 20%;
+      box-shadow: 0 0 5px rgb(216, 208, 192);
+    }
+
+    .doctor-details {
+      /* padding: 10px; */
+    }
+
+    .doctor p {
+      margin: 5px 0;
+      line-height: 1.5;
+      /* text-align: center; */
+    }
+
+    /* .fee-book-container {
         height: 40px;
         background-color: #00205b;
         position: relative;
         width: 100%; /* Make the button full width */
-        border-radius: 5px;
-      }
-      .fee-banner {
+    /* border-radius: 5px;
+      } */
+    /* .fee-banner {
         position: absolute;
         color: #fff;
         padding: 10px;
         left: 5px;
-      }
+      } */
 
-      .book-now-btn {
-        position: absolute;
-        right: 5px;
-        color: #fff;
-        background-color: #00205b;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        top: 5px;
-      }
+    .book-now-btn {
+      width: 100%;
+      height: 40px;
+      color: #f6f1f1;
+      background-color: #00205b;
+      border: none;
+      font-size: larger;
+      padding: 5px 10px;
+      border-radius: 15px;
+      cursor: pointer;
+      margin-bottom: 5px;
+    }
 
-      .book-now-btn:hover {
-        background-color: #f0f0f0; /* Light gray background on hover */
-        color: #007bff;
-      }
+    .book-now-btn:hover {
+      background-color: #f0f0f0;
+      /* Light gray background on hover */
+      color: #007bff;
+    }
 
-      .symptoms-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 10px; /* Adjust the gap between grid items */
-        padding: 20px;
-        justify-content: center;
-      }
+    .symptoms-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      /* Adjust the gap between grid items */
+      padding: 20px;
+      justify-content: center;
+    }
 
-      .symptom {
-        text-align: center;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-        cursor: pointer; /* Add pointer cursor */
-        background: #f0f0f0; /* Gradient background */
-      }
+    .symptom {
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      /* Add shadow effect */
+      cursor: pointer;
+      /* Add pointer cursor */
+      background: #f0f0f0;
+      /* Gradient background */
+    }
 
-      .symptom img {
-        width: 100%;
-        height: auto; /* Ensure proper image aspect ratio */
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-      }
+    .symptom img {
+      width: 100%;
+      height: auto;
+      /* Ensure proper image aspect ratio */
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
 
-      .symptom-details {
-        padding: 10px;
-      }
+    .symptom-details {
+      padding: 10px;
+    }
 
-      .symptom p {
-        margin: 5px 0;
-        text-align: center;
-      }
+    .symptom p {
+      margin: 5px 0;
+      text-align: center;
+    }
 
-      .doctor-specialists-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 10px; /* Adjust the gap between grid items */
-        padding: 20px;
-        justify-content: center;
-      }
+    .doctor-specialists-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      /* Adjust the gap between grid items */
+      padding: 20px;
+      justify-content: center;
+    }
 
-      .doctor-specialist {
-        text-align: center;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-        cursor: pointer; /* Add pointer cursor */
-        background: #f0f0f0; /* Gradient background */
-      }
+    .doctor-specialist {
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      /* Add shadow effect */
+      cursor: pointer;
+      /* Add pointer cursor */
+      background: #f0f0f0;
+      /* Gradient background */
+    }
 
-      .doctor-specialist img {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        border-radius: 50%;
-        margin-bottom: 10px;
-      }
+    .doctor-specialist img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
 
-      .doctor-name {
-        margin: 5px 0; /* Reduce the gap between p tags and image */
-        line-height: 1.2; /* Ensure consistent line height */
-        color: #00205b; /* Adjust text color */
-        font-size: 14px; /* Adjust font size */
-        font-weight: bold; /* Adjust font weight */
-        text-align: center;
-      }
+    .doctor-name {
+      margin: 5px 0;
+      /* Reduce the gap between p tags and image */
+      line-height: 1.2;
+      /* Ensure consistent line height */
+      color: #00205b;
+      /* Adjust text color */
+      font-size: 14px;
+      /* Adjust font size */
+      font-weight: bold;
+      /* Adjust font weight */
+      text-align: center;
+    }
 
-      .doctor-category {
-        margin: 5px 0; /* Reduce the gap between p tags and image */
-        line-height: 1.2; /* Ensure consistent line height */
-        color: #00205b; /* Adjust text color */
-        font-size: 12px; /* Adjust font size */
-        font-weight: normal; /* Adjust font weight */
-        text-align: center;
-      }
-      .slotitems {
-        width: 12.99%;
-      }
-      .slot-item {
-        padding: 10px;
-        margin-left: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-        cursor: pointer; /* Add pointer cursor */
-        border-radius: 10px;
-        transition: background-color 1s, color 1s;
-      }
-      .slot-item:hover {
-        color: #f0f0f0;
-        background-color: #007bff;
-      }
-      .slot-item .date-day,
-      .slot-item .status {
-        text-align: center;
-        padding: 4px;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Header -->
-    <!-- <div class="header">
+    .doctor-category {
+      margin: 5px 0;
+      /* Reduce the gap between p tags and image */
+      line-height: 1.2;
+      /* Ensure consistent line height */
+      color: #00205b;
+      /* Adjust text color */
+      font-size: 12px;
+      /* Adjust font size */
+      font-weight: normal;
+      /* Adjust font weight */
+      text-align: center;
+    }
+
+    .slotitems {
+      width: 12.99%;
+    }
+
+    .slot-item {
+      padding: 10px;
+      margin-left: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      /* Add shadow effect */
+      cursor: pointer;
+      /* Add pointer cursor */
+      border-radius: 10px;
+      transition: background-color 1s, color 1s;
+    }
+
+    .slot-item:hover {
+      color: #f0f0f0;
+      background-color: #007bff;
+    }
+
+    .slot-item .date-day,
+    .slot-item .status {
+      text-align: center;
+      padding: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <!-- <div class="header">
         Doctor's Booking
     </div> -->
 
-    <!-- Navbar Container -->
-    <div class="navbar-container">
-      <!-- Navbar -->
-      <nav class="navbar">
-        <!-- Logo -->
-        <a class="navbar-brand" href="dashboard.html">
-          <img src="logo.png" alt="Company Logo" id="companyLogo" />
-        </a>
-        <!-- Search Bar with Search Icon -->
-        <div class="input-group searchbar-container">
-          <input
-            type="text"
-            class="form-control searchbar"
-            placeholder="Search"
-            aria-label="Search"
-            aria-describedby="search-button"
-            id="searchInput"
-            autocomplete="off"
-          />
-          <div class="input-group-text">
-            <i class="fas fa-search"></i>
-          </div>
-          <ul id="searchResults"></ul>
+  <!-- Navbar Container -->
+  <div class="navbar-container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <!-- Logo -->
+      <a class="navbar-brand" href="dashboard.html">
+        <img src="logo.png" alt="Company Logo" id="companyLogo" />
+      </a>
+      <!-- Search Bar with Search Icon -->
+      <div class="input-group searchbar-container">
+        <input type="text" class="form-control searchbar" placeholder="Search" aria-label="Search"
+          aria-describedby="search-button" id="searchInput" autocomplete="off" />
+        <div class="input-group-text">
+          <i class="fas fa-search"></i>
         </div>
-        <!-- Profile Icon -->
-        <div class="profile-icon">
-          <i class="fas fa-user"></i>
-          <!-- Adjust icon as needed -->
-        </div>
-      </nav>
-    </div>
+        <ul id="searchResults"></ul>
+      </div>
+      <!-- Profile Icon -->
+      <div class="profile-icon">
+        <i class="fas fa-user"></i>
+        <!-- Adjust icon as needed -->
+      </div>
+    </nav>
+  </div>
 
-    <!-- Slider Container -->
-    <!-- <div class="swiper-container">
+  <!-- Slider Container -->
+  <!-- <div class="swiper-container">
       <div class="swiper-wrapper">
 
     </div> -->
-
-    <!-- Meet our specialist -->
-    <div
-      class="header"
-      style="background-color: #00205b; color: white; margin-top: 100px"
-    >
-      Find Doctor By specialists
-      <div class="view-all-btn">
-        <a href="#">View All</a>
-      </div>
+  <!-- Doctors for Today -->
+  <div class="header" style="background-color: #00205b; color: white;margin-top: 100px">
+    Doctors for Today
+    <div class="view-all-btn">
+      <a href="#">View All</a>
     </div>
-    <!-- Specialists Grid -->
-    <div class="specialists-container">
-      <!-- Data will be dynamically added here -->
-    </div>
+  </div>
 
-    <!-- Doctors for Today -->
-    <div class="header" style="background-color: #00205b; color: white">
-      Doctors for Today
-      <div class="view-all-btn">
-        <a href="#">View All</a>
-      </div>
+  <!-- Doctors Grid for Today -->
+  <div class="doctors-container">
+    <!-- Data will be dynamically added here -->
+  </div>
+  <!-- Meet our specialist -->
+  <div class="header" style="background-color: #00205b; color: white; ">
+    Find Doctor By specialists
+    <div class="view-all-btn">
+      <a href="#">View All</a>
     </div>
+  </div>
+  <!-- Specialists Grid -->
+  <div class="specialists-container">
+    <!-- Data will be dynamically added here -->
+  </div>
 
-    <!-- Doctors Grid for Today -->
-    <div class="doctors-container">
-      <!-- Data will be dynamically added here -->
+
+
+  <!-- Find Doctors by Symptoms -->
+  <div class="header" style="background-color: #00205b; color: white">
+    Find Doctors by Symptoms
+    <div class="view-all-btn">
+      <a href="#">View All</a>
     </div>
+  </div>
 
-    <!-- Find Doctors by Symptoms -->
-    <div class="header" style="background-color: #00205b; color: white">
-      Find Doctors by Symptoms
-      <div class="view-all-btn">
-        <a href="#">View All</a>
-      </div>
+  <!-- Symptoms Grid -->
+  <div class="symptoms-container">
+    <!-- Data will be dynamically added here -->
+  </div>
+
+  <!-- Meet our specialist -->
+  <div class="header" style="background-color: #00205b; color: white">
+    Meet our specialists
+    <div class="view-all-btn">
+      <a href="#">View All</a>
     </div>
+  </div>
+  <!-- Specialists Grid -->
+  <div class="doctor-specialists-container">
+    <!-- Data will be dynamically added here -->
+  </div>
 
-    <!-- Symptoms Grid -->
-    <div class="symptoms-container">
-      <!-- Data will be dynamically added here -->
-    </div>
+  <!-- JavaScript libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
-    <!-- Meet our specialist -->
-    <div class="header" style="background-color: #00205b; color: white">
-      Meet our specialists
-      <div class="view-all-btn">
-        <a href="#">View All</a>
-      </div>
-    </div>
-    <!-- Specialists Grid -->
-    <div class="doctor-specialists-container">
-      <!-- Data will be dynamically added here -->
-    </div>
-
-    <!-- JavaScript libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
-    <script>
-      let doctorsData = [];
-      let userData = null;
-      document.addEventListener("DOMContentLoaded", function () {
-        // Check if the user is already logged in
-        const isLoggedIn = localStorage.getItem("isLoggedIn");
-        if (isLoggedIn) {
-          // Retrieve username from localStorage
-          const username = localStorage.getItem("username");
-          // Do something with the logged-in user's data
-          const storedUserData = localStorage.getItem("userData");
-          console.log(storedUserData);
-          // Access and use the user's data
-          if (storedUserData) {
-            userData = JSON.parse(storedUserData);
-            console.log(userData);
-            userData=userData.data
-            // Set the logo URL dynamically
-            const companyLogo = document.getElementById("companyLogo");
-            companyLogo.src = userData.LOGO_URL;
-          }
+  <script>
+    let doctorsData = [];
+    let userData = null;
+    document.addEventListener("DOMContentLoaded", function () {
+      // Check if the user is already logged in
+      const isLoggedIn = localStorage.getItem("isLoggedIn");
+      if (isLoggedIn) {
+        // Retrieve username from localStorage
+        const username = localStorage.getItem("username");
+        // Do something with the logged-in user's data
+        const storedUserData = localStorage.getItem("userData");
+        console.log(storedUserData);
+        // Access and use the user's data
+        if (storedUserData) {
+          userData = JSON.parse(storedUserData);
+          console.log(userData);
+          userData = userData.data
+          // Set the logo URL dynamically
+          const companyLogo = document.getElementById("companyLogo");
+          companyLogo.src = userData.LOGO_URL;
         }
-      });
-      function populateDoctors() {
-        const PHARMA_ID=userData?userData.PHARMA_ID:null
-        const url = "http://easyhealths.com/api/searchDoctorTest";
-        const params = {
-          PHARMA_ID: PHARMA_ID,
-        };
-
-        axios
-          .post(url, params)
-          .then((response) => {
-            const data = response.data.data;
-            // console.log(data);
-            // const filteredArray = data.filter(
-            //   (item) => item.FIELD_TYPE === "Doctor"
-            // );
-            // const filteredDoctors = filteredArray.map((item) => {
-            //   return item.DETAILS;
-            // });
-            // console.log(filteredDoctors);
-            doctorsData = data;
-            console.log(doctorsData);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            return null;
-          });
       }
-      const searchInput = document.getElementById("searchInput");
-      const searchResults = document.getElementById("searchResults");
-      // Function to make a POST request on page load
-      window.onload = function () {
-        populateDoctors();
-        console.log(doctorsData);
-        searchInput.click();
-        searchInput.focus();
-        // Your API endpoint URL
-        const apiUrl = "http://easyhealths.com/api/phopd";
-
-        // Data to be sent in the request body
-        const postData = {
-          // Add any necessary data for the API call
-          PHARMAID: userData.PHARMA_ID,
-        };
-
-        // Making a POST request using Axios
-        axios
-          .post(apiUrl, postData)
-          .then((response) => {
-            // Handle response data
-            console.log(response.data);
-            const sliderData = response.data.data
-              ? response.data.data.slider
-              : null;
-            const specialistsData = response.data.data
-              ? response.data.data.specialist
-              : null;
-            console.log(sliderData);
-            const todayDoctorsData = response.data.data
-              ? response.data.data.today_doctor
-              : null;
-            const symptomsData = response.data.data
-              ? response.data.data.symptoms
-              : null;
-            const doctorSpecialistsData = response.data.data
-              ? response.data.data.total_doctor
-              : null;
-
-            // Populate the slider with images
-            // const sliderContainer = document.querySelector(".swiper-wrapper");
-            // sliderData.forEach((item) => {
-            //   const slide = document.createElement("div");
-            //   slide.classList.add("swiper-slide");
-            //   const img = document.createElement("img");
-            //   img.src = item.SLIDER_URL;
-            //   slide.appendChild(img);
-            //   sliderContainer.appendChild(slide);
-            // });
-
-            // Populate the specialists grid
-            const specialistsContainer = document.querySelector(
-              ".specialists-container"
-            );
-            for (let i = 0; i < Math.min(specialistsData.length, 6); i++) {
-              const specialist = specialistsData[i];
-              const specialistDiv = document.createElement("div");
-              specialistDiv.classList.add("specialist");
-              specialistDiv.addEventListener("click", () => {
-                console.log(specialist); // Print specialist data when clicked
-              });
-              const specialistImg = document.createElement("img");
-              specialistImg.src = specialist.PHOTO_URL;
-              const specialistName = document.createElement("p");
-              specialistName.textContent = specialist.SPECIALIST;
-              const specialistDesignation = document.createElement("p");
-              specialistDesignation.textContent = specialist.SPECIALITY;
-              const totalDoctors = document.createElement("p");
-              totalDoctors.textContent = "Total Doctors: " + specialist.TOTAL;
-              specialistDiv.appendChild(specialistImg);
-              specialistDiv.appendChild(specialistName);
-              specialistDiv.appendChild(specialistDesignation);
-              specialistDiv.appendChild(totalDoctors);
-              specialistsContainer.appendChild(specialistDiv);
-            }
-            // Populate the doctors grid for today
-            // Populate the doctors grid for today
-            const doctorsContainer =
-              document.querySelector(".doctors-container");
-            for (let i = 0; i < Math.min(todayDoctorsData.length, 6); i++) {
-              const doctor = todayDoctorsData[i];
-              const doctorDiv = document.createElement("div");
-              doctorDiv.classList.add("doctor");
-
-              const doctorImg = document.createElement("img");
-              doctorImg.src = doctor.DR_PHOTO;
-
-              const doctorName = document.createElement("p");
-              doctorName.textContent = doctor.DR_NAME;
-              doctorName.style.fontWeight = "bold";
-
-              const doctorDetails = document.createElement("p");
-              doctorDetails.innerHTML = `<span>Experience:</span> ${doctor.EXPERIENCE} | <span>Specialization:</span> ${doctor.D_CATG}`;
-              doctorDetails.style.fontSize = "12px";
-
-              const feeBookContainer = document.createElement("div");
-              feeBookContainer.classList.add("fee-book-container");
-
-              const feeBanner = document.createElement("div");
-              feeBanner.classList.add("fee-banner");
-              feeBanner.innerHTML = `Fees: ${doctor.DR_FEES}`;
-
-              const bookNowBtn = document.createElement("button");
-              bookNowBtn.textContent = "Book Now";
-              bookNowBtn.classList.add("book-now-btn");
-
-              feeBookContainer.appendChild(feeBanner);
-              feeBookContainer.appendChild(bookNowBtn);
-
-              doctorDiv.appendChild(doctorImg);
-              doctorDiv.appendChild(doctorName);
-              doctorDiv.appendChild(doctorDetails);
-              doctorDiv.appendChild(feeBookContainer); // Append fee and book container
-              doctorDiv.addEventListener("click",()=>{
-                console.log(doctor);
-              })
-              doctorsContainer.appendChild(doctorDiv);
-            }
-
-            // Populate the symptoms grid
-            const symptomsContainer = document.querySelector(
-              ".symptoms-container"
-            );
-            for (let i = 0; i < Math.min(symptomsData.length, 6); i++) {
-              const symptom = symptomsData[i];
-              const symptomDiv = document.createElement("div");
-              symptomDiv.classList.add("symptom");
-              symptomDiv.addEventListener("click", () => {
-                console.log(symptom); // Print symptom data when clicked
-              });
-              const symptomImg = document.createElement("img");
-              symptomImg.src = symptom.PHOTO_URL;
-              const symptomName = document.createElement("p");
-              symptomName.textContent = symptom.SYM_NAME;
-              symptomDiv.appendChild(symptomImg);
-              symptomDiv.appendChild(symptomName);
-              symptomsContainer.appendChild(symptomDiv);
-            }
-
-            // Populate the specialists grid
-            const doctorSpecialistsContainer = document.querySelector(
-              ".doctor-specialists-container"
-            );
-            for (
-              let i = 0;
-              i < Math.min(doctorSpecialistsData.length, 6);
-              i++
-            ) {
-              const specialist = doctorSpecialistsData[i];
-              const specialistDiv = document.createElement("div");
-              specialistDiv.classList.add("doctor-specialist");
-              specialistDiv.addEventListener("click", () => {
-                console.log(specialist); // Print specialist data when clicked
-              });
-              const specialistImg = document.createElement("img");
-              specialistImg.src = specialist.DR_PHOTO;
-              const specialistName = document.createElement("p");
-              specialistName.textContent = specialist.DR_NAME;
-              specialistName.classList.add("doctor-name"); // Added class for styling
-              const specialistCategory = document.createElement("p");
-              specialistCategory.textContent = specialist.D_CATG;
-              specialistCategory.classList.add("doctor-category"); // Added class for styling
-              specialistDiv.appendChild(specialistImg);
-              specialistDiv.appendChild(specialistName);
-              specialistDiv.appendChild(specialistCategory);
-              doctorSpecialistsContainer.appendChild(specialistDiv);
-            }
-          })
-          .catch((error) => {
-            // Handle errors
-            console.error("There was an error:", error);
-          });
+    });
+    function populateDoctors() {
+      const PHARMA_ID = userData ? userData.PHARMA_ID : null
+      const url = "http://easyhealths.com/api/searchDoctorTest";
+      const params = {
+        PHARMA_ID: PHARMA_ID,
       };
 
-      searchInput.addEventListener("input", () => {
-        console.log(doctorsData);
-        const query = searchInput.value;
-        populateSearchResults(query);
-      });
-      // Close search results when clicking outside the search container
-      document.addEventListener("click", (event) => {
-        const isClickInsideSearchContainer =
-          searchInput.contains(event.target) ||
-          searchResults.contains(event.target);
-        if (!isClickInsideSearchContainer) {
-          closeSearchResults();
-        }
-      });
-      function closeSearchResults() {
-        searchResults.classList.remove("active"); // Hide search results
+      axios
+        .post(url, params)
+        .then((response) => {
+          const data = response.data.data;
+          // console.log(data);
+          // const filteredArray = data.filter(
+          //   (item) => item.FIELD_TYPE === "Doctor"
+          // );
+          // const filteredDoctors = filteredArray.map((item) => {
+          //   return item.DETAILS;
+          // });
+          // console.log(filteredDoctors);
+          doctorsData = data;
+          console.log(doctorsData);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          return null;
+        });
+    }
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
+    // Function to make a POST request on page load
+    window.onload = function () {
+      populateDoctors();
+      console.log(doctorsData);
+      searchInput.click();
+      searchInput.focus();
+      // Your API endpoint URL
+      const apiUrl = "http://easyhealths.com/api/admopd";
+
+      // Data to be sent in the request body
+      const postData = {
+        // Add any necessary data for the API call
+        PHARMAID: userData.PHARMA_ID,
+      };
+
+      // Making a POST request using Axios
+      axios
+        .post(apiUrl, postData)
+        .then((response) => {
+          // Handle response data
+          console.log(response.data);
+          const sliderData = response.data.data
+            ? response.data.data.slider
+            : null;
+          const specialistsData = response.data.data
+            ? response.data.data.specialist
+            : null;
+          console.log(sliderData);
+          const todayDoctorsData = response.data.data
+            ? response.data.data.today_doctor
+            : null;
+          const symptomsData = response.data.data
+            ? response.data.data.symptoms
+            : null;
+          const doctorSpecialistsData = response.data.data
+            ? response.data.data.total_doctor
+            : null;
+
+          // Populate the slider with images
+          // const sliderContainer = document.querySelector(".swiper-wrapper");
+          // sliderData.forEach((item) => {
+          //   const slide = document.createElement("div");
+          //   slide.classList.add("swiper-slide");
+          //   const img = document.createElement("img");
+          //   img.src = item.SLIDER_URL;
+          //   slide.appendChild(img);
+          //   sliderContainer.appendChild(slide);
+          // });
+
+          // Populate the specialists grid
+          const specialistsContainer = document.querySelector(
+            ".specialists-container"
+          );
+          for (let i = 0; i < Math.min(specialistsData.length, 6); i++) {
+            const specialist = specialistsData[i];
+            const specialistDiv = document.createElement("div");
+            specialistDiv.classList.add("specialist");
+            specialistDiv.addEventListener("click", () => {
+              console.log(specialist); // Print specialist data when clicked
+              // Encode the SPECIALIST value for URL
+              // Encode object data as JSON and then as URL parameter
+              const encodedData = encodeURIComponent(JSON.stringify(specialist));
+              const redirectUrl = `doctors.html?data=${encodedData}`;
+
+              // Redirect to doctors.html with the specified SPECIALIST parameter
+              window.location.href = redirectUrl;
+            });
+            const specialistImg = document.createElement("img");
+            specialistImg.src = specialist.PHOTO_URL;
+            const specialistName = document.createElement("p");
+            specialistName.textContent = specialist.SPECIALIST;
+            const specialistDesignation = document.createElement("p");
+            specialistDesignation.textContent = specialist.SPECIALITY;
+            const totalDoctors = document.createElement("p");
+            totalDoctors.textContent = "Total Doctors: " + specialist.TOTAL;
+            specialistDiv.appendChild(specialistImg);
+            specialistDiv.appendChild(specialistName);
+            specialistDiv.appendChild(specialistDesignation);
+            specialistDiv.appendChild(totalDoctors);
+            specialistsContainer.appendChild(specialistDiv);
+          }
+
+          // Populate the doctors grid for today
+          const doctorsContainer =
+            document.querySelector(".doctors-container");
+          todayDoctorsData.sort(sortByCheckInStatus)
+          for (let i = 0; i < Math.min(todayDoctorsData.length, 6); i++) {
+            const doctor = todayDoctorsData[i];
+            const doctorDiv = document.createElement("div");
+            doctorDiv.classList.add("doctor");
+
+            const doctorImg = document.createElement("img");
+            doctorImg.src = doctor.DR_PHOTO;
+
+            const doctorName = document.createElement("p");
+            doctorName.textContent = doctor.DR_NAME;
+            doctorName.style.fontWeight = "bold";
+
+            const doctorDetails = document.createElement("p");
+            if (doctor.CHK_IN_STATUS === 'OUT') {
+              doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:red;">${doctor.CHK_IN_STATUS}</span> <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
+                <br><strong>Fees:</strong> ₹${doctor.DR_FEES}`;
+            }
+            else {
+              doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:green;">${doctor.CHK_IN_STATUS}</span> <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
+                <br><strong>Fees:</strong> ₹${doctor.DR_FEES}
+                <br><strong>Available Bookings: </strong>${doctor.AVAILABLE}
+                <br><strong>Timing: </strong>${doctor.CHK_IN_TIME} - ${doctor.CHK_OUT_TIME}
+                <br><strong>Chamber Number:</strong> ${doctor.CHEMBER_NO}`;
+            }
+
+            doctorDetails.style.fontSize = "14px";
+
+            // const feeBookContainer = document.createElement("div");
+            // feeBookContainer.classList.add("fee-book-container");
+
+            const bookNowBtn = document.createElement("button");
+            bookNowBtn.textContent = "Book Now";
+            bookNowBtn.classList.add("book-now-btn");
+            //feeBookContainer.appendChild(bookNowBtn);
+
+            doctorDiv.appendChild(doctorImg);
+            doctorDiv.appendChild(doctorName);
+            doctorDiv.appendChild(doctorDetails);
+            doctorDiv.appendChild(bookNowBtn); // Append fee and book container
+            doctorDiv.addEventListener("click", () => {
+              console.log(doctor);
+            })
+            doctorsContainer.appendChild(doctorDiv);
+          }
+
+          // Custom sorting function based on CHK_IN_STATUS
+          function sortByCheckInStatus(a, b) {
+            const statusOrder = {
+              'IN': 1,
+              'UPCOMING': 2,
+              'OUT': 3
+            };
+
+            const statusA = a.CHK_IN_STATUS;
+            const statusB = b.CHK_IN_STATUS;
+
+            if (statusOrder[statusA] < statusOrder[statusB]) {
+              return -1;
+            } else if (statusOrder[statusA] > statusOrder[statusB]) {
+              return 1;
+            } else {
+              return 0;
+            }
+          }
+
+          // Populate the symptoms grid
+          const symptomsContainer = document.querySelector(
+            ".symptoms-container"
+          );
+          for (let i = 0; i < Math.min(symptomsData.length, 6); i++) {
+            const symptom = symptomsData[i];
+            const symptomDiv = document.createElement("div");
+            symptomDiv.classList.add("symptom");
+            symptomDiv.addEventListener("click", () => {
+              console.log(symptom); // Print symptom data when clicked
+            });
+            const symptomImg = document.createElement("img");
+            symptomImg.src = symptom.PHOTO_URL;
+            const symptomName = document.createElement("p");
+            symptomName.textContent = symptom.SYM_NAME;
+            symptomDiv.appendChild(symptomImg);
+            symptomDiv.appendChild(symptomName);
+            symptomsContainer.appendChild(symptomDiv);
+          }
+
+          // Populate the specialists grid
+          const doctorSpecialistsContainer = document.querySelector(
+            ".doctor-specialists-container"
+          );
+          for (
+            let i = 0;
+            i < Math.min(doctorSpecialistsData.length, 6);
+            i++
+          ) {
+            const specialist = doctorSpecialistsData[i];
+            const specialistDiv = document.createElement("div");
+            specialistDiv.classList.add("doctor-specialist");
+            specialistDiv.addEventListener("click", () => {
+              console.log(specialist); // Print specialist data when clicked
+            });
+            const specialistImg = document.createElement("img");
+            specialistImg.src = specialist.DR_PHOTO;
+            const specialistName = document.createElement("p");
+            specialistName.textContent = specialist.DR_NAME;
+            specialistName.classList.add("doctor-name"); // Added class for styling
+            const specialistCategory = document.createElement("p");
+            specialistCategory.textContent = specialist.D_CATG;
+            specialistCategory.classList.add("doctor-category"); // Added class for styling
+            specialistDiv.appendChild(specialistImg);
+            specialistDiv.appendChild(specialistName);
+            specialistDiv.appendChild(specialistCategory);
+            doctorSpecialistsContainer.appendChild(specialistDiv);
+          }
+
+          const headers=document.querySelectorAll(`.header`)
+          headers.forEach((header)=>{
+            header.style.display='block'
+          })
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error("There was an error:", error);
+        });
+    };
+
+    searchInput.addEventListener("input", () => {
+      console.log(doctorsData);
+      const query = searchInput.value;
+      populateSearchResults(query);
+    });
+    // Close search results when clicking outside the search container
+    document.addEventListener("click", (event) => {
+      const isClickInsideSearchContainer =
+        searchInput.contains(event.target) ||
+        searchResults.contains(event.target);
+      if (!isClickInsideSearchContainer) {
+        closeSearchResults();
       }
-      searchInput.addEventListener("click", (event) => {
-        event.stopPropagation();
-        if (searchResults.innerHTML.trim() !== "") {
-          searchResults.classList.add("active");
-        }
+    });
+    function closeSearchResults() {
+      searchResults.classList.remove("active"); // Hide search results
+    }
+    searchInput.addEventListener("click", (event) => {
+      event.stopPropagation();
+      if (searchResults.innerHTML.trim() !== "") {
+        searchResults.classList.add("active");
+      }
+    });
+
+    function populateSearchResults(query) {
+      console.log(doctorsData);
+      searchResults.innerHTML = "";
+
+      if (query.trim() === "") {
+        return;
+      }
+
+      const filteredDoctors = doctorsData.filter((item) => {
+        const cleanItemName = item.ITEM_NAME.toLowerCase();
+        const cleanBItemCat = item.DETAILS.D_CATG ? item.DETAILS.D_CATG.toLowerCase() : '';
+        return cleanItemName.includes(query.toLowerCase()) || cleanBItemCat.includes(query.toLowerCase())
       });
 
-      function populateSearchResults(query) {
-        console.log(doctorsData);
-        searchResults.innerHTML = "";
+      if (filteredDoctors.length === 0) {
+        console.log(filteredDoctors);
+        const noResultsItem = document.createElement("li");
+        noResultsItem.classList.add("no-results");
+        noResultsItem.textContent = "No match found.";
+        searchResults.appendChild(noResultsItem);
+        return;
+      }
+      const filtered = filteredDoctors.sort((a, b) => {
+        const cleanAItemName = a.ITEM_NAME.toLowerCase();
+        const cleanBItemName = b.ITEM_NAME.toLowerCase();
+        const aIndex = cleanAItemName.indexOf(query.toLowerCase());
+        const bIndex = cleanBItemName.indexOf(query.toLowerCase());
+        return aIndex - bIndex;
+      });
+      console.log(filtered);
 
-        if (query.trim() === "") {
-          return;
-        }
+      // if (filtered.length <= 2) {
+      //   filtered.forEach((doctor) => {
+      //     const drId = doctor.DR_ID ? doctor.DR_ID : null;
 
-        const filteredDoctors = doctorsData.filter((item) => {
-          const cleanItemName = item.ITEM_NAME.toLowerCase();
-          return cleanItemName.includes(query.toLowerCase());
-        });
+      //     const slotData = fetchData(drId);
 
-        if (filteredDoctors.length === 0) {
-          console.log(filteredDoctors);
-          const noResultsItem = document.createElement("li");
-          noResultsItem.classList.add("no-results");
-          noResultsItem.textContent = "No match found.";
-          searchResults.appendChild(noResultsItem);
-          return;
-        }
-        const filtered = filteredDoctors.sort((a, b) => {
-          const cleanAItemName = a.ITEM_NAME.toLowerCase();
-          const cleanBItemName = b.ITEM_NAME.toLowerCase();
-          const aIndex = cleanAItemName.indexOf(query.toLowerCase());
-          const bIndex = cleanBItemName.indexOf(query.toLowerCase());
-          return aIndex - bIndex;
-        });
-        console.log(filtered);
+      //     // Using .then() to handle the fulfillment of the promise
+      //     slotData
+      //       .then((arrayResult) => {
+      //         doctor.slotData = arrayResult ? arrayResult : null; // Log the array once the promise is fulfilled
+      //       })
+      //       .catch((error) => {
+      //         console.error("Error fetching array from slotData:", error); // Handle any errors
+      //       });
+      //     async function fetchData(drId) {
+      //       try {
+      //         const slots = await fetchSlots(drId)
+      //           .then((results) => {
+      //             return results;
+      //           })
+      //           .catch((error) => {
+      //             // Handle errors if any
+      //             console.error("Error fetching array:", error);
+      //           });
+      //         return slots;
+      //         // Process slot data as needed
+      //       } catch (error) {
+      //         console.error("Error fetching slot data:", error);
+      //         return null;
+      //       }
+      //     }
+      //   });
+      // }
+      function getFormattedDate(dateString) {
+        const year = dateString.substring(0, 4);
+        const month = dateString.substring(4, 6);
+        const day = dateString.substring(6, 8);
 
-        // if (filtered.length <= 2) {
-        //   filtered.forEach((doctor) => {
-        //     const drId = doctor.DR_ID ? doctor.DR_ID : null;
+        // Create a Date object using the parsed components
+        const date = new Date(`${year}-${month}-${day}`);
 
-        //     const slotData = fetchData(drId);
+        // Format the date as "DD Month"
+        const options = { day: "numeric", month: "long" };
+        return date.toLocaleDateString("en-US", options);
+      }
+      filtered.forEach((doctor, index) => {
+        if (doctor.FIELD_TYPE === "Doctor") {
+          doctor = doctor.DETAILS;
+          const drId = doctor.DR_ID ? doctor.DR_ID : null;
+          console.log(drId);
+          const slotData = doctor.SCH_DT ? doctor.SCH_DT : null;
+          console.log(slotData);
+          const listItem = document.createElement("li");
 
-        //     // Using .then() to handle the fulfillment of the promise
-        //     slotData
-        //       .then((arrayResult) => {
-        //         doctor.slotData = arrayResult ? arrayResult : null; // Log the array once the promise is fulfilled
-        //       })
-        //       .catch((error) => {
-        //         console.error("Error fetching array from slotData:", error); // Handle any errors
-        //       });
-        //     async function fetchData(drId) {
-        //       try {
-        //         const slots = await fetchSlots(drId)
-        //           .then((results) => {
-        //             return results;
-        //           })
-        //           .catch((error) => {
-        //             // Handle errors if any
-        //             console.error("Error fetching array:", error);
-        //           });
-        //         return slots;
-        //         // Process slot data as needed
-        //       } catch (error) {
-        //         console.error("Error fetching slot data:", error);
-        //         return null;
-        //       }
-        //     }
-        //   });
-        // }
-        function getFormattedDate(dateString) {
-          const year = dateString.substring(0, 4);
-          const month = dateString.substring(4, 6);
-          const day = dateString.substring(6, 8);
-
-          // Create a Date object using the parsed components
-          const date = new Date(`${year}-${month}-${day}`);
-
-          // Format the date as "DD Month"
-          const options = { day: "numeric", month: "long" };
-          return date.toLocaleDateString("en-US", options);
-        }
-        filtered.forEach((doctor, index) => {
-          if (doctor.FIELD_TYPE === "Doctor") {
-            doctor = doctor.DETAILS;
-            const drId = doctor.DR_ID ? doctor.DR_ID : null;
-            console.log(drId);
-            const slotData = doctor.SCH_DT ? doctor.SCH_DT : null;
-            console.log(slotData);
-            const listItem = document.createElement("li");
-
-            const doctorPhotoContainer = document.createElement("div");
-            doctorPhotoContainer.classList.add("doctor-photo");
-            doctorPhotoContainer.innerHTML = `
+          const doctorPhotoContainer = document.createElement("div");
+          doctorPhotoContainer.classList.add("doctor-photo");
+          doctorPhotoContainer.innerHTML = `
           <img src="${doctor.DR_PHOTO}" alt="${doctor.DR_PHOTO}" class="me-3">
         `;
 
-            const doctorInfoContainer = document.createElement("div");
-            doctorInfoContainer.classList.add("doctor-info");
-            doctorInfoContainer.innerHTML = `
+          const doctorInfoContainer = document.createElement("div");
+          doctorInfoContainer.classList.add("doctor-info");
+          doctorInfoContainer.innerHTML = `
           <h5>${doctor.DR_NAME}</h5>
           <p>${doctor.D_CATG}</p>
         `;
 
-            listItem.appendChild(doctorPhotoContainer);
-            listItem.appendChild(doctorInfoContainer);
-            slotData.forEach((slot) => {
-              const date = new Date(slot.SCH_DT);
-              const formattedDate = getFormattedDate(slot.SCH_DT);
-              const dayName = slot.SCH_DAY;
-              const slotItem = document.createElement("div");
-              slotItem.classList.add("slotitems");
-              // Determine status text and color based on conditions
-              let statusText, statusColor;
-              if (
-                slot.STATUS === "Booking Available" &&
-                slot.CHK_IN_STS === "UPCOMING"
-              ) {
-                statusText = "Available";
-                statusColor = "green";
-              } else if (
-                slot.STATUS === "Booking Available" &&
-                slot.CHK_IN_STS === "IN"
-              ) {
-                statusText = "In Clinic";
-                statusColor = "green";
-              } else {
-                statusText = "Not Available";
-                statusColor = "red";
-              }
+          listItem.appendChild(doctorPhotoContainer);
+          listItem.appendChild(doctorInfoContainer);
+          slotData.forEach((slot) => {
+            const date = new Date(slot.SCH_DT);
+            const formattedDate = getFormattedDate(slot.SCH_DT);
+            const dayName = slot.SCH_DAY;
+            const slotItem = document.createElement("div");
+            slotItem.classList.add("slotitems");
+            // Determine status text and color based on conditions
+            let statusText, statusColor;
+            if (
+              slot.STATUS === "Booking Available" &&
+              slot.CHK_IN_STS === "UPCOMING"
+            ) {
+              statusText = "Available";
+              statusColor = "green";
+            } else if (
+              slot.STATUS === "Booking Available" &&
+              slot.CHK_IN_STS === "IN"
+            ) {
+              statusText = "In Clinic";
+              statusColor = "green";
+            } else {
+              statusText = "Not Available";
+              statusColor = "red";
+            }
 
-              // Modify slotItem HTML to call handleSlotClick with slot data
-              slotItem.innerHTML = `
+            // Modify slotItem HTML to call handleSlotClick with slot data
+            slotItem.innerHTML = `
                         <div class="slot-item">
                             <div class="date-day">${formattedDate}<br>${dayName}</div>
                             <div class="status" style="color: ${statusColor};">${statusText}</div>
                         </div>
                     `;
-              listItem.appendChild(slotItem);
-              slotItem.addEventListener("click", () => {
-                console.log(slot);
-                doctor.SlotId = slot.ID ? slot.ID : null;
-                delete doctor.SCH_DT;
-                const doctordata = doctor ? doctor : null;
-                console.log(doctor);
-                const object1String = JSON.stringify(doctordata);
-                const object2String = JSON.stringify(slot);
-                const baseUrl = "/doctor_profile_with_slots.html"; // Base URL of the destination page
-                const queryParams = new URLSearchParams({
-                  data1: object1String,
-                  data2: object2String,
-                });
-
-                const url = `${baseUrl}?${queryParams}`;
-
-                // Function to convert object to query string
-                // function objectToQueryString(obj) {
-                //   const keyValuePairs = [];
-                //   for (const key in obj) {
-                //     if (Object.hasOwnProperty.call(obj, key)) {
-                //       keyValuePairs.push(
-                //           `${key}=${encodeURIComponent(obj[key])}`
-                //         );
-                //     }
-                //   }
-                //   return keyValuePairs.join("&");
-                // }
-
-                // Convert object to query string
-                // const queryParams = objectToQueryString(doctordata);
-                // console.log(queryParams);
-
-                window.location.href = url;
+            listItem.appendChild(slotItem);
+            slotItem.addEventListener("click", () => {
+              console.log(slot);
+              doctor.SlotId = slot.ID ? slot.ID : null;
+              delete doctor.SCH_DT;
+              const doctordata = doctor ? doctor : null;
+              console.log(doctor);
+              const object1String = JSON.stringify(doctordata);
+              const object2String = JSON.stringify(slot);
+              const baseUrl = "/doctor_profile_with_slots.html"; // Base URL of the destination page
+              const queryParams = new URLSearchParams({
+                data1: object1String,
+                data2: object2String,
               });
-            });
 
-            doctorPhotoContainer.addEventListener("click", () => {
-              const doctordata = doctor ? doctor : null;
-              console.log(doctor);
+              const url = `${baseUrl}?${queryParams}`;
+
               // Function to convert object to query string
-              function objectToQueryString(obj) {
-                const keyValuePairs = [];
-                for (const key in obj) {
-                  if (Object.hasOwnProperty.call(obj, key)) {
-                    if (key === "SCH_DT") {
-                      // Convert slotData object to JSON string
-                      keyValuePairs.push(
-                        `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
-                      );
-                    } else {
-                      keyValuePairs.push(
-                        `${key}=${encodeURIComponent(obj[key])}`
-                      );
-                    }
-                  }
-                }
-                return keyValuePairs.join("&");
-              }
+              // function objectToQueryString(obj) {
+              //   const keyValuePairs = [];
+              //   for (const key in obj) {
+              //     if (Object.hasOwnProperty.call(obj, key)) {
+              //       keyValuePairs.push(
+              //           `${key}=${encodeURIComponent(obj[key])}`
+              //         );
+              //     }
+              //   }
+              //   return keyValuePairs.join("&");
+              // }
 
               // Convert object to query string
-              const queryParams = objectToQueryString(doctordata);
-              console.log(queryParams);
-              window.location.href = `demo.html?${queryParams}`;
+              // const queryParams = objectToQueryString(doctordata);
+              // console.log(queryParams);
+
+              window.location.href = url;
             });
-            doctorInfoContainer.addEventListener("click", () => {
-              const doctordata = doctor ? doctor : null;
-              console.log(doctor);
-              // Function to convert object to query string
-              function objectToQueryString(obj) {
-                const keyValuePairs = [];
-                for (const key in obj) {
-                  if (Object.hasOwnProperty.call(obj, key)) {
-                    if (key === "SCH_DT") {
-                      // Convert slotData object to JSON string
-                      keyValuePairs.push(
-                        `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
-                      );
-                    } else {
-                      keyValuePairs.push(
-                        `${key}=${encodeURIComponent(obj[key])}`
-                      );
-                    }
+          });
+
+          doctorPhotoContainer.addEventListener("click", () => {
+            const doctordata = doctor ? doctor : null;
+            console.log(doctor);
+            // Function to convert object to query string
+            function objectToQueryString(obj) {
+              const keyValuePairs = [];
+              for (const key in obj) {
+                if (Object.hasOwnProperty.call(obj, key)) {
+                  if (key === "SCH_DT") {
+                    // Convert slotData object to JSON string
+                    keyValuePairs.push(
+                      `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
+                    );
+                  } else {
+                    keyValuePairs.push(
+                      `${key}=${encodeURIComponent(obj[key])}`
+                    );
                   }
                 }
-                return keyValuePairs.join("&");
               }
+              return keyValuePairs.join("&");
+            }
 
-              // Convert object to query string
-              const queryParams = objectToQueryString(doctordata);
-              console.log(queryParams);
-              window.location.href = `demo.html?${queryParams}`;
-            });
+            // Convert object to query string
+            const queryParams = objectToQueryString(doctordata);
+            console.log(queryParams);
+            window.location.href = `demo.html?${queryParams}`;
+          });
+          doctorInfoContainer.addEventListener("click", () => {
+            const doctordata = doctor ? doctor : null;
+            console.log(doctor);
+            // Function to convert object to query string
+            function objectToQueryString(obj) {
+              const keyValuePairs = [];
+              for (const key in obj) {
+                if (Object.hasOwnProperty.call(obj, key)) {
+                  if (key === "SCH_DT") {
+                    // Convert slotData object to JSON string
+                    keyValuePairs.push(
+                      `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
+                    );
+                  } else {
+                    keyValuePairs.push(
+                      `${key}=${encodeURIComponent(obj[key])}`
+                    );
+                  }
+                }
+              }
+              return keyValuePairs.join("&");
+            }
 
-            searchResults.appendChild(listItem);
-          }
-        });
+            // Convert object to query string
+            const queryParams = objectToQueryString(doctordata);
+            console.log(queryParams);
+            window.location.href = `demo.html?${queryParams}`;
+          });
 
-        searchResults.classList.add("active"); // Show search results
-      }
-    </script>
-  </body>
+          searchResults.appendChild(listItem);
+        }
+      });
+
+      searchResults.classList.add("active"); // Show search results
+    }
+  </script>
+</body>
+
 </html>
