@@ -245,16 +245,26 @@
       margin-top: 10px;
     }
 
-    .view-all-btn a {
-      color: #00205b;
+    .view-all-btn button {
+      color: #19cfc3;
+      background-color: transparent;
       text-decoration: none;
       font-weight: bold;
+      border: none;
+      font-size: large;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: color 0.3s ease, color 0.3s ease;
+    }
+
+    .view-all-btn button:hover {
+      color: #0056b3;
     }
 
     /* Custom CSS for Doctors Grid for Today */
     .doctors-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(6, 1fr);
       gap: 15px;
       /* Adjust the gap between grid items */
       padding-bottom: 20px;
@@ -264,7 +274,7 @@
 
     .doctor {
       margin-top: 35px;
-        padding: 0 3px;
+      padding: 0 3px;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       /* Add shadow effect */
@@ -343,7 +353,7 @@
       width: 100%;
       height: 40px;
       color: #f6f1f1;
-      background-color:#007bff;
+      background-color: #007bff;
       border: none;
       font-size: larger;
       padding: 5px 10px;
@@ -439,6 +449,34 @@
       text-align: center;
     }
 
+    @media (max-width: 1024px) {
+      .doctors-container {
+        grid-template-columns: repeat(4, 1fr);
+        /* Adjust for smaller screens */
+      }
+    }
+
+    @media (max-width: 768px) {
+      .doctors-container {
+        grid-template-columns: repeat(3, 1fr);
+        /* Adjust for smaller screens */
+      }
+    }
+
+    @media (max-width: 600px) {
+      .doctors-container {
+        grid-template-columns: repeat(2, 1fr);
+        /* Adjust for smaller screens */
+      }
+    }
+
+    @media (max-width: 480px) {
+      .doctors-container {
+        grid-template-columns: repeat(1, 1fr);
+        /* Single column layout for narrower screens */
+      }
+    }
+
     .doctor-category {
       margin: 5px 0;
       /* Reduce the gap between p tags and image */
@@ -518,10 +556,10 @@
 
     </div> -->
   <!-- Doctors for Today -->
-  <div class="header" style="background-color: #00205b; color: white;margin-top: 100px">
+  <div class="header" style="margin-top: 100px">
     Doctors for Today
     <div class="view-all-btn">
-      <a href="#">View All</a>
+      <button type="button" id="todayBtn">View All</button>
     </div>
   </div>
 
@@ -533,11 +571,11 @@
   <div class="header" style="background-color: #00205b; color: white; ">
     Find Doctor By specialists
     <div class="view-all-btn">
-      <a href="#">View All</a>
+      <button type="button" id="specialistBtn">View All</button>
     </div>
   </div>
   <!-- Specialists Grid -->
-  <div class="specialists-container">
+  <div class="specialists-container" style="margin-top: 20px;">
     <!-- Data will be dynamically added here -->
   </div>
 
@@ -547,12 +585,12 @@
   <div class="header" style="background-color: #00205b; color: white">
     Find Doctors by Symptoms
     <div class="view-all-btn">
-      <a href="#">View All</a>
+      <button type="button" id="symptomsBtn">View All</button>
     </div>
   </div>
 
   <!-- Symptoms Grid -->
-  <div class="symptoms-container">
+  <div class="symptoms-container" style="margin-top: 20px;">
     <!-- Data will be dynamically added here -->
   </div>
 
@@ -560,11 +598,11 @@
   <div class="header" style="background-color: #00205b; color: white">
     Meet our specialists
     <div class="view-all-btn">
-      <a href="#">View All</a>
+      <button type="button" id="allSpecialistBtn">View All</button>
     </div>
   </div>
   <!-- Specialists Grid -->
-  <div class="doctor-specialists-container">
+  <div class="doctor-specialists-container" style="margin-top: 20px;">
     <!-- Data will be dynamically added here -->
   </div>
 
@@ -707,11 +745,23 @@
             specialistsContainer.appendChild(specialistDiv);
           }
 
+          function showOneRow() {
+            const gridItems = document.querySelectorAll('.doctor');
+            gridItems.forEach((item, index) => {
+              if (index >= 6) {
+                item.style.display = 'none';
+              } else {
+                item.style.display = 'block'; // Display first row items
+              }
+            });
+          }
           // Populate the doctors grid for today
           const doctorsContainer =
             document.querySelector(".doctors-container");
+          const toggleButton = document.getElementById('todayBtn');
+
           todayDoctorsData.sort(sortByCheckInStatus)
-          for (let i = 0; i < Math.min(todayDoctorsData.length, 6); i++) {
+          for (let i = 0; i < todayDoctorsData.length; i++) {
             const doctor = todayDoctorsData[i];
             const doctorDiv = document.createElement("div");
             doctorDiv.classList.add("doctor");
@@ -755,7 +805,28 @@
             })
             doctorsContainer.appendChild(doctorDiv);
           }
+          function toggleGridView() {
+            const gridItems = document.querySelectorAll('.doctor');
+            const isExpanded = toggleButton.classList.contains('expanded');
 
+            if (isExpanded) {
+              // Collapse grid to show only one row
+              showOneRow();
+              toggleButton.innerHTML = 'View All'; // Change to expand icon
+              toggleButton.classList.remove('expanded');
+            } else {
+              // Expand grid to show all items
+              gridItems.forEach(item => {
+                item.style.display = 'block';
+              });
+              toggleButton.innerHTML = 'View Less'; // Change to compress icon
+              toggleButton.classList.add('expanded');
+            }
+          }
+          showOneRow()
+          toggleButton.addEventListener('click', function () {
+            toggleGridView();
+          });
           // Custom sorting function based on CHK_IN_STATUS
           function sortByCheckInStatus(a, b) {
             const statusOrder = {
@@ -825,9 +896,9 @@
             doctorSpecialistsContainer.appendChild(specialistDiv);
           }
 
-          const headers=document.querySelectorAll(`.header`)
-          headers.forEach((header)=>{
-            header.style.display='block'
+          const headers = document.querySelectorAll(`.header`)
+          headers.forEach((header) => {
+            header.style.display = 'block'
           })
         })
         .catch((error) => {
