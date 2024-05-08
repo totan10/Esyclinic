@@ -1,1014 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Doctor's Booking</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/swiper/swiper-bundle.min.css"
-    />
-    <style>
-      /* Custom CSS */
-      body {
-        margin: 0;
-        padding: 0;
-      }
-      .header {
-        background-color: #00205b; /* Dark blue background */
-        height: 40px; /* Height of the header */
-        color: white; /* Text color */
-        text-align: center; /* Center align text */
-        font-size: 24px; /* Font size */
-      }
 
-      /* Custom CSS */
-      .navbar-container {
-        position: fixed; /* Fix the navbar container */
-        top: 0; /* Position at the top */
-        width: 100%; /* Full width */
-        z-index: 999; /* Ensure it's above other content */
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
 
-      .navbar {
-        background-color: #f8f9fa; /* Navbar background color */
-        padding: 10px; /* Padding for navbar content */
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-      }
+    .container {
+      text-align: center;
+      width: 100%;
+    }
 
-      .searchbar-container {
-        position: relative;
-        width: 60%; /* Search bar takes 60% of the navbar width */
-      }
+    .grid-container {
+      display: grid;
+      grid-template-columns:repeat(6, 1fr);
+      gap: 10px;
+      max-width: 90%;
+      margin: 10px auto;
+      overflow: hidden;
+      /* Hide overflow for smooth height animation */
+      transition: max-height 0.3s ease;
+      /* Transition max-height for smooth animation */
+      max-height: 200px;
+      /* Set initial max-height for collapsed state */
+    }
 
-      .searchbar {
-        width: calc(100% - 40px); /* Adjusted width considering icon padding */
-        padding: 10px 30px 10px 10px; /* Adjust padding to your preference */
-        font-size: 16px;
-        outline: none;
-        border: none;
-        border-radius: 20px; /* Rounded corners */
-        border: 2px solid #ccc; /* Border around search bar */
-      }
+    .grid-item {
+      padding: 10px;
+      box-sizing: border-box;
+      text-align: center;
+      border: 1px solid #ccc;
+    }
 
-      /* Other styles remain the same */
+    .hidden {
+      display: none;
+    }
 
-      .navbar-brand img {
-        max-height: 60px;
-        margin-right: 10px;
-      }
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
-      .searchbar:focus {
-        border-color: #007bff; /* Border color when focused */
-      }
+    button:hover {
+      background-color: #0056b3;
+    }
 
-      .searchbar:focus + .input-group-text {
-        color: #007bff; /* Icon color when search bar is focused */
+    /* Media queries for responsiveness */
+    @media (max-width: 768px) {
+      .grid-container {
+        grid-template-columns: repeat(3, 1fr);
       }
+    }
 
-      #searchResults {
-        list-style-type: none;
-        padding: 0;
-        position: absolute;
-        z-index: 1;
-        width: 100%;
-        background-color: #fff;
-        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
-        overflow-y: auto; /* Add scrollbar if needed */
-        max-height: 150px; /* Limit max height to show scrollbar */
-        display: none; /* Hide by default */
-        top: 25px;
+    @media (max-width: 576px) {
+      .grid-container {
+        grid-template-columns: repeat(2, 1fr);
       }
+    }
+  </style>
+</head>
 
-      #searchResults.active {
-        display: block; /* Show when active */
-      }
-
-      #searchResults li {
-        padding: 10px;
-        background-color: #f9f9f9;
-        border-bottom: 1px solid #ddd;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-      }
-      #searchResults li:hover {
-        background-color: #f3f3f3;
-      }
-
-      .doctor-info {
-        margin-left: 10px;
-      }
-
-      .doctor-info h5 {
-        margin: 0;
-      }
-
-      .doctor-info p {
-        margin: 5px 0;
-      }
-
-      .doctor-photo {
-        width: 60px;
-        height: 60px;
-        border-radius: 10%;
-        background-color: #ddd;
-        overflow: hidden;
-      }
-
-      .doctor-photo img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .no-results {
-        padding: 10px;
-        text-align: center;
-      }
-
-      .input-group-text {
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-        position: absolute;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        display: flex;
-        align-items: center;
-        padding: 10px; /* Adjust padding to your preference */
-      }
-
-      .input-group-text i {
-        color: #ccc; /* Icon color */
-        border: none;
-      }
-
-      .profile-icon {
-        margin-left: 20px; /* Margin between search bar and profile icon */
-        font-size: 24px; /* Font size for profile icon */
-        cursor: pointer;
-      }
-
-      .swiper-container {
-        margin-top: 50px;
-        width: 100%;
-        height: 400px; /* Adjust height of the slider */
-      }
-
-      .swiper-slide img {
-        width: 100%;
-        height: 100%;
-        object-fit: fill; /* Ensure the image covers the entire slide */
-      }
-
-      .specialists-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 10px; /* Adjust the gap between grid items */
-        padding: 20px;
-        justify-content: center;
-      }
-
-      .specialist {
-        text-align: center;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-        cursor: pointer; /* Add pointer cursor */
-        background-color: #f0f0f0;
-      }
-
-      .specialist img {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        border-radius: 50%;
-        margin-bottom: 10px;
-      }
-
-      .specialist p {
-        margin: 5px 0; /* Reduce the gap between p tags and image */
-        line-height: 1.2; /* Ensure consistent line height */
-        color: #333; /* Adjust text color */
-        font-size: 14px; /* Adjust font size */
-        font-weight: 500; /* Adjust font weight */
-        text-align: center;
-      }
-
-      .view-all-btn {
-        text-align: right;
-        margin-right: 20px;
-        margin-top: 10px;
-      }
-
-      .view-all-btn a {
-        color: #00205b;
-        text-decoration: none;
-        font-weight: bold;
-      }
-
-      /* Custom CSS for Doctors Grid for Today */
-      .doctors-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 10px; /* Adjust the gap between grid items */
-        padding: 20px;
-        justify-content: center;
-      }
-
-      .doctor {
-        text-align: center;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-        cursor: pointer; /* Add pointer cursor */
-        background: #f0f0f0; /* Gradient background */
-      }
-
-      .specialist,
-      .doctor,
-      .symptom,
-      .doctor-specialist {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-      }
-      /* For Specialists Grid, Doctors Grid, Symptoms Grid, and Doctor Specialists Grid */
-      .specialist:hover,
-      .doctor:hover,
-      .symptom:hover,
-      .doctor-specialist:hover {
-        transform: translateY(-5px) scale(1.05);
-        transition: transform 0.3s ease;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        background-color: #baacac;
-        color: #f3f3f3;
-      }
-      .specialist:hover,
-      .doctor:hover,
-      .symptom:hover,
-      .doctor-specialist p:hover {
-        color: #f3f3f3;
-      }
-      .doctor img {
-        width: 100%;
-        height: 200px; /* Ensure proper image aspect ratio */
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-      }
-
-      .doctor-details {
-        padding: 10px;
-      }
-
-      .doctor p {
-        margin: 5px 0;
-        text-align: center;
-      }
-      .fee-book-container {
-        height: 40px;
-        background-color: #00205b;
-        position: relative;
-        width: 100%; /* Make the button full width */
-        border-radius: 5px;
-      }
-      .fee-banner {
-        position: absolute;
-        color: #fff;
-        padding: 10px;
-        left: 5px;
-      }
-
-      .book-now-btn {
-        position: absolute;
-        right: 5px;
-        color: #fff;
-        background-color: #00205b;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        top: 5px;
-      }
-
-      .book-now-btn:hover {
-        background-color: #f0f0f0; /* Light gray background on hover */
-        color: #007bff;
-      }
-
-      .symptoms-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 10px; /* Adjust the gap between grid items */
-        padding: 20px;
-        justify-content: center;
-      }
-
-      .symptom {
-        text-align: center;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-        cursor: pointer; /* Add pointer cursor */
-        background: #f0f0f0; /* Gradient background */
-      }
-
-      .symptom img {
-        width: 100%;
-        height: auto; /* Ensure proper image aspect ratio */
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-      }
-
-      .symptom-details {
-        padding: 10px;
-      }
-
-      .symptom p {
-        margin: 5px 0;
-        text-align: center;
-      }
-
-      .doctor-specialists-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 10px; /* Adjust the gap between grid items */
-        padding: 20px;
-        justify-content: center;
-      }
-
-      .doctor-specialist {
-        text-align: center;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-        cursor: pointer; /* Add pointer cursor */
-        background: #f0f0f0; /* Gradient background */
-      }
-
-      .doctor-specialist img {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        border-radius: 50%;
-        margin-bottom: 10px;
-      }
-
-      .doctor-name {
-        margin: 5px 0; /* Reduce the gap between p tags and image */
-        line-height: 1.2; /* Ensure consistent line height */
-        color: #00205b; /* Adjust text color */
-        font-size: 14px; /* Adjust font size */
-        font-weight: bold; /* Adjust font weight */
-        text-align: center;
-      }
-
-      .doctor-category {
-        margin: 5px 0; /* Reduce the gap between p tags and image */
-        line-height: 1.2; /* Ensure consistent line height */
-        color: #00205b; /* Adjust text color */
-        font-size: 12px; /* Adjust font size */
-        font-weight: normal; /* Adjust font weight */
-        text-align: center;
-      }
-      .slotitems {
-        width: 12.99%;
-      }
-      .slot-item {
-        padding: 10px;
-        margin-left: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-        cursor: pointer; /* Add pointer cursor */
-        border-radius: 10px;
-        transition: background-color 1s, color 1s;
-      }
-      .slot-item:hover {
-        color: #f0f0f0;
-        background-color: #007bff;
-      }
-      .slot-item .date-day,
-      .slot-item .status {
-        text-align: center;
-        padding: 4px;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Header -->
-    <!-- <div class="header">
-        Doctor's Booking
-    </div> -->
-
-    <!-- Navbar Container -->
-    <div class="navbar-container">
-      <!-- Navbar -->
-      <nav class="navbar">
-        <!-- Logo -->
-        <a class="navbar-brand" href="dashboard.html">
-          <img src="logo.png" alt="Company Logo" id="companyLogo" />
-        </a>
-        <!-- Search Bar with Search Icon -->
-        <div class="input-group searchbar-container">
-          <input
-            type="text"
-            class="form-control searchbar"
-            placeholder="Search"
-            aria-label="Search"
-            aria-describedby="search-button"
-            id="searchInput"
-            autocomplete="off"
-          />
-          <div class="input-group-text">
-            <i class="fas fa-search"></i>
-          </div>
-          <ul id="searchResults"></ul>
-        </div>
-        <!-- Profile Icon -->
-        <div class="profile-icon">
-          <i class="fas fa-user"></i>
-          <!-- Adjust icon as needed -->
-        </div>
-      </nav>
+<body>
+  <div class="container">
+    <button id="toggleButton">
+      <i class="fas fa-expand"></i> <!-- Initial icon: expand -->
+    </button>
+    <div class="grid-container" id="gridContainer">
+      <!-- Grid items will be dynamically added here -->
     </div>
+  </div>
 
-    <!-- Slider Container -->
-    <!-- <div class="swiper-container">
-      <div class="swiper-wrapper">
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const gridContainer = document.getElementById('gridContainer');
+      const toggleButton = document.getElementById('toggleButton');
 
-    </div> -->
+      const items = [
+        "Object 1", "Object 2", "Object 3", "Object 4", "Object 5",
+        "Object 6", "Object 7", "Object 8", "Object 9", "Object 10",
+        "Object 11", "Object 12", "Object 13", "Object 14", "Object 15",
+        "Object 16", "Object 17", "Object 18", "Object 19", "Object 20"
+      ];
 
-    <!-- Meet our specialist -->
-    <div
-      class="header"
-      style="background-color: #00205b; color: white; margin-top: 100px"
-    >
-      Find Doctor By specialists
-      <div class="view-all-btn">
-        <a href="#">View All</a>
-      </div>
-    </div>
-    <!-- Specialists Grid -->
-    <div class="specialists-container">
-      <!-- Data will be dynamically added here -->
-    </div>
+      function createGridItems() {
+        items.forEach(item => {
+          const gridItem = document.createElement('div');
+          gridItem.classList.add('grid-item');
+          gridItem.textContent = item;
+          gridContainer.appendChild(gridItem);
+        });
+      }
 
-    <!-- Doctors for Today -->
-    <div class="header" style="background-color: #00205b; color: white">
-      Doctors for Today
-      <div class="view-all-btn">
-        <a href="#">View All</a>
-      </div>
-    </div>
-
-    <!-- Doctors Grid for Today -->
-    <div class="doctors-container">
-      <!-- Data will be dynamically added here -->
-    </div>
-
-    <!-- Find Doctors by Symptoms -->
-    <div class="header" style="background-color: #00205b; color: white">
-      Find Doctors by Symptoms
-      <div class="view-all-btn">
-        <a href="#">View All</a>
-      </div>
-    </div>
-
-    <!-- Symptoms Grid -->
-    <div class="symptoms-container">
-      <!-- Data will be dynamically added here -->
-    </div>
-
-    <!-- Meet our specialist -->
-    <div class="header" style="background-color: #00205b; color: white">
-      Meet our specialists
-      <div class="view-all-btn">
-        <a href="#">View All</a>
-      </div>
-    </div>
-    <!-- Specialists Grid -->
-    <div class="doctor-specialists-container">
-      <!-- Data will be dynamically added here -->
-    </div>
-
-    <!-- JavaScript libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
-    <script>
-      let doctorsData = [];
-      let userData = null;
-      document.addEventListener("DOMContentLoaded", function () {
-        // Check if the user is already logged in
-        const isLoggedIn = localStorage.getItem("isLoggedIn");
-        if (isLoggedIn) {
-          // Retrieve username from localStorage
-          const username = localStorage.getItem("username");
-          // Do something with the logged-in user's data
-          const storedUserData = localStorage.getItem("userData");
-          console.log(storedUserData);
-          // Access and use the user's data
-          if (storedUserData) {
-            userData = JSON.parse(storedUserData);
-            console.log(userData);
-            // Set the logo URL dynamically
-            const companyLogo = document.getElementById("companyLogo");
-            companyLogo.src = userData.data.LOGO_URL;
+      function showOneRow() {
+        const gridItems = document.querySelectorAll('.grid-item');
+        gridItems.forEach((item, index) => {
+          if (index >= 6) {
+            item.style.display = 'none';
+          } else {
+            item.style.display = 'block'; // Display first row items
           }
-        }
-      });
-      function populateDoctors() {
-        const url = "http://easyhealths.com/api/searchDoctorTest";
-        const params = {
-          PHARMA_ID: 8,
-        };
+        });
+      }
 
-        axios
-          .post(url, params)
-          .then((response) => {
-            const data = response.data.data;
-            // console.log(data);
-            // const filteredArray = data.filter(
-            //   (item) => item.FIELD_TYPE === "Doctor"
-            // );
-            // const filteredDoctors = filteredArray.map((item) => {
-            //   return item.DETAILS;
-            // });
-            // console.log(filteredDoctors);
-            doctorsData = data;
-            console.log(doctorsData);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            return null;
+      function toggleGridView() {
+        const gridItems = document.querySelectorAll('.grid-item');
+        const isExpanded = toggleButton.classList.contains('expanded');
+
+        if (isExpanded) {
+          // Collapse grid to show only one row
+          showOneRow();
+          toggleButton.innerHTML = '<i class="fas fa-expand"></i>'; // Change to expand icon
+          toggleButton.classList.remove('expanded');
+        } else {
+          // Expand grid to show all items
+          gridItems.forEach(item => {
+            item.style.display = 'block';
           });
-      }
-      const searchInput = document.getElementById("searchInput");
-      const searchResults = document.getElementById("searchResults");
-      // Function to make a POST request on page load
-      window.onload = function () {
-        populateDoctors();
-        console.log(doctorsData);
-        searchInput.click();
-        searchInput.focus();
-        // Your API endpoint URL
-        const apiUrl = "http://easyhealths.com/api/phopd";
-
-        // Data to be sent in the request body
-        const postData = {
-          // Add any necessary data for the API call
-          PHARMAID: 8,
-        };
-
-        // Making a POST request using Axios
-        axios
-          .post(apiUrl, postData)
-          .then((response) => {
-            // Handle response data
-            console.log(response.data);
-            const sliderData = response.data.data
-              ? response.data.data.slider
-              : null;
-            const specialistsData = response.data.data
-              ? response.data.data.specialist
-              : null;
-            console.log(sliderData);
-            const todayDoctorsData = response.data.data
-              ? response.data.data.today_doctor
-              : null;
-            const symptomsData = response.data.data
-              ? response.data.data.symptoms
-              : null;
-            const doctorSpecialistsData = response.data.data
-              ? response.data.data.total_doctor
-              : null;
-
-            // Populate the slider with images
-            // const sliderContainer = document.querySelector(".swiper-wrapper");
-            // sliderData.forEach((item) => {
-            //   const slide = document.createElement("div");
-            //   slide.classList.add("swiper-slide");
-            //   const img = document.createElement("img");
-            //   img.src = item.SLIDER_URL;
-            //   slide.appendChild(img);
-            //   sliderContainer.appendChild(slide);
-            // });
-
-            // Populate the specialists grid
-            const specialistsContainer = document.querySelector(
-              ".specialists-container"
-            );
-            for (let i = 0; i < Math.min(specialistsData.length, 6); i++) {
-              const specialist = specialistsData[i];
-              const specialistDiv = document.createElement("div");
-              specialistDiv.classList.add("specialist");
-              specialistDiv.addEventListener("click", () => {
-                console.log(specialist); // Print specialist data when clicked
-              });
-              const specialistImg = document.createElement("img");
-              specialistImg.src = specialist.PHOTO_URL;
-              const specialistName = document.createElement("p");
-              specialistName.textContent = specialist.SPECIALIST;
-              const specialistDesignation = document.createElement("p");
-              specialistDesignation.textContent = specialist.SPECIALITY;
-              const totalDoctors = document.createElement("p");
-              totalDoctors.textContent = "Total Doctors: " + specialist.TOTAL;
-              specialistDiv.appendChild(specialistImg);
-              specialistDiv.appendChild(specialistName);
-              specialistDiv.appendChild(specialistDesignation);
-              specialistDiv.appendChild(totalDoctors);
-              specialistsContainer.appendChild(specialistDiv);
-            }
-            // Populate the doctors grid for today
-            // Populate the doctors grid for today
-            const doctorsContainer =
-              document.querySelector(".doctors-container");
-            for (let i = 0; i < Math.min(todayDoctorsData.length, 6); i++) {
-              const doctor = todayDoctorsData[i];
-              const doctorDiv = document.createElement("div");
-              doctorDiv.classList.add("doctor");
-
-              const doctorImg = document.createElement("img");
-              doctorImg.src = doctor.DR_PHOTO;
-
-              const doctorName = document.createElement("p");
-              doctorName.textContent = doctor.DR_NAME;
-              doctorName.style.fontWeight = "bold";
-
-              const doctorDetails = document.createElement("p");
-              doctorDetails.innerHTML = `<span>Experience:</span> ${doctor.EXPERIENCE} | <span>Specialization:</span> ${doctor.D_CATG}`;
-              doctorDetails.style.fontSize = "12px";
-
-              const feeBookContainer = document.createElement("div");
-              feeBookContainer.classList.add("fee-book-container");
-
-              const feeBanner = document.createElement("div");
-              feeBanner.classList.add("fee-banner");
-              feeBanner.innerHTML = `Fees: ${doctor.DR_FEES}`;
-
-              const bookNowBtn = document.createElement("button");
-              bookNowBtn.textContent = "Book Now";
-              bookNowBtn.classList.add("book-now-btn");
-
-              feeBookContainer.appendChild(feeBanner);
-              feeBookContainer.appendChild(bookNowBtn);
-
-              doctorDiv.appendChild(doctorImg);
-              doctorDiv.appendChild(doctorName);
-              doctorDiv.appendChild(doctorDetails);
-              doctorDiv.appendChild(feeBookContainer); // Append fee and book container
-
-              doctorsContainer.appendChild(doctorDiv);
-            }
-
-            // Populate the symptoms grid
-            const symptomsContainer = document.querySelector(
-              ".symptoms-container"
-            );
-            for (let i = 0; i < Math.min(symptomsData.length, 6); i++) {
-              const symptom = symptomsData[i];
-              const symptomDiv = document.createElement("div");
-              symptomDiv.classList.add("symptom");
-              symptomDiv.addEventListener("click", () => {
-                console.log(symptom); // Print symptom data when clicked
-              });
-              const symptomImg = document.createElement("img");
-              symptomImg.src = symptom.PHOTO_URL;
-              const symptomName = document.createElement("p");
-              symptomName.textContent = symptom.SYM_NAME;
-              symptomDiv.appendChild(symptomImg);
-              symptomDiv.appendChild(symptomName);
-              symptomsContainer.appendChild(symptomDiv);
-            }
-
-            // Populate the specialists grid
-            const doctorSpecialistsContainer = document.querySelector(
-              ".doctor-specialists-container"
-            );
-            for (
-              let i = 0;
-              i < Math.min(doctorSpecialistsData.length, 6);
-              i++
-            ) {
-              const specialist = doctorSpecialistsData[i];
-              const specialistDiv = document.createElement("div");
-              specialistDiv.classList.add("doctor-specialist");
-              specialistDiv.addEventListener("click", () => {
-                console.log(specialist); // Print specialist data when clicked
-              });
-              const specialistImg = document.createElement("img");
-              specialistImg.src = specialist.DR_PHOTO;
-              const specialistName = document.createElement("p");
-              specialistName.textContent = specialist.DR_NAME;
-              specialistName.classList.add("doctor-name"); // Added class for styling
-              const specialistCategory = document.createElement("p");
-              specialistCategory.textContent = specialist.D_CATG;
-              specialistCategory.classList.add("doctor-category"); // Added class for styling
-              specialistDiv.appendChild(specialistImg);
-              specialistDiv.appendChild(specialistName);
-              specialistDiv.appendChild(specialistCategory);
-              doctorSpecialistsContainer.appendChild(specialistDiv);
-            }
-          })
-          .catch((error) => {
-            // Handle errors
-            console.error("There was an error:", error);
-          });
-      };
-
-      searchInput.addEventListener("input", () => {
-        console.log(doctorsData);
-        const query = searchInput.value;
-        populateSearchResults(query);
-      });
-      // Close search results when clicking outside the search container
-      document.addEventListener("click", (event) => {
-        const isClickInsideSearchContainer =
-          searchInput.contains(event.target) ||
-          searchResults.contains(event.target);
-        if (!isClickInsideSearchContainer) {
-          closeSearchResults();
+          toggleButton.innerHTML = '<i class="fas fa-compress"></i>'; // Change to compress icon
+          toggleButton.classList.add('expanded');
         }
-      });
-      function closeSearchResults() {
-        searchResults.classList.remove("active"); // Hide search results
       }
-      searchInput.addEventListener("click", (event) => {
-        event.stopPropagation();
-        if (searchResults.innerHTML.trim() !== "") {
-          searchResults.classList.add("active");
-        }
+
+      toggleButton.addEventListener('click', function () {
+        toggleGridView();
       });
 
-      function populateSearchResults(query) {
-        console.log(doctorsData);
-        searchResults.innerHTML = "";
+      // Initially show only one row (6 items)
+      createGridItems();
+      showOneRow(); // Display the first row
+    });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+</body>
 
-        if (query.trim() === "") {
-          return;
-        }
-
-        const filteredDoctors = doctorsData.filter((item) => {
-          const cleanItemName = item.ITEM_NAME.toLowerCase();
-          return cleanItemName.includes(query.toLowerCase());
-        });
-
-        if (filteredDoctors.length === 0) {
-          console.log(filteredDoctors);
-          const noResultsItem = document.createElement("li");
-          noResultsItem.classList.add("no-results");
-          noResultsItem.textContent = "No match found.";
-          searchResults.appendChild(noResultsItem);
-          return;
-        }
-        const filtered = filteredDoctors.sort((a, b) => {
-          const cleanAItemName = a.ITEM_NAME.toLowerCase();
-          const cleanBItemName = b.ITEM_NAME.toLowerCase();
-          const aIndex = cleanAItemName.indexOf(query.toLowerCase());
-          const bIndex = cleanBItemName.indexOf(query.toLowerCase());
-          return aIndex - bIndex;
-        });
-        console.log(filtered);
-
-        // if (filtered.length <= 2) {
-        //   filtered.forEach((doctor) => {
-        //     const drId = doctor.DR_ID ? doctor.DR_ID : null;
-
-        //     const slotData = fetchData(drId);
-
-        //     // Using .then() to handle the fulfillment of the promise
-        //     slotData
-        //       .then((arrayResult) => {
-        //         doctor.slotData = arrayResult ? arrayResult : null; // Log the array once the promise is fulfilled
-        //       })
-        //       .catch((error) => {
-        //         console.error("Error fetching array from slotData:", error); // Handle any errors
-        //       });
-        //     async function fetchData(drId) {
-        //       try {
-        //         const slots = await fetchSlots(drId)
-        //           .then((results) => {
-        //             return results;
-        //           })
-        //           .catch((error) => {
-        //             // Handle errors if any
-        //             console.error("Error fetching array:", error);
-        //           });
-        //         return slots;
-        //         // Process slot data as needed
-        //       } catch (error) {
-        //         console.error("Error fetching slot data:", error);
-        //         return null;
-        //       }
-        //     }
-        //   });
-        // }
-        function getFormattedDate(dateString) {
-          const year = dateString.substring(0, 4);
-          const month = dateString.substring(4, 6);
-          const day = dateString.substring(6, 8);
-
-          // Create a Date object using the parsed components
-          const date = new Date(`${year}-${month}-${day}`);
-
-          // Format the date as "DD Month"
-          const options = { day: "numeric", month: "long" };
-          return date.toLocaleDateString("en-US", options);
-        }
-        filtered.forEach((doctor, index) => {
-          if (doctor.FIELD_TYPE === "Doctor") {
-            doctor=doctor.DETAILS
-            const drId = doctor.DR_ID ? doctor.DR_ID : null;
-            console.log(drId);
-            const slotData = doctor.SCH_DT ? doctor.SCH_DT : null;
-            console.log(slotData);
-            const listItem = document.createElement("li");
-
-            const doctorPhotoContainer = document.createElement("div");
-            doctorPhotoContainer.classList.add("doctor-photo");
-            doctorPhotoContainer.innerHTML = `
-          <img src="${doctor.DR_PHOTO}" alt="${doctor.DR_PHOTO}" class="me-3">
-        `;
-
-            const doctorInfoContainer = document.createElement("div");
-            doctorInfoContainer.classList.add("doctor-info");
-            doctorInfoContainer.innerHTML = `
-          <h5>${doctor.DR_NAME}</h5>
-          <p>${doctor.D_CATG}</p>
-        `;
-
-            listItem.appendChild(doctorPhotoContainer);
-            listItem.appendChild(doctorInfoContainer);
-            slotData.forEach((slot) => {
-              const date = new Date(slot.SCH_DT);
-              const formattedDate = getFormattedDate(slot.SCH_DT);
-              const dayName = slot.SCH_DAY;
-              const slotItem = document.createElement("div");
-              slotItem.classList.add("slotitems");
-              // Determine status text and color based on conditions
-              let statusText, statusColor;
-              if (
-                slot.STATUS === "Booking Available" &&
-                slot.CHK_IN_STS === "UPCOMING"
-              ) {
-                statusText = "Available";
-                statusColor = "green";
-              } else if (
-                slot.STATUS === "Booking Available" &&
-                slot.CHK_IN_STS === "IN"
-              ) {
-                statusText = "In Clinic";
-                statusColor = "green";
-              } else {
-                statusText = "Not Available";
-                statusColor = "red";
-              }
-
-              // Modify slotItem HTML to call handleSlotClick with slot data
-              slotItem.innerHTML = `
-                        <div class="slot-item">
-                            <div class="date-day">${formattedDate}<br>${dayName}</div>
-                            <div class="status" style="color: ${statusColor};">${statusText}</div>
-                        </div>
-                    `;
-              listItem.appendChild(slotItem);
-              slotItem.addEventListener("click", () => {
-                const doctordata = doctor ? doctor : null;
-                console.log(doctor);
-                // Function to convert object to query string
-                function objectToQueryString(obj) {
-                  const keyValuePairs = [];
-                  for (const key in obj) {
-                    if (Object.hasOwnProperty.call(obj, key)) {
-                      if (key === "SCH_DT") {
-                        // Convert slotData object to JSON string
-                        keyValuePairs.push(
-                          `${key}=${encodeURIComponent(
-                            JSON.stringify(obj[key])
-                          )}`
-                        );
-                      } else {
-                        keyValuePairs.push(
-                          `${key}=${encodeURIComponent(obj[key])}`
-                        );
-                      }
-                    }
-                  }
-                  return keyValuePairs.join("&");
-                }
-
-                // Convert object to query string
-                const queryParams = objectToQueryString(doctordata);
-                console.log(queryParams);
-                window.location.href = `doctor_profile_with_slots.html?${queryParams}`;
-              });
-            });
-
-            doctorPhotoContainer.addEventListener("click", () => {
-              const doctordata = doctor ? doctor : null;
-                console.log(doctor);
-                // Function to convert object to query string
-                function objectToQueryString(obj) {
-                  const keyValuePairs = [];
-                  for (const key in obj) {
-                    if (Object.hasOwnProperty.call(obj, key)) {
-                      if (key === "SCH_DT") {
-                        // Convert slotData object to JSON string
-                        keyValuePairs.push(
-                          `${key}=${encodeURIComponent(
-                            JSON.stringify(obj[key])
-                          )}`
-                        );
-                      } else {
-                        keyValuePairs.push(
-                          `${key}=${encodeURIComponent(obj[key])}`
-                        );
-                      }
-                    }
-                  }
-                  return keyValuePairs.join("&");
-                }
-
-                // Convert object to query string
-                const queryParams = objectToQueryString(doctordata);
-                console.log(queryParams);
-                window.location.href = `demo.html?${queryParams}`;
-            });
-            doctorInfoContainer.addEventListener("click", () => {
-              const doctordata = doctor ? doctor : null;
-                console.log(doctor);
-                // Function to convert object to query string
-                function objectToQueryString(obj) {
-                  const keyValuePairs = [];
-                  for (const key in obj) {
-                    if (Object.hasOwnProperty.call(obj, key)) {
-                      if (key === "SCH_DT") {
-                        // Convert slotData object to JSON string
-                        keyValuePairs.push(
-                          `${key}=${encodeURIComponent(
-                            JSON.stringify(obj[key])
-                          )}`
-                        );
-                      } else {
-                        keyValuePairs.push(
-                          `${key}=${encodeURIComponent(obj[key])}`
-                        );
-                      }
-                    }
-                  }
-                  return keyValuePairs.join("&");
-                }
-
-                // Convert object to query string
-                const queryParams = objectToQueryString(doctordata);
-                console.log(queryParams);
-                window.location.href = `demo.html?${queryParams}`;
-            });
-
-            searchResults.appendChild(listItem);
-          }
-        });
-
-        searchResults.classList.add("active"); // Show search results
-      }
-
-      // Function to fetch available slots with retry logic
-      async function fetchSlots(drId) {
-        const url = "http://easyhealths.com/api/availdrslot";
-        const params = {
-          DRID: drId,
-          PHARMAID: "8",
-        };
-
-        try {
-          const response = await axios.post(url, params);
-          const data = response.data.data;
-          return data;
-        } catch (error) {
-          if (error.response && error.response.status === 429) {
-            const retryAfter = error.response.headers["retry-after"];
-            if (retryAfter) {
-              const waitTime = parseInt(retryAfter) * 1000; // Convert to milliseconds
-              console.log(
-                `Received 429 error. Retrying after ${retryAfter} seconds...`
-              );
-              await new Promise((resolve) => setTimeout(resolve, waitTime));
-              // Retry the request after waiting
-              return fetchSlots(drId);
-            }
-          }
-          console.error("Error fetching slot data:", error);
-          return null;
-        }
-      }
-    </script>
-  </body>
 </html>
