@@ -210,13 +210,33 @@
         .doctors-container {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 15px;
+            gap: 10px;
             /* Adjust the gap between grid items */
             padding: 20px;
             justify-items: center;
 
             margin-top: 100px;
         }
+
+        .book-now-btn {
+            width: 100%;
+            height: 40px;
+            color: #f6f1f1;
+            background-color: #007bff;
+            border: none;
+            font-size: larger;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        .book-now-btn:hover {
+            background-color: #f0f0f0;
+            /* Light gray background on hover */
+            color: #007bff;
+        }
+
         @media (max-width: 1024px) {
             .doctors-container {
                 grid-template-columns: repeat(4, 1fr);
@@ -230,15 +250,17 @@
                 /* Adjust for smaller screens */
             }
         }
+
         @media (max-width: 600px) {
             .doctors-container {
                 grid-template-columns: repeat(2, 1fr);
                 /* Adjust for smaller screens */
             }
         }
+
         @media (max-width: 480px) {
             .doctors-container {
-                grid-template-columns: repeat(1,1fr);
+                grid-template-columns: repeat(1, 1fr);
                 /* Single column layout for narrower screens */
             }
         }
@@ -252,6 +274,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             /* Add shadow effect */
             cursor: pointer;
+            max-width: 200px;
             /* Add pointer cursor */
             background: #f0f0f0;
             /* Gradient background */
@@ -354,7 +377,7 @@
 
                 // Example: Access specific properties
                 console.log(specialistData.SPECIALIST);
-                document.title=`${specialistData.SPECIALIST}`
+                document.title = `${specialistData.SPECIALIST}`
 
             }
             // Check if the user is already logged in
@@ -378,16 +401,16 @@
         });
         function showDoctors(DIS_ID) {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "http://easyhealths.com/api/admcatgclinicdr"
+            const url = "http://easyhealths.com/api/admcatgclinicdr1"
             const params = {
                 PHARMA_ID: PHARMA_ID,
                 DIS_ID: DIS_ID
             };
-
+            console.log(params);
             axios
                 .post(url, params)
                 .then((response) => {
-                    const data = response.data.data.doctors;
+                    const data = response.data.data;
                     doctorsList = data;
                     console.log(doctorsList);
                     populateList(doctorsList)
@@ -422,8 +445,8 @@
             const doctorsContainer =
                 document.querySelector(".doctors-container");
             doctorsList.sort((a, b) => {
-                const dateA = a.AVAILABLE_DT; // Get the AVAILABLE_DT from object a
-                const dateB = b.AVAILABLE_DT; // Get the AVAILABLE_DT from object b
+                const dateA = a.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object a
+                const dateB = b.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object b
 
                 // Compare the date strings as strings (assuming they are in "YYYYMMDD" format)
                 if (dateA < dateB) {
@@ -436,8 +459,8 @@
             });
             console.log(doctorsList);
             for (let i = 0; i < doctorsList.length; i++) {
-                const doctor = doctorsList[i];
-                const availabe_date = formatDate(doctor.AVAILABLE_DT)
+                const doctor = doctorsList[i].DETAILS;
+                const availabe_date = formatDate(doctor.SCH_DT[0].SCH_DT)
                 const doctorDiv = document.createElement("div");
                 doctorDiv.classList.add("doctor");
 
@@ -449,40 +472,84 @@
                 doctorName.style.fontWeight = "bold";
 
                 const doctorDetails = document.createElement("p");
-                if (doctor.AVAILABLE_STATUS === 'OUT') {
-                    doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:red;">${doctor.AVAILABLE_STATUS}</span> 
-                    <br> <span><strong>Experience:</strong></span> ${doctor.EXPERIENCE}
-                    <br> <span><strong>Qualification:</strong></span> ${doctor.QUALIFICATION}
-                    <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
-                <br><strong>Fees:</strong> ₹${doctor.DR_FEES}`;
-                }
-                else {
-                    doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:green;">${doctor.AVAILABLE_STATUS}</span> 
-                    <br> <span><strong>Experience:</strong></span> ${doctor.EXPERIENCE}
+                //     if (doctor.AVAILABLE_STATUS === 'OUT') {
+                //         doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:red;">${doctor.AVAILABLE_STATUS}</span> 
+                //         <br> <span><strong>Experience:</strong></span> ${doctor.EXPERIENCE}
+                //         <br> <span><strong>Qualification:</strong></span> ${doctor.QUALIFICATION}
+                //         <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
+                //     <br><strong>Fees:</strong> ₹${doctor.DR_FEES}`;
+                //     }
+                //     else {
+                //         doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:green;">${doctor.AVAILABLE_STATUS}</span> 
+                //         <br> <span><strong>Experience:</strong></span> ${doctor.EXPERIENCE}
+                //         <br> <span><strong>Qualification:</strong></span> ${doctor.QUALIFICATION}
+                //         <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
+                //     <br><strong>Fees:</strong> ₹${doctor.DR_FEES}
+                //     <br><strong>Date of Avaibility: </strong>${availabe_date}
+                // `
+                //     }
+                doctorDetails.innerHTML = ` 
+                    <span><strong>Experience:</strong></span> ${doctor.EXPERIENCE}
                     <br> <span><strong>Qualification:</strong></span> ${doctor.QUALIFICATION}
                     <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
                 <br><strong>Fees:</strong> ₹${doctor.DR_FEES}
                 <br><strong>Date of Avaibility: </strong>${availabe_date}
             `
-                }
 
                 doctorDetails.style.fontSize = "14px";
 
                 // const feeBookContainer = document.createElement("div");
                 // feeBookContainer.classList.add("fee-book-container");
 
-                // const bookNowBtn = document.createElement("button");
-                // bookNowBtn.textContent = "Book Now";
-                // bookNowBtn.classList.add("book-now-btn");
+                const bookNowBtn = document.createElement("button");
+                bookNowBtn.textContent = "Book Now";
+                bookNowBtn.classList.add("book-now-btn");
                 //feeBookContainer.appendChild(bookNowBtn);
 
                 doctorDiv.appendChild(doctorImg);
                 doctorDiv.appendChild(doctorName);
                 doctorDiv.appendChild(doctorDetails);
-                //doctorDiv.appendChild(bookNowBtn); // Append fee and book container
+                doctorDiv.appendChild(bookNowBtn); // Append fee and book container
                 doctorDiv.addEventListener("click", () => {
+                    const doctordata = doctor ? doctor : null;
+                    // Convert object to query string
+                    const queryParams = objectToQueryString(doctordata);
+                    console.log(queryParams);
+                    window.location.href = `demo.html?${queryParams}`;
                     console.log(doctor);
-                })
+                    // Function to convert object to query string
+                                 
+                });
+                function objectToQueryString(obj) {
+                        const keyValuePairs = [];
+                        for (const key in obj) {
+                            if (Object.hasOwnProperty.call(obj, key)) {
+                                if (key === "SCH_DT") {
+                                    // Convert slotData object to JSON string
+                                    keyValuePairs.push(
+                                        `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
+                                    );
+                                } else {
+                                    keyValuePairs.push(
+                                        `${key}=${encodeURIComponent(obj[key])}`
+                                    );
+                                }
+                            }
+                        }
+                        return keyValuePairs.join("&");
+                    }
+
+      
+                
+                bookNowBtn.addEventListener("click", () => {
+                    const doctordata = doctor ? doctor : null;
+                    // Convert object to query string
+                    const queryParams = objectToQueryString(doctordata);
+                    console.log(queryParams);
+                    window.location.href = `demo.html?${queryParams}`;
+                    console.log(doctor);
+                          
+                });
                 doctorsContainer.appendChild(doctorDiv);
             }
 
@@ -545,8 +612,9 @@
 
             const filteredDoctors = doctorsData.filter((item) => {
                 const cleanItemName = item.ITEM_NAME.toLowerCase();
-                const cleanBItemCat = item.DETAILS.D_CATG ? item.DETAILS.D_CATG.toLowerCase() : '';
-                return cleanItemName.includes(query.toLowerCase()) || cleanBItemCat.includes(query.toLowerCase())
+                // const cleanItemType = item.FIELD_TYPE ? item.FIELD_TYPE.toLowerCase() : '';
+                // const cleanBItemCat = item.DETAILS.D_CATG ? item.DETAILS.D_CATG.toLowerCase() : '';
+                return cleanItemName.includes(query.toLowerCase()) ;
             });
 
             if (filteredDoctors.length === 0) {
@@ -565,40 +633,28 @@
                 return aIndex - bIndex;
             });
             console.log(filtered);
+            // Define the specific order for certain Field_type values
+            const specificOrder = ['Doctor', 'Symptom', 'Test']; // Define specific types to appear first
+            filtered.sort((a, b) => {
+                const fieldA = a.Field_type;
+                const fieldB = b.Field_type;
 
-            // if (filtered.length <= 2) {
-            //   filtered.forEach((doctor) => {
-            //     const drId = doctor.DR_ID ? doctor.DR_ID : null;
+                // Get the index of Field_type values in the specificOrder array
+                const indexA = specificOrder.indexOf(fieldA);
+                const indexB = specificOrder.indexOf(fieldB);
 
-            //     const slotData = fetchData(drId);
-
-            //     // Using .then() to handle the fulfillment of the promise
-            //     slotData
-            //       .then((arrayResult) => {
-            //         doctor.slotData = arrayResult ? arrayResult : null; // Log the array once the promise is fulfilled
-            //       })
-            //       .catch((error) => {
-            //         console.error("Error fetching array from slotData:", error); // Handle any errors
-            //       });
-            //     async function fetchData(drId) {
-            //       try {
-            //         const slots = await fetchSlots(drId)
-            //           .then((results) => {
-            //             return results;
-            //           })
-            //           .catch((error) => {
-            //             // Handle errors if any
-            //             console.error("Error fetching array:", error);
-            //           });
-            //         return slots;
-            //         // Process slot data as needed
-            //       } catch (error) {
-            //         console.error("Error fetching slot data:", error);
-            //         return null;
-            //       }
-            //     }
-            //   });
-            // }
+                // Compare indices within the specificOrder array
+                if (indexA > -1 && indexB > -1) {
+                    return indexA - indexB; // Sort by specific order index
+                } else if (indexA > -1) {
+                    return -1; // Place types in specificOrder before others
+                } else if (indexB > -1) {
+                    return 1; // Place types in specificOrder before others
+                } else {
+                    return 0; // Maintain original order for other types
+                }
+            });
+            console.log(filtered);
             function getFormattedDate(dateString) {
                 const year = dateString.substring(0, 4);
                 const month = dateString.substring(4, 6);
@@ -764,11 +820,23 @@
 
                     searchResults.appendChild(listItem);
                 }
+                else {
+                    const listItem = document.createElement("li");
+                    listItem.style.justifyContent = 'space-between'
+                    listItem.style.padding = '0 5px'
+                    listItem.style.height = '45px'
+                    listItem.innerHTML = `
+          <h4>${doctor.ITEM_NAME}</h4>
+          <p style='color:green'>${doctor.FIELD_TYPE}</p>`;
+                    searchResults.appendChild(listItem)
+                    listItem.addEventListener('click', () => {
+                        console.log(doctor);
+                    })
+                }
             });
 
             searchResults.classList.add("active"); // Show search results
         }
-
     </script>
 </body>
 

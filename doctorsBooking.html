@@ -267,9 +267,9 @@
       grid-template-columns: repeat(6, 1fr);
       gap: 15px;
       /* Adjust the gap between grid items */
-      padding-bottom: 20px;
+      padding: 20px;
       justify-content: center;
-      margin-top: 50px;
+      margin-top: 40px;
     }
 
     .doctor {
@@ -285,6 +285,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      max-width: 200px;
       /* align-items: center; */
     }
 
@@ -408,7 +409,7 @@
 
     .doctor-specialists-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(6, 1fr);
       gap: 10px;
       /* Adjust the gap between grid items */
       padding: 20px;
@@ -416,8 +417,8 @@
     }
 
     .doctor-specialist {
-      text-align: center;
-      padding: 20px;
+      margin-top: 40px;
+      padding: 0 3px;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       /* Add shadow effect */
@@ -425,14 +426,22 @@
       /* Add pointer cursor */
       background: #f0f0f0;
       /* Gradient background */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      max-width: 220px;
+      /* align-items: center; */
+      /
     }
 
     .doctor-specialist img {
-      width: 100px;
+      width: 60%;
       height: 100px;
-      object-fit: cover;
-      border-radius: 50%;
-      margin-bottom: 10px;
+      /* Ensure proper image aspect ratio */
+      border-radius: 10%;
+      margin-top: -50px;
+      margin-left: 18%;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
 
     .doctor-name {
@@ -446,32 +455,39 @@
       /* Adjust font size */
       font-weight: bold;
       /* Adjust font weight */
-      text-align: center;
     }
 
     @media (max-width: 1024px) {
-      .doctors-container {
+
+      .doctors-container,
+      .doctor-specialists-container {
         grid-template-columns: repeat(4, 1fr);
         /* Adjust for smaller screens */
       }
     }
 
     @media (max-width: 768px) {
-      .doctors-container {
+
+      .doctors-container,
+      .doctor-specialists-container {
         grid-template-columns: repeat(3, 1fr);
         /* Adjust for smaller screens */
       }
     }
 
     @media (max-width: 600px) {
-      .doctors-container {
+
+      .doctors-container,
+      .doctor-specialists-container {
         grid-template-columns: repeat(2, 1fr);
         /* Adjust for smaller screens */
       }
     }
 
     @media (max-width: 480px) {
-      .doctors-container {
+
+      .doctors-container,
+      .doctor-specialists-container {
         grid-template-columns: repeat(1, 1fr);
         /* Single column layout for narrower screens */
       }
@@ -479,16 +495,7 @@
 
     .doctor-category {
       margin: 5px 0;
-      /* Reduce the gap between p tags and image */
-      line-height: 1.2;
-      /* Ensure consistent line height */
-      color: #00205b;
-      /* Adjust text color */
-      font-size: 12px;
-      /* Adjust font size */
-      font-weight: normal;
-      /* Adjust font weight */
-      text-align: center;
+      line-height: 1.5;
     }
 
     .slotitems {
@@ -887,12 +894,21 @@
             const specialistName = document.createElement("p");
             specialistName.textContent = specialist.DR_NAME;
             specialistName.classList.add("doctor-name"); // Added class for styling
-            const specialistCategory = document.createElement("p");
-            specialistCategory.textContent = specialist.D_CATG;
-            specialistCategory.classList.add("doctor-category"); // Added class for styling
+            const doctorDetails = document.createElement("p");
+            doctorDetails.classList.add("doctor-category"); // Added class for styling
+            doctorDetails.innerHTML = `
+            <span><strong>Specialization:</strong></span> ${specialist.D_CATG}
+            <br>  <span><strong>Experience:</strong></span> ${specialist.EXPERIENCE}
+                    <br> <span><strong>Qualification:</strong></span> ${specialist.QUALIFICATION}
+                <br><strong>Fees:</strong> ₹${specialist.DR_FEES}`;
+
+                const bookNowBtn = document.createElement("button");
+            bookNowBtn.textContent = "Book Now";
+            bookNowBtn.classList.add("book-now-btn");  
             specialistDiv.appendChild(specialistImg);
             specialistDiv.appendChild(specialistName);
-            specialistDiv.appendChild(specialistCategory);
+            specialistDiv.appendChild(doctorDetails);
+            specialistDiv.appendChild(bookNowBtn);
             doctorSpecialistsContainer.appendChild(specialistDiv);
           }
 
@@ -941,9 +957,9 @@
 
       const filteredDoctors = doctorsData.filter((item) => {
         const cleanItemName = item.ITEM_NAME.toLowerCase();
-        const cleanItemType = item.FIELD_TYPE ? item.FIELD_TYPE.toLowerCase() : '';
-        const cleanBItemCat = item.DETAILS.D_CATG ? item.DETAILS.D_CATG.toLowerCase() : '';
-        return cleanItemName.includes(query.toLowerCase()) || cleanBItemCat.includes(query.toLowerCase()) || cleanItemType.includes(query.toLowerCase())
+        //const cleanItemType = item.FIELD_TYPE ? item.FIELD_TYPE.toLowerCase() : '';
+        //const cleanBItemCat = item.DETAILS.D_CATG ? item.DETAILS.D_CATG.toLowerCase() : '';
+        return cleanItemName.includes(query.toLowerCase()) 
       });
 
       if (filteredDoctors.length === 0) {
@@ -1152,7 +1168,8 @@
         else {
           const listItem = document.createElement("li");
           listItem.style.justifyContent = 'space-between'
-          listItem.style.padding = '0'
+          listItem.style.padding = '0 5px'
+          listItem.style.height = '45px'
           listItem.innerHTML = `
           <h4>${doctor.ITEM_NAME}</h4>
           <p style='color:green'>${doctor.FIELD_TYPE}</p>`;
