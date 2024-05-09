@@ -5,201 +5,216 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard</title>
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
-     .header {
-            background-color: #00205b;
-            /* Dark blue background */
-            height: 40px;
-            /* Height of the header */
-            color: white;
-            /* Text color */
-            text-align: center;
-            /* Center align text */
-            font-size: 24px;
-            /* Font size */
-        }
+    .header {
+      background-color: #00205b;
+      /* Dark blue background */
+      height: 40px;
+      /* Height of the header */
+      color: white;
+      /* Text color */
+      text-align: center;
+      /* Center align text */
+      font-size: 24px;
+      /* Font size */
+    }
 
-        /* Custom CSS */
-        .navbar-container {
-            position: fixed;
-            /* Fix the navbar container */
-            top: 0;
-            /* Position at the top */
-            width: 100%;
-            /* Full width */
-            z-index: 999;
-            /* Ensure it's above other content */
-        }
+    /* Custom CSS */
+    .navbar-container {
+      position: fixed;
+      /* Fix the navbar container */
+      top: 0;
+      /* Position at the top */
+      width: 100%;
+      /* Full width */
+      z-index: 999;
+      /* Ensure it's above other content */
+    }
 
-        .navbar {
-            background-color: #f8f9fa;
-            /* Navbar background color */
-            padding: 10px;
-            /* Padding for navbar content */
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
-            /* Add shadow effect */
-        }
+    .navbar {
+      background-color: #f8f9fa;
+      /* Navbar background color */
+      padding: 10px;
+      /* Padding for navbar content */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
+      /* Add shadow effect */
+    }
 
-        .searchbar-container {
-            position: relative;
-            width: 60%;
-            /* Search bar takes 60% of the navbar width */
-        }
+    .searchbar-container {
+      position: relative;
+      width: 60%;
+      /* Search bar takes 60% of the navbar width */
+    }
 
-        .searchbar {
-            width: calc(100% - 40px);
-            /* Adjusted width considering icon padding */
-            padding: 10px 30px 10px 10px;
-            /* Adjust padding to your preference */
-            font-size: 16px;
-            outline: none;
-            border: none;
-            border-radius: 20px;
-            /* Rounded corners */
-            border: 2px solid #ccc;
-            /* Border around search bar */
-        }
+    .searchbar {
+      width: calc(100% - 40px);
+      /* Adjusted width considering icon padding */
+      padding: 10px 30px 10px 10px;
+      /* Adjust padding to your preference */
+      font-size: 16px;
+      outline: none;
+      border: none;
+      border-radius: 20px;
+      /* Rounded corners */
+      border: 2px solid #ccc;
+      /* Border around search bar */
+    }
 
-        /* Other styles remain the same */
+    /* Other styles remain the same */
 
-        .navbar-brand img {
-            max-height: 60px;
-            margin-right: 10px;
-        }
+    .navbar-brand img {
+      max-height: 60px;
+      margin-right: 10px;
+    }
 
-        .searchbar:focus {
-            border-color: #007bff;
-            /* Border color when focused */
-        }
+    .searchbar:focus {
+      border-color: #007bff;
+      /* Border color when focused */
+    }
 
-        .searchbar:focus+.input-group-text {
-            color: #007bff;
-            /* Icon color when search bar is focused */
-        }
+    .searchbar:focus+.input-group-text {
+      color: #007bff;
+      /* Icon color when search bar is focused */
+    }
 
-        #searchResults {
-            list-style-type: none;
-            padding: 0;
-            position: absolute;
-            z-index: 1;
-            width: 100%;
-            background-color: #fff;
-            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-            /* Add scrollbar if needed */
-            max-height: 150px;
-            /* Limit max height to show scrollbar */
-            display: none;
-            /* Hide by default */
-            top: 25px;
-        }
+    #searchResults {
+      list-style-type: none;
+      padding: 0;
+      position: absolute;
+      z-index: 1;
+      width: 100%;
+      background-color: #fff;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+      /* Add scrollbar if needed */
+      max-height: 150px;
+      /* Limit max height to show scrollbar */
+      display: none;
+      /* Hide by default */
+      top: 25px;
+    }
 
-        #searchResults.active {
-            display: block;
-            /* Show when active */
-        }
+    #searchResults.active {
+      display: block;
+      /* Show when active */
+    }
 
-        #searchResults li {
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-bottom: 1px solid #ddd;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
+    #searchResults li {
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-bottom: 1px solid #ddd;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
 
-        #searchResults li:hover {
-            background-color: #f3f3f3;
-        }
+    #searchResults li:hover {
+      background-color: #f3f3f3;
+    }
 
-        .doctor-info {
-            margin-left: 10px;
-        }
+    .doctor-info {
+      margin-left: 10px;
+    }
 
-        .doctor-info h5 {
-            margin: 0;
-        }
+    .doctor-info h5 {
+      margin: 0;
+    }
 
-        .doctor-info p {
-            margin: 5px 0;
-        }
+    .doctor-info p {
+      margin: 5px 0;
+    }
 
-        .doctor-photo {
-            width: 60px;
-            height: 60px;
-            border-radius: 10%;
-            background-color: #ddd;
-            overflow: hidden;
-        }
+    .doctor-photo {
+      width: 60px;
+      height: 60px;
+      border-radius: 10%;
+      background-color: #ddd;
+      overflow: hidden;
+    }
 
-        .doctor-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .doctor-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-        .no-results {
-            padding: 10px;
-            text-align: center;
-        }
+    .no-results {
+      padding: 10px;
+      text-align: center;
+    }
 
-        .input-group-text {
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            /* Adjust padding to your preference */
-        }
+    .input-group-text {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      /* Adjust padding to your preference */
+    }
 
-        .input-group-text i {
-            color: #ccc;
-            /* Icon color */
-            border: none;
-        }
+    .input-group-text i {
+      color: #ccc;
+      /* Icon color */
+      border: none;
+    }
 
-        .profile-icon {
-            margin-left: 20px;
-            /* Margin between search bar and profile icon */
-            font-size: 24px;
-            /* Font size for profile icon */
-            cursor: pointer;
-        }
+    .profile-icon {
+      margin-right: 20px;
+      /* Margin between search bar and profile icon */
+      font-size: 20px;
+      font-weight: 700;
+      /* Font size for profile icon */
+      cursor: pointer;
+      width: 120px;
+      background: -webkit-linear-gradient(#05639b, #01e096);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: solid;
+      text-align: center;
+      transition: background 1s;
+    }
 
-        .slotitems {
-            width: 12.99%;
-        }
+    .profile-icon:hover {
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background: -webkit-linear-gradient(#01e096, #05639b);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .slot-item {
-            padding: 10px;
-            margin-left: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            /* Add shadow effect */
-            cursor: pointer;
-            /* Add pointer cursor */
-            border-radius: 10px;
-            transition: background-color 0.5s, color 0.5s;
-        }
+    .slotitems {
+      width: 12.99%;
+    }
 
-        .slot-item:hover {
-            color: #f0f0f0;
-            background-color: #007bff;
-        }
+    .slot-item {
+      padding: 10px;
+      margin-left: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      /* Add shadow effect */
+      cursor: pointer;
+      /* Add pointer cursor */
+      border-radius: 10px;
+      transition: background-color 0.5s, color 0.5s;
+    }
 
-        .slot-item .date-day,
-        .slot-item .status {
-            text-align: center;
-            padding: 4px;
-        }
+    .slot-item:hover {
+      color: #f0f0f0;
+      background-color: #007bff;
+    }
+
+    .slot-item .date-day,
+    .slot-item .status {
+      text-align: center;
+      padding: 4px;
+    }
 
     /* Service Boxes */
     .service-box {
@@ -236,15 +251,17 @@
       /* Lighter background color on hover */
     }
 
-    .row{
+    .row {
       display: grid;
-      grid-template-columns: repeat(3,1fr);
+      grid-template-columns: repeat(3, 1fr);
     }
-    @media (max-width: 768px){
-      .row{
+
+    @media (max-width: 768px) {
+      .row {
         grid-template-columns: repeat(1, 1fr);
       }
     }
+
     .voicemodal-content {
       background-color: #fefefe;
       padding: 20px;
@@ -295,10 +312,8 @@
         transform: scale(1.1);
       }
     }
-
-   
   </style>
-  
+
 </head>
 
 <body>
@@ -326,7 +341,7 @@
     </nav>
   </div>
 
-  
+
 
   <div class="container" style="margin-top: 150px;">
     <div class="row">
@@ -383,6 +398,8 @@
           // Set the logo URL dynamically
           const companyLogo = document.getElementById("companyLogo");
           companyLogo.src = userData.LOGO_URL;
+          const clinicName = document.querySelector(".profile-icon")
+          clinicName.innerHTML = `${userData.PHARMA_NAME}`
         }
         populateDoctors();
         searchInput.click();
@@ -444,7 +461,7 @@
         const cleanItemName = item.ITEM_NAME.toLowerCase();
         //const cleanItemType = item.FIELD_TYPE ? item.FIELD_TYPE.toLowerCase() : '';
         //const cleanBItemCat = item.DETAILS.D_CATG ? item.DETAILS.D_CATG.toLowerCase() : '';
-        return cleanItemName.includes(query.toLowerCase()) 
+        return cleanItemName.includes(query.toLowerCase())
       });
 
       if (filteredDoctors.length === 0) {

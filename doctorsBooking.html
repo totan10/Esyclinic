@@ -176,11 +176,26 @@
     }
 
     .profile-icon {
-      margin-left: 20px;
+      margin-right: 20px;
       /* Margin between search bar and profile icon */
-      font-size: 24px;
+      font-size: 20px;
+      font-weight: 700;
       /* Font size for profile icon */
       cursor: pointer;
+      width: 120px;
+      background: -webkit-linear-gradient(#05639b, #01e096);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: solid;
+      text-align: center;
+      transition: background 1s;
+    }
+
+    .profile-icon:hover {
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background: -webkit-linear-gradient(#01e096, #05639b);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .swiper-container {
@@ -459,6 +474,17 @@
       /* Adjust font weight */
     }
 
+    @media (max-width: 1200px) {
+
+      .doctors-container,
+      .specialists-container,
+      .symptoms-container,
+      .doctor-specialists-container {
+        grid-template-columns: repeat(5, 1fr);
+        /* Adjust for smaller screens */
+      }
+    }
+
     @media (max-width: 1024px) {
 
       .doctors-container,
@@ -470,7 +496,7 @@
       }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 825px) {
 
       .doctors-container,
       .specialists-container,
@@ -481,7 +507,7 @@
       }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 650px) {
 
       .doctors-container,
       .specialists-container,
@@ -492,7 +518,7 @@
       }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 400px) {
 
       .doctors-container,
       .specialists-container,
@@ -535,6 +561,7 @@
       padding: 4px;
     }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css">
 </head>
 
 <body>
@@ -562,7 +589,7 @@
       </div>
       <!-- Profile Icon -->
       <div class="profile-icon">
-        <i class="fas fa-user"></i>
+
         <!-- Adjust icon as needed -->
       </div>
     </nav>
@@ -628,10 +655,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js">
+  </script>
   <script>
     let doctorsData = [];
     let userData = null;
+    wow = new WOW(
+      {
+        boxClass: 'wow',      // default
+        animateClass: 'animated', // change this if you are not using animate.css
+        offset: 0,          // default
+        mobile: true,       // keep it on mobile
+        live: true        // track if element updates
+      }
+    )
+    wow.init();
     document.addEventListener("DOMContentLoaded", function () {
       // Check if the user is already logged in
       const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -640,7 +678,6 @@
         const username = localStorage.getItem("username");
         // Do something with the logged-in user's data
         const storedUserData = localStorage.getItem("userData");
-        console.log(storedUserData);
         // Access and use the user's data
         if (storedUserData) {
           userData = JSON.parse(storedUserData);
@@ -648,6 +685,8 @@
           userData = userData.data
           // Set the logo URL dynamically
           const companyLogo = document.getElementById("companyLogo");
+          const clinicName = document.querySelector(".profile-icon")
+          clinicName.innerHTML = `${userData.PHARMA_NAME}`
           companyLogo.src = userData.LOGO_URL;
         }
       }
@@ -672,7 +711,7 @@
           // });
           // console.log(filteredDoctors);
           doctorsData = data;
-          console.log(doctorsData);
+          // console.log(doctorsData);
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -684,12 +723,11 @@
     // Function to make a POST request on page load
     window.onload = function () {
       populateDoctors();
-      console.log(doctorsData);
       searchInput.click();
       searchInput.focus();
       // Your API endpoint URL
-      const apiUrl = "http://easyhealths.com/api/admopd";
-
+      // const apiUrl = "http://easyhealths.com/api/admopd";
+      const apiUrl="http://easyhealths.com/api/phopdweb"
       // Data to be sent in the request body
       const postData = {
         // Add any necessary data for the API call
@@ -702,21 +740,18 @@
         .then((response) => {
           // Handle response data
           console.log(response.data);
-          const sliderData = response.data.data
-            ? response.data.data.slider
-            : null;
+          
           const specialistsData = response.data.data
             ? response.data.data.specialist
             : null;
-          console.log(sliderData);
           const todayDoctorsData = response.data.data
-            ? response.data.data.today_doctor
+            ? response.data.data.today_doctors
             : null;
           const symptomsData = response.data.data
             ? response.data.data.symptoms
             : null;
           const doctorSpecialistsData = response.data.data
-            ? response.data.data.total_doctor
+            ? response.data.data.total_doctors
             : null;
 
           // Populate the slider with images
@@ -734,11 +769,11 @@
           const specialistsContainer = document.querySelector(
             ".specialists-container"
           );
-          const specialistBtn=document.getElementById('specialistBtn')
-          for (let i = 0; i <specialistsData.length; i++) {
+          const specialistBtn = document.getElementById('specialistBtn')
+          for (let i = 0; i < specialistsData.length; i++) {
             const specialist = specialistsData[i];
             const specialistDiv = document.createElement("div");
-            specialistDiv.classList.add("specialist");
+            specialistDiv.classList.add("specialist","wow","fadeInLeft");
             specialistDiv.addEventListener("click", () => {
               console.log(specialist); // Print specialist data when clicked
               // Encode the SPECIALIST value for URL
@@ -764,8 +799,8 @@
             specialistsContainer.appendChild(specialistDiv);
           }
           showOneRow('.specialist')
-          specialistBtn.addEventListener('click',()=>{
-            toggleGridView('.specialist','specialistBtn');
+          specialistBtn.addEventListener('click', () => {
+            toggleGridView('.specialist', 'specialistBtn');
           })
           function showOneRow(doctors) {
             const gridItems = document.querySelectorAll(doctors);
@@ -774,8 +809,8 @@
                 item.style.display = 'none';
               } else {
                 item.style.display = 'block'; // Display first row items
-                item.style.display='flex'
-                item.style.flexDirection='column'
+                item.style.display = 'flex'
+                item.style.flexDirection = 'column'
               }
             });
           }
@@ -788,7 +823,7 @@
           for (let i = 0; i < todayDoctorsData.length; i++) {
             const doctor = todayDoctorsData[i];
             const doctorDiv = document.createElement("div");
-            doctorDiv.classList.add("doctor");
+            doctorDiv.classList.add("doctor","wow","fadeInLeft");
 
             const doctorImg = document.createElement("img");
             doctorImg.src = doctor.DR_PHOTO;
@@ -819,21 +854,55 @@
             bookNowBtn.textContent = "Book Now";
             bookNowBtn.classList.add("book-now-btn");
             //feeBookContainer.appendChild(bookNowBtn);
+            bookNowBtn.addEventListener("click", () => {
+                    const doctordata = doctor ? doctor : null;
+                    // Convert object to query string
+                    const queryParams = objectToQueryString(doctordata);
+                    console.log(queryParams);
+                    window.location.href = `demo.html?${queryParams}`;
+                    console.log(doctor);
 
+                });
             doctorDiv.appendChild(doctorImg);
             doctorDiv.appendChild(doctorName);
             doctorDiv.appendChild(doctorDetails);
             doctorDiv.appendChild(bookNowBtn); // Append fee and book container
             doctorDiv.addEventListener("click", () => {
-              console.log(doctor);
+              const doctordata = doctor ? doctor : null;
+                    // Convert object to query string
+                    const queryParams = objectToQueryString(doctordata);
+                    console.log(queryParams);
+                    window.location.href = `demo.html?${queryParams}`;
+                    console.log(doctor);
             })
+             // Function to convert object to query string
+             function objectToQueryString(obj) {
+              const keyValuePairs = [];
+              for (const key in obj) {
+                if (Object.hasOwnProperty.call(obj, key)) {
+                  if (key === "SCH_DT") {
+                    // Convert slotData object to JSON string
+                    keyValuePairs.push(
+                      `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
+                    );
+                  } else {
+                    keyValuePairs.push(
+                      `${key}=${encodeURIComponent(obj[key])}`
+                    );
+                  }
+                }
+              }
+              return keyValuePairs.join("&");
+            }
+
+           
             doctorsContainer.appendChild(doctorDiv);
           }
-          function toggleGridView(doctors,button) {
+          function toggleGridView(doctors, button) {
             const gridItems = document.querySelectorAll(doctors);
             const toggleButton = document.getElementById(button);
             const isExpanded = toggleButton.classList.contains('expanded');
-            
+
             if (isExpanded) {
               // Collapse grid to show only one row
               showOneRow(doctors);
@@ -843,8 +912,8 @@
               // Expand grid to show all items
               gridItems.forEach(item => {
                 item.style.display = 'block';
-                item.style.display='flex'
-                item.style.flexDirection='column'
+                item.style.display = 'flex'
+                item.style.flexDirection = 'column'
               });
               toggleButton.innerHTML = 'View Less'; // Change to compress icon
               toggleButton.classList.add('expanded');
@@ -852,7 +921,7 @@
           }
           showOneRow('.doctor')
           todayeButton.addEventListener('click', function () {
-            toggleGridView('.doctor','todayBtn');
+            toggleGridView('.doctor', 'todayBtn');
           });
 
           // Custom sorting function based on CHK_IN_STATUS
@@ -879,11 +948,11 @@
           const symptomsContainer = document.querySelector(
             ".symptoms-container"
           );
-          const symptomsBtn=document.getElementById('symptomsBtn')
-          for (let i = 0; i <symptomsData.length; i++) {
+          const symptomsBtn = document.getElementById('symptomsBtn')
+          for (let i = 0; i < symptomsData.length; i++) {
             const symptom = symptomsData[i];
             const symptomDiv = document.createElement("div");
-            symptomDiv.classList.add("symptom");
+            symptomDiv.classList.add("symptom","wow","fadeInLeft");
             symptomDiv.addEventListener("click", () => {
               console.log(symptom); // Print symptom data when clicked
             });
@@ -896,14 +965,14 @@
             symptomsContainer.appendChild(symptomDiv);
           }
           showOneRow('.symptom');
-          symptomsBtn.addEventListener('click',()=>{
-            toggleGridView('.symptom','symptomsBtn')
+          symptomsBtn.addEventListener('click', () => {
+            toggleGridView('.symptom', 'symptomsBtn')
           })
           // Populate the specialists grid
           const doctorSpecialistsContainer = document.querySelector(
             ".doctor-specialists-container"
           );
-          const doctorSpecialistBtn=document.getElementById('allSpecialistBtn');
+          const doctorSpecialistBtn = document.getElementById('allSpecialistBtn');
           for (
             let i = 0;
             i < doctorSpecialistsData.length;
@@ -911,7 +980,7 @@
           ) {
             const specialist = doctorSpecialistsData[i];
             const specialistDiv = document.createElement("div");
-            specialistDiv.classList.add("doctor-specialist");
+            specialistDiv.classList.add("doctor-specialist","wow","fadeInLeft");
             specialistDiv.addEventListener("click", () => {
               console.log(specialist); // Print specialist data when clicked
             });
@@ -922,26 +991,61 @@
             specialistName.classList.add("doctor-name"); // Added class for styling
             const doctorDetails = document.createElement("p");
             doctorDetails.classList.add("doctor-category"); // Added class for styling
-            
+
             doctorDetails.innerHTML = `
             <span><strong>Specialization:</strong></span> ${specialist.D_CATG}
             <br>  <span><strong>Experience:</strong></span> ${specialist.EXPERIENCE}
                     <br> <span><strong>Qualification:</strong></span> ${specialist.QUALIFICATION}
                 <br><strong>Fees:</strong> ₹${specialist.DR_FEES}`;
 
-                const bookNowBtn = document.createElement("button");
+            const bookNowBtn = document.createElement("button");
             bookNowBtn.textContent = "Book Now";
-            bookNowBtn.classList.add("book-now-btn");  
+            bookNowBtn.classList.add("book-now-btn");
             specialistDiv.appendChild(specialistImg);
             specialistDiv.appendChild(specialistName);
             specialistDiv.appendChild(doctorDetails);
             specialistDiv.appendChild(bookNowBtn);
+            bookNowBtn.addEventListener("click", () => {
+              const doctordata = specialist ? specialist : null;
+                    // Convert object to query string
+                    const queryParams = objectToQueryString(doctordata);
+                    console.log(queryParams);
+                    window.location.href = `demo.html?${queryParams}`;
+                    console.log(doctor);
+            })
+            specialistDiv.addEventListener("click", () => {
+              const doctordata = specialist ? specialist : null;
+                    // Convert object to query string
+                    const queryParams = objectToQueryString(doctordata);
+                    console.log(queryParams);
+                    window.location.href = `demo.html?${queryParams}`;
+                    console.log(doctor);
+            })
+             // Function to convert object to query string
+             function objectToQueryString(obj) {
+              const keyValuePairs = [];
+              for (const key in obj) {
+                if (Object.hasOwnProperty.call(obj, key)) {
+                  if (key === "SCH_DT") {
+                    // Convert slotData object to JSON string
+                    keyValuePairs.push(
+                      `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
+                    );
+                  } else {
+                    keyValuePairs.push(
+                      `${key}=${encodeURIComponent(obj[key])}`
+                    );
+                  }
+                }
+              }
+              return keyValuePairs.join("&");
+            }
             doctorSpecialistsContainer.appendChild(specialistDiv);
-           
+
           }
           showOneRow('.doctor-specialist')
-          doctorSpecialistBtn.addEventListener('click',()=>{
-            toggleGridView('.doctor-specialist','allSpecialistBtn')
+          doctorSpecialistBtn.addEventListener('click', () => {
+            toggleGridView('.doctor-specialist', 'allSpecialistBtn')
           })
           const headers = document.querySelectorAll(`.header`)
           headers.forEach((header) => {
@@ -990,7 +1094,7 @@
         const cleanItemName = item.ITEM_NAME.toLowerCase();
         //const cleanItemType = item.FIELD_TYPE ? item.FIELD_TYPE.toLowerCase() : '';
         //const cleanBItemCat = item.DETAILS.D_CATG ? item.DETAILS.D_CATG.toLowerCase() : '';
-        return cleanItemName.includes(query.toLowerCase()) 
+        return cleanItemName.includes(query.toLowerCase())
       });
 
       if (filteredDoctors.length === 0) {

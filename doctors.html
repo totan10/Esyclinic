@@ -173,11 +173,26 @@
         }
 
         .profile-icon {
-            margin-left: 20px;
+            margin-right: 20px;
             /* Margin between search bar and profile icon */
-            font-size: 24px;
+            font-size: 20px;
+            font-weight: 700;
             /* Font size for profile icon */
             cursor: pointer;
+            width: 120px;
+            background: -webkit-linear-gradient(#05639b, #01e096);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: solid;
+            text-align: center;
+            transition: background 1s;
+        }
+
+        .profile-icon:hover {
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background: -webkit-linear-gradient(#01e096, #05639b);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .slotitems {
@@ -205,7 +220,8 @@
             text-align: center;
             padding: 4px;
         }
-        .doctors_heading{
+
+        .doctors_heading {
             height: 40px;
             margin-top: 100px;
             width: 100%;
@@ -330,6 +346,7 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css">
 </head>
 
 <body>
@@ -365,6 +382,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
     <script>
         let doctorsData = [];
         let userData = null;
@@ -404,6 +422,8 @@
                     // Set the logo URL dynamically
                     const companyLogo = document.getElementById("companyLogo");
                     companyLogo.src = userData.LOGO_URL;
+                    const clinicName = document.querySelector(".profile-icon")
+                    clinicName.innerHTML = `${userData.PHARMA_NAME}`
                 }
                 showDoctors(specialistData.DIS_ID)
             }
@@ -453,10 +473,10 @@
             // Populate the doctors grid for today
             const doctorsContainer =
                 document.querySelector(".doctors-container");
-                const heading=document.querySelector('.doctors_heading');
-                heading.textContent=`${specialistData.SPECIALIST}`
-                heading.style.display='block'
-                
+            const heading = document.querySelector('.doctors_heading',"wow","fadeInDown");
+            heading.textContent = `${specialistData.SPECIALIST}`
+            heading.style.display = 'block'
+
             doctorsList.sort((a, b) => {
                 const dateA = a.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object a
                 const dateB = b.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object b
@@ -471,11 +491,22 @@
                 return 0; // dates are equal
             });
             console.log(doctorsList);
+            wow = new WOW(
+                {
+                    boxClass: 'wow',      // default
+                    animateClass: 'animated', // change this if you are not using animate.css
+                    offset: 0,          // default
+                    mobile: true,       // keep it on mobile
+                    live: true        // track if element updates
+                }
+            )
+            wow.init();
+
             for (let i = 0; i < doctorsList.length; i++) {
                 const doctor = doctorsList[i].DETAILS;
                 const availabe_date = formatDate(doctor.SCH_DT[0].SCH_DT)
                 const doctorDiv = document.createElement("div");
-                doctorDiv.classList.add("doctor");
+                doctorDiv.classList.add("doctor","wow","fadeInDown");
 
                 const doctorImg = document.createElement("img");
                 doctorImg.src = doctor.DR_PHOTO;
@@ -531,29 +562,29 @@
                     window.location.href = `demo.html?${queryParams}`;
                     console.log(doctor);
                     // Function to convert object to query string
-                                 
+
                 });
                 function objectToQueryString(obj) {
-                        const keyValuePairs = [];
-                        for (const key in obj) {
-                            if (Object.hasOwnProperty.call(obj, key)) {
-                                if (key === "SCH_DT") {
-                                    // Convert slotData object to JSON string
-                                    keyValuePairs.push(
-                                        `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
-                                    );
-                                } else {
-                                    keyValuePairs.push(
-                                        `${key}=${encodeURIComponent(obj[key])}`
-                                    );
-                                }
+                    const keyValuePairs = [];
+                    for (const key in obj) {
+                        if (Object.hasOwnProperty.call(obj, key)) {
+                            if (key === "SCH_DT") {
+                                // Convert slotData object to JSON string
+                                keyValuePairs.push(
+                                    `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
+                                );
+                            } else {
+                                keyValuePairs.push(
+                                    `${key}=${encodeURIComponent(obj[key])}`
+                                );
                             }
                         }
-                        return keyValuePairs.join("&");
                     }
+                    return keyValuePairs.join("&");
+                }
 
-      
-                
+
+
                 bookNowBtn.addEventListener("click", () => {
                     const doctordata = doctor ? doctor : null;
                     // Convert object to query string
@@ -561,7 +592,7 @@
                     console.log(queryParams);
                     window.location.href = `demo.html?${queryParams}`;
                     console.log(doctor);
-                          
+
                 });
                 doctorsContainer.appendChild(doctorDiv);
             }
@@ -627,7 +658,7 @@
                 const cleanItemName = item.ITEM_NAME.toLowerCase();
                 // const cleanItemType = item.FIELD_TYPE ? item.FIELD_TYPE.toLowerCase() : '';
                 // const cleanBItemCat = item.DETAILS.D_CATG ? item.DETAILS.D_CATG.toLowerCase() : '';
-                return cleanItemName.includes(query.toLowerCase()) ;
+                return cleanItemName.includes(query.toLowerCase());
             });
 
             if (filteredDoctors.length === 0) {

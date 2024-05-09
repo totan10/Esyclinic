@@ -3,162 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appointment Details</title>
+    <title>Scroll Animation with Advanced Techniques</title>
     <style>
         body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 2000px; /* Set height to allow scrolling */
+        }
 
-#content {
-    width: 210mm; /* A4 width */
-    height: 297mm; /* A4 height */
-    padding: 10mm;
-    box-sizing: border-box;
-    margin: 0;
-}
+        #animation-section {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
 
-.clinicDetails {
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.clinicDetails h2 {
-    color: cyan; /* Header color */
-    margin: 0;
-}
-
-.clinicDetails p {
-    margin: 5px 0;
-}
-
-.clinicDetails img {
-    max-width: 150px;
-    height: auto;
-    margin-top: -20px;
-}
-
-.detailsContainer {
-    display: flex;
-    justify-content: space-between;
-    border-radius: 10px;
-    border: 1px solid black;
-    padding: 10px;
-}
-
-.column {
-    width: 30%;
-    padding: 5px;
-}
-
-.column h3 {
-    color: rgb(33, 144, 235); /* Header color */
-    margin: 0;
-}
-
-.column p {
-    margin: 5px 0;
-    font-size: smaller;
-}
-
-.clinicalNotes {
-    margin-top: 10px;
-    border: 1px solid black;
-    border-radius: 10px;
-    /* padding: 10px; */
-}
-
-.clinicalNotesContainer {
-    display: flex;
-    justify-content: space-between;
-    height: 750px;
-}
-
-.clinicalNote {
-    width: 33%;
-    /* padding: 10px; */
-    box-sizing: border-box;
-    border-right: 1px solid #131212; /* Border between columns */
-    height: 100%;
-}
-
-.clinicalNote:last-child {
-    border-right: none; /* Remove border on the last column */
-    width: 67%;
-}
-
-.clinicalNote h5{
-    margin: 0px;
-    padding: 3px;
-    text-align: center;
-    border-bottom: 1px solid black;
-
-}
-
-@media print {
-    body {
-        margin: 0;
-        padding: 0;
-    }
-
-    #content {
-        width: 210mm;
-        min-height: 297mm;
-        padding: 20mm;
-        box-sizing: border-box;
-    }
-}
-
-    
+        #animated-image {
+            position: absolute;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css"> 
 </head>
 <body>
-    <div> <div id="content">
-        <div class="clinicDetails">
-           <img src="http://easyhealths.com/storage/app/cliniclogo/8L.jpg" alt="clinic logo">
-            <h2>SURAKSHA CLINIC</h2>
-            <p><strong>Old Big Bazaar Building, Near Railway Station</strong></p>
-        </div>
-        <div class="detailsContainer">
-            
-            <div class="column doctorDetails">
-                <h6>Doctor Details</h6>
-                <p><strong>Name:</strong> Dr. Kunal Sarkar</p>
-                <p><strong>Doctor ID:</strong> 1107321459</p>
-                <p><strong>Registration No:</strong> 5432514587</p>
-                <p><strong>Designation:</strong> Senior Vice Chairman, Cardiac Surgeon, Head MICS</p>
-            </div>
-            <div class="column patientDetails">
-                <h6>Patient Details</h6>
-                <p><strong>Name:</strong>Sourav</p>
-                <p><strong>Age:</strong> 28</p>
-                <p><strong>Gender:</strong> Male</p>
-                <p><strong>Mobile:</strong> 7667758034</p>
-            </div>
-            <div class="column appointmentDetails">
-                <h6>Appointment Details</h6> 
-                <p><strong>Booking ID:</strong> CC76585F8A</p>
-                <p><strong>Visit Date:</strong> 30-04-2024</p>
-                <p><strong>Visit Time:</strong>  02:30 PM-03:00 PM</p>
-            </div>
-        </div>
+    <div id="animation-section">
+        <img id="animated-image" src="/afternoon_icon.jpeg" alt="Animated Image">
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const section = document.getElementById('animation-section');
+            const animatedImage = document.getElementById('animated-image');
+            let lastScrollPosition = 0;
+            let isScrolling = false;
+            let resizeTimeout;
 
-        <!-- Rounded bordered rectangular table for clinical notes and advice -->
-        <div class="clinicalNotes">
-            <div class="clinicalNotesContainer">
-                <div class="clinicalNote">
-                    <!-- First column content (Clinical Notes) -->
-                    <h5>Clinical Notes</h5>
-                    <!-- Add clinical notes content here -->
-                </div>
-                <div class="clinicalNote">
-                    <!-- Second column content (Advice) -->
-                    <h5>Advice</h5>
-                    <!-- Add advice content here -->
-                </div>
-            </div>
-        </div>
-    </div></div>
+            function isInViewport(element) {
+                const rect = element.getBoundingClientRect();
+                return (
+                    rect.top >= 0 &&
+                    rect.left >= 0 &&
+                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                );
+            }
+
+            function handleScroll() {
+                const currentScrollPosition = window.scrollY;
+
+                if (!isScrolling) {
+                    if (currentScrollPosition > lastScrollPosition) {
+                        // Scrolling down
+                        animatedImage.style.opacity = 1; // Fade in
+                    } else {
+                        // Scrolling up
+                        animatedImage.style.opacity = 0; // Fade out
+                    }
+
+                    const sectionTop = section.offsetTop;
+                    const distance = currentScrollPosition - sectionTop;
+                    const parallaxFactor = 0.5; // Adjust this value for desired parallax effect
+                    animatedImage.style.transform = `translateX(${distance * parallaxFactor}px)`;
+
+                    lastScrollPosition = currentScrollPosition;
+                    isScrolling = true;
+                    setTimeout(() => {
+                        isScrolling = false;
+                    }, 100); // Adjust throttle delay (in milliseconds) as needed
+                }
+            }
+
+            function handleResize() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    handleScroll(); // Re-calculate positions on resize
+                }, 200); // Adjust delay (in milliseconds) as needed
+            }
+
+            function initAnimation() {
+                window.addEventListener('scroll', handleScroll);
+                window.addEventListener('resize', handleResize);
+                handleScroll(); // Initial check on page load
+            }
+
+            initAnimation();
+        });
+    </script>
 </body>
 </html>
