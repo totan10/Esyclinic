@@ -205,6 +205,18 @@
             text-align: center;
             padding: 4px;
         }
+        .doctors_heading{
+            height: 40px;
+            margin-top: 100px;
+            width: 100%;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            padding-top: 10px;
+            font-weight: 700;
+            font-size: x-large;
+            color: #f3f3f3;
+            background-color: #26aabe;
+        }
 
         /* Custom CSS for Doctors Grid for Today */
         .doctors-container {
@@ -214,8 +226,6 @@
             /* Adjust the gap between grid items */
             padding: 20px;
             justify-items: center;
-
-            margin-top: 100px;
         }
 
         .book-now-btn {
@@ -345,6 +355,7 @@
             </div>
         </nav>
     </div>
+    <div class="doctors_heading"></div>
     <div class="doctors-container" id="doctorContainer">
 
     </div>
@@ -440,6 +451,9 @@
             // Populate the doctors grid for today
             const doctorsContainer =
                 document.querySelector(".doctors-container");
+                const heading=document.querySelector('.doctors_heading');
+                heading.textContent=`${specialistData.SPECIALIST}`
+                
             doctorsList.sort((a, b) => {
                 const dateA = a.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object a
                 const dateB = b.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object b
