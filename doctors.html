@@ -216,6 +216,8 @@
             font-size: x-large;
             color: #f3f3f3;
             background-color: #26aabe;
+            display: none;
+            transition: display 1s;
         }
 
         /* Custom CSS for Doctors Grid for Today */
@@ -453,6 +455,7 @@
                 document.querySelector(".doctors-container");
                 const heading=document.querySelector('.doctors_heading');
                 heading.textContent=`${specialistData.SPECIALIST}`
+                heading.style.display='block'
                 
             doctorsList.sort((a, b) => {
                 const dateA = a.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object a
