@@ -199,7 +199,7 @@
 
     .specialists-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(6, 1fr);
       gap: 10px;
       /* Adjust the gap between grid items */
       padding: 20px;
@@ -215,6 +215,7 @@
       cursor: pointer;
       /* Add pointer cursor */
       background-color: #f0f0f0;
+      align-items: center;
     }
 
     .specialist img {
@@ -371,7 +372,7 @@
 
     .symptoms-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(6, 1fr);
       gap: 10px;
       /* Adjust the gap between grid items */
       padding: 20px;
@@ -418,6 +419,7 @@
 
     .doctor-specialist {
       margin-top: 40px;
+      margin-bottom: 5px;
       padding: 0 3px;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -460,6 +462,8 @@
     @media (max-width: 1024px) {
 
       .doctors-container,
+      .specialists-container,
+      .symptoms-container,
       .doctor-specialists-container {
         grid-template-columns: repeat(4, 1fr);
         /* Adjust for smaller screens */
@@ -469,6 +473,8 @@
     @media (max-width: 768px) {
 
       .doctors-container,
+      .specialists-container,
+      .symptoms-container,
       .doctor-specialists-container {
         grid-template-columns: repeat(3, 1fr);
         /* Adjust for smaller screens */
@@ -478,6 +484,8 @@
     @media (max-width: 600px) {
 
       .doctors-container,
+      .specialists-container,
+      .symptoms-container,
       .doctor-specialists-container {
         grid-template-columns: repeat(2, 1fr);
         /* Adjust for smaller screens */
@@ -487,6 +495,8 @@
     @media (max-width: 480px) {
 
       .doctors-container,
+      .specialists-container,
+      .symptoms-container,
       .doctor-specialists-container {
         grid-template-columns: repeat(1, 1fr);
         /* Single column layout for narrower screens */
@@ -496,6 +506,7 @@
     .doctor-category {
       margin: 5px 0;
       line-height: 1.5;
+      overflow-wrap: break-word;
     }
 
     .slotitems {
@@ -723,7 +734,8 @@
           const specialistsContainer = document.querySelector(
             ".specialists-container"
           );
-          for (let i = 0; i < Math.min(specialistsData.length, 6); i++) {
+          const specialistBtn=document.getElementById('specialistBtn')
+          for (let i = 0; i <specialistsData.length; i++) {
             const specialist = specialistsData[i];
             const specialistDiv = document.createElement("div");
             specialistDiv.classList.add("specialist");
@@ -751,21 +763,26 @@
             specialistDiv.appendChild(totalDoctors);
             specialistsContainer.appendChild(specialistDiv);
           }
-
-          function showOneRow() {
-            const gridItems = document.querySelectorAll('.doctor');
+          showOneRow('.specialist')
+          specialistBtn.addEventListener('click',()=>{
+            toggleGridView('.specialist','specialistBtn');
+          })
+          function showOneRow(doctors) {
+            const gridItems = document.querySelectorAll(doctors);
             gridItems.forEach((item, index) => {
               if (index >= 6) {
                 item.style.display = 'none';
               } else {
                 item.style.display = 'block'; // Display first row items
+                item.style.display='flex'
+                item.style.flexDirection='column'
               }
             });
           }
           // Populate the doctors grid for today
           const doctorsContainer =
             document.querySelector(".doctors-container");
-          const toggleButton = document.getElementById('todayBtn');
+          const todayeButton = document.getElementById('todayBtn');
 
           todayDoctorsData.sort(sortByCheckInStatus)
           for (let i = 0; i < todayDoctorsData.length; i++) {
@@ -812,28 +829,32 @@
             })
             doctorsContainer.appendChild(doctorDiv);
           }
-          function toggleGridView() {
-            const gridItems = document.querySelectorAll('.doctor');
+          function toggleGridView(doctors,button) {
+            const gridItems = document.querySelectorAll(doctors);
+            const toggleButton = document.getElementById(button);
             const isExpanded = toggleButton.classList.contains('expanded');
-
+            
             if (isExpanded) {
               // Collapse grid to show only one row
-              showOneRow();
+              showOneRow(doctors);
               toggleButton.innerHTML = 'View All'; // Change to expand icon
               toggleButton.classList.remove('expanded');
             } else {
               // Expand grid to show all items
               gridItems.forEach(item => {
                 item.style.display = 'block';
+                item.style.display='flex'
+                item.style.flexDirection='column'
               });
               toggleButton.innerHTML = 'View Less'; // Change to compress icon
               toggleButton.classList.add('expanded');
             }
           }
-          showOneRow()
-          toggleButton.addEventListener('click', function () {
-            toggleGridView();
+          showOneRow('.doctor')
+          todayeButton.addEventListener('click', function () {
+            toggleGridView('.doctor','todayBtn');
           });
+
           // Custom sorting function based on CHK_IN_STATUS
           function sortByCheckInStatus(a, b) {
             const statusOrder = {
@@ -858,7 +879,8 @@
           const symptomsContainer = document.querySelector(
             ".symptoms-container"
           );
-          for (let i = 0; i < Math.min(symptomsData.length, 6); i++) {
+          const symptomsBtn=document.getElementById('symptomsBtn')
+          for (let i = 0; i <symptomsData.length; i++) {
             const symptom = symptomsData[i];
             const symptomDiv = document.createElement("div");
             symptomDiv.classList.add("symptom");
@@ -873,14 +895,18 @@
             symptomDiv.appendChild(symptomName);
             symptomsContainer.appendChild(symptomDiv);
           }
-
+          showOneRow('.symptom');
+          symptomsBtn.addEventListener('click',()=>{
+            toggleGridView('.symptom','symptomsBtn')
+          })
           // Populate the specialists grid
           const doctorSpecialistsContainer = document.querySelector(
             ".doctor-specialists-container"
           );
+          const doctorSpecialistBtn=document.getElementById('allSpecialistBtn');
           for (
             let i = 0;
-            i < Math.min(doctorSpecialistsData.length, 6);
+            i < doctorSpecialistsData.length;
             i++
           ) {
             const specialist = doctorSpecialistsData[i];
@@ -896,6 +922,7 @@
             specialistName.classList.add("doctor-name"); // Added class for styling
             const doctorDetails = document.createElement("p");
             doctorDetails.classList.add("doctor-category"); // Added class for styling
+            
             doctorDetails.innerHTML = `
             <span><strong>Specialization:</strong></span> ${specialist.D_CATG}
             <br>  <span><strong>Experience:</strong></span> ${specialist.EXPERIENCE}
@@ -910,8 +937,12 @@
             specialistDiv.appendChild(doctorDetails);
             specialistDiv.appendChild(bookNowBtn);
             doctorSpecialistsContainer.appendChild(specialistDiv);
+           
           }
-
+          showOneRow('.doctor-specialist')
+          doctorSpecialistBtn.addEventListener('click',()=>{
+            toggleGridView('.doctor-specialist','allSpecialistBtn')
+          })
           const headers = document.querySelectorAll(`.header`)
           headers.forEach((header) => {
             header.style.display = 'block'
