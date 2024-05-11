@@ -236,6 +236,26 @@
             transition: display 1s;
         }
 
+        /* Add any additional styles as needed */
+        .filter-buttons {
+            margin: 20px;
+        }
+
+        .filter-buttons button {
+            margin-right: 10px;
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #fff;
+            color: #01b5cd;
+        }
+
+        .filter-buttons button.active {
+            background-color: #01b5cd;
+            color: #fff;
+        }
+
         /* Custom CSS for Doctors Grid for Today */
         .doctors-container {
             display: grid;
@@ -250,7 +270,7 @@
             width: 100%;
             height: 40px;
             color: #f6f1f1;
-            background-color: #007bff;
+            background-color: #01b5cd;
             border: none;
             font-size: larger;
             padding: 5px 10px;
@@ -262,7 +282,7 @@
         .book-now-btn:hover {
             background-color: #f0f0f0;
             /* Light gray background on hover */
-            color: #007bff;
+            color: #01b5cd;
         }
 
         @media (max-width: 1024px) {
@@ -375,6 +395,11 @@
         </nav>
     </div>
     <div class="doctors_heading"></div>
+    <div class="filter-buttons">
+        <button id="femaleDoctorsBtn"><i class="fas fa-venus"></i> Female Doctors</button>
+        <button id="availableTodayBtn"><i class="fas fa-calendar-day"></i> Available Today</button>
+        <button id="budgetFriendlyBtn"> <i id="budgetIcon" class="fas fa-money-bill-wave"></i> Budget Friendly</button>
+    </div>
     <div class="doctors-container" id="doctorContainer">
 
     </div>
@@ -388,108 +413,131 @@
         let userData = null;
         let specialistData = null
         let doctorsList = []
-        window.onload = function () {
-            populateDoctors();
-        }
-        document.addEventListener("DOMContentLoaded", function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            const encodedData = urlParams.get('data');
+        const femaleDoctorsBtn = document.getElementById("femaleDoctorsBtn");
+        const availableTodayBtn = document.getElementById("availableTodayBtn");
+        const budgetFriendlyBtn = document.getElementById("budgetFriendlyBtn");
+        let activeFilters = new Set(); // Set to track active filters
+        let isSortedByFees = false;
 
-            if (encodedData) {
-                // Decode URL parameter and parse JSON to retrieve object
-                specialistData = JSON.parse(decodeURIComponent(encodedData));
-
-                // Now you can use specialistData as an object
-                console.log(specialistData);
-
-                // Example: Access specific properties
-                console.log(specialistData.SPECIALIST);
-                document.title = `${specialistData.SPECIALIST}`
-
-            }
-            // Check if the user is already logged in
-            const isLoggedIn = localStorage.getItem("isLoggedIn");
-            if (isLoggedIn) {
-                // Retrieve username from localStorage
-                const username = localStorage.getItem("username");
-                // Do something with the logged-in user's data
-                const storedUserData = localStorage.getItem("userData");
-                // Access and use the user's data
-                if (storedUserData) {
-                    userData = JSON.parse(storedUserData);
-                    console.log(userData);
-                    userData = userData.data
-                    // Set the logo URL dynamically
-                    const companyLogo = document.getElementById("companyLogo");
-                    companyLogo.src = userData.LOGO_URL;
-                    const clinicName = document.querySelector(".profile-icon")
-                    clinicName.innerHTML = `${userData.PHARMA_NAME}`
-                }
-                showDoctors(specialistData.DIS_ID)
-            }
+        femaleDoctorsBtn.addEventListener("click", () => {
+            toggleFilter("FEMALE", femaleDoctorsBtn);
         });
-        function showDoctors(DIS_ID) {
-            const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "http://easyhealths.com/api/admcatgclinicdr1"
-            const params = {
-                PHARMA_ID: PHARMA_ID,
-                DIS_ID: DIS_ID
-            };
-            console.log(params);
-            axios
-                .post(url, params)
-                .then((response) => {
-                    const data = response.data.data;
-                    doctorsList = data;
-                    console.log(doctorsList);
-                    populateList(doctorsList)
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    return null;
-                });
 
+        availableTodayBtn.addEventListener("click", () => {
+            toggleFilter("AVAILABLE_TODAY", availableTodayBtn);
+        });
+        function sortByFees() {
+            isSortedByFees = !isSortedByFees; // Toggle sorting state
+            const sortedDoctors = isSortedByFees ?
+                doctorsList.slice().sort((a, b) => {
+                    // First, sort by fees
+                    if (a.DETAILS.DR_FEES !== b.DETAILS.DR_FEES) {
+                        return a.DETAILS.DR_FEES - b.DETAILS.DR_FEES;
+                    } else {
+                        // If fees are the same, sort by availability date
+                        return a.DETAILS.SCH_DT[0].SCH_DT.localeCompare(b.DETAILS.SCH_DT[0].SCH_DT);
+                    }
+                }) :
+                doctorsList;
+            populateList(sortedDoctors);
+            toggleIcon(); // Toggle icon based on current state
         }
-        // Function to format date from "YYYYMMDD" to "dd-Month-YYYY"
-        const formatDate = (dateStr) => {
-            const year = dateStr.slice(0, 4);
-            const month = parseInt(dateStr.slice(4, 6), 10); // Convert month part to integer
-            const day = dateStr.slice(6, 8);
+        budgetFriendlyBtn.addEventListener("click", () => {
+            sortByFees()
+        });
 
-            // Array of month names
-            const monthNames = [
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            ];
+        function toggleIcon() {
+            const budgetIcon = document.getElementById("budgetIcon");
+            if (isSortedByFees) {
+                budgetIcon.classList.add("fa-sort-amount-up"); // Add sorting icon
+                budgetIcon.classList.remove("fa-money-bill-wave");
+                budgetFriendlyBtn.style.color = 'white';
+                budgetFriendlyBtn.style.backgroundColor = '#01b5cd';
+            } else {
+                budgetIcon.classList.remove("fa-sort-amount-up");
+                budgetIcon.classList.add("fa-money-bill-wave"); // Restore default icon
+                budgetFriendlyBtn.style.color = '#01b5cd';
+                budgetFriendlyBtn.style.backgroundColor = 'white';
+            }
+        }
 
-            // Get month name based on month number (month - 1 due to zero-indexed array)
-            const monthName = monthNames[month - 1];
+        // Function to toggle filter and button state
+        function toggleFilter(filterType, button) {
+            const isActive = activeFilters.has(filterType);
 
-            // Construct formatted date string
-            const formattedDate = `${day}-${monthName}-${year}`;
-            return formattedDate;
-        };
+            // Toggle active state of the filter
+            if (isActive) {
+                activeFilters.delete(filterType);
+            } else {
+                activeFilters.add(filterType);
+            }
+
+            // Apply all active filters to the doctors list
+            const filteredDoctors = applyFilters(doctorsList);
+            console.log(filteredDoctors);
+            populateList(filteredDoctors);
+
+            // Toggle active state of the button
+            button.classList.toggle("active", !isActive);
+
+            // Toggle icon based on active state
+            const icon = button.querySelector("i");
+            if (icon) {
+                if (isActive) {
+                    icon.classList.remove("fa-check-circle");
+                    icon.classList.add("fa-solid fa-square-check");
+                } else {
+                    icon.classList.remove("fa-solid fa-square-check");
+                    icon.classList.add("fa-check-circle");
+                }
+            }
+        }
+        // Function to apply all active filters to the doctors list
+        function applyFilters(doctorsList) {
+            if (activeFilters.size === 0) {
+                return doctorsList; // No filters active, return all doctors
+            }
+
+            return doctorsList.filter(doctor => {
+                return Array.from(activeFilters).every(filterType => {
+                    switch (filterType) {
+                        case "FEMALE":
+                            return doctor.DETAILS.SEX === "FEMALE";
+                        case "AVAILABLE_TODAY":
+                            const today = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+                            return doctor.DETAILS.SCH_DT.some(schedule => schedule.BOOK_START_DT === today);
+                        default:
+                            return true;
+                    }
+                });
+            });
+        }
         function populateList(doctorsList) {
             // Populate the doctors grid for today
             const doctorsContainer =
                 document.querySelector(".doctors-container");
-            const heading = document.querySelector('.doctors_heading',"wow","fadeInDown");
-            heading.textContent = `${specialistData.SPECIALIST}`
+            doctorsContainer.innerHTML = ''
+            const heading = document.querySelector('.doctors_heading', "wow", "fadeInDown");
+            const headContent = specialistData.SYM_NAME ? `Doctors For ${specialistData.SYM_NAME} Treatment` : `Available ${specialistData.SPECIALIST}`
+            heading.textContent = headContent
             heading.style.display = 'block'
+            if (!isSortedByFees) {
+                doctorsList.sort((a, b) => {
+                    const dateA = a.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object a
+                    const dateB = b.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object b
 
-            doctorsList.sort((a, b) => {
-                const dateA = a.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object a
-                const dateB = b.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object b
+                    // Compare the date strings as strings (assuming they are in "YYYYMMDD" format)
+                    if (dateA < dateB) {
+                        return -1; // dateA comes before dateB
+                    }
+                    if (dateA > dateB) {
+                        return 1; // dateA comes after dateB
+                    }
+                    return 0; // dates are equal
+                });
+            }
 
-                // Compare the date strings as strings (assuming they are in "YYYYMMDD" format)
-                if (dateA < dateB) {
-                    return -1; // dateA comes before dateB
-                }
-                if (dateA > dateB) {
-                    return 1; // dateA comes after dateB
-                }
-                return 0; // dates are equal
-            });
+
             console.log(doctorsList);
             wow = new WOW(
                 {
@@ -506,7 +554,7 @@
                 const doctor = doctorsList[i].DETAILS;
                 const availabe_date = formatDate(doctor.SCH_DT[0].SCH_DT)
                 const doctorDiv = document.createElement("div");
-                doctorDiv.classList.add("doctor","wow","fadeInDown");
+                doctorDiv.classList.add("doctor", "wow", "fadeInDown");
 
                 const doctorImg = document.createElement("img");
                 doctorImg.src = doctor.DR_PHOTO;
@@ -596,10 +644,93 @@
                 });
                 doctorsContainer.appendChild(doctorDiv);
             }
+        }
+        const formatDate = (dateStr) => {
+            const year = dateStr.slice(0, 4);
+            const month = parseInt(dateStr.slice(4, 6), 10); // Convert month part to integer
+            const day = dateStr.slice(6, 8);
+
+            // Array of month names
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+            // Get month name based on month number (month - 1 due to zero-indexed array)
+            const monthName = monthNames[month - 1];
+
+            // Construct formatted date string
+            const formattedDate = `${day}-${monthName}-${year}`;
+            return formattedDate;
+        };
 
 
+        window.onload = function () {
+            populateDoctors();
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedData = urlParams.get('data');
+
+            if (encodedData) {
+                // Decode URL parameter and parse JSON to retrieve object
+                specialistData = JSON.parse(decodeURIComponent(encodedData));
+
+                // Now you can use specialistData as an object
+                console.log(specialistData);
+
+                // Example: Access specific properties
+                console.log(specialistData.SPECIALIST);
+                document.title = `${specialistData.SPECIALIST}`
+
+            }
+            // Check if the user is already logged in
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            if (isLoggedIn) {
+                // Retrieve username from localStorage
+                const username = localStorage.getItem("username");
+                // Do something with the logged-in user's data
+                const storedUserData = localStorage.getItem("userData");
+                // Access and use the user's data
+                if (storedUserData) {
+                    userData = JSON.parse(storedUserData);
+                    console.log(userData);
+                    userData = userData.data
+                    // Set the logo URL dynamically
+                    const companyLogo = document.getElementById("companyLogo");
+                    companyLogo.src = userData.LOGO_URL;
+                    const clinicName = document.querySelector(".profile-icon")
+                    clinicName.innerHTML = `${userData.PHARMA_NAME}`
+                }
+                showDoctors(specialistData.DIS_ID)
+            }
+            else {
+                window.location.href = '/'
+            }
+        });
+        function showDoctors(DIS_ID) {
+            const PHARMA_ID = userData ? userData.PHARMA_ID : null
+            const url = "http://easyhealths.com/api/admcatgclinicdr1"
+            const params = {
+                PHARMA_ID: PHARMA_ID,
+                DIS_ID: DIS_ID
+            };
+            console.log(params);
+            axios
+                .post(url, params)
+                .then((response) => {
+                    const data = response.data.data;
+                    doctorsList = data;
+                    console.log(doctorsList);
+                    populateList(doctorsList)
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    return null;
+                });
 
         }
+        // Function to format date from "YYYYMMDD" to "dd-Month-YYYY"
         function populateDoctors() {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
             const url = "http://easyhealths.com/api/searchDoctorTest";
@@ -678,10 +809,10 @@
             });
             console.log(filtered);
             // Define the specific order for certain Field_type values
-            const specificOrder = ['Doctor', 'Symptom', 'Test']; // Define specific types to appear first
+            const specificOrder = ['Doctor', 'Symptom', 'Test', 'Profile', 'Package', , 'PATHOLOGY', 'RADIOLOGY']; // Define specific types to appear first
             filtered.sort((a, b) => {
-                const fieldA = a.Field_type;
-                const fieldB = b.Field_type;
+                const fieldA = a.FIELD_TYPE;
+                const fieldB = b.FIELD_TYPE;
 
                 // Get the index of Field_type values in the specificOrder array
                 const indexA = specificOrder.indexOf(fieldA);
@@ -874,12 +1005,51 @@
           <p style='color:green'>${doctor.FIELD_TYPE}</p>`;
                     searchResults.appendChild(listItem)
                     listItem.addEventListener('click', () => {
-                        console.log(doctor);
+                        if (doctor.FIELD_TYPE === 'Symptom') {
+                            const symptomData = doctor ? doctor.DETAILS : null
+                            symptomData.SYM_NAME = doctor.ITEM_NAME ? doctor.ITEM_NAME : null
+                            const encodedData = encodeURIComponent(JSON.stringify(symptomData));
+                            const redirectUrl = `doctors.html?data=${encodedData}`;
+
+                            // Redirect to doctors.html with the specified SPECIALIST parameter
+                            window.location.href = redirectUrl;
+                        };
                     })
                 }
             });
 
             searchResults.classList.add("active"); // Show search results
+        }
+        document.addEventListener("keydown", function (event) {
+            // Check if the Shift key is pressed along with another key
+            if (event.shiftKey) {
+                console.log("clicked");
+                switch (event.key) {
+                    case "D": // Shift + D for Doctors Booking
+                        event.preventDefault(); // Prevent default action
+                        handleDoctorsBooking();
+                        break;
+                    case "T": // Shift + L for Lab Test Booking
+                        event.preventDefault(); // Prevent default action
+                        handleLabTestBooking();
+                        break;
+                    case "R": // Shift + T for Report Transfer
+                        event.preventDefault(); // Prevent default action
+                        window.location.href = "reportTransfer.html";
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        function handleDoctorsBooking() {
+            window.location.href = "doctorsBooking.html";
+        }
+
+        // Handle Lab Test Booking Click
+        function handleLabTestBooking() {
+            // Add your logic for lab test booking here
+            window.location.href = "labtestBooking.html";
         }
     </script>
 </body>

@@ -677,7 +677,16 @@
           <p style='color:green'>${doctor.FIELD_TYPE}</p>`;
           searchResults.appendChild(listItem)
           listItem.addEventListener('click', () => {
-            console.log(doctor);
+            if (doctor.FIELD_TYPE === 'Symptom') {
+              const symptomData = doctor ? doctor.DETAILS : null
+              symptomData.SYM_NAME = doctor.ITEM_NAME ? doctor.ITEM_NAME : null
+              const encodedData = encodeURIComponent(JSON.stringify(symptomData));
+              const redirectUrl = `doctors.html?data=${encodedData}`;
+
+              // Redirect to doctors.html with the specified SPECIALIST parameter
+              window.location.href = redirectUrl;
+            }
+
           })
         }
       });

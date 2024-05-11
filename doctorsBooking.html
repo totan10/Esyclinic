@@ -660,6 +660,8 @@
   <script>
     let doctorsData = [];
     let userData = null;
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
     wow = new WOW(
       {
         boxClass: 'wow',      // default
@@ -691,6 +693,19 @@
         }
       }
     });
+    function showOneRow(doctors) {
+      const gridItems = document.querySelectorAll(doctors);
+      gridItems.forEach((item, index) => {
+        if (index >= 6) {
+          item.style.display = 'none';
+        } else {
+          item.style.display = 'block'; // Display first row items
+          item.style.display = 'flex'
+          item.style.flexDirection = 'column'
+        }
+      });
+    }
+
     function populateDoctors() {
       const PHARMA_ID = userData ? userData.PHARMA_ID : null
       const url = "http://easyhealths.com/api/searchDoctorTest";
@@ -718,8 +733,7 @@
           return null;
         });
     }
-    const searchInput = document.getElementById("searchInput");
-    const searchResults = document.getElementById("searchResults");
+
     // Function to make a POST request on page load
     window.onload = function () {
       populateDoctors();
@@ -727,7 +741,7 @@
       searchInput.focus();
       // Your API endpoint URL
       // const apiUrl = "http://easyhealths.com/api/admopd";
-      const apiUrl="http://easyhealths.com/api/phopdweb"
+      const apiUrl = "http://easyhealths.com/api/phopdweb"
       // Data to be sent in the request body
       const postData = {
         // Add any necessary data for the API call
@@ -740,7 +754,7 @@
         .then((response) => {
           // Handle response data
           console.log(response.data);
-          
+
           const specialistsData = response.data.data
             ? response.data.data.specialist
             : null;
@@ -773,7 +787,7 @@
           for (let i = 0; i < specialistsData.length; i++) {
             const specialist = specialistsData[i];
             const specialistDiv = document.createElement("div");
-            specialistDiv.classList.add("specialist","wow","fadeInLeft");
+            specialistDiv.classList.add("specialist", "wow", "fadeInLeft");
             specialistDiv.addEventListener("click", () => {
               console.log(specialist); // Print specialist data when clicked
               // Encode the SPECIALIST value for URL
@@ -802,18 +816,6 @@
           specialistBtn.addEventListener('click', () => {
             toggleGridView('.specialist', 'specialistBtn');
           })
-          function showOneRow(doctors) {
-            const gridItems = document.querySelectorAll(doctors);
-            gridItems.forEach((item, index) => {
-              if (index >= 6) {
-                item.style.display = 'none';
-              } else {
-                item.style.display = 'block'; // Display first row items
-                item.style.display = 'flex'
-                item.style.flexDirection = 'column'
-              }
-            });
-          }
           // Populate the doctors grid for today
           const doctorsContainer =
             document.querySelector(".doctors-container");
@@ -823,7 +825,7 @@
           for (let i = 0; i < todayDoctorsData.length; i++) {
             const doctor = todayDoctorsData[i];
             const doctorDiv = document.createElement("div");
-            doctorDiv.classList.add("doctor","wow","fadeInLeft");
+            doctorDiv.classList.add("doctor", "wow", "fadeInLeft");
 
             const doctorImg = document.createElement("img");
             doctorImg.src = doctor.DR_PHOTO;
@@ -855,28 +857,28 @@
             bookNowBtn.classList.add("book-now-btn");
             //feeBookContainer.appendChild(bookNowBtn);
             bookNowBtn.addEventListener("click", () => {
-                    const doctordata = doctor ? doctor : null;
-                    // Convert object to query string
-                    const queryParams = objectToQueryString(doctordata);
-                    console.log(queryParams);
-                    window.location.href = `demo.html?${queryParams}`;
-                    console.log(doctor);
+              const doctordata = doctor ? doctor : null;
+              // Convert object to query string
+              const queryParams = objectToQueryString(doctordata);
+              console.log(queryParams);
+              window.location.href = `demo.html?${queryParams}`;
+              console.log(doctor);
 
-                });
+            });
             doctorDiv.appendChild(doctorImg);
             doctorDiv.appendChild(doctorName);
             doctorDiv.appendChild(doctorDetails);
             doctorDiv.appendChild(bookNowBtn); // Append fee and book container
             doctorDiv.addEventListener("click", () => {
               const doctordata = doctor ? doctor : null;
-                    // Convert object to query string
-                    const queryParams = objectToQueryString(doctordata);
-                    console.log(queryParams);
-                    window.location.href = `demo.html?${queryParams}`;
-                    console.log(doctor);
+              // Convert object to query string
+              const queryParams = objectToQueryString(doctordata);
+              console.log(queryParams);
+              window.location.href = `demo.html?${queryParams}`;
+              console.log(doctor);
             })
-             // Function to convert object to query string
-             function objectToQueryString(obj) {
+            // Function to convert object to query string
+            function objectToQueryString(obj) {
               const keyValuePairs = [];
               for (const key in obj) {
                 if (Object.hasOwnProperty.call(obj, key)) {
@@ -895,7 +897,7 @@
               return keyValuePairs.join("&");
             }
 
-           
+
             doctorsContainer.appendChild(doctorDiv);
           }
           function toggleGridView(doctors, button) {
@@ -952,7 +954,7 @@
           for (let i = 0; i < symptomsData.length; i++) {
             const symptom = symptomsData[i];
             const symptomDiv = document.createElement("div");
-            symptomDiv.classList.add("symptom","wow","fadeInLeft");
+            symptomDiv.classList.add("symptom", "wow", "fadeInLeft");
             symptomDiv.addEventListener("click", () => {
               console.log(symptom); // Print symptom data when clicked
             });
@@ -963,6 +965,16 @@
             symptomDiv.appendChild(symptomImg);
             symptomDiv.appendChild(symptomName);
             symptomsContainer.appendChild(symptomDiv);
+            symptomDiv.addEventListener("click", () => {
+              console.log(symptom); // Print specialist data when clicked
+              // Encode the SPECIALIST value for URL
+              // Encode object data as JSON and then as URL parameter
+              const encodedData = encodeURIComponent(JSON.stringify(symptom));
+              const redirectUrl = `doctors.html?data=${encodedData}`;
+
+              // Redirect to doctors.html with the specified SPECIALIST parameter
+              window.location.href = redirectUrl;
+            });
           }
           showOneRow('.symptom');
           symptomsBtn.addEventListener('click', () => {
@@ -980,7 +992,7 @@
           ) {
             const specialist = doctorSpecialistsData[i];
             const specialistDiv = document.createElement("div");
-            specialistDiv.classList.add("doctor-specialist","wow","fadeInLeft");
+            specialistDiv.classList.add("doctor-specialist", "wow", "fadeInLeft");
             specialistDiv.addEventListener("click", () => {
               console.log(specialist); // Print specialist data when clicked
             });
@@ -1007,22 +1019,22 @@
             specialistDiv.appendChild(bookNowBtn);
             bookNowBtn.addEventListener("click", () => {
               const doctordata = specialist ? specialist : null;
-                    // Convert object to query string
-                    const queryParams = objectToQueryString(doctordata);
-                    console.log(queryParams);
-                    window.location.href = `demo.html?${queryParams}`;
-                    console.log(doctor);
+              // Convert object to query string
+              const queryParams = objectToQueryString(doctordata);
+              console.log(queryParams);
+              window.location.href = `demo.html?${queryParams}`;
+              console.log(doctor);
             })
             specialistDiv.addEventListener("click", () => {
               const doctordata = specialist ? specialist : null;
-                    // Convert object to query string
-                    const queryParams = objectToQueryString(doctordata);
-                    console.log(queryParams);
-                    window.location.href = `demo.html?${queryParams}`;
-                    console.log(doctor);
+              // Convert object to query string
+              const queryParams = objectToQueryString(doctordata);
+              console.log(queryParams);
+              window.location.href = `demo.html?${queryParams}`;
+              console.log(doctor);
             })
-             // Function to convert object to query string
-             function objectToQueryString(obj) {
+            // Function to convert object to query string
+            function objectToQueryString(obj) {
               const keyValuePairs = [];
               for (const key in obj) {
                 if (Object.hasOwnProperty.call(obj, key)) {
@@ -1114,10 +1126,10 @@
       });
       console.log(filtered);
       // Define the specific order for certain Field_type values
-      const specificOrder = ['Doctor', 'Symptom', 'Test']; // Define specific types to appear first
+      const specificOrder = ['Doctor', 'Symptom', 'Test', 'Profile', 'Package', , 'PATHOLOGY', 'RADIOLOGY']; // Define specific types to appear first
       filtered.sort((a, b) => {
-        const fieldA = a.Field_type;
-        const fieldB = b.Field_type;
+        const fieldA = a.FIELD_TYPE;
+        const fieldB = b.FIELD_TYPE;
 
         // Get the index of Field_type values in the specificOrder array
         const indexA = specificOrder.indexOf(fieldA);
@@ -1310,13 +1322,45 @@
           <p style='color:green'>${doctor.FIELD_TYPE}</p>`;
           searchResults.appendChild(listItem)
           listItem.addEventListener('click', () => {
+            
             console.log(doctor);
+            if(doctor.FIELD_TYPE==='Symptom'){
+              const symptomData=doctor?doctor.DETAILS:null
+              symptomData.SYM_NAME=doctor.ITEM_NAME?doctor.ITEM_NAME:null
+              const encodedData = encodeURIComponent(JSON.stringify(symptomData));
+              const redirectUrl = `doctors.html?data=${encodedData}`;
+
+              // Redirect to doctors.html with the specified SPECIALIST parameter
+              window.location.href = redirectUrl;
+            }
           })
         }
       });
 
       searchResults.classList.add("active"); // Show search results
     }
+    document.addEventListener("keydown", function (event) {
+      // Check if the Shift key is pressed along with another key
+      if (event.shiftKey) {
+        console.log("clicked");
+        switch (event.key) {
+          case "D": // Shift + D for Doctors Booking
+            event.preventDefault(); // Prevent default action
+            window.location.href = "doctorsBooking.html";
+            break;
+          case "T": // Shift + L for Lab Test Booking
+            event.preventDefault(); // Prevent default action
+            window.location.href = "labtestBooking.html";
+            break;
+          case "R": // Shift + T for Report Transfer
+            event.preventDefault(); // Prevent default action
+            window.location.href = "reportTransfer.html";
+            break;
+          default:
+            break;
+        }
+      }
+    });
   </script>
 </body>
 
