@@ -268,7 +268,7 @@
         }
 
         .gradientTexts {
-            background: -webkit-linear-gradient( #43cea2, #185a9d);
+            background: -webkit-linear-gradient(#43cea2, #185a9d);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -511,9 +511,17 @@
                 filteredDoctors = filteredDoctors.filter(doctor => doctor.DETAILS.SEX === "FEMALE");
             }
 
+            // if (activeFilters.availableToday) {
+            //     const todayDate = new Date().toISOString().slice(0, 10).replace(/-/g, ""); // Current date in YYYYMMDD format
+            //     filteredDoctors = filteredDoctors.filter(doctor => doctor.DETAILS.SCH_DT[0].SCH_DT === todayDate);
+            // }
             if (activeFilters.availableToday) {
-                const todayDate = new Date().toISOString().slice(0, 10).replace(/-/g, ""); // Current date in YYYYMMDD format
-                filteredDoctors = filteredDoctors.filter(doctor => doctor.DETAILS.SCH_DT[0].SCH_DT === todayDate);
+                const todayDate = new Date().toISOString().slice(0, 10); // Current date in YYYY-MM-DD format
+                filteredDoctors.sort((a, b) => {
+                    const dateA = a.DETAILS.SCH_DT[0].SCH_DT;
+                    const dateB = b.DETAILS.SCH_DT[0].SCH_DT;
+                    return dateA === todayDate ? -1 : dateB === todayDate ? 1 : 0;
+                });
             }
             if (activeFilters.rating) {
                 filteredDoctors.sort((a, b) => {

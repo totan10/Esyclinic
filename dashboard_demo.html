@@ -1,148 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    .container {
-      text-align: center;
-      width: 100%;
-    }
-
-    .grid-container {
-      display: grid;
-      grid-template-columns:repeat(6, 1fr);
-      gap: 10px;
-      max-width: 90%;
-      margin: 10px auto;
-      overflow: hidden;
-      /* Hide overflow for smooth height animation */
-      transition: max-height 0.3s ease;
-      /* Transition max-height for smooth animation */
-      max-height: 200px;
-      /* Set initial max-height for collapsed state */
-    }
-
-    .grid-item {
-      padding: 10px;
-      box-sizing: border-box;
-      text-align: center;
-      border: 1px solid #ccc;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    button {
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    /* Media queries for responsiveness */
-    @media (max-width: 768px) {
-      .grid-container {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    @media (max-width: 576px) {
-      .grid-container {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="container">
-    <button id="toggleButton">
-      <i class="fas fa-expand"></i> <!-- Initial icon: expand -->
-    </button>
-    <div class="grid-container" id="gridContainer">
-      <!-- Grid items will be dynamically added here -->
-    </div>
-  </div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const gridContainer = document.getElementById('gridContainer');
-      const toggleButton = document.getElementById('toggleButton');
-
-      const items = [
-        "Object 1", "Object 2", "Object 3", "Object 4", "Object 5",
-        "Object 6", "Object 7", "Object 8", "Object 9", "Object 10",
-        "Object 11", "Object 12", "Object 13", "Object 14", "Object 15",
-        "Object 16", "Object 17", "Object 18", "Object 19", "Object 20"
-      ];
-
-      function createGridItems() {
-        items.forEach(item => {
-          const gridItem = document.createElement('div');
-          gridItem.classList.add('grid-item');
-          gridItem.textContent = item;
-          gridContainer.appendChild(gridItem);
-        });
-      }
-
-      function showOneRow() {
-        const gridItems = document.querySelectorAll('.grid-item');
-        gridItems.forEach((item, index) => {
-          if (index >= 6) {
-            item.style.display = 'none';
-          } else {
-            item.style.display = 'block'; // Display first row items
-          }
-        });
-      }
-
-      function toggleGridView() {
-        const gridItems = document.querySelectorAll('.grid-item');
-        const isExpanded = toggleButton.classList.contains('expanded');
-
-        if (isExpanded) {
-          // Collapse grid to show only one row
-          showOneRow();
-          toggleButton.innerHTML = '<i class="fas fa-expand"></i>'; // Change to expand icon
-          toggleButton.classList.remove('expanded');
-        } else {
-          // Expand grid to show all items
-          gridItems.forEach(item => {
-            item.style.display = 'block';
-          });
-          toggleButton.innerHTML = '<i class="fas fa-compress"></i>'; // Change to compress icon
-          toggleButton.classList.add('expanded');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Loader with Popup Example</title>
+    <style>
+        /* Styles for the overlay */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+            display: none; /* Initially hidden */
         }
-      }
 
-      toggleButton.addEventListener('click', function () {
-        toggleGridView();
-      });
+        /* Styles for the loader */
+        #loader {
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #238ace;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            position: fixed;
+            top: 50%;
+            right: 25%;
+            margin-top: -25px; /* Half of height */
+            margin-left: -25px; /* Half of width */
+            display: none; /* Initially hidden */
+            z-index: 9999; /* Ensure loader is above the overlay */
+        }
 
-      // Initially show only one row (6 items)
-      createGridItems();
-      showOneRow(); // Display the first row
-    });
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+        /* Keyframe animation for spinner */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Styles for the popup */
+        #popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            display: none; /* Initially hidden */
+            z-index: 10000; /* Ensure popup is above everything */
+        }
+    </style>
+</head>
+<body>
+    <div id="overlay"></div>
+    <div id="loader"></div>
+    <div id="popup">
+        <h2>API Call Completed</h2>
+        <p>API call has been successfully completed!</p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+    <h1>API Loader with Popup Example</h1>
+    <button onclick="makeAPICall()">Make API Call</button>
+
+    <script>
+        function makeAPICall() {
+            // Display overlay and loader
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('loader').style.display = 'block';
+
+            // Simulate API call (replace with your actual API call)
+            setTimeout(() => {
+                // Assuming API call is successful after 2 seconds
+                handleAPISuccess();
+            }, 2000);
+        }
+
+        function handleAPISuccess() {
+            // Hide overlay and loader when API call is completed
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('loader').style.display = 'none';
+
+            // Show popup
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            // Close the popup
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
 </body>
-
 </html>

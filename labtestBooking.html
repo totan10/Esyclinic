@@ -1,11 +1,611 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css">
+    <style>
+        /* Custom CSS */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        .header {
+            background-color: #00205b;
+            /* Dark blue background */
+            height: 40px;
+            /* Height of the header */
+            color: white;
+            /* Text color */
+            text-align: center;
+            /* Center align text */
+            font-size: 24px;
+            /* Font size */
+        }
+
+        /* Custom CSS */
+        .navbar-container {
+            position: fixed;
+            /* Fix the navbar container */
+            top: 0;
+            /* Position at the top */
+            width: 100%;
+            /* Full width */
+            z-index: 999;
+            /* Ensure it's above other content */
+        }
+
+        .navbar {
+            background-color: #f8f9fa;
+            /* Navbar background color */
+            padding: 10px;
+            /* Padding for navbar content */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
+            /* Add shadow effect */
+        }
+
+        .searchbar-container {
+            position: relative;
+            width: 60%;
+            /* Search bar takes 60% of the navbar width */
+        }
+
+        .searchbar {
+            width: calc(100% - 40px);
+            /* Adjusted width considering icon padding */
+            padding: 10px 30px 10px 10px;
+            /* Adjust padding to your preference */
+            font-size: 16px;
+            outline: none;
+            border: none;
+            border-radius: 20px;
+            /* Rounded corners */
+            border: 2px solid #ccc;
+            /* Border around search bar */
+        }
+
+        /* Other styles remain the same */
+
+        .navbar-brand img {
+            max-height: 60px;
+            margin-right: 10px;
+        }
+
+        .searchbar:focus {
+            border-color: #007bff;
+            /* Border color when focused */
+        }
+
+        .searchbar:focus+.input-group-text {
+            color: #007bff;
+            /* Icon color when search bar is focused */
+        }
+
+        #searchResults {
+            list-style-type: none;
+            padding: 0;
+            position: absolute;
+            z-index: 1;
+            width: 100%;
+            background-color: #fff;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            /* Add scrollbar if needed */
+            max-height: 200px;
+            /* Limit max height to show scrollbar */
+            display: none;
+            /* Hide by default */
+            top: 25px;
+        }
+
+        #searchResults.active {
+            display: block;
+            /* Show when active */
+        }
+
+        #searchResults li {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        #searchResults li:hover {
+            background-color: #f3f3f3;
+        }
+
+        .doctor-info {
+            margin-left: 10px;
+        }
+
+        .doctor-info h5 {
+            margin: 0;
+        }
+
+        .doctor-info p {
+            margin: 5px 0;
+        }
+
+        .doctor-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 10%;
+            background-color: #ddd;
+            overflow: hidden;
+        }
+
+        .doctor-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .no-results {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .input-group-text {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            /* Adjust padding to your preference */
+        }
+
+        .input-group-text i {
+            color: #ccc;
+            /* Icon color */
+            border: none;
+        }
+
+        .profile-icon {
+            margin-right: 20px;
+            /* Margin between search bar and profile icon */
+            font-size: 20px;
+            font-weight: 700;
+            /* Font size for profile icon */
+            cursor: pointer;
+            width: 120px;
+            background: -webkit-linear-gradient(#05639b, #01e096);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: solid;
+            text-align: center;
+            transition: background 1s;
+        }
+
+        .profile-icon:hover {
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background: -webkit-linear-gradient(#01e096, #05639b);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slotitems {
+            width: 12.99%;
+        }
+
+        .slot-item {
+            padding: 10px;
+            margin-left: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Add shadow effect */
+            cursor: pointer;
+            /* Add pointer cursor */
+            border-radius: 10px;
+            transition: background-color 1s, color 1s;
+        }
+
+        .slot-item:hover {
+            color: #f0f0f0;
+            background-color: #007bff;
+        }
+
+        .slot-item .date-day,
+        .slot-item .status {
+            text-align: center;
+            padding: 4px;
+        }
+    </style>
 </head>
+
 <body>
-    
+    <!-- Navbar Container -->
+    <div class="navbar-container">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <!-- Logo -->
+            <a class="navbar-brand" href="dashboard.html">
+                <img src="logo.png" alt="Company Logo" id="companyLogo" />
+            </a>
+            <!-- Search Bar with Search Icon -->
+            <div class="input-group searchbar-container">
+                <input type="text" class="form-control searchbar" placeholder="Search" aria-label="Search"
+                    aria-describedby="search-button" id="searchInput" autocomplete="off" />
+                <div class="input-group-text">
+                    <i class="fas fa-search"></i>
+                </div>
+                <ul id="searchResults"></ul>
+            </div>
+            <!-- Profile Icon -->
+            <div class="profile-icon">
+                <i class="fas fa-user"></i>
+                <!-- Adjust icon as needed -->
+            </div>
+        </nav>
+    </div>
+    <!-- JavaScript libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+    <script>
+        let userData = null;
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
+    wow = new WOW(
+      {
+        boxClass: 'wow',      // default
+        animateClass: 'animated', // change this if you are not using animate.css
+        offset: 0,          // default
+        mobile: true,       // keep it on mobile
+        live: true        // track if element updates
+      }
+    )
+    wow.init();
+    document.addEventListener("DOMContentLoaded", function () {
+      // Check if the user is already logged in
+      const isLoggedIn = localStorage.getItem("isLoggedIn");
+      if (isLoggedIn) {
+        // Retrieve username from localStorage
+        const username = localStorage.getItem("username");
+        // Do something with the logged-in user's data
+        const storedUserData = localStorage.getItem("userData");
+        // Access and use the user's data
+        if (storedUserData) {
+          userData = JSON.parse(storedUserData);
+          console.log(userData);
+          userData = userData.data
+          // Set the logo URL dynamically
+          const companyLogo = document.getElementById("companyLogo");
+          const clinicName = document.querySelector(".profile-icon")
+          clinicName.innerHTML = `${userData.PHARMA_NAME}`
+          companyLogo.src = userData.LOGO_URL;
+          populateDoctors();
+        }
+      }
+    });
+    // Function to format date from "YYYYMMDD" to "dd-Month-YYYY"
+    function populateDoctors() {
+            const PHARMA_ID = userData ? userData.PHARMA_ID : null
+            const url = "http://easyhealths.com/api/searchDoctorTest";
+            const params = {
+                PHARMA_ID: PHARMA_ID,
+            };
+
+            axios
+                .post(url, params)
+                .then((response) => {
+                    const data = response.data.data;
+                    doctorsData = data;
+                    console.log(doctorsData);
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    return null;
+                });
+        }
+       
+
+        searchInput.addEventListener("input", () => {
+            console.log(doctorsData);
+            const query = searchInput.value;
+            populateSearchResults(query);
+        });
+        // Close search results when clicking outside the search container
+        document.addEventListener("click", (event) => {
+            const isClickInsideSearchContainer =
+                searchInput.contains(event.target) ||
+                searchResults.contains(event.target);
+            if (!isClickInsideSearchContainer) {
+                closeSearchResults();
+            }
+        });
+        function closeSearchResults() {
+            searchResults.classList.remove("active"); // Hide search results
+        }
+        searchInput.addEventListener("click", (event) => {
+            event.stopPropagation();
+            if (searchResults.innerHTML.trim() !== "") {
+                searchResults.classList.add("active");
+            }
+        });
+
+        function populateSearchResults(query) {
+            console.log(doctorsData);
+            searchResults.innerHTML = "";
+
+            if (query.trim() === "") {
+                return;
+            }
+
+            const filteredDoctors = doctorsData.filter((item) => {
+                const cleanItemName = item.ITEM_NAME.toLowerCase();
+                // const cleanItemType = item.FIELD_TYPE ? item.FIELD_TYPE.toLowerCase() : '';
+                // const cleanBItemCat = item.DETAILS.D_CATG ? item.DETAILS.D_CATG.toLowerCase() : '';
+                return cleanItemName.includes(query.toLowerCase());
+            });
+
+            if (filteredDoctors.length === 0) {
+                console.log(filteredDoctors);
+                const noResultsItem = document.createElement("li");
+                noResultsItem.classList.add("no-results");
+                noResultsItem.textContent = "No match found.";
+                searchResults.appendChild(noResultsItem);
+                return;
+            }
+            const filtered = filteredDoctors.sort((a, b) => {
+                const cleanAItemName = a.ITEM_NAME.toLowerCase();
+                const cleanBItemName = b.ITEM_NAME.toLowerCase();
+                const aIndex = cleanAItemName.indexOf(query.toLowerCase());
+                const bIndex = cleanBItemName.indexOf(query.toLowerCase());
+                return aIndex - bIndex;
+            });
+            console.log(filtered);
+            // Define the specific order for certain Field_type values
+            const specificOrder = ['Doctor', 'Symptom', 'Test', 'Profile', 'Package', , 'PATHOLOGY', 'RADIOLOGY']; // Define specific types to appear first
+            filtered.sort((a, b) => {
+                const fieldA = a.FIELD_TYPE;
+                const fieldB = b.FIELD_TYPE;
+
+                // Get the index of Field_type values in the specificOrder array
+                const indexA = specificOrder.indexOf(fieldA);
+                const indexB = specificOrder.indexOf(fieldB);
+
+                // Compare indices within the specificOrder array
+                if (indexA > -1 && indexB > -1) {
+                    return indexA - indexB; // Sort by specific order index
+                } else if (indexA > -1) {
+                    return -1; // Place types in specificOrder before others
+                } else if (indexB > -1) {
+                    return 1; // Place types in specificOrder before others
+                } else {
+                    return 0; // Maintain original order for other types
+                }
+            });
+            console.log(filtered);
+            function getFormattedDate(dateString) {
+                const year = dateString.substring(0, 4);
+                const month = dateString.substring(4, 6);
+                const day = dateString.substring(6, 8);
+
+                // Create a Date object using the parsed components
+                const date = new Date(`${year}-${month}-${day}`);
+
+                // Format the date as "DD Month"
+                const options = { day: "numeric", month: "long" };
+                return date.toLocaleDateString("en-US", options);
+            }
+            filtered.forEach((doctor, index) => {
+                if (doctor.FIELD_TYPE === "Doctor") {
+                    doctor = doctor.DETAILS;
+                    const drId = doctor.DR_ID ? doctor.DR_ID : null;
+                    console.log(drId);
+                    const slotData = doctor.SCH_DT ? doctor.SCH_DT : null;
+                    console.log(slotData);
+                    const listItem = document.createElement("li");
+
+                    const doctorPhotoContainer = document.createElement("div");
+                    doctorPhotoContainer.classList.add("doctor-photo");
+                    doctorPhotoContainer.innerHTML = `
+          <img src="${doctor.DR_PHOTO}" alt="${doctor.DR_PHOTO}" class="me-3">
+        `;
+
+                    const doctorInfoContainer = document.createElement("div");
+                    doctorInfoContainer.classList.add("doctor-info");
+                    doctorInfoContainer.innerHTML = `
+          <h5>${doctor.DR_NAME}</h5>
+          <p>${doctor.D_CATG}</p>
+        `;
+
+                    listItem.appendChild(doctorPhotoContainer);
+                    listItem.appendChild(doctorInfoContainer);
+                    slotData.forEach((slot) => {
+                        const date = new Date(slot.SCH_DT);
+                        const formattedDate = getFormattedDate(slot.SCH_DT);
+                        const dayName = slot.SCH_DAY;
+                        const slotItem = document.createElement("div");
+                        slotItem.classList.add("slotitems");
+                        // Determine status text and color based on conditions
+                        let statusText, statusColor;
+                        if (
+                            slot.STATUS === "Available" &&
+                            slot.CHK_IN_STS === "UPCOMING"
+                        ) {
+                            statusText = "Available";
+                            statusColor = "green";
+                        } else if (
+                            slot.STATUS === "Available" &&
+                            slot.CHK_IN_STS === "IN"
+                        ) {
+                            statusText = "In Clinic";
+                            statusColor = "green";
+                        } else {
+                            statusText = "Not Available";
+                            statusColor = "red";
+                        }
+
+                        // Modify slotItem HTML to call handleSlotClick with slot data
+                        slotItem.innerHTML = `
+                        <div class="slot-item">
+                            <div class="date-day">${formattedDate}<br>${dayName}</div>
+                            <div class="status" style="color: ${statusColor};">${statusText}</div>
+                        </div>
+                    `;
+                        listItem.appendChild(slotItem);
+                        slotItem.addEventListener("click", () => {
+                            console.log(slot);
+                            doctor.SlotId = slot.ID ? slot.ID : null;
+                            delete doctor.SCH_DT;
+                            const doctordata = doctor ? doctor : null;
+                            console.log(doctor);
+                            const object1String = JSON.stringify(doctordata);
+                            const object2String = JSON.stringify(slot);
+                            const baseUrl = "/doctor_profile_with_slots.html"; // Base URL of the destination page
+                            const queryParams = new URLSearchParams({
+                                data1: object1String,
+                                data2: object2String,
+                            });
+
+                            const url = `${baseUrl}?${queryParams}`;
+
+                            // Function to convert object to query string
+                            // function objectToQueryString(obj) {
+                            //   const keyValuePairs = [];
+                            //   for (const key in obj) {
+                            //     if (Object.hasOwnProperty.call(obj, key)) {
+                            //       keyValuePairs.push(
+                            //           `${key}=${encodeURIComponent(obj[key])}`
+                            //         );
+                            //     }
+                            //   }
+                            //   return keyValuePairs.join("&");
+                            // }
+
+                            // Convert object to query string
+                            // const queryParams = objectToQueryString(doctordata);
+                            // console.log(queryParams);
+
+                            window.location.href = url;
+                        });
+                    });
+
+                    doctorPhotoContainer.addEventListener("click", () => {
+                        const doctordata = doctor ? doctor : null;
+                        console.log(doctor);
+                        // Function to convert object to query string
+                        function objectToQueryString(obj) {
+                            const keyValuePairs = [];
+                            for (const key in obj) {
+                                if (Object.hasOwnProperty.call(obj, key)) {
+                                    if (key === "SCH_DT") {
+                                        // Convert slotData object to JSON string
+                                        keyValuePairs.push(
+                                            `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
+                                        );
+                                    } else {
+                                        keyValuePairs.push(
+                                            `${key}=${encodeURIComponent(obj[key])}`
+                                        );
+                                    }
+                                }
+                            }
+                            return keyValuePairs.join("&");
+                        }
+
+                        // Convert object to query string
+                        const queryParams = objectToQueryString(doctordata);
+                        console.log(queryParams);
+                        window.location.href = `demo.html?${queryParams}`;
+                    });
+                    doctorInfoContainer.addEventListener("click", () => {
+                        const doctordata = doctor ? doctor : null;
+                        console.log(doctor);
+                        // Function to convert object to query string
+                        function objectToQueryString(obj) {
+                            const keyValuePairs = [];
+                            for (const key in obj) {
+                                if (Object.hasOwnProperty.call(obj, key)) {
+                                    if (key === "SCH_DT") {
+                                        // Convert slotData object to JSON string
+                                        keyValuePairs.push(
+                                            `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
+                                        );
+                                    } else {
+                                        keyValuePairs.push(
+                                            `${key}=${encodeURIComponent(obj[key])}`
+                                        );
+                                    }
+                                }
+                            }
+                            return keyValuePairs.join("&");
+                        }
+
+                        // Convert object to query string
+                        const queryParams = objectToQueryString(doctordata);
+                        console.log(queryParams);
+                        window.location.href = `demo.html?${queryParams}`;
+                    });
+
+                    searchResults.appendChild(listItem);
+                }
+                else {
+                    const listItem = document.createElement("li");
+                    listItem.style.justifyContent = 'space-between'
+                    listItem.style.padding = '0 5px'
+                    listItem.style.height = '45px'
+                    listItem.innerHTML = `
+          <h4>${doctor.ITEM_NAME}</h4>
+          <p style='color:green'>${doctor.FIELD_TYPE}</p>`;
+                    searchResults.appendChild(listItem)
+                    listItem.addEventListener('click', () => {
+                        if (doctor.FIELD_TYPE === 'Symptom') {
+                            const symptomData = doctor ? doctor.DETAILS : null
+                            symptomData.SYM_NAME = doctor.ITEM_NAME ? doctor.ITEM_NAME : null
+                            const encodedData = encodeURIComponent(JSON.stringify(symptomData));
+                            const redirectUrl = `doctors.html?data=${encodedData}`;
+
+                            // Redirect to doctors.html with the specified SPECIALIST parameter
+                            window.location.href = redirectUrl;
+                        };
+                    })
+                }
+            });
+
+            searchResults.classList.add("active"); // Show search results
+        }
+    document.addEventListener("keydown", function (event) {
+      // Check if the Shift key is pressed along with another key
+      if (event.shiftKey) {
+        console.log("clicked");
+        switch (event.key) {
+          case "D": // Shift + D for Doctors Booking
+            event.preventDefault(); // Prevent default action
+            window.location.href = "doctorsBooking.html";
+            break;
+          case "T": // Shift + L for Lab Test Booking
+            event.preventDefault(); // Prevent default action
+            window.location.href = "labtestBooking.html";
+            break;
+          case "R": // Shift + T for Report Transfer
+            event.preventDefault(); // Prevent default action
+            window.location.href = "reportTransfer.html";
+            break;
+          default:
+            break;
+        }
+      }
+    });
+
+    </script>
 </body>
+
 </html>

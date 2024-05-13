@@ -680,6 +680,38 @@
         box-sizing: border-box;
       }
     }
+
+    /* Styles for the loader */
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 8px solid #238ace;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      position: fixed;
+      top: 50%;
+      right: 25%;
+      margin-top: -25px;
+      /* Half of height */
+      margin-left: -25px;
+      /* Half of width */
+      display: none;
+      /* Initially hidden */
+      z-index: 9999;
+      /* Ensure loader is above the overlay */
+    }
+
+    /* Keyframe animation for spinner */
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
 </head>
@@ -743,6 +775,8 @@
         </div>
       </div>
       <div class="container booking-confirmation"></div>
+      <div class="popup-overlay loaderOverlay"></div>
+      <div class="loader"></div>
     </div>
   </div>
 
@@ -1204,9 +1238,13 @@
           // Make name and age fields editable
           const patientNameInput = document.getElementById("patientName");
           const patientAgeInput = document.getElementById("patientAge");
-
+          const patientSexInput=document.getElementById("patientGender")
+          patientSexInput.removeAttribute("readonly");
           patientNameInput.removeAttribute("readonly");
           patientAgeInput.removeAttribute("readonly");
+          patientNameInput.value='';
+          patientAgeInput.value='';
+          patientSexInput.value=''
         }
       } catch (error) {
         console.error("Error fetching patient data:", error);
@@ -1565,8 +1603,10 @@
       //document.getElementById("popupOverlay").style.visibility = "hidden";
       document.getElementById("mainPopup").style.display = "none";
       document.getElementById("popupOverlay").style.visibility = "hidden";
+
     }
     async function bookAppointment(url, params) {
+
       try {
         const response = await axios.post(url, params);
         console.log(response.data);
@@ -1590,36 +1630,44 @@
           const url = "http://easyhealths.com/api/booking";
           const params = patientDetails;
           // Call bookAppointment and handle the promise
-          bookAppointment(url, params)
-            .then((responseData) => {
-              console.log(responseData); // This should now log the actual response data
-              if (responseData.Success) {
-                const bookingId = responseData.data
-                  ? responseData.data.APPNT_TOKEN
-                  : null;
-                showSuccessPopup(
-                  "Booking Successful. Payment done",
-                  bookingId,
-                  patientDetails,
-                  age,
-                  gender
-                );
-              } else {
-                const bookingId = responseData.data
-                  ? responseData.data.APPNT_TOKEN
-                  : null;
-                showFailurePopup(
-                  "Patient already booked",
-                  bookingId,
-                  patientDetails,
-                  age,
-                  gender
-                );
-              }
-            })
-            .catch((error) => {
-              console.error("Error fetching slot data:", error);
-            });
+          document.querySelector('.loaderOverlay').style.visibility = 'visible';
+          document.querySelector('.loader').style.display = 'block';
+          // Simulate API call (replace with your actual API call)
+          setTimeout(() => {
+            bookAppointment(url, params)
+              .then((responseData) => {
+                document.querySelector('.loaderOverlay').style.visibility = 'hidden';
+                document.querySelector('.loader').style.display = 'none';
+                console.log(responseData); // This should now log the actual response data
+                if (responseData.Success) {
+                  const bookingId = responseData.data
+                    ? responseData.data.APPNT_TOKEN
+                    : null;
+                  showSuccessPopup(
+                    "Booking Successful. Payment done",
+                    bookingId,
+                    patientDetails,
+                    age,
+                    gender
+                  );
+                } else {
+                  const bookingId = responseData.data
+                    ? responseData.data.APPNT_TOKEN
+                    : null;
+                  showFailurePopup(
+                    "Patient already booked",
+                    bookingId,
+                    patientDetails,
+                    age,
+                    gender
+                  );
+                }
+              })
+              .catch((error) => {
+                console.error("Error fetching slot data:", error);
+              });
+          }, 2000);
+
 
           // Perform logic for paying to clinic
           console.log("Paying to Clinic");
@@ -1630,43 +1678,48 @@
         .getElementById("payToDoctorBtn")
         .addEventListener("click", function () {
           hideSubPopup();
-          hideSubPopup();
           console.log(patientDetails);
+          document.querySelector('.loaderOverlay').style.visibility = 'visible';
+          document.querySelector('.loader').style.display = 'block';
           const url = "http://easyhealths.com/api/booking";
           const params = patientDetails;
           // Call bookAppointment and handle the promise
-          bookAppointment(url, params)
-            .then((responseData) => {
-              console.log(responseData); // This should now log the actual response data
-              if (responseData.Success) {
-                const bookingId = responseData.data
-                  ? responseData.data.APPNT_TOKEN
-                  : null;
-                showSuccessPopup(
-                  `Booking Successful.\nPay ₹ ${patientDetails.DR_FEES} to Doctor`,
-                  bookingId,
-                  patientDetails,
-                  age,
-                  gender
-                );
-              } else {
-                const bookingId = responseData.data
-                  ? responseData.data.APPNT_TOKEN
-                  : null;
-                console.log(patientDetails);
-                showFailurePopup(
-                  `Patient already booked.\nPay ₹ ${patientDetails.DR_FEES}`,
-                  bookingId,
-                  patientDetails,
-                  age,
-                  gender
-                );
-              }
-            })
-            .catch((error) => {
-              console.error("Error fetching slot data:", error);
-            });
+          setTimeout(() => {
+            bookAppointment(url, params)
+              .then((responseData) => {
+                document.querySelector('.loaderOverlay').style.visibility = 'hidden';
+          document.querySelector('.loader').style.display = 'none';
+                console.log(responseData); // This should now log the actual response data
+                if (responseData.Success) {
+                  const bookingId = responseData.data
+                    ? responseData.data.APPNT_TOKEN
+                    : null;
+                  showSuccessPopup(
+                    `Booking Successful.\nPay ₹ ${patientDetails.DR_FEES} to Doctor`,
+                    bookingId,
+                    patientDetails,
+                    age,
+                    gender
+                  );
+                } else {
+                  const bookingId = responseData.data
+                    ? responseData.data.APPNT_TOKEN
+                    : null;
+                  console.log(patientDetails);
+                  showFailurePopup(
+                    `Patient already booked.\nPay ₹ ${patientDetails.DR_FEES}`,
+                    bookingId,
+                    patientDetails,
+                    age,
+                    gender
+                  );
+                }
+              })
+              .catch((error) => {
+                console.error("Error fetching slot data:", error);
+              });
 
+          }, 2000)
           // Perform logic for paying to clinic
           console.log("Paying to Clinic");
         });
