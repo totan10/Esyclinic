@@ -1,1275 +1,1342 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <!DOCTYPE html>
+  <html lang="en">
+
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Doctor's Profile - Dr. Ashutosh Samal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+      crossorigin="anonymous" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+
+    <style>
+      /* Add custom styles here */
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+      }
+
+      #doctorProfileContainer {
+        margin: 0;
+        max-width: fit-content;
+      }
+
+      .doctor-profile {
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      .doctor-image {
+        margin-right: 30px;
+        flex-shrink: 0;
+        /* Prevent image from shrinking */
+        width: 200px;
+        /* Adjust image width */
+        height: fit-content;
+        /* Maintain aspect ratio */
+      }
+
+      .doctor-image img {
+        border: 2px solid #f8f9fa;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        /* Add shadow effect */
+        z-index: 2;
+      }
+
+      .doctor-info {
+        flex: 1;
+      }
+
+      .designation {
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+
+      .specialization,
+      .experience,
+      .qualification {
+        margin-bottom: 5px;
+      }
+
+      .fees,
+      .id,
+      .mobile,
+      .language,
+      .sex {
+        margin-bottom: 5px;
+      }
+
+      .appointments {
+        text-align: center;
+      }
+
+      .slot-container {
+        max-width: 100%;
+      }
+
+      /* Add modern 3D look to rounded rectangles */
+      .slot-item {
+        background-color: #00b2c8;
+        border-radius: 25px;
+        padding: 30px;
+        /* Increase padding */
+        margin-bottom: 20px;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .slot-item:hover {
+        transform: translateY(-5px);
+      }
+
+      .slot-item h3 {
+        color: white;
+      }
+
+      .date-day {
+        color: white;
+        text-align: center;
+        font-weight: 700;
+        font-size: x-large;
+      }
+
+      .status {
+        text-align: center;
+        font-size: x-large;
+        font-weight: 700;
+      }
+
+      /* Add a new class for slot timings within the modal */
+      .modal-slot-item {
+        background-color: transparent;
+        border: 2px solid rgb(54, 53, 53);
+        border-radius: 10px;
+        padding: 5px;
+        /* Adjust padding */
+        margin-right: 5px;
+        /* Add margin between slot items */
+        margin-bottom: 10px;
+        /* Adjust margin bottom */
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        /* Add shadow effect */
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        /* Add transition for transform and background-color */
+        width: 24%;
+      }
+
+      /* Display a maximum of six slot timings per row */
+      .slot-section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        opacity: 0;
+        /* Initially hide the slots */
+        transition: opacity 0.3s ease;
+        /* Add transition effect for opacity */
+      }
+
+      .slot-section.active {
+        opacity: 1;
+        /* Show the slots when active */
+      }
+
+      /* Style for timing text */
+      .modal-slot-item span {
+        color: #1b18b0;
+        /* Blue color */
+        text-align: center;
+        display: block;
+        margin-bottom: 5px;
+        font-size: medium;
+        transition: color 0.3s ease;
+        /* Add transition for color change */
+      }
+
+      /* Style for availability text */
+      .modal-slot-item .availability {
+        color: rgb(3 207 3);
+        /* Green color */
+        margin: 0;
+        text-align: center;
+        font-size: medium;
+        transition: color 0.3s ease;
+      }
+
+      .modal-slot-item:hover {
+        transform: translateY(-5px);
+        background-color: #00b2c8;
+        /* Change background color on hover */
+        border: none;
+      }
+
+      .modal-slot-item:hover span {
+        color: white;
+        /* Change text color on hover */
+      }
+
+      .modal-slot-item:hover .availability {
+        color: greenyellow;
+        font-weight: 700;
+      }
+
+      .slotTime {
+        display: none;
+        max-height: 0;
+        transition: max-height 1s ease;
+        /* Add transition effect for opening and closing */
+        overflow: hidden;
+        /* Hide overflowing content */
+      }
+
+      .slotTime.active {
+        display: block;
+        max-height: 2000px;
+        /* Adjust the max height as per your content */
+        transition: max-height 1s ease;
+        position: relative;
+        z-index: 3;
+      }
+
+      .booking-form {
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .booking-form input[type="text"],
+      .booking-form input[type="tel"],
+      .booking-form select,
+      #patientAge {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        transition: border-color 0.15s ease-in-out,
+          box-shadow 0.15s ease-in-out;
+      }
+
+      .booking-form input[type="submit"] {
+        /* width: 100%; */
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.15s ease-in-out;
+        margin-left: 100px;
+        /* position: absolute;
+        bottom: 20px;
+        left: 25%; */
+        width: 150px;
+      }
+
+      .booking-form input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+
+      #cancelButton {
+        padding: 10px;
+        background-color: #ff4d4d;
+        /* Red background */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 20%;
+        transition: background-color 0.15s ease-in-out;
+        margin-left: 100px;
+      }
+
+      #cancelButton:hover {
+        background-color: #cc0000;
+        /* Darker red on hover */
+      }
+
+      /* CSS animations for form elements */
+      .booking-form input[type="text"],
+      .booking-form input[type="tel"],
+      .booking-form select,
+      #patientAge,
+      #patientDropdown .booking-form input[type="submit"],
+      #cancelButton {
+        transition: transform 0.3s ease-in-out;
+      }
+
+      #patientDropdown {
+        display: none;
+      }
+
+      .booking-form input[type="text"]:focus,
+      .booking-form input[type="tel"]:focus,
+      .booking-form select:focus,
+      #patientAge:focus,
+      #patientDropdown:focus .booking-form input[type="submit"]:focus,
+      #cancelButton:focus {
+        transform: scale(1.05);
+        /* Scale up on focus */
+      }
+
+      /* Set height of the booking form to match the screen height */
+      .booking-container {
+        height: 100vh;
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Add animation to the booking form */
+      .booking-form {
+        animation: slideInFromLeft 1s ease;
+      }
+
+      @keyframes slideInFromLeft {
+        0% {
+          transform: translateX(-100%);
+          opacity: 0;
+        }
+
+        100% {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .popup-overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        visibility: hidden;
+      }
+
+      .popup {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        text-align: center;
+      }
+
+      .popup button:hover {
+        transform: translateY(-5px);
+        color: #15b9ce;
+        background-color: #ffffff;
+        border: 2px solid #15b9ce;
+      }
+
+      .popup button:active {
+        transform: translateY(2px);
+      }
+
+      .popup button:focus {
+        outline: none;
+      }
+
+      .popup button {
+        position: relative;
+        background-color: #15b9ce;
+        /* Green */
+        border: none;
+        font-size: 20px;
+        color: #ffffff;
+        text-align: center;
+        transition-duration: 0.4s;
+        overflow: hidden;
+        cursor: pointer;
+        border-radius: 15px;
+        margin: 10px;
+        padding: 10px 20px;
+        transition: transform 0.3s;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .popup button:after {
+        content: "";
+        background: #90ee90;
+        /* Light Green */
+        display: block;
+        position: absolute;
+        padding-top: 300%;
+        padding-left: 350%;
+        margin-left: -20px !important;
+        margin-top: -120%;
+        opacity: 0;
+        transition: all 0.8s;
+      }
+
+      .popup button:active:after {
+        padding: 0;
+        margin: 0;
+        opacity: 1;
+        transition: 0s;
+      }
+
+      .booking-confirmation {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        display: none;
+      }
+
+      /* CSS for booking confirmation */
+      .booking-confirmation {
+        position: fixed;
+        width: 50%;
+
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .confirmation-heading {
+        margin-top: 0;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #72d3e4;
+      }
+
+      .info-container {
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 15px;
+        background-color: #f0f0f0;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border: 2px solid #4bb0bb;
+      }
+
+      .info-container span {
+        font-weight: 700;
+      }
+
+      .info-container h4 {
+        font-weight: 700;
+      }
+
+      .patient-info,
+      .appointment-info {
+        margin-bottom: 20px;
+      }
+
+      .buttons-container {
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .booking-button {
+        background-color: #007bff;
+      }
+
+      .cancel-button {
+        background-color: #cc0000;
+      }
+
+      .booking-button,
+      .cancel-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .booking-button::before,
+      .cancel-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 300%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        z-index: -1;
+      }
+
+      .booking-button:hover::before,
+      .cancel-button:hover::before {
+        left: 0;
+      }
+
+      .booking-button:hover {
+        color: #007bff;
+        background-color: #fff;
+        border: 1px solid #007bff;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .cancel-button:hover {
+        color: #ff4d4d;
+        background-color: #fff;
+        border: 1px solid #cc0000;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .booking-button::after,
+      .cancel-button::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 300%;
+        height: 300%;
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        z-index: -1;
+        transform: translate(-50%, -50%) rotate(45deg);
+      }
+
+      .booking-button:hover::after,
+      .cancel-button:hover::after {
+        width: 200%;
+        height: 200%;
+      }
+
+      /* Style for success button */
+      .success-button {
+        background-color: #007bff;
+        /* Blue background color */
+        color: #fff;
+        /* White text color */
+      }
+
+      /* Style for failure button */
+      .failure-button {
+        background-color: #ff4d4d;
+        /* Red background color */
+        color: #fff;
+        /* White text color */
+      }
+
+      /* Add this CSS for the success and failure buttons */
+      .success-button,
+      .failure-button {
+        position: relative;
+        background-color: #007bff;
+        /* Default background color */
+        color: #fff;
+        /* Default text color */
+        border: none;
+        font-size: 20px;
+        text-align: center;
+        transition: background-color 0.3s, transform 0.3s;
+        overflow: hidden;
+        cursor: pointer;
+        border-radius: 15px;
+        margin: 10px;
+        padding: 10px 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .failure-button:hover {
+        transform: translateY(-5px);
+      }
+
+      .success-button:hover {
+        transform: translateY(-5px);
+      }
+
+      .success-button:active,
+      .failure-button:active {
+        transform: translateY(2px);
+      }
+
+      .success-button:focus,
+      .failure-button:focus {
+        outline: none;
+      }
+
+      #content {
+        width: 210mm;
+        /* A4 width */
+        height: 297mm;
+        /* A4 height */
+        padding: 10mm;
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      .clinicDetails {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .clinicDetails h2 {
+        color: cyan;
+        /* Header color */
+        margin: 0;
+      }
+
+      .clinicDetails p {
+        margin: 5px 0;
+      }
+
+      .clinicDetails img {
+        max-width: 150px;
+        height: auto;
+        margin-top: -20px;
+      }
+
+      .detailsContainer {
+        display: flex;
+        justify-content: space-between;
+        border-radius: 10px;
+        border: 1px solid black;
+        padding: 10px;
+      }
+
+      .column {
+        width: 30%;
+        padding: 5px;
+      }
+
+      .column h6 {
+        color: rgb(30, 140, 231);
+        /* Header color */
+        margin: 0;
+      }
+
+      .column p {
+        margin: 5px 0;
+        font-size: smaller;
+      }
+
+      .clinicalNotes {
+        margin-top: 10px;
+        border: 1px solid black;
+        border-radius: 10px;
+        /* padding: 10px; */
+      }
+
+      .clinicalNotesContainer {
+        display: flex;
+        justify-content: space-between;
+        height: 740px;
+      }
+
+      .clinicalNote {
+        width: 33%;
+        /* padding: 10px; */
+        box-sizing: border-box;
+        border-right: 1px solid #131212;
+        /* Border between columns */
+        height: 100%;
+      }
+
+      .clinicalNote:last-child {
+        border-right: none;
+        /* Remove border on the last column */
+        width: 67%;
+      }
+
+      .clinicalNote h5 {
+        margin: 0px;
+        padding: 3px;
+        text-align: center;
+        border-bottom: 1px solid black;
+      }
+
+      @media print {
+        body {
+          margin: 0;
+          padding: 0;
+        }
+
+        #content {
+          width: 210mm;
+          min-height: 297mm;
+          padding: 20mm;
+          box-sizing: border-box;
+        }
+      }
+    </style>
   </head>
+
   <body>
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Doctor's Profile - Dr. Ashutosh Samal</title>
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          crossorigin="anonymous"
-        />
-        <link
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-          rel="stylesheet"
-        />
-
-        <style>
-          /* Add custom styles here */
-          body {
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-          }
-          #doctorProfileContainer {
-            margin: 0;
-            max-width: fit-content;
-          }
-          .doctor-profile {
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: flex-start;
-          }
-          .doctor-image {
-            margin-right: 30px;
-            flex-shrink: 0; /* Prevent image from shrinking */
-            width: 200px; /* Adjust image width */
-            height: fit-content; /* Maintain aspect ratio */
-          }
-          .doctor-image img {
-            border: 2px solid #f8f9fa;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-            z-index: 2;
-          }
-          .doctor-info {
-            flex: 1;
-          }
-          .designation {
-            margin-bottom: 10px;
-            font-weight: bold;
-          }
-          .specialization,
-          .experience,
-          .qualification {
-            margin-bottom: 5px;
-          }
-          .fees,
-          .id,
-          .mobile,
-          .language,
-          .sex {
-            margin-bottom: 5px;
-          }
-          .appointments {
-            text-align: center;
-          }
-          .slot-container {
-            max-width: 100%;
-          }
-          /* Add modern 3D look to rounded rectangles */
-          .slot-item {
-            background-color: #00b2c8;
-            border-radius: 25px;
-            padding: 30px; /* Increase padding */
-            margin-bottom: 20px;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-          }
-          .slot-item:hover {
-            transform: translateY(-5px);
-          }
-          .slot-item h3 {
-            color: white;
-          }
-          .date-day {
-            color: white;
-            text-align: center;
-            font-weight: 700;
-            font-size: x-large;
-          }
-          .status {
-            text-align: center;
-            font-size: x-large;
-            font-weight: 700;
-          }
-          /* Add a new class for slot timings within the modal */
-          .modal-slot-item {
-            background-color: transparent;
-            border: 2px solid rgb(54, 53, 53);
-            border-radius: 10px;
-            padding: 5px; /* Adjust padding */
-            margin-right: 5px; /* Add margin between slot items */
-            margin-bottom: 10px; /* Adjust margin bottom */
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
-            transition: transform 0.3s ease, background-color 0.3s ease; /* Add transition for transform and background-color */
-            width: 24%;
-          }
-          /* Display a maximum of six slot timings per row */
-          .slot-section {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            opacity: 0; /* Initially hide the slots */
-            transition: opacity 0.3s ease; /* Add transition effect for opacity */
-          }
-          .slot-section.active {
-            opacity: 1; /* Show the slots when active */
-          }
-          /* Style for timing text */
-          .modal-slot-item span {
-            color: #1b18b0; /* Blue color */
-            text-align: center;
-            display: block;
-            margin-bottom: 5px;
-            font-size: medium;
-            transition: color 0.3s ease; /* Add transition for color change */
-          }
-          /* Style for availability text */
-          .modal-slot-item .availability {
-            color: rgb(3 207 3); /* Green color */
-            margin: 0;
-            text-align: center;
-            font-size: medium;
-            transition: color 0.3s ease;
-          }
-          .modal-slot-item:hover {
-            transform: translateY(-5px);
-            background-color: #00b2c8; /* Change background color on hover */
-            border: none;
-          }
-          .modal-slot-item:hover span {
-            color: white; /* Change text color on hover */
-          }
-          .modal-slot-item:hover .availability {
-            color: greenyellow;
-            font-weight: 700;
-          }
-          .slotTime {
-            display: none;
-            max-height: 0;
-            transition: max-height 1s ease; /* Add transition effect for opening and closing */
-            overflow: hidden; /* Hide overflowing content */
-          }
-
-          .slotTime.active {
-            display: block;
-            max-height: 2000px; /* Adjust the max height as per your content */
-            transition: max-height 1s ease;
-            position: relative;
-            z-index: 3;
-          }
-
-          .booking-form {
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            height: 60%;
-            position: relative;
-          }
-          .booking-form input[type="text"],
-          .booking-form input[type="tel"],
-          .booking-form select,
-          #patientAge {
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            transition: border-color 0.15s ease-in-out,
-              box-shadow 0.15s ease-in-out;
-          }
-          .booking-form input[type="submit"] {
-            /* width: 100%; */
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.15s ease-in-out;
-            position: absolute;
-            bottom: 20px;
-            left: 25%;
-            width: 150px;
-          }
-          .booking-form input[type="submit"]:hover {
-            background-color: #0056b3;
-          }
-
-          #cancelButton {
-            padding: 10px;
-            background-color: #ff4d4d; /* Red background */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 20%;
-            transition: background-color 0.15s ease-in-out;
-            position: absolute;
-            bottom: 20px;
-            right: 25%;
-          }
-
-          #cancelButton:hover {
-            background-color: #cc0000; /* Darker red on hover */
-          }
-
-          /* CSS animations for form elements */
-          .booking-form input[type="text"],
-          .booking-form input[type="tel"],
-          .booking-form select,
-          #patientAge,
-          #patientDropdown .booking-form input[type="submit"],
-          #cancelButton {
-            transition: transform 0.3s ease-in-out;
-          }
-          #patientDropdown {
-            display: none;
-          }
-          .booking-form input[type="text"]:focus,
-          .booking-form input[type="tel"]:focus,
-          .booking-form select:focus,
-          #patientAge:focus,
-          #patientDropdown:focus .booking-form input[type="submit"]:focus,
-          #cancelButton:focus {
-            transform: scale(1.05); /* Scale up on focus */
-          }
-
-          /* Set height of the booking form to match the screen height */
-          .booking-container {
-            height: 100vh;
-            display: none;
-            justify-content: center;
-            align-items: center;
-          }
-
-          /* Add animation to the booking form */
-          .booking-form {
-            animation: slideInFromLeft 1s ease;
-          }
-
-          @keyframes slideInFromLeft {
-            0% {
-              transform: translateX(-100%);
-              opacity: 0;
-            }
-            100% {
-              transform: translateX(0);
-              opacity: 1;
-            }
-          }
-
-          .popup-overlay {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 50%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            visibility: hidden;
-          }
-
-          .popup {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-            text-align: center;
-          }
-
-          .popup button:hover {
-            transform: translateY(-5px);
-            color: #15b9ce;
-            background-color: #ffffff;
-            border: 2px solid #15b9ce;
-          }
-
-          .popup button:active {
-            transform: translateY(2px);
-          }
-
-          .popup button:focus {
-            outline: none;
-          }
-
-          .popup button {
-            position: relative;
-            background-color: #15b9ce; /* Green */
-            border: none;
-            font-size: 20px;
-            color: #ffffff;
-            text-align: center;
-            transition-duration: 0.4s;
-            overflow: hidden;
-            cursor: pointer;
-            border-radius: 15px;
-            margin: 10px;
-            padding: 10px 20px;
-            transition: transform 0.3s;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          }
-
-          .popup button:after {
-            content: "";
-            background: #90ee90; /* Light Green */
-            display: block;
-            position: absolute;
-            padding-top: 300%;
-            padding-left: 350%;
-            margin-left: -20px !important;
-            margin-top: -120%;
-            opacity: 0;
-            transition: all 0.8s;
-          }
-
-          .popup button:active:after {
-            padding: 0;
-            margin: 0;
-            opacity: 1;
-            transition: 0s;
-          }
-          .booking-confirmation {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 50%;
-            height: 100%;
-            display: none;
-          }
-
-          /* CSS for booking confirmation */
-          .booking-confirmation {
-            position: fixed;
-            width: 50%;
-
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-          }
-
-          .confirmation-heading {
-            margin-top: 0;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #72d3e4;
-          }
-
-          .info-container {
-            margin-bottom: 20px;
-            padding: 20px;
-            border-radius: 15px;
-            background-color: #f0f0f0;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            border: 2px solid #4bb0bb;
-          }
-          .info-container span {
-            font-weight: 700;
-          }
-          .info-container h4 {
-            font-weight: 700;
-          }
-          .patient-info,
-          .appointment-info {
-            margin-bottom: 20px;
-          }
-
-          .buttons-container {
-            display: flex;
-            justify-content: space-around;
-          }
-          .booking-button {
-            background-color: #007bff;
-          }
-          .cancel-button {
-            background-color: #cc0000;
-          }
-          .booking-button,
-          .cancel-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-          }
-
-          .booking-button::before,
-          .cancel-button::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 300%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            z-index: -1;
-          }
-
-          .booking-button:hover::before,
-          .cancel-button:hover::before {
-            left: 0;
-          }
-
-          .booking-button:hover {
-            color: #007bff;
-            background-color: #fff;
-            border: 1px solid #007bff;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-          }
-
-          .cancel-button:hover {
-            color: #ff4d4d;
-            background-color: #fff;
-            border: 1px solid #cc0000;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-          }
-
-          .booking-button::after,
-          .cancel-button::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300%;
-            height: 300%;
-            background: rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            z-index: -1;
-            transform: translate(-50%, -50%) rotate(45deg);
-          }
-
-          .booking-button:hover::after,
-          .cancel-button:hover::after {
-            width: 200%;
-            height: 200%;
-          }
-
-          /* Style for success button */
-          .success-button {
-            background-color: #007bff; /* Blue background color */
-            color: #fff; /* White text color */
-          }
-
-          /* Style for failure button */
-          .failure-button {
-            background-color: #ff4d4d; /* Red background color */
-            color: #fff; /* White text color */
-          }
-          /* Add this CSS for the success and failure buttons */
-          .success-button,
-          .failure-button {
-            position: relative;
-            background-color: #007bff; /* Default background color */
-            color: #fff; /* Default text color */
-            border: none;
-            font-size: 20px;
-            text-align: center;
-            transition: background-color 0.3s, transform 0.3s;
-            overflow: hidden;
-            cursor: pointer;
-            border-radius: 15px;
-            margin: 10px;
-            padding: 10px 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          }
-
-          .failure-button:hover {
-            transform: translateY(-5px);
-          }
-          .success-button:hover {
-            transform: translateY(-5px);
-          }
-          .success-button:active,
-          .failure-button:active {
-            transform: translateY(2px);
-          }
-
-          .success-button:focus,
-          .failure-button:focus {
-            outline: none;
-          }
-
-          #content {
-            width: 210mm; /* A4 width */
-            height: 297mm; /* A4 height */
-            padding: 10mm;
-            box-sizing: border-box;
-            margin: 0;
-          }
-
-          .clinicDetails {
-            text-align: center;
-            margin-bottom: 10px;
-          }
-
-          .clinicDetails h2 {
-            color: cyan; /* Header color */
-            margin: 0;
-          }
-
-          .clinicDetails p {
-            margin: 5px 0;
-          }
-
-          .clinicDetails img {
-            max-width: 150px;
-            height: auto;
-            margin-top: -20px;
-          }
-
-          .detailsContainer {
-            display: flex;
-            justify-content: space-between;
-            border-radius: 10px;
-            border: 1px solid black;
-            padding: 10px;
-          }
-
-          .column {
-            width: 30%;
-            padding: 5px;
-          }
-
-          .column h6 {
-            color: rgb(30, 140, 231); /* Header color */
-            margin: 0;
-          }
-
-          .column p {
-            margin: 5px 0;
-            font-size: smaller;
-          }
-
-          .clinicalNotes {
-            margin-top: 10px;
-            border: 1px solid black;
-            border-radius: 10px;
-            /* padding: 10px; */
-          }
-
-          .clinicalNotesContainer {
-            display: flex;
-            justify-content: space-between;
-            height: 740px;
-          }
-
-          .clinicalNote {
-            width: 33%;
-            /* padding: 10px; */
-            box-sizing: border-box;
-            border-right: 1px solid #131212; /* Border between columns */
-            height: 100%;
-          }
-
-          .clinicalNote:last-child {
-            border-right: none; /* Remove border on the last column */
-            width: 67%;
-          }
-
-          .clinicalNote h5 {
-            margin: 0px;
-            padding: 3px;
-            text-align: center;
-            border-bottom: 1px solid black;
-          }
-
-          @media print {
-            body {
-              margin: 0;
-              padding: 0;
-            }
-
-            #content {
-              width: 210mm;
-              min-height: 297mm;
-              padding: 20mm;
-              box-sizing: border-box;
-            }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="row" style="margin: 0">
-          <div class="col-lg-6">
-            <div id="doctorProfileContainer">
-              <!-- Doctor's profile will be added dynamically here -->
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="container mt-5 slot-container">
-              <h3 class="text-primary mb-3">Available Slots</h3>
-              <!-- Slots will be added dynamically here -->
-            </div>
-            <div class="container booking-container">
-              <!-- Appointment Booking Form -->
-              <div class="booking-form">
-                <h3 class="mb-4">Book Appointment</h3>
-                <form id="appointmentForm">
-                  <input
-                    type="tel"
-                    id="patientMobile"
-                    placeholder="Your Mobile Number"
-                    required
-                  />
-                  <select id="patientDropdown" required>
-                    <option value="">Select Patient</option>
-                  </select>
-                  <input
-                    type="text"
-                    id="patientName"
-                    placeholder="Your Name"
-                    required
-                  />
-                  <select id="patientGender" required>
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
-                  <input
-                    type="number"
-                    id="patientAge"
-                    placeholder="Your Age"
-                    required
-                  />
-                  <input type="submit" value="Proceed" />
-                  <button type="button" id="cancelButton" onclick="closeForm()">
-                    Cancel
-                  </button>
-                </form>
-              </div>
-            </div>
-            <div class="popup-overlay" id="popupOverlay">
-              <div class="popup" id="mainPopup">
-                <p>Please select an option:</p>
-                <button id="doctorVisitBtn">Doctor Visit</button>
-                <button id="reportBtn">Report</button>
-              </div>
-
-              <div class="popup" id="subPopup">
-                <p>Choose Payment Method:</p>
-                <button id="payToClinicBtn">Receive Payment</button>
-                <button id="payToDoctorBtn">Pay to Doctor</button>
-              </div>
-            </div>
-            <div class="container booking-confirmation"></div>
+    <div class="row" style="margin: 0">
+      <div class="col-lg-6">
+        <div id="doctorProfileContainer">
+          <!-- Doctor's profile will be added dynamically here -->
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="container mt-5 slot-container">
+          <h3 class="text-primary mb-3">Available Slots</h3>
+          <!-- Slots will be added dynamically here -->
+        </div>
+        <div class="container booking-container">
+          <!-- Appointment Booking Form -->
+          <div class="booking-form">
+            <h3 class="mb-4">Book Appointment</h3>
+            <form id="appointmentForm">
+              <input type="tel" id="patientMobile" placeholder="Your Mobile Number" required />
+              <select id="patientDropdown">
+                <option value="">Select Patient</option>
+              </select>
+              <input type="text" id="patientName" placeholder="Your Name" required />
+              <input type="tel" id="alternateMobile" placeholder="Your Alternate Mobile Number" />
+              <select id="patientGender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              <input type="text" id="patientAddress" placeholder="Your Address" required />
+              <select id="M_STS">
+                <option value="">Marital Status</option>
+                <option value="Married">Married</option>
+                <option value="Unmarried">Unmarried</option>
+              </select>
+              <input type="number" id="patientAge" placeholder="Your Age" required />
+              <input type="submit" value="Proceed" />
+              <button type="button" id="cancelButton" onclick="closeForm()">
+                Cancel
+              </button>
+            </form>
           </div>
         </div>
-        <div id="printableContent" style="display: none">
-          <!-- Content to be printed as PDF -->
+        <div class="popup-overlay" id="popupOverlay">
+          <div class="popup" id="mainPopup">
+            <p>Please select an option:</p>
+            <button id="doctorVisitBtn">Doctor Visit</button>
+            <button id="reportBtn">Report</button>
+          </div>
+
+          <div class="popup" id="subPopup">
+            <p>Choose Payment Method:</p>
+            <button id="payToClinicBtn">Receive Payment</button>
+            <button id="payToDoctorBtn">Pay to Doctor</button>
+          </div>
         </div>
-        <script
-          src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"
-          crossorigin="anonymous"
-        ></script>
-        <script
-          src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-          crossorigin="anonymous"
-        ></script>
-        <!-- Add this script tag to include Axios -->
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script>
-          let slots = null;
-          let userData = null;
-          let slotdetails = null;
-          let slotTiming = null;
-          // Create a function to generate the doctor's profile page
-          function generateDoctorProfilePage(doctorData) {
-            console.log(doctorData);
-            // Create container element
-            const container = document.createElement("div");
-            container.classList.add("container", "mt-5");
-            const profileContainer = document.getElementById(
-              "doctorProfileContainer"
-            );
-            // Create profile row
-            const profileRow = document.createElement("div");
-            profileRow.classList.add("row", "doctor-profile");
+        <div class="container booking-confirmation"></div>
+      </div>
+    </div>
+    <div id="printableContent" style="display: none">
+      <!-- Content to be printed as PDF -->
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"></script>
+    <!-- Add this script tag to include Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      let slots = null;
+      let userData = null;
+      let slotdetails = null;
+      let slotTiming = null;
+      // Create a function to generate the doctor's profile page
+      function generateDoctorProfilePage(doctorData) {
+        console.log(doctorData);
+        // Create container element
+        const container = document.createElement("div");
+        container.classList.add("container", "mt-5");
+        const profileContainer = document.getElementById(
+          "doctorProfileContainer"
+        );
+        // Create profile row
+        const profileRow = document.createElement("div");
+        profileRow.classList.add("row", "doctor-profile");
 
-            // Create image column
-            const imageCol = document.createElement("div");
-            imageCol.classList.add("col-md-4", "col-sm-12", "doctor-image");
-            const image = document.createElement("img");
-            image.src = doctorData.DR_PHOTO;
-            image.alt = doctorData.DR_NAME;
-            image.classList.add("img-thumbnail");
-            imageCol.appendChild(image);
+        // Create image column
+        const imageCol = document.createElement("div");
+        imageCol.classList.add("col-md-4", "col-sm-12", "doctor-image");
+        const image = document.createElement("img");
+        image.src = doctorData.DR_PHOTO;
+        image.alt = doctorData.DR_NAME;
+        image.classList.add("img-thumbnail");
+        imageCol.appendChild(image);
 
-            // Create info column
-            const infoCol = document.createElement("div");
-            infoCol.classList.add("col-md-8", "col-sm-12", "doctor-info");
-            const nameHeader = document.createElement("h2");
-            nameHeader.textContent = doctorData.DR_NAME;
-            const designationPara = document.createElement("p");
-            designationPara.classList.add("designation");
-            designationPara.textContent = doctorData.DESIGNATION;
-            const specializationDiv = document.createElement("div");
-            specializationDiv.classList.add("specialization");
-            specializationDiv.innerHTML = `<b>Specialization:</b> ${doctorData.D_CATG}`;
-            const experienceDiv = document.createElement("div");
-            experienceDiv.classList.add("experience");
-            experienceDiv.innerHTML = `<b>Experience:</b> ${doctorData.EXPERIENCE}`;
-            const qualificationDiv = document.createElement("div");
-            qualificationDiv.classList.add("qualification");
-            qualificationDiv.innerHTML = `<b>Qualification:</b> ${doctorData.QUALIFICATION}`;
-            const feesDiv = document.createElement("div");
-            feesDiv.classList.add("fees");
-            feesDiv.innerHTML = `<b>Fees:</b> ${doctorData.DR_FEES}`;
-            const idDiv = document.createElement("div");
-            idDiv.classList.add("id");
-            idDiv.innerHTML = `<b>ID:</b> ${doctorData.DR_ID}`;
-            const mobileDiv = document.createElement("div");
-            mobileDiv.classList.add("mobile");
-            mobileDiv.innerHTML = `<b>Mobile:</b> ${doctorData.DR_MOBILE}`;
-            const languageDiv = document.createElement("div");
-            languageDiv.classList.add("language");
-            languageDiv.innerHTML = `<b>Language:</b> ${doctorData.LANGUAGE}`;
-            const sexDiv = document.createElement("div");
-            sexDiv.classList.add("sex");
-            sexDiv.innerHTML = `<b>Sex:</b> ${doctorData.SEX}`;
-            infoCol.appendChild(nameHeader);
-            infoCol.appendChild(designationPara);
-            infoCol.appendChild(specializationDiv);
-            infoCol.appendChild(experienceDiv);
-            infoCol.appendChild(qualificationDiv);
-            infoCol.appendChild(feesDiv);
-            infoCol.appendChild(idDiv);
-            infoCol.appendChild(mobileDiv);
-            infoCol.appendChild(languageDiv);
-            infoCol.appendChild(sexDiv);
+        // Create info column
+        const infoCol = document.createElement("div");
+        infoCol.classList.add("col-md-8", "col-sm-12", "doctor-info");
+        const nameHeader = document.createElement("h2");
+        nameHeader.textContent = doctorData.DR_NAME;
+        const designationPara = document.createElement("p");
+        designationPara.classList.add("designation");
+        designationPara.textContent = doctorData.DESIGNATION;
+        const specializationDiv = document.createElement("div");
+        specializationDiv.classList.add("specialization");
+        specializationDiv.innerHTML = `<b>Specialization:</b> ${doctorData.D_CATG}`;
+        const experienceDiv = document.createElement("div");
+        experienceDiv.classList.add("experience");
+        experienceDiv.innerHTML = `<b>Experience:</b> ${doctorData.EXPERIENCE}`;
+        const qualificationDiv = document.createElement("div");
+        qualificationDiv.classList.add("qualification");
+        qualificationDiv.innerHTML = `<b>Qualification:</b> ${doctorData.QUALIFICATION}`;
+        const feesDiv = document.createElement("div");
+        feesDiv.classList.add("fees");
+        feesDiv.innerHTML = `<b>Fees:</b> ${doctorData.DR_FEES}`;
+        const idDiv = document.createElement("div");
+        idDiv.classList.add("id");
+        idDiv.innerHTML = `<b>ID:</b> ${doctorData.DR_ID}`;
+        const mobileDiv = document.createElement("div");
+        mobileDiv.classList.add("mobile");
+        mobileDiv.innerHTML = `<b>Mobile:</b> ${doctorData.DR_MOBILE}`;
+        const languageDiv = document.createElement("div");
+        languageDiv.classList.add("language");
+        languageDiv.innerHTML = `<b>Language:</b> ${doctorData.LANGUAGE}`;
+        const sexDiv = document.createElement("div");
+        sexDiv.classList.add("sex");
+        sexDiv.innerHTML = `<b>Sex:</b> ${doctorData.SEX}`;
+        infoCol.appendChild(nameHeader);
+        infoCol.appendChild(designationPara);
+        infoCol.appendChild(specializationDiv);
+        infoCol.appendChild(experienceDiv);
+        infoCol.appendChild(qualificationDiv);
+        infoCol.appendChild(feesDiv);
+        infoCol.appendChild(idDiv);
+        infoCol.appendChild(mobileDiv);
+        infoCol.appendChild(languageDiv);
+        infoCol.appendChild(sexDiv);
 
-            // Append columns to profile row
-            profileRow.appendChild(imageCol);
-            profileRow.appendChild(infoCol);
+        // Append columns to profile row
+        profileRow.appendChild(imageCol);
+        profileRow.appendChild(infoCol);
 
-            // Append rows to container
-            container.appendChild(profileRow);
-            // Append container to body
-            profileContainer.appendChild(container);
+        // Append rows to container
+        container.appendChild(profileRow);
+        // Append container to body
+        profileContainer.appendChild(container);
 
-            const isLoggedIn = localStorage.getItem("isLoggedIn");
-            if (isLoggedIn) {
-              // Retrieve username from localStorage
-              const username = localStorage.getItem("username");
-              // Do something with the logged-in user's data
-              const storedUserData = localStorage.getItem("userData");
-              console.log(storedUserData);
-              // Access and use the user's data
-              if (storedUserData) {
-                userData = JSON.parse(storedUserData).data;
-                console.log(userData);
-                // Set the logo URL dynamically
-              }
-              console.log(userData);
-            }
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        if (isLoggedIn) {
+          // Retrieve username from localStorage
+          const username = localStorage.getItem("username");
+          // Do something with the logged-in user's data
+          const storedUserData = localStorage.getItem("userData");
+          console.log(storedUserData);
+          // Access and use the user's data
+          if (storedUserData) {
+            userData = JSON.parse(storedUserData).data;
             console.log(userData);
-            //delete doctorData.SCH_DT
-            let SlotId = null;
-            console.log(doctorData);
-            if (doctorData && doctorData.SlotId !== undefined) {
-              SlotId = doctorData.SlotId;
-              console.log(SlotId);
-            } else {
-              console.log("slotId is missing or undefined");
-            }
-            const PHARMA_ID = userData.PHARMA_ID ? userData.PHARMA_ID : null;
-            let DR_ID = null;
-            if (doctorData && doctorData.DR_ID !== undefined) {
-              DR_ID = doctorData.DR_ID;
-              console.log(DR_ID);
-            } else {
-              console.log("dr id is missing or undefined");
-            }
-            console.log(SlotId);
-            console.log(DR_ID);
-            // Call the function to generate slot items with dates
-
-            viewSlot(SlotId, DR_ID, PHARMA_ID);
+            // Set the logo URL dynamically
           }
+          console.log(userData);
+        }
+        console.log(userData);
+        //delete doctorData.SCH_DT
+        let SlotId = null;
+        console.log(doctorData);
+        if (doctorData && doctorData.SlotId !== undefined) {
+          SlotId = doctorData.SlotId;
+          console.log(SlotId);
+        } else {
+          console.log("slotId is missing or undefined");
+        }
+        const PHARMA_ID = userData.PHARMA_ID ? userData.PHARMA_ID : null;
+        let DR_ID = null;
+        if (doctorData && doctorData.DR_ID !== undefined) {
+          DR_ID = doctorData.DR_ID;
+          console.log(DR_ID);
+        } else {
+          console.log("dr id is missing or undefined");
+        }
+        console.log(SlotId);
+        console.log(DR_ID);
+        // Call the function to generate slot items with dates
 
-          function generateSlotItems(slots) {
-            console.log(slots);
-            let slot = null;
-            let SLOTS = [];
-            SLOTS.push(slots);
-            console.log(SLOTS);
-            const slotContainer = document.querySelector(".slot-container");
-            //const SLOTS=slots?slots:[]
-            if (SLOTS) {
-              console.log(SLOTS);
-              const iconUrls = {
-                Morning: "/morning_icon.jpeg",
-                Afternoon: "/afternoon_icon.jpeg",
-                Evening: "/evening_icon.jpeg",
-              };
+        viewSlot(SlotId, DR_ID, PHARMA_ID);
+      }
 
-              ["Morning", "Afternoon", "Evening"].forEach((timePeriod) => {
-                const slotsForPeriod = SLOTS[0][timePeriod];
-                console.log(slotsForPeriod);
-                if (slotsForPeriod && slotsForPeriod.length > 0) {
-                  const timingCOntainer = document.createElement("div");
-                  const iconUrl = iconUrls[timePeriod];
-                  timingCOntainer.innerHTML += `<h4><img src="${iconUrl}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
-                  // timingCOntainer.innerHTML += '<div class="slot-section">';
-                  // Iterate over slots for the current time period
-                  //console.log(slotsForPeriod);
-                  for (let i = 0; i < slotsForPeriod.length; i += 4) {
-                    const slotItemPair = document.createElement("div");
-                    slotItemPair.classList.add("row", "mb-3");
-                    for (
-                      let j = i;
-                      j < Math.min(i + 4, slotsForPeriod.length);
-                      j++
-                    ) {
-                      const timeSlot = slotsForPeriod[j];
-                      const slottimeItem = document.createElement("div");
-                      slottimeItem.classList.add("modal-slot-item", "col-md-3");
-                      slottimeItem.dataset.slot = JSON.stringify(timeSlot);
-                      slottimeItem.innerHTML = `
+      function generateSlotItems(slots) {
+        console.log(slots);
+        let slot = null;
+        let SLOTS = [];
+        SLOTS.push(slots);
+        console.log(SLOTS);
+        const slotContainer = document.querySelector(".slot-container");
+        //const SLOTS=slots?slots:[]
+        if (SLOTS) {
+          console.log(SLOTS);
+          const iconUrls = {
+            Morning: "/morning_icon.jpeg",
+            Afternoon: "/afternoon_icon.jpeg",
+            Evening: "/evening_icon.jpeg",
+          };
+
+          ["Morning", "Afternoon", "Evening"].forEach((timePeriod) => {
+            const slotsForPeriod = SLOTS[0][timePeriod];
+            console.log(slotsForPeriod);
+            if (slotsForPeriod && slotsForPeriod.length > 0) {
+              const timingCOntainer = document.createElement("div");
+              const iconUrl = iconUrls[timePeriod];
+              timingCOntainer.innerHTML += `<h4><img src="${iconUrl}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
+              // timingCOntainer.innerHTML += '<div class="slot-section">';
+              // Iterate over slots for the current time period
+              //console.log(slotsForPeriod);
+              for (let i = 0; i < slotsForPeriod.length; i += 4) {
+                const slotItemPair = document.createElement("div");
+                slotItemPair.classList.add("row", "mb-3");
+                for (
+                  let j = i;
+                  j < Math.min(i + 4, slotsForPeriod.length);
+                  j++
+                ) {
+                  const timeSlot = slotsForPeriod[j];
+                  const slottimeItem = document.createElement("div");
+                  slottimeItem.classList.add("modal-slot-item", "col-md-3");
+                  slottimeItem.dataset.slot = JSON.stringify(timeSlot);
+                  slottimeItem.innerHTML = `
                                 <span>${timeSlot.FROM} - ${timeSlot.TO}</span>
                                 <div class="availability">Available</div>
                             `;
-                      slotItemPair.appendChild(slottimeItem);
-                      // console.log(JSON.parse(slottimeItem.dataset.slot));
-                      console.log(slottimeItem);
-                      slottimeItem.onclick = function () {
-                        //console.log("inside the function");
+                  slotItemPair.appendChild(slottimeItem);
+                  // console.log(JSON.parse(slottimeItem.dataset.slot));
+                  console.log(slottimeItem);
+                  slottimeItem.onclick = function () {
+                    //console.log("inside the function");
 
-                        const clickedSlotData = JSON.parse(
-                          slottimeItem.dataset.slot
-                        );
-                        console.log(clickedSlotData);
-                        openBookingForm(clickedSlotData, slotData);
-                      };
-                    }
-                    timingCOntainer.appendChild(slotItemPair);
-                  }
-                  slotContainer.appendChild(timingCOntainer);
-                  //slotContainer.innerHTML="</div>"
-                } else {
-                  const timingCOntainer = document.createElement("div");
-                  // Display message if no slots available for the current time period
-                  timingCOntainer.innerHTML += `<h4><img src="${iconUrls[timePeriod]}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
-                  timingCOntainer.innerHTML +=
-                    '<div class="no-slots-animation">No slots available</div>';
-                  slotContainer.appendChild(timingCOntainer);
+                    const clickedSlotData = JSON.parse(
+                      slottimeItem.dataset.slot
+                    );
+                    console.log(clickedSlotData);
+                    openBookingForm(clickedSlotData, slotData);
+                  };
                 }
-              });
+                timingCOntainer.appendChild(slotItemPair);
+              }
+              slotContainer.appendChild(timingCOntainer);
+              //slotContainer.innerHTML="</div>"
             } else {
-              // Handle case where slot data is missing or incorrect
-              slotContainer.innerHTML = "Error: Slot data not available";
+              const timingCOntainer = document.createElement("div");
+              // Display message if no slots available for the current time period
+              timingCOntainer.innerHTML += `<h4><img src="${iconUrls[timePeriod]}" alt="${timePeriod} Icon" style="width: 40px; height: 40px;"> ${timePeriod} Slots</h4>`;
+              timingCOntainer.innerHTML +=
+                '<div class="no-slots-animation">No slots available</div>';
+              slotContainer.appendChild(timingCOntainer);
             }
+          });
+        } else {
+          // Handle case where slot data is missing or incorrect
+          slotContainer.innerHTML = "Error: Slot data not available";
+        }
+      }
+      async function viewSlot(SlotId, DR_ID, PHARMA_ID) {
+        const params = {
+          PHARMA_ID: PHARMA_ID,
+          DR_ID: DR_ID,
+          APPNT_ID: SlotId,
+        };
+        console.log(params);
+        const url = "http://easyhealths.com/api/vuslot";
+        try {
+          console.log(params);
+          const response = await axios.post(url, params);
+          console.log(response.data);
+          slots = response.data.Data;
+          console.log(slots);
+          generateSlotItems(slots);
+        } catch (error) {
+          console.error("Error fetching slot data:", error);
+          return null;
+        }
+      }
+      function formatDate(inputDate) {
+        // Extract year, month, and day from the input string
+        const year = inputDate.substring(0, 4);
+        const month = inputDate.substring(4, 6);
+        const day = inputDate.substring(6, 8);
+
+        // Form the date in dd-mm-yyyy format
+        const formattedDate = `${day}-${month}-${year}`;
+
+        return formattedDate;
+      }
+      //Function to create booking form
+      function openBookingForm(slotData, slot) {
+        slotdetails = slotData;
+        slotTiming = slot;
+        console.log(slotTiming);
+        console.log("Inside Booking form");
+        const slotContainer = document.querySelector(".slot-container");
+        const bookingContainer =
+          document.querySelector(".booking-container");
+        slotContainer.style.display = "none";
+        bookingContainer.style.display = "block";
+        const bookingForm = document.querySelector(".booking-form");
+
+        bookingForm.style.display = "block"; // Show booking form
+      }
+      document
+        .getElementById("patientMobile")
+        .addEventListener("input", function (event) {
+          const mobile = event.target.value;
+          if (mobile.length <= 9 || mobile.length > 10) {
+            const defaultOption = document.createElement("option");
+            defaultOption.style.display = "none";
+            const patientDropdown =
+              document.getElementById("patientDropdown");
+            patientDropdown.style.display = "none";
           }
-          async function viewSlot(SlotId, DR_ID, PHARMA_ID) {
-            const params = {
-              PHARMA_ID: PHARMA_ID,
-              DR_ID: DR_ID,
-              APPNT_ID: SlotId,
-            };
-            console.log(params);
-            const url = "http://easyhealths.com/api/vuslot";
-            try {
-              console.log(params);
-              const response = await axios.post(url, params);
-              console.log(response.data);
-              slots = response.data.Data; 
-              console.log(slots);
-              generateSlotItems(slots);
-            } catch (error) {
-              console.error("Error fetching slot data:", error);
-              return null;
+          if (!isValidMobile(mobile)) {
+            displayError(
+              event.target,
+              "Mobile number should be exactly 10 digits."
+            );
+            const patientDropdown =
+              document.getElementById("patientDropdown");
+            patientDropdown.style.display = "none";
+          } else {
+            if (mobile.length === 10 && !isNaN(mobile)) {
+              // Call function to handle mobile number with 10 digits
+              handleMobileNumberWith10Digits(mobile);
             }
+            clearError(event.target);
           }
-          function formatDate(inputDate) {
-            // Extract year, month, and day from the input string
-            const year = inputDate.substring(0, 4);
-            const month = inputDate.substring(4, 6);
-            const day = inputDate.substring(6, 8);
+        });
 
-            // Form the date in dd-mm-yyyy format
-            const formattedDate = `${day}-${month}-${year}`;
+      async function handleMobileNumberWith10Digits(mobile) {
+        const url = "http://easyhealths.com/api/srchmob";
+        const params = {
+          MOBILE: mobile,
+        };
 
-            return formattedDate;
-          }
-          //Function to create booking form
-          function openBookingForm(slotData, slot) {
-            slotdetails = slotData;
-            slotTiming = slot;
-            console.log(slotTiming);
-            console.log("Inside Booking form");
-            const slotContainer = document.querySelector(".slot-container");
-            const bookingContainer =
-              document.querySelector(".booking-container");
-            slotContainer.style.display = "none";
-            bookingContainer.style.display = "block";
-            const bookingForm = document.querySelector(".booking-form");
+        try {
+          const response = await axios.post(url, params);
+          const patients = response.data.data ? response.data.data : [];
 
-            bookingForm.style.display = "block"; // Show booking form
-          }
-          document
-            .getElementById("patientMobile")
-            .addEventListener("input", function (event) {
-              const mobile = event.target.value;
-              if (mobile.length <= 9 || mobile.length > 10) {
-                const defaultOption = document.createElement("option");
-                defaultOption.style.display = "none";
-                const patientDropdown =
-                  document.getElementById("patientDropdown");
-                patientDropdown.style.display = "none";
-              }
-              if (!isValidMobile(mobile)) {
-                displayError(
-                  event.target,
-                  "Mobile number should be exactly 10 digits."
-                );
-                const patientDropdown =
-                  document.getElementById("patientDropdown");
-                patientDropdown.style.display = "none";
-              } else {
-                if (mobile.length === 10 && !isNaN(mobile)) {
-                  // Call function to handle mobile number with 10 digits
-                  handleMobileNumberWith10Digits(mobile);
-                }
-                clearError(event.target);
-              }
+          // Clear any previous dropdown options
+          const selectElement = document.getElementById("patientDropdown");
+          selectElement.innerHTML = "";
+          console.log(patients);
+          if (patients.length > 0) {
+            // Show the dropdown/select element
+            selectElement.style.display = "block";
+
+            // Create default option
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.text = "Select Patient";
+            selectElement.appendChild(defaultOption);
+
+            // Populate dropdown options with patient data
+            patients.forEach((patient) => {
+              const option = document.createElement("option");
+              option.value = patient.ID; // Store patient ID as option value
+
+              // Store other patient details as data attributes
+              option.dataset.name = patient.NAME;
+              option.dataset.age = patient.AGE;
+              option.dataset.sex = patient.SEX;
+              option.dataset.familyId = patient.FAMILY_ID;
+              // Set text content for the option
+              option.textContent = `${patient.NAME} - Age: ${patient.AGE}, Sex: ${patient.SEX}`;
+
+              selectElement.appendChild(option);
             });
-
-          async function handleMobileNumberWith10Digits(mobile) {
-            const url = "http://easyhealths.com/api/srchmob";
-            const params = {
-              MOBILE: mobile,
-            };
-
-            try {
-              const response = await axios.post(url, params);
-              const patients = response.data.data ? response.data.data : [];
-
-              // Clear any previous dropdown options
-              const selectElement = document.getElementById("patientDropdown");
-              selectElement.innerHTML = "";
-              console.log(patients);
-              if (patients.length > 0) {
-                // Show the dropdown/select element
-                selectElement.style.display = "block";
-
-                // Create default option
-                const defaultOption = document.createElement("option");
-                defaultOption.value = "";
-                defaultOption.text = "Select Patient";
-                selectElement.appendChild(defaultOption);
-
-                // Populate dropdown options with patient data
-                patients.forEach((patient) => {
-                  const option = document.createElement("option");
-                  option.value = patient.ID; // Store patient ID as option value
-
-                  // Store other patient details as data attributes
-                  option.dataset.name = patient.NAME;
-                  option.dataset.age = patient.AGE;
-                  option.dataset.sex = patient.SEX;
-                  option.dataset.familyId = patient.FAMILY_ID;
-                  // Set text content for the option
-                  option.textContent = `${patient.NAME} - Age: ${patient.AGE}, Sex: ${patient.SEX}`;
-
-                  selectElement.appendChild(option);
-                });
-              } else {
-                // Hide the dropdown/select element if no data is available
-                selectElement.style.display = "none";
-                const defaultOption = document.createElement("option");
-                defaultOption.style.display = "none";
-                // Make name and age fields editable
-                const patientNameInput = document.getElementById("patientName");
-                const patientAgeInput = document.getElementById("patientAge");
-
-                patientNameInput.removeAttribute("readonly");
-                patientAgeInput.removeAttribute("readonly");
-              }
-            } catch (error) {
-              console.error("Error fetching patient data:", error);
-            }
-          }
-          // Function to check if a string contains only alphabets
-          function isValidName(name) {
-            return /^[a-zA-Z]+$/.test(name);
-          }
-
-          // Function to check if a mobile number is valid (exactly 10 digits)
-          function isValidMobile(mobile) {
-            return /^\d{10}$/.test(mobile);
-          }
-
-          // Function to check if age is not negative
-          function isValidAge(age) {
-            return age >= 0;
-          }
-
-          // Function to display error message
-          function displayError(inputField, message) {
-            const parentElement = inputField.parentElement;
-            const errorElement = parentElement.querySelector(".error-message");
-
-            // Create error message element if not already present
-            if (!errorElement) {
-              const errorMessage = document.createElement("div");
-              errorMessage.classList.add("error-message");
-              parentElement.appendChild(errorMessage);
-              errorElement = errorMessage;
-            }
-
-            // Display error message
-            errorElement.textContent = message;
-          }
-
-          // Function to clear error message
-          function clearError(inputField) {
-            const parentElement = inputField.parentElement;
-            const errorElement = parentElement.querySelector(".error-message");
-
-            // Clear error message
-            if (errorElement) {
-              parentElement.removeChild(errorElement);
-            }
-          }
-
-          // Add event listeners to input fields for validation
-          document
-            .getElementById("patientName")
-            .addEventListener("input", function (event) {
-              const name = event.target.value;
-              if (!isValidName(name)) {
-                displayError(
-                  event.target,
-                  "Name should only contain alphabets."
-                );
-              } else {
-                clearError(event.target);
-              }
-            });
-
-          document
-            .getElementById("patientAge")
-            .addEventListener("input", function (event) {
-              const age = parseInt(event.target.value);
-              if (!isValidAge(age)) {
-                displayError(event.target, "Age cannot be negative.");
-              } else {
-                clearError(event.target);
-              }
-            });
-
-          function closeForm() {
-            const slotContainer = document.querySelector(".slot-container");
-            const bookingContainer =
-              document.querySelector(".booking-container");
-            slotContainer.style.display = "block";
-            bookingContainer.style.display = "none";
-            const bookingForm = document.querySelector(".booking-form");
-
-            bookingForm.style.display = "none"; // Show booking form
-          }
-          // Modify form submission event listener to include validation
-          document
-            .getElementById("appointmentForm")
-            .addEventListener("submit", async function (event) {
-              event.preventDefault(); // Prevent default form submission
-
-              const patientName = document.getElementById("patientName").value;
-              const patientMobile =
-                document.getElementById("patientMobile").value;
-              const patientGender =
-                document.getElementById("patientGender").value;
-              const patientAge = parseInt(
-                document.getElementById("patientAge").value
-              );
-              const patientDropdown =
-                document.getElementById("patientDropdown");
-              const selectedOption =
-                patientDropdown.options[patientDropdown.selectedIndex];
-
-              // Retrieve data from dataset attributes of the selected option
-              const patientId = selectedOption.value; // This would be the entire patient object as a JSON string
-              const patientNameFromDataset = selectedOption.dataset.name;
-              const patientAgeFromDataset = selectedOption.dataset.age;
-              const patientSexFromDataset = selectedOption.dataset.sex;
-              const patientFamilyIdFromDataset =
-                selectedOption.dataset.familyId;
-              // Perform validation before submitting the form
-              let isValid = true;
-
-              if (!isValidName(patientName)) {
-                displayError(
-                  document.getElementById("patientName"),
-                  "Name should only contain alphabets."
-                );
-                isValid = false;
-              } else {
-                clearError(document.getElementById("patientName"));
-              }
-
-              if (!isValidMobile(patientMobile)) {
-                displayError(
-                  document.getElementById("patientMobile"),
-                  "Mobile number should be exactly 10 digits."
-                );
-                isValid = false;
-              } else {
-                clearError(document.getElementById("patientMobile"));
-              }
-
-              if (!isValidAge(patientAge)) {
-                displayError(
-                  document.getElementById("patientAge"),
-                  "Age cannot be negative."
-                );
-                isValid = false;
-              } else {
-                clearError(document.getElementById("patientAge"));
-              }
-
-              // If all fields are valid, submit the form
-              if (isValid) {
-                // Make an API call to book appointment
-                // You can add your API endpoint here
-                console.log(userData);
-                const patientDetails = {
-                  FAMILY_ID: patientFamilyIdFromDataset,
-                  PATIENT_ID: patientId,
-                  PATIENT_NAME: patientNameFromDataset,
-                  MOBILE: patientMobile,
-                  DR_ID: doctordata.DR_ID,
-                  DR_NAME: doctordata.DR_NAME,
-                  APNT_DT: slotTiming.SCH_DT,
-                  PHARMA_ID: userData.PHARMA_ID ? userData.PHARMA_ID : null,
-                  PHARMA_NAME: userData.PHARMA_NAME,
-                  APNT_ID: slotTiming.ID,
-                  FROM: slotdetails.FROM,
-                  TO: slotdetails.TO,
-                  DR_FEES: doctordata.DR_FEES,
-                };
-                console.log(patientDetails);
-                showMainPopup(
-                  patientDetails,
-                  patientSexFromDataset,
-                  patientAgeFromDataset
-                );
-                // Reset form fields
-                this.reset();
-
-                // Hide booking form after submission
-                document.querySelector(".booking-form").style.display = "none";
-                // document.querySelector(".slot-container").style.display = "block";
-              }
-            });
-
-          // Add event listener to the patient dropdown
-          const patientDropdown = document.getElementById("patientDropdown");
-          patientDropdown.addEventListener("change", function () {
-            // Get the selected option from the dropdown
-            const selectedOption = this.options[this.selectedIndex];
-
-            // Populate input fields with selected patient data
+          } else {
+            // Hide the dropdown/select element if no data is available
+            selectElement.style.display = "none";
+            const defaultOption = document.createElement("option");
+            defaultOption.style.display = "none";
+            // Make name and age fields editable
             const patientNameInput = document.getElementById("patientName");
             const patientAgeInput = document.getElementById("patientAge");
-            const patientGenderInput = document.getElementById("patientGender");
 
-            patientNameInput.value = selectedOption.dataset.name; // Populate name input field
-            patientAgeInput.value = selectedOption.dataset.age; // Populate age input field
-            patientGenderInput.value = selectedOption.dataset.sex; // Populate gender input field
+            patientNameInput.removeAttribute("readonly");
+            patientAgeInput.removeAttribute("readonly");
+          }
+        } catch (error) {
+          console.error("Error fetching patient data:", error);
+        }
+      }
+      // Function to check if a string contains only alphabets
+      function isValidName(name) {
+        return /^[a-zA-Z]+$/.test(name);
+      }
 
-            // Make input fields non-editable
-            patientNameInput.setAttribute("readonly", true);
-            patientAgeInput.setAttribute("readonly", true);
-            patientGenderInput.setAttribute("readonly", true);
-          });
+      // Function to check if a mobile number is valid (exactly 10 digits)
+      function isValidMobile(mobile) {
+        return /^\d{10}$/.test(mobile);
+      }
 
-          // Function to show the main popup
-          function showMainPopup(
-            patientDetails,
-            patientSexFromDataset,
-            patientAgeFromDataset
-          ) {
-            document.querySelector(".slot-container").style.display = "none";
-            document.getElementById("popupOverlay").style.visibility =
-              "visible";
-            document.getElementById("mainPopup").style.display = "block";
-            document.getElementById("subPopup").style.display = "none";
+      // Function to check if age is not negative
+      function isValidAge(age) {
+        return age >= 0;
+      }
 
-            // Handle Doctor Visit button click
-            document
-              .getElementById("doctorVisitBtn")
-              .addEventListener("click", function () {
-                patientDetails.BOOKING_TYPE = "drvisit";
-                hideMainPopup();
+      // Function to display error message
+      function displayError(inputField, message) {
+        const parentElement = inputField.parentElement;
+        const errorElement = parentElement.querySelector(".error-message");
 
-                openBookingConfirmation(
-                  patientDetails,
-                  patientSexFromDataset,
-                  patientSexFromDataset
-                );
-              });
+        // Create error message element if not already present
+        if (!errorElement) {
+          const errorMessage = document.createElement("div");
+          errorMessage.classList.add("error-message");
+          parentElement.appendChild(errorMessage);
+          errorElement = errorMessage;
+        }
 
-            function openBookingConfirmation(
+        // Display error message
+        errorElement.textContent = message;
+      }
+
+      // Function to clear error message
+      function clearError(inputField) {
+        const parentElement = inputField.parentElement;
+        const errorElement = parentElement.querySelector(".error-message");
+
+        // Clear error message
+        if (errorElement) {
+          parentElement.removeChild(errorElement);
+        }
+      }
+
+      // Add event listeners to input fields for validation
+      document
+        .getElementById("patientName")
+        .addEventListener("input", function (event) {
+          const name = event.target.value;
+          if (!isValidName(name)) {
+            displayError(
+              event.target,
+              "Name should only contain alphabets."
+            );
+          } else {
+            clearError(event.target);
+          }
+        });
+
+      document
+        .getElementById("patientAge")
+        .addEventListener("input", function (event) {
+          const age = parseInt(event.target.value);
+          if (!isValidAge(age)) {
+            displayError(event.target, "Age cannot be negative.");
+          } else {
+            clearError(event.target);
+          }
+        });
+
+      function closeForm() {
+        const slotContainer = document.querySelector(".slot-container");
+        const bookingContainer =
+          document.querySelector(".booking-container");
+        slotContainer.style.display = "block";
+        bookingContainer.style.display = "none";
+        const bookingForm = document.querySelector(".booking-form");
+
+        bookingForm.style.display = "none"; // Show booking form
+      }
+      // Modify form submission event listener to include validation
+      document
+        .getElementById("appointmentForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Prevent default form submission
+
+          const patientName = document.getElementById("patientName").value;
+          const patientMobile = document.getElementById("patientMobile").value;
+          const patientGender = document.getElementById("patientGender").value;
+          const patientAge = parseInt(
+            document.getElementById("patientAge").value
+          );
+          const alternateMobile = document.getElementById("alternateMobile").value;
+          const m_sts = document.getElementById('M_STS').value;
+          const Address = document.getElementById('patientAddress').value;
+          const patientDropdown = document.getElementById("patientDropdown");
+
+          let selectedOption = null
+          if (patientDropdown != null) {
+            selectedOption =
+              patientDropdown.options[patientDropdown.selectedIndex];
+          }
+
+          // Retrieve data from dataset attributes of the selected option
+          const patientId = selectedOption ? selectedOption.value : patientMobile; // This would be the entire patient object as a JSON string
+          const patientNameFromDataset = selectedOption != null ? selectedOption.dataset.name : patientName;
+          const patientAgeFromDataset = selectedOption != null ? selectedOption.dataset.age : patientAge;
+          const patientSexFromDataset = selectedOption != null ? selectedOption.dataset.sex : patientGender;
+          const patientFamilyIdFromDataset = selectedOption != null ? selectedOption.dataset.familyId : patientMobile;
+          console.log(Address);
+          // Perform validation before submitting the form
+          let isValid = true;
+
+          if (!isValidName(patientName)) {
+            displayError(
+              document.getElementById("patientName"),
+              "Name should only contain alphabets."
+            );
+            isValid = false;
+          } else {
+            clearError(document.getElementById("patientName"));
+          }
+
+          if (!isValidMobile(patientMobile)) {
+            displayError(
+              document.getElementById("patientMobile"),
+              "Mobile number should be exactly 10 digits."
+            );
+            isValid = false;
+          } else {
+            clearError(document.getElementById("patientMobile"));
+          }
+
+          if (!isValidAge(patientAge)) {
+            displayError(
+              document.getElementById("patientAge"),
+              "Age cannot be negative."
+            );
+            isValid = false;
+          } else {
+            clearError(document.getElementById("patientAge"));
+          }
+
+          // If all fields are valid, submit the form
+          if (isValid) {
+            // Make an API call to book appointment
+            // You can add your API endpoint here
+            console.log(userData);
+            const patientDetails = {
+              FAMILY_ID: patientFamilyIdFromDataset,
+              PATIENT_ID: patientId,
+              PATIENT_NAME: patientNameFromDataset,
+              MOBILE: patientMobile,
+              DR_ID: doctordata.DR_ID,
+              DR_NAME: doctordata.DR_NAME,
+              BOOK_BY_ID: userData.CLINIC_MOBILE,
+              BOOK_BY_NAME: userData.PHARMA_NAME,
+              APNT_DT: slotTiming.SCH_DT,
+              PHARMA_ID: userData.PHARMA_ID ? userData.PHARMA_ID : null,
+              PHARMA_NAME: userData.PHARMA_NAME,
+              APNT_ID: slotTiming.ID,
+              FROM: slotdetails.FROM,
+              TO: slotdetails.TO,
+              DR_FEES: doctordata.DR_FEES,
+            };
+            console.log(patientDetails);
+            showMainPopup(
               patientDetails,
               patientSexFromDataset,
               patientAgeFromDataset
-            ) {
-              document.querySelector(".slot-container").style.display = "none";
-              console.log(patientDetails);
-              // Get the booking confirmation container
-              const bookingConfirm = document.querySelector(
-                ".booking-confirmation"
-              );
+            );
+            // Reset form fields
+            this.reset();
 
-              // Clear any previous content
-              bookingConfirm.innerHTML = "";
-              bookingConfirm.innerHTML = `<h2 class="confirmation-heading">
+            // Hide booking form after submission
+            document.querySelector(".booking-form").style.display = "none";
+            // document.querySelector(".slot-container").style.display = "block";
+          }
+        });
+
+      // Add event listener to the patient dropdown
+      const patientDropdown = document.getElementById("patientDropdown");
+      patientDropdown.addEventListener("change", function () {
+        // Get the selected option from the dropdown
+        const selectedOption = this.options[this.selectedIndex];
+
+        // Populate input fields with selected patient data
+        const patientNameInput = document.getElementById("patientName");
+        const patientAgeInput = document.getElementById("patientAge");
+        const patientGenderInput = document.getElementById("patientGender");
+
+        patientNameInput.value = selectedOption.dataset.name; // Populate name input field
+        patientAgeInput.value = selectedOption.dataset.age; // Populate age input field
+        patientGenderInput.value = selectedOption.dataset.sex; // Populate gender input field
+
+        // Make input fields non-editable
+        patientNameInput.setAttribute("readonly", true);
+        patientAgeInput.setAttribute("readonly", true);
+        patientGenderInput.setAttribute("readonly", true);
+      });
+
+      // Function to show the main popup
+      function showMainPopup(
+        patientDetails,
+        patientSexFromDataset,
+        patientAgeFromDataset
+      ) {
+        document.querySelector(".slot-container").style.display = "none";
+        document.getElementById("popupOverlay").style.visibility =
+          "visible";
+        document.getElementById("mainPopup").style.display = "block";
+        document.getElementById("subPopup").style.display = "none";
+
+        // Handle Doctor Visit button click
+        document
+          .getElementById("doctorVisitBtn")
+          .addEventListener("click", function () {
+            patientDetails.BOOKING_TYPE = "drvisit";
+            hideMainPopup();
+
+            openBookingConfirmation(
+              patientDetails,
+              patientSexFromDataset,
+              patientSexFromDataset
+            );
+          });
+
+        function openBookingConfirmation(
+          patientDetails,
+          patientSexFromDataset,
+          patientAgeFromDataset
+        ) {
+          document.querySelector(".slot-container").style.display = "none";
+          console.log(patientDetails);
+          // Get the booking confirmation container
+          const bookingConfirm = document.querySelector(
+            ".booking-confirmation"
+          );
+
+          // Clear any previous content
+          bookingConfirm.innerHTML = "";
+          bookingConfirm.innerHTML = `<h2 class="confirmation-heading">
                     Please Confirm Appointment Details
                   </h2>`;
-              // Create upper part for patient info
-              const upperPart = document.createElement("div");
-              upperPart.classList.add("patient-info", "info-container");
+          // Create upper part for patient info
+          const upperPart = document.createElement("div");
+          upperPart.classList.add("patient-info", "info-container");
 
-              let bookingDate = patientDetails.APNT_DT;
-              var year = bookingDate.substring(0, 4);
-              var month = bookingDate.substring(4, 6);
-              var day = bookingDate.substring(6, 8);
+          let bookingDate = patientDetails.APNT_DT;
+          var year = bookingDate.substring(0, 4);
+          var month = bookingDate.substring(4, 6);
+          var day = bookingDate.substring(6, 8);
 
-              // Format the date into dd-mm-yyyy format
-              bookingDate = day + "-" + month + "-" + year;
-              let purpose = null;
-              if (patientDetails.BOOKING_TYPE === "drvisit") {
-                purpose = "Doctor Visit";
-              } else {
-                purpose = "Reporting";
-              }
-              // Create lower part for doctor and appointment info
-              const lowerPart = document.createElement("div");
-              lowerPart.classList.add("appointment-info", "info-container");
-              lowerPart.innerHTML = `
+          // Format the date into dd-mm-yyyy format
+          bookingDate = day + "-" + month + "-" + year;
+          let purpose = null;
+          if (patientDetails.BOOKING_TYPE === "drvisit") {
+            purpose = "Doctor Visit";
+          } else {
+            purpose = "Reporting";
+          }
+          // Create lower part for doctor and appointment info
+          const lowerPart = document.createElement("div");
+          lowerPart.classList.add("appointment-info", "info-container");
+          lowerPart.innerHTML = `
             <p><span>Patient</span>           : ${patientDetails.PATIENT_NAME}</p>
             <p><span>Age</span>               : ${patientAgeFromDataset}</p>
             <p><span>Gender</span>            : ${patientSexFromDataset}</p>
@@ -1278,7 +1345,7 @@
 
             `;
 
-              upperPart.innerHTML = `
+          upperPart.innerHTML = `
                   <p><span>Doctor</span>            : ${patientDetails.DR_NAME}</p>
             <p><span>Chamber</span>           :${patientDetails.PHARMA_NAME}</p>
             <p><span>Booking Date </span>     : ${bookingDate}</p>
@@ -1287,320 +1354,300 @@
 
 
           `;
-              // Append upper and lower parts to the booking confirmation container
-              bookingConfirm.appendChild(upperPart);
-              bookingConfirm.appendChild(lowerPart);
+          // Append upper and lower parts to the booking confirmation container
+          bookingConfirm.appendChild(upperPart);
+          bookingConfirm.appendChild(lowerPart);
 
-              // Create buttons container
-              const buttonsContainer = document.createElement("div");
-              buttonsContainer.classList.add("buttons-container");
+          // Create buttons container
+          const buttonsContainer = document.createElement("div");
+          buttonsContainer.classList.add("buttons-container");
 
-              // Create Book Appointment button
-              const bookAppointmentBtn = document.createElement("button");
-              bookAppointmentBtn.classList.add("booking-button");
-              bookAppointmentBtn.textContent = "Book Appointment";
-              //bookAppointmentBtn.style.backgroundColor = "#007bff"; // Blue color
-              // Create Cancel button
-              const cancelButton = document.createElement("button");
-              cancelButton.classList.add("cancel-button");
-              cancelButton.textContent = "Cancel";
-              //cancelButton.style.backgroundColor = "#ff4d4d"; // Red color
-              cancelButton.addEventListener("click", function () {
-                const slotContainer = document.querySelector(".slot-container");
-                const bookingContainer =
-                  document.querySelector(".booking-container");
-                slotContainer.style.display = "none";
-                bookingContainer.style.display = "block";
-                const bookingForm = document.querySelector(".booking-form");
-                bookingConfirm.style.display = "none";
-                bookingForm.style.display = "block"; // Show booking form
-              });
+          // Create Book Appointment button
+          const bookAppointmentBtn = document.createElement("button");
+          bookAppointmentBtn.classList.add("booking-button");
+          bookAppointmentBtn.textContent = "Book Appointment";
+          //bookAppointmentBtn.style.backgroundColor = "#007bff"; // Blue color
+          // Create Cancel button
+          const cancelButton = document.createElement("button");
+          cancelButton.classList.add("cancel-button");
+          cancelButton.textContent = "Cancel";
+          //cancelButton.style.backgroundColor = "#ff4d4d"; // Red color
+          cancelButton.addEventListener("click", function () {
+            const slotContainer = document.querySelector(".slot-container");
+            const bookingContainer =
+              document.querySelector(".booking-container");
+            slotContainer.style.display = "none";
+            bookingContainer.style.display = "block";
+            const bookingForm = document.querySelector(".booking-form");
+            bookingConfirm.style.display = "none";
+            bookingForm.style.display = "block"; // Show booking form
+          });
 
-              // Append buttons to the buttons container
-              buttonsContainer.appendChild(bookAppointmentBtn);
-              buttonsContainer.appendChild(cancelButton);
+          // Append buttons to the buttons container
+          buttonsContainer.appendChild(bookAppointmentBtn);
+          buttonsContainer.appendChild(cancelButton);
 
-              // Append buttons container to the booking confirmation container
-              bookingConfirm.appendChild(buttonsContainer);
+          // Append buttons container to the booking confirmation container
+          bookingConfirm.appendChild(buttonsContainer);
 
-              // Show the booking confirmation container
-              bookingConfirm.style.display = "block";
+          // Show the booking confirmation container
+          bookingConfirm.style.display = "block";
 
-              bookAppointmentBtn.addEventListener("click", function () {
-                // Handle booking appointment
-                showSubPopup(
-                  patientDetails,
-                  patientSexFromDataset,
-                  patientAgeFromDataset
-                );
-              });
-            }
+          bookAppointmentBtn.addEventListener("click", function () {
+            // Handle booking appointment
+            showSubPopup(
+              patientDetails,
+              patientSexFromDataset,
+              patientAgeFromDataset
+            );
+          });
+        }
 
-            // Handle Report button click
-            document
-              .getElementById("reportBtn")
-              .addEventListener("click", function () {
-                patientDetails.BOOKING_TYPE = "report";
-                patientDetails.DR_FEES = "0";
-                hideMainPopup();
-                console.log(`patient details`, patientDetails);
-                // Perform logic for generating report
-                console.log("Generating Report");
-                openBookingConfirmation(
-                  patientDetails,
-                  patientSexFromDataset,
-                  patientAgeFromDataset
-                );
-              });
-          }
+        // Handle Report button click
+        document
+          .getElementById("reportBtn")
+          .addEventListener("click", function () {
+            patientDetails.BOOKING_TYPE = "report";
+            patientDetails.DR_FEES = "0";
+            hideMainPopup();
+            console.log(`patient details`, patientDetails);
+            // Perform logic for generating report
+            console.log("Generating Report");
+            openBookingConfirmation(
+              patientDetails,
+              patientSexFromDataset,
+              patientAgeFromDataset
+            );
+          });
+      }
 
-          /// Function to hide the main popup
-          function hideMainPopup() {
-            //document.getElementById("popupOverlay").style.visibility = "hidden";
-            document.getElementById("mainPopup").style.display = "none";
-            document.getElementById("popupOverlay").style.visibility = "hidden";
-          }
-          async function bookAppointment(url, params) {
-            try {
-              const response = await axios.post(url, params);
-              console.log(response.data);
-              const responseData = response.data;
-              return responseData;
-            } catch (error) {
-              console.error("Error fetching slot data:", error);
-              return null;
-            }
-          }
-          // Function to show the sub popup
-          async function showSubPopup(patientDetails, gender, age) {
-            document.getElementById("popupOverlay").style.visibility =
-              "visible";
-            document.getElementById("subPopup").style.display = "block";
-            // Handle Pay to Clinic button click
-            document
-              .getElementById("payToClinicBtn")
-              .addEventListener("click", function () {
-                hideSubPopup();
-                console.log(patientDetails);
-                const url = "http://easyhealths.com/api/booking";
-                const params = patientDetails;
-                // Call bookAppointment and handle the promise
-                bookAppointment(url, params)
-                  .then((responseData) => {
-                    console.log(responseData); // This should now log the actual response data
-                    if (responseData.Success) {
-                      const bookingId = responseData.data
-                        ? responseData.data.APPNT_TOKEN
-                        : null;
-                      showSuccessPopup(
-                        "Booking Successful. Payment done",
-                        bookingId,
-                        patientDetails,
-                        age,
-                        gender
-                      );
-                    } else {
-                      const bookingId = responseData.data
-                        ? responseData.data.APPNT_TOKEN
-                        : null;
-                      showFailurePopup(
-                        "Patient already booked",
-                        bookingId,
-                        patientDetails,
-                        age,
-                        gender
-                      );
-                    }
-                  })
-                  .catch((error) => {
-                    console.error("Error fetching slot data:", error);
-                  });
-
-                // Perform logic for paying to clinic
-                console.log("Paying to Clinic");
-              });
-
-            // Handle Pay to Doctor button click
-            document
-              .getElementById("payToDoctorBtn")
-              .addEventListener("click", function () {
-                hideSubPopup();
-                hideSubPopup();
-                console.log(patientDetails);
-                const url = "http://easyhealths.com/api/booking";
-                const params = patientDetails;
-                // Call bookAppointment and handle the promise
-                bookAppointment(url, params)
-                  .then((responseData) => {
-                    console.log(responseData); // This should now log the actual response data
-                    if (responseData.Success) {
-                      const bookingId = responseData.data
-                        ? responseData.data.APPNT_TOKEN
-                        : null;
-                      showSuccessPopup(
-                        `Booking Successful.\nPay ₹ ${patientDetails.DR_FEES} to Doctor`,
-                        bookingId,
-                        patientDetails,
-                        age,
-                        gender
-                      );
-                    } else {
-                      const bookingId = responseData.data
-                        ? responseData.data.APPNT_TOKEN
-                        : null;
-                      console.log(patientDetails);
-                      showFailurePopup(
-                        `Patient already booked.\nPay ₹ ${patientDetails.DR_FEES}`,
-                        bookingId,
-                        patientDetails,
-                        age,
-                        gender
-                      );
-                    }
-                  })
-                  .catch((error) => {
-                    console.error("Error fetching slot data:", error);
-                  });
-
-                // Perform logic for paying to clinic
-                console.log("Paying to Clinic");
-              });
-          }
-          // Function to show success popup
-          function showSuccessPopup(
-            message,
-            bookingId,
-            patientDetails,
-            age,
-            gender
-          ) {
-            const successPopup = document.createElement("div");
-            successPopup.classList.add("popup");
-            successPopup.id = "successPopup"; // Assign an id for styling
-            successPopup.innerHTML = `<p>${message}</p><p>Booking Id: ${bookingId}</p>`;
-            successPopup.innerHTML += `<button id="successBtn" class="success-button">OK</button>`; // Add class for styling
-            document.getElementById("popupOverlay").appendChild(successPopup);
-            document.getElementById("popupOverlay").style.visibility =
-              "visible";
-
-            // Add event listener for the success button
-            const successBtn = document.getElementById("successBtn");
-            successBtn.addEventListener("click", function () {
-              let formattedDate = formatDate(patientDetails.APNT_DT);
-              const visitTime = patientDetails.FROM + `-` + patientDetails.TO;
-              const doctorData = {
-                DR_NAME: patientDetails.DR_NAME,
-                DR_ID: patientDetails.DR_ID,
-                REGN_NO: doctordata.REGN_NO,
-                DESIGNATION: doctordata.DESIGNATION,
-                VisitDate: formattedDate,
-                VisitTime: visitTime,
-              };
-              const patientdetails = {
-                PATIENT_NAME: patientDetails.PATIENT_NAME,
-                Booking_ID: bookingId,
-                Age: age,
-                Gender: gender,
-                Mobile: patientDetails.Mobile,
-              };
-              const clinicData = {
-                PHARMA_NAME: userData.PHARMA_NAME,
-                ADDRESS: userData.ADDRESS,
-                CITY: userData.CITY,
-                STATE: userData.STATE,
-                PIN: userData.PIN,
-                LOGO_URL: userData.LOGO_URL,
-              };
-              generatePDF(doctorData, clinicData, patientdetails);
-              //location.reload(); // Reload the page on button click
-            });
-          }
-
-          // Function to show failure popup
-          function showFailurePopup(
-            message,
-            bookingId,
-            patientDetails,
-            age,
-            gender
-          ) {
-            const failurePopup = document.createElement("div");
-            failurePopup.classList.add("popup");
-            failurePopup.id = "failurePopup"; // Assign an id for styling
-            failurePopup.innerHTML = `<p>${message}</p><p>Booking Id: ${bookingId}</p>`;
-            failurePopup.innerHTML += `<button id="failureBtn" class="failure-button">OK</button>`; // Add class for styling
-            document.getElementById("popupOverlay").appendChild(failurePopup);
-            document.getElementById("popupOverlay").style.visibility =
-              "visible";
-
-            // Add event listener for the failure button
-            const failureBtn = document.getElementById("failureBtn");
-            failureBtn.addEventListener("click", function () {
-              console.log(patientDetails);
-              let formattedDate = formatDate(patientDetails.APNT_DT);
-              const visitTime = patientDetails.FROM + `-` + patientDetails.TO;
-              const doctorData = {
-                DR_NAME: patientDetails.DR_NAME,
-                DR_ID: patientDetails.DR_ID,
-                DESIGNATION: doctordata.DESIGNATION,
-                REGN_NO: doctordata.REGN_NO,
-                VisitDate: formattedDate,
-                VisitTime: visitTime,
-              };
-              const patientdetails = {
-                PATIENT_NAME: patientDetails.PATIENT_NAME,
-                Booking_ID: bookingId,
-                Age: age,
-                Gender: gender,
-                Mobile: patientDetails.MOBILE,
-              };
-              const clinicData = {
-                PHARMA_NAME: userData.PHARMA_NAME,
-                ADDRESS: userData.ADDRESS,
-                CITY: userData.CITY,
-                STATE: userData.STATE,
-                PIN: userData.PIN,
-                LOGO_URL: userData.LOGO_URL,
-              };
-              generatePDF(doctorData, clinicData, patientdetails);
-              //location.reload(); // Reload the page on button click
-            });
-          }
-
-          // Function to hide the sub popup
-          function hideSubPopup() {
-            document.getElementById("popupOverlay").style.visibility = "hidden";
-            document.getElementById("subPopup").style.display = "none";
-          }
-
-          function generatePDF(doctorData, clinicData, patientDetails) {
-            const imageUrl =
-              "http://easyhealths.com/storage/app/cliniclogo/8L.jpg";
-
-            // Encode the URL to Base64
-            let base64Url = btoa(imageUrl);
-            base64Url = `data:image/png;base64,` + base64Url;
-            const element = document.createElement("div");
-            const base6dimage = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAABTCAMAAADtJ7gsAAAC8VBMVEUAAAD39/b6/Pv3+Pfw7u339fPxUln19PP28fD09PP49e/5+vrt7u31UFL57evy7OoGBgb28OydzE752dnb29sWFhbtISrtKzPwUFd+fn754eH58fDyWWD0fIDR0dESEhLuJy9bW1umpqb41NQaGhr0goaUlJT1tLbn89P3vsBgYGD52trPz8+jz1fuMTnvOUDvRU7wVFqEhITu7ues1GjvQ0rzkpV7e3v1naD4zs62trbuNz7uLjYeHh7yY2n1mZ2urq6Tk5P4zs8WFhan0V/wQ0rxTVQ1NTXxXWPzh4yFhYX0jJCHh4eRkZF4eHj2qqz2vb+4uLgvLy/yam++3Ig8PDz4wsOgoKDLy8vGxsa4uLglJSUCAgLxXGLvTFLxU1kVFRXM5aLb7b6dnZ32n6Hh8Mj3xMX4yss4ODienp7x9OT64uFFRUXvNz7xUFfycXZra2vS6K3q9NjT09MLCwsgICDybXNRUVHyZmt9fX1nZ2f1pan2rrD3t7qtlJXuP0XtPUQtLS0PDw87OztDQ0PxWl7zXmTF4ZTzdnvS6Kv1kpX0oKL3triHh4eBgYGkpKS6vrahoaG32XxBQUEwMDAcHBzzd3xLS0vH4poyMjL2rK72uLpfX1/n89Oz2HSx1XBOTk5cXFxXV1f3oqZgYGD1rKuoqKi3t7f1gIH0fIDF4ZQAAADxSE70l5smJibya3H1nJ7f7sJ+fn77xsAvLy+12nubm5v0hYj1srPExMT3n6BXV1fyTFNdXV1OTk7zYGYLCwv0eXzR6K32YWSrwFCt1GnvMTdlZWXzio4AAAAyMjL1hYuezE3yMDXtGySYykUAAADsERrtGSLsGyTtFyDrDxfsFBztDhfsERnsFh7uGyLtDxntICnsHSaVyD6UyDwODg6WyUHuEhuXykOSxzruFR7rGyLuGCHtCxQFBQWaykXuJS3uHSfuEBrsBQ6V00fyESLuFBzvKzSXy0SPxTTVWC7JbTOOzjuvnjm+hjfcRzKLQWsSAAAAznRSTlMAAgwJERThBAMGGA0ISiIq/CX+QSH2+/jbQTMd3awZ/Pq2dErynnt1XFRBOyv5+eze1YEw5uaemo5cQ/Pu7caTZ2ZURPDs4N/NrJyVkIyMfmtQ7s7LpmVTRjgz9/LU0srJoYKBeGZbSD8+Oy0T+uO6rJVHOvDjw7+8oZyKcmQO8+fh2tTBu66ro4iIhHpvMC8iHNLPxLSzopR/YVtYU+HTx6iak4tsXVs+vbWysainpYFxVi7RwY6KglMyBerHkZCCf3FC+/jceHBkW1PmtjCBKvMAABIsSURBVHja7NixaxNRHAfw3yWWJFdJyZsCugrncIjkcHGTQ3Sqw+Ge0FMIOOQGF3U1PXWQTl2SDG5B0AxduhQL3SSPNjY2Bt/j+R6lHKVL/AO8JCR5FzrkBgsP8llCIIT35ft+d+8OlpaWlv4LTS97Jb+606iXNFCONlpz6qNXqja+I0yo+GsbiQwoKFlwqw0UJqCcccyJk4W0eo3kjO0GYpQM8BjjxQQoZ83dMTklHE8R1AJQrI6EV7UxYRxLqFkDhQznW9/fCijDHM/lUKyPnG8Tgucx01Arhu7blAQBnsNxCzIKBUm2LMrwJUQRVOI5XGpDQqysQreP1YopOL4U8SEFqig4hOHLMTsHyqjZAksCJqUSVVCF5iOCZRQdID4pBJVBFduMYQmndcfk01COpsqkV2gkBzErzYBNU3EDFLFNuFyHaBhNymex6teUKESDCmHylNOq1xByPy1FDicGlnOQoFSwqDz2lq5GjrJJ8AxB7polsISU1ChkdYsG8ph7WYtGTyc6KKFEcCDlqOkWDeYKUcINm0jzgQxtS2AZrStSiC8NCEMuNKM5OHNBCSsWkRZdAp/yaCHOKqhAM4LZwkUFDMSwjCEPlDieaPt0OiDCSesWxbKBKGpqXHthfzoS1F6Dqph/MFyBK6WNQXzF2dJdcDGf31iK9AHg00khRdAPaIBlogJXSd+9vf51Y2P9za6uQVwG45O3C8N2BpEcTuJ6aiSZhEWkM6mhTCoTfyHXnry8c9497Pf7f7qd+3c3H0A8OXOUhGMDvLkrFrWyn/I3Rx7eg0Xs5fPjn7+KvSOf5bvHvfb5UXvoV+/w4jHEk3YoDokmZBwRzWF6cOviZGTBv/18djJytgexaPC+029HHG9CTLXxVBeghgaDyCnYAHh33Bnpv4ZFvO397oTap98gng/d3mk74ucXiCk1LEIUw0IolgjkghYGaQ8d9Z4uFqQ73hk/nkMs2RfdTlsSfjl8lI5XahrKiDEzG37wQMphGhCaBPlHmdWENhEF4dkm0UarUgOJpAYCErQU2xRNqVRaEC2WHloQeqtF8QcsWryIoGIv/qCePBRR9CKCiqIiooggogdBjLzN7r5skkWIblJoo9Z/PZn3Zt4mih78Wmg2Ozsz3/y9WVpo+9fUl39qREg8JIq2UUrAn6BH6vHc9TgYlcqcZWZd1q/9/x4vx+y2b+89vHl9dg9IIhy1x5vh72gI+pqCf2bEiIxLZ4PBxr/znw+/I8HTlBG7cHBoePj2RNJYXxXyLVJoAIHgU3XtB4Cr+PFpE8DiI4OPd0Bg9eoWWPPs+4+vXwS+/vj+bH8QmkRE7nNUv1cQmQ9+T7FfhPrujtjosmSy8+Dg87s+7BEU76jajQ5NLEuOxg4vqUuF7+6L7sTmrZ2jWxLdL+7WEhbjaUQ5TjUc2H0oIEouXRDI7EUtgaO6vHY+ipRvscXndHug6XQP4+/GYP/nbTA0WSp/UChHTkYx+4NYWlbSJ40OGAWJ7Ba/Bit6Z0zOmGUxxlm8S04tQwZ2rj8YOjjDTWYxs9LetVARGVkWsTlnVpHlObcjx1pVid03iQjrrNVfI0Dz3rmcwJwissmS1+5HUTC9WfHZ7mieMN3ZDDsW2PhqD3S+K6drcKfDD2SwTqIFtlUaHC7ZafEs64mCdsjhtUFTVSOJ2Mh7+c3CdNmRn2ft6d4WQMTeGXX9XOZulw+JPLFy+K0eflDfVovbbSlrbQ0SEardjgWSiLinrx81RfjY8e2fz85fsInGhoLlrACRPYZERoWiJT2WHCiGPgLaSgudJtg3sEcy0vBMqepxTrk8PdCI/67vRW0eDJOmeptTVl8Zg36oEYkgc2sMfiNiTwYVkXSuZDsiZsWxS293wuK4fELXdWVkOqYJIll5kd8iOu0AFQAfaISWjixGHOHYLyURhuEoebmqHxUNKYuMKCuVZeh148S0gyHIGLx3HLQ/iOQ31xOhUocxFRf56Ief7zcu0DZU9RdNZjjpLGWfLRekNyMRHoMg3CYeTFgftvAil9EZ5ybjx0DTGpazWunkvI+6NQwCayK2bpnMdZwiGbH3iqqTyWYqLiWeWgGE5rBOgfydCNvXQEQUDKvy89sJgCvvsjP9saHd0VBfxCAi82uy/D5AKI433HgI5zIxcTqvDVzrDD/ygeZ/5MXIMG3X67rsEAiEiqaTmjjdGm0b6iBdRxdQa++OzzkZJR4/ojJCRPjUH0SWNwE0JC1loMgiyX1fP60C6B473EbDhQqIbdYAtK1FVHQKAstM6aFekQvhICePs91VndB093z1cX+KVM8WI32tT9ar1mYrQeDI1ttt1ABd+LgliCBa40wxcWy7D5t7hYNEzPtEpMPGDB0EgJajFvlgJQ+P+1Z92lhV1uIDwgYyb06IB8mz/GltwMRS5Ack4eGKCl83ePB3uJglq30dAKwr6FRaZ9ANr41DKRpvjwKA0KqG8yqdjm6enA9CQ0anQNYToUWspcelfEyK4bzt83XZbpjKDbEw3eUnQcxxInJmXbmEDx1dAiJVLUeLaFTPxKLKmQAFIcdWCoVaL7LVjWHlrUBLaDAyR6misYrhT3Gvr/TphJh0I2XqEYrWgh6DnJOz2UDZ4kpB4N7nOyjTtjLW2V7mqhx4QhAhWeMmpcYI7yKXRsoWMTHjfRTqPR9pWvb7pNO3ORFRO2QgOpwY65nlarXC00dh8RbT8JjIchyxdZQ7RJmkHJsJIR4na6mAUL1x6RIRjVgqXMln63ZpXi9bWO46NEnbaFuEBwWmStQca5bkQjMoXhwCicN5dErHh9oSyfhcPmulPeTriWjQ0FcwvY7vWQxwhGRFzAVWVvC2KfaI8bCO6b8lg/jq0kLwJWxu6WKKYx94slGU1Y0jyTnid8ArknWTvDxLwqk26k1MEqYNdhARQ9zVTofzlpFTFlTT1kHqzKppyKvOn2eUuQc0iPJk76YYDzQJ7PPi1s7P50C76RWUUTRLdURG0jmswvEzJm11mQ1evS9OFEyVv3niQNhtIO/MBSKiXgJEF51xbVU2c56RAyoqGr1TRCctRTJGCpQzGkQjNl1fFi/HeK6WnZD83+Hbi7BiFu+XrHxhWUwdpkJ2xEAidtvClOXgUjXaAJr40UQKRrMGRni6CxrhCENHZ9fRdo5+GILIeLuFRmwznYxtQovmNel/S0jzyusM04lIL0AXEbH6F4qbU6aqAJGEC6ijPCM78NyrNTBlOtJ+Ntkd8gV6jNohdsWiEIfgMBnQjRHQQMHf5WKfuO3NGlxWRFpB4hqvETlNRnjH4Ao/dDJ09hrOq4+9Ox76cI1JFFWTVIkMqIzbQwDakJ7J1BE5T9YizZLIxoXVEzIjzuJwd0AMR5WRC4JIPq2I+PsZGRAbSmBdC6DhSRd3JDYM0J0lIrRjTFBGZqLQeFC2sV4aWCzWNjqU+SAuKDPT5kz/VN+F832dLiUkY04BxPLUMEYhdmXCMLydRziXwJXZWC9n5r2zsKTdlZ5P4YQL0+Rp9Q7gXMa5KrYrMmGtFCdTpLf7QuuGXVNhKnfe5b296OFxkDjIkMjHKCzcx/DgAIGFk0RkB4A8rtx02eJmnvGioIsrw+FaRjIlPVth3kjVXTFNbqEOIrJ2GzT3yG/cVGi+1ti0YVbHtmgFpSiXnnkKWsNoFpUWN/khuNWscLvkWKaeIyJ9AAn+O5FjNSK+5Vm0uq5pfmNTczv1iCBCCwRa8sDEK0e3IiJ+xTgs0TwXTXjyF9Xl85pGEMXxN1oTMaIEDy6xB8GDEUEr0mJJiSAoG3IpCLlpoFCFhppbCNg2p17anHrtMZccWnrvH5BjYM3OOmbdy4K6YPRvyNt9Y7J+QXD2vZk3n3nzc7EG8hHCJc1zHM2V0k0nMyOQWQ0wtXKuzK+BwVtc1/LCAqAuptgeUshIlngPrGnKUzNGL+yS/QSCr9l7rE5BfsblySk8EAbH5OjTzM071HAb9EmfPvhA/gk/yK9dgKojMyaEFe/K9W25IOc+ELa5b1K/jb0YPVRIlKaLFLDWOkioTv2bFMoAR8ZTkEUnPtd9t0nGVG29tVt79DfKACI9ZzXVcBiGnw9kRm4RJNjSJEjEW+yfAGJ7wpq6fXwwFMhJznECh7Rh3D2DAM06lPkGB9gf+H5hYUKibW0NJHJhSJA4wIuWc4dBUKNC5MSi0TIkSHNpG7o+kKi64MVsGLz9Pclncrc0tVKiu9Rc8QmCBOoOFSjah233PC0409Udpk++w8EJwLd3XEPZwrr24p2RTePj8o/lRB/IY98QWr3mXekcqjuTIEkqO17yd+qOTqtYhQT3DMK5pKmV/XNcTI51TXCTi1G6VIlhNIY/yJ/PbT7k3Eir2QDk2xuuekoCWOCsQQXVi7aLeQlD/jRpcI4VjuDylTSHEETd8KS8/E+XJaVHH15nc+1i2poI29T0cfH7lxQwgFRz1XSEDpl9cm+cRgHt2weFkYkxllXoKrLhGkiFQ6lM5utVtXqFr7sgPIvlc/1Ktd/Z2QQEi24FUFueQxD/u4Uo87uXO5XDw8rvEEM7mQEVIN9gkHzJRi09ipM1W1lTc+lSTU1leOeIHWo0O9RxMKtgbXX+tGpvb/taQbglzCTNZeGUwcbmQBcjxSr8Ugh5dkw9A7k0mhFOwxgD76ZRMAoA3dO/axphHAbw57wTNTnqFe6Go3CHx+FwOJlBEATFQRAVDIi/MgRcFDIEjIgZAomu+UUjIZAhKSEZChlKKZTS0q200/Mn3Hr/Rd8zTTt3K32G8+V9X9/v98Pd+78m37i3cObp6JmK5JWHXeCkXC5b8sg0xRi97LEOxfRMC7HRsDxUgW72OIPRUAZOPQ/iObTEvqEs/uf1zrwRZNMTi0iYppcJj/AUQDfNBID1d413FnBmnkEambIYHTdGcUjI19pR2SuXh+eWKAXlvnG/jjDyu0ZJiZiniJkjNSx2AiRGpqSYI8AyT/AUh2QWWQ6QohfTSL8mRmT7pRgHM3R8MoU2yUIz7pK0kAvIFlxfh3pILQMs2QS2g9MlSffU5TjNhQrgYIvUUut4zy6QYrgrMw9P6uCOh4pUoY57g+QiijTJ9DlFnGteY6NCMg8RZUpysMELRLaMNSgFime0r0kd8gHHfIOnvOZx6SWumMYuy5/23PSef37JXFFP+oeO7Sv73G934PFzjdNEwXfaaod2o/GII/8MebrMAm+DdwLin5i7vCihyErByEBkZ6ufrYgNF/SgG3awG3KmzdubrijIW1F7xzK4n64wJ1VEH3oka9j1jRByw0V2sYLkePitNcgEC8DtW2iyzyKUzS3kfRp66Tdkl8ZlBl+fIf2iG0IuWr2kfzGyjYhDf9FEmZ/TvElM/MeWesc6oH4KITk6hXn8F0Q7EYYrQEqRAzxBNoV1WzTsiaX6a0OxbDf6cVatS1d06dxwp8QU0NUKMdHHG6Ev2CpKLK/5xitIMgCpEowBeezvLZfapoUUHfvmF8TgzZ83Es8eshK7oiMgXmyPDHJocbI9StqkUQRKC9rnw4B0m1KBRxfynUADAnKuTvzmnBt4y84TxAkhGAeT2G9IbwXpYsr7WzZ1bYJdjf3YHT9s2n3tYMB9QNdcWc2+51yWC9oOfrCs+24Uq0hHgfBBQLaPtM31qOE2K5ouh5DgscHN35BSs7vnH3zjrv6a+dieW+pCQK53Ehv+JPxCOiX9Pb0h520dBwVtuIMSJ8XiFQQkTwZkXUA+fFRfBydI8yuAjH+EZ0h+yhku2NNtiqQwZ7p3J36/8qETUDtIBn76YcpUvNTu2f66WtjawXf+QIW3D7UuVu93+pAtJrUl4nv9xD0DjUxLK8hSnfMZomzSZkrqiFUeRhXfTgBPlz3J7RIr4qr5PDy45hRAxCUDSw6X38LVrJT4vmssqEvSt8IbneYXAKecYJWD8NTKS8yZSfOz4xjUOwZt2h206KBGniPLsLKu9OkLTsRmCLlG3ni+7JkJyQ+iG6haX1mIkg1W1vpBvCOmNgxeYhVp/KWVVYDm7eN+BpH6BxXAwyw3667XHak+e6E3LhsZJKtFAIlBLpdTIB/f7rYxqEUHVQUYVK1iLleTneoaxrOPANaqA6wi16u1tgI4Oas4ywDFWRKnX1r7Y1GvOoZar0aB9mWroUPq7Yd9xLK1CEyxhp6YjiKMfveYy0SrjjiurtRrMuK1nDWoxV6JKXystvEvR8Jf5SdhN/lDtM25XwAAAABJRU5ErkJggg==`;
-            let base64data = "";
-            fetch(imageUrl)
-              .then((response) => response.blob()) // Convert the response to a Blob object
-              .then((blob) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(blob); // Convert the Blob into Base64
-                reader.onloadend = function () {
-                  base64data = reader.result;
-                  console.log(base64data);
-                  document.getElementById("base64").textContent = base64data;
-                };
+      /// Function to hide the main popup
+      function hideMainPopup() {
+        //document.getElementById("popupOverlay").style.visibility = "hidden";
+        document.getElementById("mainPopup").style.display = "none";
+        document.getElementById("popupOverlay").style.visibility = "hidden";
+      }
+      async function bookAppointment(url, params) {
+        try {
+          const response = await axios.post(url, params);
+          console.log(response.data);
+          const responseData = response.data;
+          return responseData;
+        } catch (error) {
+          console.error("Error fetching slot data:", error);
+          return null;
+        }
+      }
+      // Function to show the sub popup
+      async function showSubPopup(patientDetails, gender, age) {
+        document.getElementById("popupOverlay").style.visibility =
+          "visible";
+        document.getElementById("subPopup").style.display = "block";
+        // Handle Pay to Clinic button click
+        document
+          .getElementById("payToClinicBtn")
+          .addEventListener("click", function () {
+            hideSubPopup();
+            console.log(patientDetails);
+            const url = "http://easyhealths.com/api/booking";
+            const params = patientDetails;
+            // Call bookAppointment and handle the promise
+            bookAppointment(url, params)
+              .then((responseData) => {
+                console.log(responseData); // This should now log the actual response data
+                if (responseData.Success) {
+                  const bookingId = responseData.data
+                    ? responseData.data.APPNT_TOKEN
+                    : null;
+                  showSuccessPopup(
+                    "Booking Successful. Payment done",
+                    bookingId,
+                    patientDetails,
+                    age,
+                    gender
+                  );
+                } else {
+                  const bookingId = responseData.data
+                    ? responseData.data.APPNT_TOKEN
+                    : null;
+                  showFailurePopup(
+                    "Patient already booked",
+                    bookingId,
+                    patientDetails,
+                    age,
+                    gender
+                  );
+                }
               })
-              .catch((error) =>
-                console.error("Error converting image to Base64:", error)
-              );
+              .catch((error) => {
+                console.error("Error fetching slot data:", error);
+              });
 
-            console.log(base64Url);
-            // Construct the HTML content for the PDF
-            element.innerHTML = ` <div id="content">
+            // Perform logic for paying to clinic
+            console.log("Paying to Clinic");
+          });
+
+        // Handle Pay to Doctor button click
+        document
+          .getElementById("payToDoctorBtn")
+          .addEventListener("click", function () {
+            hideSubPopup();
+            hideSubPopup();
+            console.log(patientDetails);
+            const url = "http://easyhealths.com/api/booking";
+            const params = patientDetails;
+            // Call bookAppointment and handle the promise
+            bookAppointment(url, params)
+              .then((responseData) => {
+                console.log(responseData); // This should now log the actual response data
+                if (responseData.Success) {
+                  const bookingId = responseData.data
+                    ? responseData.data.APPNT_TOKEN
+                    : null;
+                  showSuccessPopup(
+                    `Booking Successful.\nPay ₹ ${patientDetails.DR_FEES} to Doctor`,
+                    bookingId,
+                    patientDetails,
+                    age,
+                    gender
+                  );
+                } else {
+                  const bookingId = responseData.data
+                    ? responseData.data.APPNT_TOKEN
+                    : null;
+                  console.log(patientDetails);
+                  showFailurePopup(
+                    `Patient already booked.\nPay ₹ ${patientDetails.DR_FEES}`,
+                    bookingId,
+                    patientDetails,
+                    age,
+                    gender
+                  );
+                }
+              })
+              .catch((error) => {
+                console.error("Error fetching slot data:", error);
+              });
+
+            // Perform logic for paying to clinic
+            console.log("Paying to Clinic");
+          });
+      }
+      // Function to show success popup
+      function showSuccessPopup(
+        message,
+        bookingId,
+        patientDetails,
+        age,
+        gender
+      ) {
+        const successPopup = document.createElement("div");
+        successPopup.classList.add("popup");
+        successPopup.id = "successPopup"; // Assign an id for styling
+        successPopup.innerHTML = `<p>${message}</p><p>Booking Id: ${bookingId}</p>`;
+        successPopup.innerHTML += `<button id="successBtn" class="success-button">OK</button>`; // Add class for styling
+        document.getElementById("popupOverlay").appendChild(successPopup);
+        document.getElementById("popupOverlay").style.visibility =
+          "visible";
+
+        // Add event listener for the success button
+        const successBtn = document.getElementById("successBtn");
+        successBtn.addEventListener("click", function () {
+          let formattedDate = formatDate(patientDetails.APNT_DT);
+          const visitTime = patientDetails.FROM + `-` + patientDetails.TO;
+          const doctorData = {
+            DR_NAME: patientDetails.DR_NAME,
+            DR_ID: patientDetails.DR_ID,
+            REGN_NO: doctordata.REGN_NO,
+            DESIGNATION: doctordata.DESIGNATION,
+            VisitDate: formattedDate,
+            VisitTime: visitTime,
+          };
+          const patientdetails = {
+            PATIENT_NAME: patientDetails.PATIENT_NAME,
+            Booking_ID: bookingId,
+            Age: age,
+            Gender: gender,
+            Mobile: patientDetails.Mobile,
+          };
+          const clinicData = {
+            PHARMA_NAME: userData.PHARMA_NAME,
+            ADDRESS: userData.ADDRESS,
+            CITY: userData.CITY,
+            STATE: userData.STATE,
+            PIN: userData.PIN,
+            LOGO_URL: userData.LOGO_64,
+          };
+          generatePDF(doctorData, clinicData, patientdetails);
+          //location.reload(); // Reload the page on button click
+        });
+      }
+
+      // Function to show failure popup
+      function showFailurePopup(
+        message,
+        bookingId,
+        patientDetails,
+        age,
+        gender
+      ) {
+        const failurePopup = document.createElement("div");
+        failurePopup.classList.add("popup");
+        failurePopup.id = "failurePopup"; // Assign an id for styling
+        failurePopup.innerHTML = `<p>${message}</p><p>Booking Id: ${bookingId}</p>`;
+        failurePopup.innerHTML += `<button id="failureBtn" class="failure-button">OK</button>`; // Add class for styling
+        document.getElementById("popupOverlay").appendChild(failurePopup);
+        document.getElementById("popupOverlay").style.visibility =
+          "visible";
+
+        // Add event listener for the failure button
+        const failureBtn = document.getElementById("failureBtn");
+        failureBtn.addEventListener("click", function () {
+          console.log(patientDetails);
+          let formattedDate = formatDate(patientDetails.APNT_DT);
+          const visitTime = patientDetails.FROM + `-` + patientDetails.TO;
+          const doctorData = {
+            DR_NAME: patientDetails.DR_NAME,
+            DR_ID: patientDetails.DR_ID,
+            DESIGNATION: doctordata.DESIGNATION,
+            REGN_NO: doctordata.REGN_NO,
+            VisitDate: formattedDate,
+            VisitTime: visitTime,
+          };
+          const patientdetails = {
+            PATIENT_NAME: patientDetails.PATIENT_NAME,
+            Booking_ID: bookingId,
+            Age: age,
+            Gender: gender,
+            Mobile: patientDetails.MOBILE,
+          };
+          const clinicData = {
+            PHARMA_NAME: userData.PHARMA_NAME,
+            ADDRESS: userData.ADDRESS,
+            CITY: userData.CITY,
+            STATE: userData.STATE,
+            PIN: userData.PIN,
+            LOGO_URL: userData.LOGO_64,
+          };
+          generatePDF(doctorData, clinicData, patientdetails);
+          //location.reload(); // Reload the page on button click
+        });
+      }
+
+      // Function to hide the sub popup
+      function hideSubPopup() {
+        document.getElementById("popupOverlay").style.visibility = "hidden";
+        document.getElementById("subPopup").style.display = "none";
+      }
+
+      function generatePDF(doctorData, clinicData, patientDetails) {
+        
+
+          const base64Url = `data:image/jpeg;base64,` + clinicData.LOGO_URL
+        const element = document.createElement("div");
+        
+        // Construct the HTML content for the PDF
+        element.innerHTML = ` <div id="content">
         <div class="clinicDetails">
            <img src="${base64Url}" alt="clinic logo" />
             <h2>${userData.PHARMA_NAME}</h2>
@@ -1647,86 +1694,88 @@
         </div>
     </div>`;
 
-            // // Apply additional styles for PDF rendering
-            // element.style.padding = "10px";
-            // element.style.border = "1px solid #ccc";
-            // element.style.borderRadius = "10px";
+        // // Apply additional styles for PDF rendering
+        // element.style.padding = "10px";
+        // element.style.border = "1px solid #ccc";
+        // element.style.borderRadius = "10px";
 
-            // Configure PDF options
-            // Ensure the image is fully loaded before generating the PDF
-            // Preload the image and wait for it to load completely
-            // Once the image is loaded, proceed with generating the PDF
-            const opt = {
-              filename: `booking_confirmation_${patientDetails.Booking_ID}.pdf`,
-              image: { type: "jpeg", quality: 0.98 },
-              html2canvas: { scale: 1.5 }, // Adjust scale based on testing
-              jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
-            };
-            console.log(element);
-            html2pdf()
-              .set(opt)
-              .from(element)
-              .toPdf()
-              .output("datauristring")
-              .then(function (pdfDataUri) {
-                const pdfWindow = window.open();
-                pdfWindow.document.write(
-                  '<iframe width="100%" height="100%" src="' +
-                    pdfDataUri +
-                    '" frameborder="0"></iframe>'
-                );
-                pdfWindow.document.close();
+        // Configure PDF options
+        // Ensure the image is fully loaded before generating the PDF
+        // Preload the image and wait for it to load completely
+        // Once the image is loaded, proceed with generating the PDF
+        const opt = {
+          filename: `booking_confirmation_${patientDetails.Booking_ID}.pdf`,
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 1.5 }, // Adjust scale based on testing
+          jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+        };
+        console.log(element);
+        html2pdf()
+          .set(opt)
+          .from(element)
+          .toPdf()
+          .output("datauristring")
+          .then(function (pdfDataUri) {
+            const pdfWindow = window.open();
+            pdfWindow.document.write(
+              '<iframe width="100%" height="100%" src="' +
+              pdfDataUri +
+              '" frameborder="0"></iframe>'
+            );
+            pdfWindow.document.close();
 
-                // Automatically focus the new window/tab
+            // Automatically focus the new window/tab
 
-                pdfWindow.focus();
-                //location.reload();
-              });
+            pdfWindow.focus();
+            //location.reload();
+          });
+      }
+      // Function to parse query string into object
+      function queryStringToObject(queryString) {
+        const params = new URLSearchParams(queryString);
+        const obj = {};
+
+        for (const [key, value] of params) {
+          if (key === "slotData") {
+            // Parse slotData JSON string into object
+            obj[key] = JSON.parse(decodeURIComponent(value));
+          } else {
+            obj[key] = decodeURIComponent(value);
           }
-          // Function to parse query string into object
-          function queryStringToObject(queryString) {
-            const params = new URLSearchParams(queryString);
-            const obj = {};
+        }
 
-            for (const [key, value] of params) {
-              if (key === "slotData") {
-                // Parse slotData JSON string into object
-                obj[key] = JSON.parse(decodeURIComponent(value));
-              } else {
-                obj[key] = decodeURIComponent(value);
-              }
-            }
+        return obj;
+      }
+      // Parse URL parameters to get doctor's data
+      // const queryString = window.location.search;
+      // // Parse query string into object
+      // const doctordata = queryStringToObject(queryString);
 
-            return obj;
-          }
-          // Parse URL parameters to get doctor's data
-          // const queryString = window.location.search;
-          // // Parse query string into object
-          // const doctordata = queryStringToObject(queryString);
+      // Retrieve slotData object
+      //const slotData = doctordata.slotData;
 
-          // Retrieve slotData object
-          //const slotData = doctordata.slotData;
+      //console.log(slotData);
+      // Get the URLSearchParams object from the current URL
+      const queryParams = new URLSearchParams(window.location.search);
 
-          //console.log(slotData);
-          // Get the URLSearchParams object from the current URL
-          const queryParams = new URLSearchParams(window.location.search);
+      // Retrieve the JSON strings from the query parameters
+      const object1String = queryParams.get("data1");
+      const object2String = queryParams.get("data2");
 
-          // Retrieve the JSON strings from the query parameters
-          const object1String = queryParams.get("data1");
-          const object2String = queryParams.get("data2");
+      // Parse the JSON strings back into JavaScript objects
+      const doctordata = JSON.parse(object1String);
+      const slotData = JSON.parse(object2String);
 
-          // Parse the JSON strings back into JavaScript objects
-          const doctordata = JSON.parse(object1String);
-          const slotData = JSON.parse(object2String);
-
-          // Now you can use object1 and object2 as needed
-          console.log(doctordata); // { name: "John", age: 30 }
-          console.log(slotData); // { city: "New York", country: "USA" }
-          document.title=`${doctordata. DR_NAME}`
-          generateDoctorProfilePage(doctordata);
-          // Call the function to generate the page
-        </script>
-      </body>
-    </html>
+      // Now you can use object1 and object2 as needed
+      console.log(doctordata); // { name: "John", age: 30 }
+      console.log(slotData); // { city: "New York", country: "USA" }
+      document.title = `${doctordata.DR_NAME}`
+      generateDoctorProfilePage(doctordata);
+      // Call the function to generate the page
+    </script>
   </body>
+
+  </html>
+</body>
+
 </html>
