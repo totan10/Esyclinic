@@ -248,12 +248,44 @@
             border-radius: 20px;
             cursor: pointer;
             background-color: #fff;
+            transition: background-color 0.3s ease;
             color: #01b5cd;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .filter-buttons button.active {
             background-color: #01b5cd;
             color: #fff;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-buttons button:hover {
+            background-color: #f8f9fa;
+            background-color: #01b5cd;
+            color: #fff;
+        }
+
+        /* Animation effect */
+        @keyframes buttonClickEffect {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Customizable animation properties */
+        .filter-buttons button {
+            animation-duration: 0.3s;
+            /* Duration of the animation */
+            animation-timing-function: ease-in-out;
+            /* Easing function for smooth animation */
         }
 
         /* Custom CSS for Doctors Grid for Today */
@@ -268,15 +300,17 @@
 
         .book-now-btn {
             width: 100%;
-            height: 40px;
+            height: 50px;
             color: #f6f1f1;
             background-color: #01b5cd;
             border: none;
             font-size: larger;
             padding: 5px 10px;
-            border-radius: 15px;
+            border-radius: 10px;
             cursor: pointer;
             margin-bottom: 5px;
+            border: none;
+
         }
 
         .book-now-btn:hover {
@@ -399,6 +433,7 @@
         <button id="femaleDoctorsBtn"><i class="fas fa-venus"></i> Female Doctors</button>
         <button id="availableTodayBtn"><i class="fas fa-calendar-day"></i> Available Today</button>
         <button id="budgetFriendlyBtn"> <i id="budgetIcon" class="fas fa-money-bill-wave"></i> Budget Friendly</button>
+        <button id="ratingBtn"><i class="fas fa-star"></i> Rating</button>
     </div>
     <div class="doctors-container" id="doctorContainer">
 
@@ -416,101 +451,102 @@
         const femaleDoctorsBtn = document.getElementById("femaleDoctorsBtn");
         const availableTodayBtn = document.getElementById("availableTodayBtn");
         const budgetFriendlyBtn = document.getElementById("budgetFriendlyBtn");
-        let activeFilters = new Set(); // Set to track active filters
-        let isSortedByFees = false;
+        const ratingBtn = document.getElementById("ratingBtn");
 
         femaleDoctorsBtn.addEventListener("click", () => {
-            toggleFilter("FEMALE", femaleDoctorsBtn);
+            toggleFilter("femaleDoctors");
         });
 
         availableTodayBtn.addEventListener("click", () => {
-            toggleFilter("AVAILABLE_TODAY", availableTodayBtn);
+            toggleFilter("availableToday");
         });
-        function sortByFees() {
-            isSortedByFees = !isSortedByFees; // Toggle sorting state
-            const sortedDoctors = isSortedByFees ?
-                doctorsList.slice().sort((a, b) => {
-                    // First, sort by fees
+        budgetFriendlyBtn.addEventListener('click', () => {
+            toggleFilter("budgetFriendly")
+        });
+        ratingBtn.addEventListener('click', () => {
+            toggleFilter("rating");
+        });
+
+        let activeFilters = {
+            budgetFriendly: false,
+            femaleDoctors: false,
+            availableToday: false,
+            rating: false
+        };
+        const originalIcons = {
+            femaleDoctors: 'fas fa-venus',
+            availableToday: 'far fa-calendar-check',
+            budgetFriendly: 'fas fa-money-bill-wave',
+            rating: 'fas fa-star'
+        };
+        function toggleFilter(filter) {
+            activeFilters[filter] = !activeFilters[filter]; // Toggle filter state
+            applyFilters(); // Apply filters based on current state
+            toggleIcon(filter); // Toggle icon based on current state
+            animateButtonClick()
+        }
+
+        // Toggle the icon of a filter button
+        function toggleIcon(filter) {
+            console.log('inside');
+            const button = document.getElementById(`${filter}Btn`);
+            console.log(button);
+            const iconElement = button.querySelector('svg');
+            console.log(iconElement);
+            if (activeFilters[filter]) {
+                // Add the checkmark icon when the button is active
+                button.style.backgroundColor = '#01b5cd'
+                button.style.color = 'white'
+                iconElement.className = 'fas fa-square-check';
+            } else {
+                // Restore the original icon when the button is inactive
+                iconElement.className = originalIcons[filter];
+                button.style.backgroundColor = 'transparent'
+                button.style.color = '#01b5cd'
+            }
+        }
+        function animateButtonClick() {
+            const buttons = document.querySelectorAll('.filter-buttons button');
+            buttons.forEach(button => {
+                button.style.animation = 'none'; // Reset animation
+                button.offsetHeight; // Trigger reflow
+                button.style.animation = 'buttonClickEffect 0.3s ease'; // Apply animation
+
+            });
+        }
+        // Function to apply filters based on current state
+        function applyFilters() {
+
+            let filteredDoctors = doctorsList.slice();
+
+            // Apply filters based on active filters
+            if (activeFilters.budgetFriendly) {
+                filteredDoctors.sort((a, b) => {
                     if (a.DETAILS.DR_FEES !== b.DETAILS.DR_FEES) {
                         return a.DETAILS.DR_FEES - b.DETAILS.DR_FEES;
                     } else {
-                        // If fees are the same, sort by availability date
                         return a.DETAILS.SCH_DT[0].SCH_DT.localeCompare(b.DETAILS.SCH_DT[0].SCH_DT);
                     }
-                }) :
-                doctorsList;
-            populateList(sortedDoctors);
-            toggleIcon(); // Toggle icon based on current state
-        }
-        budgetFriendlyBtn.addEventListener("click", () => {
-            sortByFees()
-        });
-
-        function toggleIcon() {
-            const budgetIcon = document.getElementById("budgetIcon");
-            if (isSortedByFees) {
-                budgetIcon.classList.add("fa-sort-amount-up"); // Add sorting icon
-                budgetIcon.classList.remove("fa-money-bill-wave");
-                budgetFriendlyBtn.style.color = 'white';
-                budgetFriendlyBtn.style.backgroundColor = '#01b5cd';
-            } else {
-                budgetIcon.classList.remove("fa-sort-amount-up");
-                budgetIcon.classList.add("fa-money-bill-wave"); // Restore default icon
-                budgetFriendlyBtn.style.color = '#01b5cd';
-                budgetFriendlyBtn.style.backgroundColor = 'white';
-            }
-        }
-
-        // Function to toggle filter and button state
-        function toggleFilter(filterType, button) {
-            const isActive = activeFilters.has(filterType);
-
-            // Toggle active state of the filter
-            if (isActive) {
-                activeFilters.delete(filterType);
-            } else {
-                activeFilters.add(filterType);
-            }
-
-            // Apply all active filters to the doctors list
-            const filteredDoctors = applyFilters(doctorsList);
-            console.log(filteredDoctors);
-            populateList(filteredDoctors);
-
-            // Toggle active state of the button
-            button.classList.toggle("active", !isActive);
-
-            // Toggle icon based on active state
-            const icon = button.querySelector("i");
-            if (icon) {
-                if (isActive) {
-                    icon.classList.remove("fa-check-circle");
-                    icon.classList.add("fa-solid fa-square-check");
-                } else {
-                    icon.classList.remove("fa-solid fa-square-check");
-                    icon.classList.add("fa-check-circle");
-                }
-            }
-        }
-        // Function to apply all active filters to the doctors list
-        function applyFilters(doctorsList) {
-            if (activeFilters.size === 0) {
-                return doctorsList; // No filters active, return all doctors
-            }
-
-            return doctorsList.filter(doctor => {
-                return Array.from(activeFilters).every(filterType => {
-                    switch (filterType) {
-                        case "FEMALE":
-                            return doctor.DETAILS.SEX === "FEMALE";
-                        case "AVAILABLE_TODAY":
-                            const today = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-                            return doctor.DETAILS.SCH_DT.some(schedule => schedule.BOOK_START_DT === today);
-                        default:
-                            return true;
-                    }
                 });
-            });
+            }
+
+            if (activeFilters.femaleDoctors) {
+                filteredDoctors = filteredDoctors.filter(doctor => doctor.DETAILS.SEX === "FEMALE");
+            }
+
+            if (activeFilters.availableToday) {
+                const todayDate = new Date().toISOString().slice(0, 10).replace(/-/g, ""); // Current date in YYYYMMDD format
+                filteredDoctors = filteredDoctors.filter(doctor => doctor.DETAILS.SCH_DT[0].SCH_DT === todayDate);
+            }
+            if (activeFilters.rating) {
+                filteredDoctors.sort((a, b) => {
+                    const experienceA = parseInt(a.DETAILS.EXPERIENCE.split(' ')[0]); // Get years of experience (as integer) from string
+                    const experienceB = parseInt(b.DETAILS.EXPERIENCE.split(' ')[0]);
+                    return experienceB - experienceA; // Sort by years of experience
+                });
+            }
+
+            populateList(filteredDoctors);
         }
         function populateList(doctorsList) {
             // Populate the doctors grid for today
@@ -521,21 +557,21 @@
             const headContent = specialistData.SYM_NAME ? `Doctors For ${specialistData.SYM_NAME} Treatment` : `Available ${specialistData.SPECIALIST}`
             heading.textContent = headContent
             heading.style.display = 'block'
-            if (!isSortedByFees) {
-                doctorsList.sort((a, b) => {
-                    const dateA = a.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object a
-                    const dateB = b.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object b
+            // if (!isSortedByFees) {
+            //     doctorsList.sort((a, b) => {
+            //         const dateA = a.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object a
+            //         const dateB = b.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object b
 
-                    // Compare the date strings as strings (assuming they are in "YYYYMMDD" format)
-                    if (dateA < dateB) {
-                        return -1; // dateA comes before dateB
-                    }
-                    if (dateA > dateB) {
-                        return 1; // dateA comes after dateB
-                    }
-                    return 0; // dates are equal
-                });
-            }
+            //         // Compare the date strings as strings (assuming they are in "YYYYMMDD" format)
+            //         if (dateA < dateB) {
+            //             return -1; // dateA comes before dateB
+            //         }
+            //         if (dateA > dateB) {
+            //             return 1; // dateA comes after dateB
+            //         }
+            //         return 0; // dates are equal
+            //     });
+            // }
 
 
             console.log(doctorsList);
@@ -875,13 +911,13 @@
                         // Determine status text and color based on conditions
                         let statusText, statusColor;
                         if (
-                            slot.STATUS === "Booking Available" &&
+                            slot.STATUS === "Available" &&
                             slot.CHK_IN_STS === "UPCOMING"
                         ) {
                             statusText = "Available";
                             statusColor = "green";
                         } else if (
-                            slot.STATUS === "Booking Available" &&
+                            slot.STATUS === "Available" &&
                             slot.CHK_IN_STS === "IN"
                         ) {
                             statusText = "In Clinic";

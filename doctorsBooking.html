@@ -1192,13 +1192,13 @@
             // Determine status text and color based on conditions
             let statusText, statusColor;
             if (
-              slot.STATUS === "Booking Available" &&
+              slot.STATUS === "Available" &&
               slot.CHK_IN_STS === "UPCOMING"
             ) {
               statusText = "Available";
               statusColor = "green";
             } else if (
-              slot.STATUS === "Booking Available" &&
+              slot.STATUS === "Available" &&
               slot.CHK_IN_STS === "IN"
             ) {
               statusText = "In Clinic";
@@ -1324,7 +1324,7 @@
           listItem.addEventListener('click', () => {
             
             console.log(doctor);
-            if(doctor.FIELD_TYPE==='Symptom'){
+            if(doctor.FIELD_TYPE==='Symptom'||doctor.FIELD_TYPE==='Specialist'){
               const symptomData=doctor?doctor.DETAILS:null
               symptomData.SYM_NAME=doctor.ITEM_NAME?doctor.ITEM_NAME:null
               const encodedData = encodeURIComponent(JSON.stringify(symptomData));
@@ -1333,6 +1333,7 @@
               // Redirect to doctors.html with the specified SPECIALIST parameter
               window.location.href = redirectUrl;
             }
+            
           })
         }
       });

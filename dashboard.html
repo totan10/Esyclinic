@@ -547,13 +547,13 @@
             // Determine status text and color based on conditions
             let statusText, statusColor;
             if (
-              slot.STATUS === "Booking Available" &&
+              slot.STATUS === "Available" &&
               slot.CHK_IN_STS === "UPCOMING"
             ) {
               statusText = "Available";
               statusColor = "green";
             } else if (
-              slot.STATUS === "Booking Available" &&
+              slot.STATUS === "Available" &&
               slot.CHK_IN_STS === "IN"
             ) {
               statusText = "In Clinic";
