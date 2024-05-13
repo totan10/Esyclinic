@@ -702,7 +702,8 @@
           <h3 class="mb-4">Book Appointment</h3>
           <form id="appointmentForm">
             <input type="tel" id="patientMobile" placeholder="Your Mobile Number" required />
-            <select id="patientDropdown" required>
+            <input type="tel" id="alternateMobile" placeholder="Your Alternate Mobile Number" />
+            <select id="patientDropdown">
               <option value="">Select Patient</option>
             </select>
             <input type="text" id="patientName" placeholder="Your Name" required />
@@ -711,6 +712,12 @@
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
+            </select>
+            <input type="text" id="patientAddress" placeholder="Your Address" required />
+            <select id="M_STS">
+              <option value="">Marital Status</option>
+              <option value="Married">Married</option>
+              <option value="Unmarried">Unmarried</option>
             </select>
             <input type="number" id="patientAge" placeholder="Your Age" required />
             <div class="buttonContainer">
@@ -857,11 +864,11 @@
               statusText = "Available";
               statusColor = "#7BF066";
             }
-            else{
+            else {
               statusText = "In Clinic";
-            statusColor = "#7BF066";
+              statusColor = "#7BF066";
             }
-          }            
+          }
           else {
             statusText = "Not Available";
             statusColor = "red";
@@ -1285,23 +1292,31 @@
       .getElementById("appointmentForm")
       .addEventListener("submit", async function (event) {
         event.preventDefault(); // Prevent default form submission
-
+        console.log(event);
         const patientName = document.getElementById("patientName").value;
         const patientMobile = document.getElementById("patientMobile").value;
         const patientGender = document.getElementById("patientGender").value;
         const patientAge = parseInt(
           document.getElementById("patientAge").value
         );
+        const alternateMobile = document.getElementById("alternateMobile").value;
+        const m_sts = document.getElementById('M_STS').value;
+        const Address=document.getElementById('patientAddress').value;
         const patientDropdown = document.getElementById("patientDropdown");
-        const selectedOption =
+
+        let selectedOption =null
+        if(patientDropdown!=null){
+          selectedOption =
           patientDropdown.options[patientDropdown.selectedIndex];
+        }
 
         // Retrieve data from dataset attributes of the selected option
-        const patientId = selectedOption.value; // This would be the entire patient object as a JSON string
-        const patientNameFromDataset = selectedOption.dataset.name;
-        const patientAgeFromDataset = selectedOption.dataset.age;
-        const patientSexFromDataset = selectedOption.dataset.sex;
-        const patientFamilyIdFromDataset = selectedOption.dataset.familyId;
+        const patientId = selectedOption ? selectedOption.value : patientMobile; // This would be the entire patient object as a JSON string
+        const patientNameFromDataset = selectedOption!=null ? selectedOption.dataset.name : patientName;
+        const patientAgeFromDataset = selectedOption!=null ? selectedOption.dataset.age : patientAge;
+        const patientSexFromDataset = selectedOption!=null ? selectedOption.dataset.sex : patientGender;
+        const patientFamilyIdFromDataset =selectedOption!=null ? selectedOption.dataset.familyId:patientMobile;
+        console.log(Address);
         // Perform validation before submitting the form
         let isValid = true;
 
@@ -1347,6 +1362,8 @@
             MOBILE: patientMobile,
             DR_ID: doctordata.DR_ID,
             DR_NAME: doctordata.DR_NAME,
+            BOOK_BY_ID:userData.CLINIC_MOBILE,
+            BOOK_BY_NAME:userData.PHARMA_NAME,
             APNT_DT: slotTiming.SCH_DT,
             PHARMA_ID: userData.PHARMA_ID ? userData.PHARMA_ID : null,
             PHARMA_NAME: userData.PHARMA_NAME,
@@ -1369,7 +1386,11 @@
           // document.querySelector(".slot-container").style.display = "block";
         }
       });
-
+      
+    const m_sts = document.getElementById('M_STS');
+    m_sts.addEventListener("change", function () {
+      const selectedOption = this.options[this.selectedIndex]
+    })
     // Add event listener to the patient dropdown
     const patientDropdown = document.getElementById("patientDropdown");
     patientDropdown.addEventListener("change", function () {

@@ -218,8 +218,14 @@
 
     /* Service Boxes */
     .service-box {
-      background-color: #f2f2f2;
-      color: #000000;
+      background: #007991;
+      /* fallback for old browsers */
+      background: -webkit-linear-gradient(to right, #78ffd6, #007991);
+      /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to right, #78ffd6, #007991);
+      /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      transition: background 0.5s ease;
+      color: #f4ebeb;
       /* Black text color */
       padding: 20px;
       margin: 30px;
@@ -247,8 +253,13 @@
     }
 
     .service-box:hover {
-      background-color: #e0e0e0;
-      /* Lighter background color on hover */
+      background: #B2FEFA;
+      /* fallback for old browsers */
+      background: -webkit-linear-gradient(to right,#007991, #B2FEFA);
+      /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to right, #007991, #B2FEFA);
+      /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
     }
 
     .row {

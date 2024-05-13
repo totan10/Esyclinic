@@ -895,7 +895,7 @@
               console.log(params);
               const response = await axios.post(url, params);
               console.log(response.data);
-              slots = response.data.Data;
+              slots = response.data.Data; 
               console.log(slots);
               generateSlotItems(slots);
             } catch (error) {
