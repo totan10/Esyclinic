@@ -681,6 +681,38 @@
           box-sizing: border-box;
         }
       }
+
+      /* Styles for the loader */
+      .loader {
+        border: 8px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 8px solid #238ace;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        position: fixed;
+        top: 50%;
+        right: 25%;
+        margin-top: -25px;
+        /* Half of height */
+        margin-left: -25px;
+        /* Half of width */
+        display: none;
+        /* Initially hidden */
+        z-index: 9999;
+        /* Ensure loader is above the overlay */
+      }
+
+      /* Keyframe animation for spinner */
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </head>
 
@@ -742,6 +774,8 @@
         </div>
         <div class="container booking-confirmation"></div>
       </div>
+      <div class="popup-overlay loaderOverlay"></div>
+      <div class="loader"></div>
     </div>
     <div id="printableContent" style="display: none">
       <!-- Content to be printed as PDF -->
@@ -1452,9 +1486,13 @@
             const url = "http://easyhealths.com/api/booking";
             const params = patientDetails;
             // Call bookAppointment and handle the promise
+            document.querySelector('.loaderOverlay').style.visibility = 'visible';
+            document.querySelector('.loader').style.display = 'block';
             bookAppointment(url, params)
               .then((responseData) => {
                 console.log(responseData); // This should now log the actual response data
+                document.querySelector('.loaderOverlay').style.visibility = 'hidden';
+                document.querySelector('.loader').style.display = 'none';
                 if (responseData.Success) {
                   const bookingId = responseData.data
                     ? responseData.data.APPNT_TOKEN
@@ -1494,11 +1532,15 @@
             hideSubPopup();
             hideSubPopup();
             console.log(patientDetails);
+            document.querySelector('.loaderOverlay').style.visibility = 'visible';
+            document.querySelector('.loader').style.display = 'block';
             const url = "http://easyhealths.com/api/booking";
             const params = patientDetails;
             // Call bookAppointment and handle the promise
             bookAppointment(url, params)
               .then((responseData) => {
+                document.querySelector('.loaderOverlay').style.visibility = 'hidden';
+                document.querySelector('.loader').style.display = 'none';
                 console.log(responseData); // This should now log the actual response data
                 if (responseData.Success) {
                   const bookingId = responseData.data
@@ -1641,11 +1683,11 @@
       }
 
       function generatePDF(doctorData, clinicData, patientDetails) {
-        
 
-          const base64Url = `data:image/jpeg;base64,` + clinicData.LOGO_URL
+
+        const base64Url = `data:image/jpeg;base64,` + clinicData.LOGO_URL
         const element = document.createElement("div");
-        
+
         // Construct the HTML content for the PDF
         element.innerHTML = ` <div id="content">
         <div class="clinicDetails">
@@ -1771,7 +1813,40 @@
       console.log(slotData); // { city: "New York", country: "USA" }
       document.title = `${doctordata.DR_NAME}`
       generateDoctorProfilePage(doctordata);
-      // Call the function to generate the page
+
+      document.addEventListener("keydown", function (event) {
+        // Check if the Shift key is pressed along with another key
+        if (event.shiftKey) {
+          console.log("clicked");
+          switch (event.key) {
+            case "D": // Shift + D for Doctors Booking
+              event.preventDefault(); // Prevent default action
+              window.location.href = "doctorsBooking.html";
+              break;
+            case "T": // Shift + L for Lab Test Booking
+              event.preventDefault(); // Prevent default action
+              window.location.href = "labtestBooking.html";
+              break;
+            case "R": // Shift + T for Report Transfer
+              event.preventDefault(); // Prevent default action
+              window.location.href = "reportTransfer.html";
+              break;
+            case "H": // Shift + T for Report Transfer
+              event.preventDefault(); // Prevent default action
+              window.location.href = "dashboard.html";
+              break;
+            case "P": // Shift + T for Report Transfer
+              event.preventDefault(); // Prevent default action
+              window.location.href = "paymentModule.html";
+              break;
+            default:
+              break;
+          }
+        }
+      });
+
+
+
     </script>
   </body>
 

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Module</title>
+    <style>
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .clear-button {
+            position: absolute;
+            top: 40%;
+            right: 10px;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            color: red;
+        }
+
+        .text-danger {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Payment Module</h1>
+        <div class="input-container">
+            <input type="tel" id="mobileNumber" name="mobileNumber" placeholder="Enter your mobile number"
+                pattern="[6-9]{1}[0-9]{9}" maxlength="10" required>
+            <button id="clearButton" class="clear-button" aria-label="Clear mobile number">
+                <i class="fas fa-times"></i>
+            </button>
+            <small id="mobileNumberError" class="text-danger"></small>
+        </div>
+    </div>
+
+
+    <!-- JavaScript libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileNumberInput = document.getElementById('mobileNumber');
+            const clearButton = document.getElementById('clearButton');
+            const mobileNumberError = document.getElementById('mobileNumberError');
+            clearButton.style.visibility ='hidden';
+            // Function to handle input validation
+            const validateMobileNumber = () => {
+                const mobileNumber = mobileNumberInput.value.trim();
+
+                // Check if the entered value is a valid 10-digit number starting with 6-9
+                const isValid = /^[6-9]\d{9}$/.test(mobileNumber);
+
+                if (isValid) {
+                    mobileNumberError.textContent = ''; // Clear error message
+                    mobileNumberError.classList.remove('text-danger');
+                } else {
+                    mobileNumberError.textContent = 'Enter a valid 10-digit number';
+                    mobileNumberError.classList.add('text-danger');
+                }
+                
+                // Show/hide clear button based on input value
+                clearButton.style.visibility = mobileNumber ? 'visible' : 'hidden';
+            };
+
+            // Event listener for input changes
+            mobileNumberInput.addEventListener('input', () => {
+                // Remove non-numeric characters from the input value
+                mobileNumberInput.value = mobileNumberInput.value.replace(/\D/g, '');
+
+                // Validate the modified input value
+                validateMobileNumber();
+            });
+
+            // Event listener for keydown (to prevent non-numeric input)
+            mobileNumberInput.addEventListener('keydown', (event) => {
+                // Allow only numeric keys (0-9), backspace, delete, and arrow keys
+                const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+
+                if (!allowedKeys.includes(event.key)) {
+                    event.preventDefault(); // Prevent input if the key is not allowed
+                }
+            });
+
+            // Event listener for clear button click
+            clearButton.addEventListener('click', () => {
+                mobileNumberInput.value = ''; // Clear input field
+                mobileNumberError.textContent = ''; // Clear error message
+                clearButton.style.visibility = 'hidden'; // Hide clear button
+            });
+        });
+
+    </script>
+</body>
+
+</html>

@@ -259,42 +259,42 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
     <script>
         let userData = null;
-    const searchInput = document.getElementById("searchInput");
-    const searchResults = document.getElementById("searchResults");
-    wow = new WOW(
-      {
-        boxClass: 'wow',      // default
-        animateClass: 'animated', // change this if you are not using animate.css
-        offset: 0,          // default
-        mobile: true,       // keep it on mobile
-        live: true        // track if element updates
-      }
-    )
-    wow.init();
-    document.addEventListener("DOMContentLoaded", function () {
-      // Check if the user is already logged in
-      const isLoggedIn = localStorage.getItem("isLoggedIn");
-      if (isLoggedIn) {
-        // Retrieve username from localStorage
-        const username = localStorage.getItem("username");
-        // Do something with the logged-in user's data
-        const storedUserData = localStorage.getItem("userData");
-        // Access and use the user's data
-        if (storedUserData) {
-          userData = JSON.parse(storedUserData);
-          console.log(userData);
-          userData = userData.data
-          // Set the logo URL dynamically
-          const companyLogo = document.getElementById("companyLogo");
-          const clinicName = document.querySelector(".profile-icon")
-          clinicName.innerHTML = `${userData.PHARMA_NAME}`
-          companyLogo.src = userData.LOGO_URL;
-          populateDoctors();
-        }
-      }
-    });
-    // Function to format date from "YYYYMMDD" to "dd-Month-YYYY"
-    function populateDoctors() {
+        const searchInput = document.getElementById("searchInput");
+        const searchResults = document.getElementById("searchResults");
+        wow = new WOW(
+            {
+                boxClass: 'wow',      // default
+                animateClass: 'animated', // change this if you are not using animate.css
+                offset: 0,          // default
+                mobile: true,       // keep it on mobile
+                live: true        // track if element updates
+            }
+        )
+        wow.init();
+        document.addEventListener("DOMContentLoaded", function () {
+            // Check if the user is already logged in
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            if (isLoggedIn) {
+                // Retrieve username from localStorage
+                const username = localStorage.getItem("username");
+                // Do something with the logged-in user's data
+                const storedUserData = localStorage.getItem("userData");
+                // Access and use the user's data
+                if (storedUserData) {
+                    userData = JSON.parse(storedUserData);
+                    console.log(userData);
+                    userData = userData.data
+                    // Set the logo URL dynamically
+                    const companyLogo = document.getElementById("companyLogo");
+                    const clinicName = document.querySelector(".profile-icon")
+                    clinicName.innerHTML = `${userData.PHARMA_NAME}`
+                    companyLogo.src = userData.LOGO_URL;
+                    populateDoctors();
+                }
+            }
+        });
+        // Function to format date from "YYYYMMDD" to "dd-Month-YYYY"
+        function populateDoctors() {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
             const url = "http://easyhealths.com/api/searchDoctorTest";
             const params = {
@@ -313,7 +313,7 @@
                     return null;
                 });
         }
-       
+
 
         searchInput.addEventListener("input", () => {
             console.log(doctorsData);
@@ -437,14 +437,14 @@
                         // Determine status text and color based on conditions
                         let statusText, statusColor;
                         if (
-                            slot.STATUS === "Available" &&
-                            slot.CHK_IN_STS === "UPCOMING"
+                            slot.SLOT_STATUS === "Available" &&
+                            slot.DR_STATUS === "TIMELY"
                         ) {
-                            statusText = "Available";
+                            statusText = "ON TIME";
                             statusColor = "green";
                         } else if (
-                            slot.STATUS === "Available" &&
-                            slot.CHK_IN_STS === "IN"
+                            slot.SLOT_STATUS === "Available" &&
+                            slot.DR_STATUS === "IN"
                         ) {
                             statusText = "In Clinic";
                             statusColor = "green";
@@ -582,28 +582,32 @@
 
             searchResults.classList.add("active"); // Show search results
         }
-    document.addEventListener("keydown", function (event) {
-      // Check if the Shift key is pressed along with another key
-      if (event.shiftKey) {
-        console.log("clicked");
-        switch (event.key) {
-          case "D": // Shift + D for Doctors Booking
-            event.preventDefault(); // Prevent default action
-            window.location.href = "doctorsBooking.html";
-            break;
-          case "T": // Shift + L for Lab Test Booking
-            event.preventDefault(); // Prevent default action
-            window.location.href = "labtestBooking.html";
-            break;
-          case "R": // Shift + T for Report Transfer
-            event.preventDefault(); // Prevent default action
-            window.location.href = "reportTransfer.html";
-            break;
-          default:
-            break;
-        }
-      }
-    });
+        document.addEventListener("keydown", function (event) {
+            // Check if the Shift key is pressed along with another key
+            if (event.shiftKey) {
+                console.log("clicked");
+                switch (event.key) {
+                    case "D": // Shift + D for Doctors Booking
+                        event.preventDefault(); // Prevent default action
+                        window.location.href = "doctorsBooking.html";
+                        break;
+                    case "T": // Shift + L for Lab Test Booking
+                        event.preventDefault(); // Prevent default action
+                        window.location.href = "labtestBooking.html";
+                        break;
+                    case "R": // Shift + T for Report Transfer
+                        event.preventDefault(); // Prevent default action
+                        window.location.href = "reportTransfer.html";
+                        break;
+                    case "H": // Shift + T for Report Transfer
+                        event.preventDefault(); // Prevent default action
+                        window.location.href = "dashboard.html";
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
 
     </script>
 </body>

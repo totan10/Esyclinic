@@ -255,7 +255,7 @@
     .service-box:hover {
       background: #B2FEFA;
       /* fallback for old browsers */
-      background: -webkit-linear-gradient(to right,#007991, #B2FEFA);
+      background: -webkit-linear-gradient(to right, #007991, #B2FEFA);
       /* Chrome 10-25, Safari 5.1-6 */
       background: linear-gradient(to right, #007991, #B2FEFA);
       /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
@@ -264,7 +264,13 @@
 
     .row {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 1000px) {
+      .row {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     @media (max-width: 768px) {
@@ -273,20 +279,6 @@
       }
     }
 
-    .voicemodal-content {
-      background-color: #fefefe;
-      padding: 20px;
-      border-radius: 50%;
-      width: 200px;
-      height: 200px;
-      text-align: center;
-      position: relative;
-    }
-
-    .voiceicon {
-      border: none;
-      margin-right: 30px;
-    }
 
     .icon-container {
       display: flex;
@@ -368,10 +360,16 @@
           <h4>Lab Test Booking</h4>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="boxes">
         <div class="service-box" onclick="window.location.href='reportTransfer.html'">
           <i class="fas fa-file-medical-alt"></i>
           <h4>Report Transfer</h4>
+        </div>
+      </div>
+      <div class="boxes">
+        <div class="service-box" id="payment-module" onclick="handlePaymentModule()">
+          <i class="fas fa-credit-card"></i>
+          <h4>Payment Module</h4>
         </div>
       </div>
     </div>
@@ -558,14 +556,14 @@
             // Determine status text and color based on conditions
             let statusText, statusColor;
             if (
-              slot.STATUS === "Available" &&
-              slot.CHK_IN_STS === "UPCOMING"
+              slot.SLOT_STATUS === "Available" &&
+              slot.DR_STATUS === "TIMELY"
             ) {
-              statusText = "Available";
+              statusText = "ON TIME";
               statusColor = "green";
             } else if (
-              slot.STATUS === "Available" &&
-              slot.CHK_IN_STS === "IN"
+              slot.SLOT_STATUS === "Available" &&
+              slot.DR_STATUS === "IN"
             ) {
               statusText = "In Clinic";
               statusColor = "green";
@@ -706,321 +704,6 @@
     }
 
 
-
-
-    function handleDoctorsBooking() {
-      window.location.href = "doctorsBooking.html";
-    }
-
-    // Handle Lab Test Booking Click
-    function handleLabTestBooking() {
-      // Add your logic for lab test booking here
-      window.location.href = "labtestBooking.html";
-    }
-
-
-    // function populateSearchResults(query) {
-    //   searchResults.innerHTML = "";
-
-    //   if (query.trim() === "") {
-    //     return;
-    //   }
-
-    //   const filteredDoctors = doctorData.filter((doctor) =>
-    //     Object.values(doctor).some((value) =>
-    //       value.toString().toLowerCase().includes(query.toLowerCase())
-    //     )
-    //   );
-
-    //   if (filteredDoctors.length === 0) {
-    //     const noResultsItem = document.createElement("li");
-    //     noResultsItem.classList.add("no-results");
-    //     noResultsItem.textContent = "No match found.";
-    //     searchResults.appendChild(noResultsItem);
-    //     return;
-    //   }
-    //   const filtered = filteredDoctors.sort((a, b) => {
-    //     const cleanAItemName = a.ITEM_NAME.toLowerCase();
-    //     const cleanBItemName = b.ITEM_NAME.toLowerCase();
-    //     const aIndex = cleanAItemName.indexOf(query.toLowerCase());
-    //     const bIndex = cleanBItemName.indexOf(query.toLowerCase());
-    //     return aIndex - bIndex;
-    //   });
-    //   console.log(filtered);
-
-    //   filtered.forEach((doctor) => {
-    //     const listItem = document.createElement("li");
-
-    //     const doctorPhotoContainer = document.createElement("div");
-    //     doctorPhotoContainer.classList.add("doctor-photo");
-    //     doctorPhotoContainer.innerHTML = `
-    //       <img src="${doctor.DETAILS.DR_PHOTO}" alt="${doctor.DETAILS.DR_NAME}" class="me-3">
-    //     `;
-
-    //     const doctorInfoContainer = document.createElement("div");
-    //     doctorInfoContainer.classList.add("doctor-info");
-    //     doctorInfoContainer.innerHTML = `
-    //       <h5>${doctor.ITEM_NAME}</h5>
-    //       <p>${doctor.DETAILS.DESIGNATION}</p>
-    //     `;
-
-    //     listItem.appendChild(doctorPhotoContainer);
-    //     listItem.appendChild(doctorInfoContainer);
-
-    //     listItem.addEventListener("click", () => {
-    //       console.log(doctor);
-    //     });
-
-    //     searchResults.appendChild(listItem);
-    //   });
-
-    //   searchResults.classList.add("active"); // Show search results
-    // }
-
-    // function closeSearchResults() {
-    //   searchResults.classList.remove("active"); // Hide search results
-    // }
-    // function closeLabSearchResults() {
-    //   labSearchResults.classList.remove("active"); // Hide search results
-    // }
-    // searchInput.addEventListener("input", () => {
-    //   const query = searchInput.value;
-    //   populateSearchResults(query);
-    //   populateLabSearchResults(query);
-    // });
-
-    // // Close search results when clicking outside the search container
-    // document.addEventListener("click", (event) => {
-    //   const isClickInsideSearchContainer =
-    //     searchInput.contains(event.target) ||
-    //     searchResults.contains(event.target);
-    //   if (!isClickInsideSearchContainer) {
-    //     closeSearchResults();
-    //   }
-    //   const isClickInsideLabSearchContainer =
-    //     searchInput.contains(event.target) ||
-    //     labSearchResults.contains(event.target);
-    //   if (!isClickInsideLabSearchContainer) {
-    //     closeLabSearchResults();
-    //   }
-    // });
-
-    // searchInput.addEventListener("click", (event) => {
-    //   event.stopPropagation();
-    //   if (searchResults.innerHTML.trim() !== "") {
-    //     searchResults.classList.add("active");
-    //   }
-    //   if (labSearchResults.innerHTML.trim() !== "") {
-    //     labSearchResults.classList.add("active");
-    //   }
-    // });
-    // // Function to make a POST request with latitude and longitude using Axios
-    // function sendLocation(latitude, longitude) {
-    //   // Your API endpoint URL
-    //   const apiUrl = "http://easyhealths.com/api/srchdrtest";
-
-    //   // Data to be sent in the request body
-    //   const postData = {
-    //     LATITUDE: latitude,
-    //     LONGITUDE: longitude,
-    //   };
-
-    //   // Making a POST request using Axios
-    //   axios
-    //     .post(apiUrl, postData)
-    //     .then((response) => {
-    //       // Handle response data
-    //       //searchData = response.data && Array.isArray(response.data) ? response.data : []; // Convert object data to array, or assign an empty array
-    //       searchData = response.data;
-    //       console.log(searchData.data);
-    //       console.log(typeof searchData.data);
-    //       // Filter data based on field_type
-    //       doctorData = searchData.data.filter(
-    //         (item) => item.FIELD_TYPE === "Doctor"
-    //       );
-    //       populateDoctorList(doctorData);
-    //       labTestData = searchData.data.filter(
-    //         (item) => item.FIELD_TYPE !== "Doctor"
-    //       );
-    //       console.log(doctorData);
-    //       console.log(labTestData);
-    //     })
-    //     .catch((error) => {
-    //       // Handle errors
-    //       console.error("There was an error:", error);
-    //     });
-    // }
-
-    // // Function to populate the doctor list
-    // function populateDoctorList(doctors) {
-    //   const doctorListContainer = document.getElementById("doctor-list");
-    //   doctorListContainer.innerHTML = ""; // Clear previous list items
-    //   doctors.forEach((doctor) => {
-    //     const doctorItem = document.createElement("div");
-    //     doctorItem.classList.add(
-    //       "doctor",
-    //       "d-flex",
-    //       "align-items-center",
-    //       "justify-content-between",
-    //       "mb-3"
-    //     );
-    //     doctorItem.innerHTML = `
-    //   <div class="doctor-details d-flex align-items-center">
-    //     <img src="${doctor.DETAILS.DR_PHOTO}" alt="${doctor.DETAILS.DR_NAME}" class="me-3">
-    //     <div class="details">
-    //       <h5>${doctor.DETAILS.DR_NAME}</h5>
-    //       <p>${doctor.DETAILS.D_CATG}</p>
-    //       <p>${doctor.DETAILS.EXPERIENCE} Experience</p>
-    //       <p>${doctor.DETAILS.QUALIFICATION}</p>
-    //       <p>${doctor.DETAILS.SEX}</p>
-    //     </div>
-    //   </div>
-    //   <div class="book-appointment">
-    //     <button onclick="bookAppointment('${doctor.DETAILS.DR_ID}')" class="btn btn-primary">Book Appointment</button>
-    //   </div>
-    // `;
-    //     doctorListContainer.appendChild(doctorItem);
-    //   });
-    // }
-    // // Function to get current location and call sendLocation function
-    // function getLocation() {
-    //   searchInput.click();
-    //   searchInput.focus();
-    //   if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(
-    //       (position) => {
-    //         const latitude = position.coords.latitude;
-    //         const longitude = position.coords.longitude;
-    //         sendLocation(latitude, longitude);
-    //       },
-    //       (error) => {
-    //         console.error("Error getting the current location:", error);
-    //       }
-    //     );
-    //   } else {
-    //     console.error("Geolocation is not supported by this browser.");
-    //   }
-    // }
-
-    // // Call getLocation function when the page loads
-    // window.onload = getLocation;
-
-    // Function to populate lab search results
-    // function populateLabSearchResults(query) {
-    //   const labSearchResults = document.getElementById("labSearchResults");
-    //   labSearchResults.innerHTML = "";
-
-    //   if (query.trim() === "") {
-    //     return;
-    //   }
-
-    //   const filteredLabTests = labTestData
-    //     .filter((item) => {
-    //       const lowerCaseQuery = query.toLowerCase();
-    //       const cleanItemName = item.ITEM_NAME.toLowerCase();
-
-    //       return cleanItemName.includes(lowerCaseQuery);
-    //     })
-    //     .sort((a, b) => {
-    //       const lowerCaseQuery = query.toLowerCase();
-    //       const cleanAItemName = a.ITEM_NAME.toLowerCase();
-    //       const cleanBItemName = b.ITEM_NAME.toLowerCase();
-    //       const aIndex = cleanAItemName.indexOf(lowerCaseQuery);
-    //       const bIndex = cleanBItemName.indexOf(lowerCaseQuery);
-    //       return aIndex - bIndex;
-    //     });
-    //   console.log(filteredLabTests);
-
-    //   if (filteredLabTests.length === 0) {
-    //     const noResultsItem = document.createElement("li");
-    //     noResultsItem.classList.add("no-results");
-    //     noResultsItem.textContent = "No match found.";
-    //     labSearchResults.appendChild(noResultsItem);
-    //     return;
-    //   }
-
-    //   filteredLabTests.forEach((labTest) => {
-    //     const listItem = document.createElement("li");
-    //     // Create your list item content here similar to the searchResults list
-    //     const doctorInfoContainer = document.createElement("div");
-    //     doctorInfoContainer.classList.add("doctor-info");
-    //     doctorInfoContainer.innerHTML = `
-    //       <h5>${labTest.ITEM_NAME}</h5>`;
-    //     listItem.appendChild(doctorInfoContainer);
-    //     listItem.addEventListener("click", () => {
-    //       console.log(labTest);
-    //     });
-    //     labTest;
-    //     labSearchResults.appendChild(listItem);
-    //   });
-
-    //   labSearchResults.classList.add("active"); // Show search results
-    // }
-
-    // const openModalButton = document.getElementById("openModalButton");
-    // const modal = document.getElementById("myModal");
-    // const startButton = document.getElementById("startButton");
-    // const stopButton = document.getElementById("stopButton");
-
-    // let recognition;
-
-    // openModalButton.addEventListener("click", function () {
-    //   modal.style.display = "flex";
-    //   startRecording();
-    // });
-
-    // startButton.onclick = startRecording;
-    // stopButton.onclick = stopRecording;
-
-    // function startRecording() {
-    //   recognition = new (window.SpeechRecognition ||
-    //     window.webkitSpeechRecognition ||
-    //     window.mozSpeechRecognition ||
-    //     window.msSpeechRecognition)();
-    //   recognition.lang = "en-US";
-    //   recognition.start();
-
-    //   startButton.style.display = "none";
-    //   stopButton.style.display = "inline-block";
-
-    //   modal.classList.add("recording-animation");
-
-    //   recognition.onresult = function (event) {
-    //     const transcript = event.results[0][0].transcript;
-    //     searchInput.value = transcript; // Clear the input field before updating it
-    //     searchInput.focus();
-    //     searchInput.click();
-    //     populateSearchResults(transcript);
-    //     populateLabSearchResults(transcript);
-    //   };
-
-    //   recognition.onend = function () {
-    //     modal.classList.remove("recording-animation");
-    //     stopRecording();
-    //     modal.style.display = "none";
-    //   };
-
-    //   setTimeout(() => {
-    //     stopRecording();
-    //     modal.style.display = "none";
-    //   }, 10000); // 10 seconds maximum duration
-    //   // Set focus on the input field
-    //   //searchInput.focus();
-    // }
-
-    // function stopRecording() {
-    //   if (recognition) {
-    //     recognition.stop();
-    //     recognition = null;
-    //   }
-
-    //   startButton.style.display = "inline-block";
-    //   stopButton.style.display = "none";
-    // }
-
-    // Listen for key presses
-    // Listen for key presses
-    // Listen for key presses
     document.addEventListener("keydown", function (event) {
       // Check if the Shift key is pressed along with another key
       if (event.shiftKey) {
@@ -1028,21 +711,30 @@
         switch (event.key) {
           case "D": // Shift + D for Doctors Booking
             event.preventDefault(); // Prevent default action
-            handleDoctorsBooking();
+            window.location.href = "doctorsBooking.html";
             break;
           case "T": // Shift + L for Lab Test Booking
             event.preventDefault(); // Prevent default action
-            handleLabTestBooking();
+            window.location.href = "labtestBooking.html";
             break;
           case "R": // Shift + T for Report Transfer
             event.preventDefault(); // Prevent default action
             window.location.href = "reportTransfer.html";
+            break;
+          case "H": // Shift + T for Report Transfer
+            event.preventDefault(); // Prevent default action
+            window.location.href = "dashboard.html";
+            break;
+          case "P": // Shift + T for Report Transfer
+            event.preventDefault(); // Prevent default action
+            window.location.href = "paymentModule.html";
             break;
           default:
             break;
         }
       }
     });
+
   </script>
 </body>
 

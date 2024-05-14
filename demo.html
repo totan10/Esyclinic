@@ -893,20 +893,21 @@
           // Determine status text and color based on conditions
           let statusText, statusColor;
           if (
-            slot.STATUS === "Available" || slot.STATUS === "Booking Available") {
-            if (slot.CHK_IN_STS === "UPCOMING") {
-              statusText = "Available";
-              statusColor = "#7BF066";
-            }
-            else {
+              slot.SLOT_STATUS === "Available" &&
+              slot.DR_STATUS === "TIMELY"
+            ) {
+              statusText = "ON TIME";
+              statusColor = "#7bf066";
+            } else if (
+              slot.SLOT_STATUS === "Available" &&
+              slot.DR_STATUS === "IN"
+            ) {
               statusText = "In Clinic";
-              statusColor = "#7BF066";
+              statusColor = "#7bf066";
+            } else {
+              statusText = "Not Available";
+              statusColor = "red";
             }
-          }
-          else {
-            statusText = "Not Available";
-            statusColor = "red";
-          }
 
           // Modify slotItem HTML to call handleSlotClick with slot data
           slotItem.innerHTML = `
@@ -915,8 +916,8 @@
                                 <div class="status" style="color: ${statusColor};">${statusText}</div>
                             </div>
                         `;
-
-          slotItem.addEventListener("mouseenter", () => {
+          if(slot.DR_STATUS!='OUT'){
+            slotItem.addEventListener("mouseenter", () => {
             //handleSlotClick(slot);
 
             //fetchSlotTimings(doctordata.DR_ID, slot.ID);
@@ -929,7 +930,9 @@
             // }
             generateSlotTimes(slot, j, rowclass);
           });
-          slotItem.addEventListener("dblclick", () => {
+          }
+          
+          slotItem.addEventListener("click", () => {
             const slotTimeContainer = document.querySelector(`.${rowclass}`);
             slotTimeContainer.classList.remove("active"); // Remove 'active' class to trigger transition
           });
@@ -1238,13 +1241,13 @@
           // Make name and age fields editable
           const patientNameInput = document.getElementById("patientName");
           const patientAgeInput = document.getElementById("patientAge");
-          const patientSexInput=document.getElementById("patientGender")
+          const patientSexInput = document.getElementById("patientGender")
           patientSexInput.removeAttribute("readonly");
           patientNameInput.removeAttribute("readonly");
           patientAgeInput.removeAttribute("readonly");
-          patientNameInput.value='';
-          patientAgeInput.value='';
-          patientSexInput.value=''
+          patientNameInput.value = '';
+          patientAgeInput.value = '';
+          patientSexInput.value = ''
         }
       } catch (error) {
         console.error("Error fetching patient data:", error);
@@ -1688,7 +1691,7 @@
             bookAppointment(url, params)
               .then((responseData) => {
                 document.querySelector('.loaderOverlay').style.visibility = 'hidden';
-          document.querySelector('.loader').style.display = 'none';
+                document.querySelector('.loader').style.display = 'none';
                 console.log(responseData); // This should now log the actual response data
                 if (responseData.Success) {
                   const bookingId = responseData.data
@@ -1919,6 +1922,39 @@
           //location.reload();
         });
     }
+    document.addEventListener("keydown", function (event) {
+      // Check if the Shift key is pressed along with another key
+      if (event.shiftKey) {
+        console.log("clicked");
+        switch (event.key) {
+          case "D": // Shift + D for Doctors Booking
+            event.preventDefault(); // Prevent default action
+            window.location.href = "doctorsBooking.html";
+            break;
+          case "T": // Shift + L for Lab Test Booking
+            event.preventDefault(); // Prevent default action
+            window.location.href = "labtestBooking.html";
+            break;
+          case "R": // Shift + T for Report Transfer
+            event.preventDefault(); // Prevent default action
+            window.location.href = "reportTransfer.html";
+            break;
+          case "H": // Shift + T for Report Transfer
+            event.preventDefault(); // Prevent default action
+            window.location.href = "dashboard.html";
+            break;
+          case "P": // Shift + T for Report Transfer
+            event.preventDefault(); // Prevent default action
+            window.location.href = "paymentModule.html";
+            break;
+          default:
+            break;
+        }
+      }
+    });
+
+
+
   </script>
 </body>
 

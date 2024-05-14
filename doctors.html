@@ -307,6 +307,13 @@
             color: #01b5cd;
         }
 
+        @media (max-width: 1200px) {
+            .doctors-container {
+                grid-template-columns: repeat(5, 1fr);
+                /* Adjust for smaller screens */
+            }
+        }
+
         @media (max-width: 1024px) {
             .doctors-container {
                 grid-template-columns: repeat(4, 1fr);
@@ -344,14 +351,13 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             /* Add shadow effect */
             cursor: pointer;
-            width: 220px;
+            width: 200px;
             /* Add pointer cursor */
             background: #fff;
             /* Gradient background */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            max-width: 240px;
             transition: transform 0.4s ease;
             /* align-items: center; */
         }
@@ -516,11 +522,14 @@
             //     filteredDoctors = filteredDoctors.filter(doctor => doctor.DETAILS.SCH_DT[0].SCH_DT === todayDate);
             // }
             if (activeFilters.availableToday) {
-                const todayDate = new Date().toISOString().slice(0, 10); // Current date in YYYY-MM-DD format
+                const todayDate = new Date().toISOString().slice(0, 10).replace(/-/g, ""); // Current date in YYYYMMDD format
+
+                // Sort by availability date (SCH_DT[0].SCH_DT)
                 filteredDoctors.sort((a, b) => {
                     const dateA = a.DETAILS.SCH_DT[0].SCH_DT;
                     const dateB = b.DETAILS.SCH_DT[0].SCH_DT;
-                    return dateA === todayDate ? -1 : dateB === todayDate ? 1 : 0;
+
+                    return dateA.localeCompare(dateB); // Sort by date in ascending order
                 });
             }
             if (activeFilters.rating) {
@@ -667,22 +676,31 @@
             }
         }
         const formatDate = (dateStr) => {
+            const today = new Date(); // Get current date
             const year = dateStr.slice(0, 4);
             const month = parseInt(dateStr.slice(4, 6), 10); // Convert month part to integer
             const day = dateStr.slice(6, 8);
 
-            // Array of month names
-            const monthNames = [
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            ];
+            // Create a Date object from the input date string
+            const inputDate = new Date(`${year}-${month}-${day}`);
 
-            // Get month name based on month number (month - 1 due to zero-indexed array)
-            const monthName = monthNames[month - 1];
+            // Compare the input date with today's date (ignore time for comparison)
+            if (inputDate.toDateString() === today.toDateString()) {
+                return 'Today';
+            } else {
+                // Array of month names
+                const monthNames = [
+                    "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
 
-            // Construct formatted date string
-            const formattedDate = `${day}-${monthName}-${year}`;
-            return formattedDate;
+                // Get month name based on month number (month - 1 due to zero-indexed array)
+                const monthName = monthNames[month - 1];
+
+                // Construct formatted date string
+                const formattedDate = `${day}-${monthName}-${year}`;
+                return formattedDate;
+            }
         };
 
 
@@ -894,16 +912,15 @@
                         const slotItem = document.createElement("div");
                         slotItem.classList.add("slotitems");
                         // Determine status text and color based on conditions
-                        let statusText, statusColor;
                         if (
-                            slot.STATUS === "Available" &&
-                            slot.CHK_IN_STS === "UPCOMING"
+                            slot.SLOT_STATUS === "Available" &&
+                            slot.DR_STATUS === "TIMELY"
                         ) {
-                            statusText = "Available";
+                            statusText = "ON TIME";
                             statusColor = "green";
                         } else if (
-                            slot.STATUS === "Available" &&
-                            slot.CHK_IN_STS === "IN"
+                            slot.SLOT_STATUS === "Available" &&
+                            slot.DR_STATUS === "IN"
                         ) {
                             statusText = "In Clinic";
                             statusColor = "green";
@@ -1048,30 +1065,26 @@
                 switch (event.key) {
                     case "D": // Shift + D for Doctors Booking
                         event.preventDefault(); // Prevent default action
-                        handleDoctorsBooking();
+                        window.location.href = "doctorsBooking.html";
                         break;
                     case "T": // Shift + L for Lab Test Booking
                         event.preventDefault(); // Prevent default action
-                        handleLabTestBooking();
+                        window.location.href = "labtestBooking.html";
                         break;
                     case "R": // Shift + T for Report Transfer
                         event.preventDefault(); // Prevent default action
                         window.location.href = "reportTransfer.html";
+                        break;
+                    case "H": // Shift + T for Report Transfer
+                        event.preventDefault(); // Prevent default action
+                        window.location.href = "dashboard.html";
                         break;
                     default:
                         break;
                 }
             }
         });
-        function handleDoctorsBooking() {
-            window.location.href = "doctorsBooking.html";
-        }
 
-        // Handle Lab Test Booking Click
-        function handleLabTestBooking() {
-            // Add your logic for lab test booking here
-            window.location.href = "labtestBooking.html";
-        }
     </script>
 </body>
 
