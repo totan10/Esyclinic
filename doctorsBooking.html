@@ -909,12 +909,27 @@
               doctorName.style.fontWeight = "bold";
 
               const doctorDetails = document.createElement("p");
+              let statusText, statusColor;
+              if (
+                doctor.DR_STATUS === "TIMELY"
+              ) {
+                statusText = "ON TIME";
+                statusColor = "#22b008";
+              } else if (
+                doctor.DR_STATUS === "IN"
+              ) {
+                statusText = "In Clinic";
+                statusColor = "#22b008";
+              } else {
+                statusText = "OUT";
+                statusColor = "red";
+              }
               if (doctor.DR_STATUS === 'OUT') {
-                doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:red;">${doctor.DR_STATUS}</span> <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
+                doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:${statusColor}">${statusText}</span> <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
               <br><span style="font-size:large;"><strong>Fees:<span class='feeText'> ₹${doctor.DR_FEES}</span></strong></span>`;
               }
               else {
-                doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:green;">${doctor.DR_STATUS}</span> <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
+                doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:${statusColor}">${statusText}</span> <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
               <br><span style="font-size:large;"><strong>Fees:<span class='feeText'> ₹${doctor.DR_FEES}</span></strong></span>
                 <br><span style="font-size:15px;"><strong>Available Bookings: ${doctor.SCH_DT[0].AVAILABLE}
                 <br>Timing: ${doctor.SCH_DT[0].FROM} - ${doctor.SCH_DT[0].TO}</strong></span>`;

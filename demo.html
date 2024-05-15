@@ -1531,7 +1531,7 @@
             patientAgeFromDataset
           );
           // Reset form fields
-          this.reset();
+          //this.reset();
 
           // Hide booking form after submission
           document.querySelector(".booking-form").style.display = "none";
@@ -1883,7 +1883,10 @@
           LOGO_URL: userData.LOGO_64,
         };
         generatePDF(doctorData, clinicData, patientdetails);
-        //location.reload(); // Reload the page on button click
+        setTimeout(()=>{
+          window.location.href='dashboard.html'
+        },2000)
+       
       });
     }
 
@@ -1933,7 +1936,9 @@
           LOGO_URL: userData.LOGO_64,
         };
         generatePDF(doctorData, clinicData, patientdetails);
-        //location.reload(); // Reload the page on button click
+        setTimeout(()=>{
+          window.location.href='dashboard.html'
+        },2000)
       });
     }
 
