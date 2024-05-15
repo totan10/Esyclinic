@@ -7,6 +7,12 @@
   <title>Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
     .header {
       background-color: #00205b;
       /* Dark blue background */
@@ -236,14 +242,16 @@
       height: 150px;
       /* Set fixed height */
       width: 55%;
+      
     }
 
-    .service-box i {
-      color: #458ece;
+    .service-box svg {
+      color: #f4f6f8;
       /* Blue icon color */
       font-size: 60px;
       /* Increased icon size */
-      margin-top: 10px;
+      margin: 10px;
+      height: 100px;
       /* Added margin below the icon */
     }
 
@@ -350,7 +358,7 @@
     <div class="row">
       <div class="boxes">
         <div class="service-box" id="doctors-booking" onclick="handleDoctorsBooking()">
-          <i class="fas fa-user-md"></i>
+          <i class="fa-solid fa-user-md"></i>
           <h4>Doctors Booking</h4>
         </div>
       </div>
@@ -390,6 +398,15 @@
     let userData = null;
     const searchInput = document.getElementById("searchInput");
     const searchResults = document.getElementById("searchResults");
+    function handleDoctorsBooking(){
+      window.location.href='doctorsBooking.html'
+    }
+    function handleLabTestBooking() {
+      window.location.href='labtestBooking.html'
+    }
+    function handlePaymentModule() {
+      window.location.href='paymentModule.html'
+    }
     document.addEventListener("DOMContentLoaded", function () {
       // Check if the user is already logged in
       const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -580,7 +597,8 @@
                         </div>
                     `;
             listItem.appendChild(slotItem);
-            slotItem.addEventListener("click", () => {
+            if(slot.DR_STATUS!='OUT'){
+              slotItem.addEventListener("click", () => {
               console.log(slot);
               doctor.SlotId = slot.ID ? slot.ID : null;
               delete doctor.SCH_DT;
@@ -595,26 +613,10 @@
               });
 
               const url = `${baseUrl}?${queryParams}`;
-
-              // Function to convert object to query string
-              // function objectToQueryString(obj) {
-              //   const keyValuePairs = [];
-              //   for (const key in obj) {
-              //     if (Object.hasOwnProperty.call(obj, key)) {
-              //       keyValuePairs.push(
-              //           `${key}=${encodeURIComponent(obj[key])}`
-              //         );
-              //     }
-              //   }
-              //   return keyValuePairs.join("&");
-              // }
-
-              // Convert object to query string
-              // const queryParams = objectToQueryString(doctordata);
-              // console.log(queryParams);
-
               window.location.href = url;
             });
+            }
+            
           });
 
           doctorPhotoContainer.addEventListener("click", () => {

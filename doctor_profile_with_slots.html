@@ -25,6 +25,7 @@
         margin: 0;
         padding: 0;
         background-color: #f8f9fa;
+        font-family: Arial, Helvetica, sans-serif;
       }
 
       #doctorProfileContainer {
@@ -168,7 +169,7 @@
 
       /* Style for availability text */
       .modal-slot-item .availability {
-        color: rgb(3 207 3);
+        color: #03cf03;
         /* Green color */
         margin: 0;
         text-align: center;
@@ -394,6 +395,11 @@
         margin: 0;
         opacity: 1;
         transition: 0s;
+      }
+
+      .text-danger {
+        color: red;
+        font-size: 14px;
       }
 
       .booking-confirmation {
@@ -733,12 +739,16 @@
           <div class="booking-form">
             <h3 class="mb-4">Book Appointment</h3>
             <form id="appointmentForm">
-              <input type="tel" id="patientMobile" placeholder="Your Mobile Number" required />
+              <input type="tel" id="patientMobile" placeholder="Your Mobile Number" pattern="[6-9]{1}[0-9]{9}"
+                maxlength="10" required />
+              <small id="mobileNumberError" class="text-danger"></small>
               <select id="patientDropdown">
                 <option value="">Select Patient</option>
               </select>
               <input type="text" id="patientName" placeholder="Your Name" required />
-              <input type="tel" id="alternateMobile" placeholder="Your Alternate Mobile Number" />
+              <input type="tel" id="alternateMobile" placeholder="Your Alternate Mobile Number"
+                pattern="[6-9]{1}[0-9]{9}" maxlength="10" />
+              <small id="alterMobileNumberError" class="text-danger"></small>
               <select id="patientGender" required>
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
@@ -752,10 +762,12 @@
                 <option value="Unmarried">Unmarried</option>
               </select>
               <input type="number" id="patientAge" placeholder="Your Age" required />
-              <input type="submit" value="Proceed" />
-              <button type="button" id="cancelButton" onclick="closeForm()">
-                Cancel
-              </button>
+              <div class="buttonContainer">
+                <input type="submit" value="Proceed" />
+                <button type="button" id="cancelButton" onclick="closeForm()">
+                  Cancel
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -882,12 +894,17 @@
         }
         console.log(userData);
         //delete doctorData.SCH_DT
-        let SlotId = null;
+        let SlotId, SCH_DT
         console.log(doctorData);
+        if (slotData && slotData.SCH_DT !== undefined) {
+          SCH_DT = slotData.SCH_DT;
+        }
         if (doctorData && doctorData.SlotId !== undefined) {
           SlotId = doctorData.SlotId;
+
           console.log(SlotId);
         } else {
+          s
           console.log("slotId is missing or undefined");
         }
         const PHARMA_ID = userData.PHARMA_ID ? userData.PHARMA_ID : null;
@@ -902,7 +919,7 @@
         console.log(DR_ID);
         // Call the function to generate slot items with dates
 
-        viewSlot(SlotId, DR_ID, PHARMA_ID);
+        viewSlot(SlotId, DR_ID, PHARMA_ID, SCH_DT);
       }
 
       function generateSlotItems(slots) {
@@ -940,25 +957,39 @@
                   j++
                 ) {
                   const timeSlot = slotsForPeriod[j];
+                  let availability, textcolor;
+                  if (timeSlot.AVAIL_APNT == '0' || timeSlot.SLOT_STATUS === 'Closed') {
+                    availability = 'Booking Closed';
+                    textcolor = 'red';
+                  }
+                  else if (timeSlot.AVAIL_APNT == '0' && timeSlot.SLOT_STATUS === 'Closed') {
+                    availability = 'Booking Closed';
+                    textcolor = 'red';
+                  }
+                  else {
+                    availability = 'Booking Available';
+                    textcolor = '#03cf03';
+                  }
                   const slottimeItem = document.createElement("div");
                   slottimeItem.classList.add("modal-slot-item", "col-md-3");
                   slottimeItem.dataset.slot = JSON.stringify(timeSlot);
                   slottimeItem.innerHTML = `
                                 <span>${timeSlot.FROM} - ${timeSlot.TO}</span>
-                                <div class="availability">Available</div>
+                                <div class="availability" style='color:${textcolor}'>${availability}</div>
                             `;
                   slotItemPair.appendChild(slottimeItem);
                   // console.log(JSON.parse(slottimeItem.dataset.slot));
-                  console.log(slottimeItem);
-                  slottimeItem.onclick = function () {
-                    //console.log("inside the function");
 
-                    const clickedSlotData = JSON.parse(
-                      slottimeItem.dataset.slot
-                    );
-                    console.log(clickedSlotData);
-                    openBookingForm(clickedSlotData, slotData);
-                  };
+                  if (timeSlot.AVAIL_APNT != '0' && timeSlot.SLOT_STATUS !== 'Closed') {
+                    slottimeItem.onclick = function () {
+                      //console.log("inside the function");
+
+                      const clickedSlotData = JSON.parse(
+                        slottimeItem.dataset.slot
+                      );
+                      openBookingForm(clickedSlotData, slot);
+                    };
+                  }
                 }
                 timingCOntainer.appendChild(slotItemPair);
               }
@@ -978,11 +1009,12 @@
           slotContainer.innerHTML = "Error: Slot data not available";
         }
       }
-      async function viewSlot(SlotId, DR_ID, PHARMA_ID) {
+      async function viewSlot(SlotId, DR_ID, PHARMA_ID, SCH_DT) {
         const params = {
           PHARMA_ID: PHARMA_ID,
           DR_ID: DR_ID,
           APPNT_ID: SlotId,
+          APPNT_DT: SCH_DT
         };
         console.log(params);
         const url = "http://easyhealths.com/api/vuslot";
@@ -1012,7 +1044,7 @@
       //Function to create booking form
       function openBookingForm(slotData, slot) {
         slotdetails = slotData;
-        slotTiming = slot;
+        slotTiming = slot ? slot : null;
         console.log(slotTiming);
         console.log("Inside Booking form");
         const slotContainer = document.querySelector(".slot-container");
@@ -1024,33 +1056,99 @@
 
         bookingForm.style.display = "block"; // Show booking form
       }
+      const mobileNumberError = document.getElementById('mobileNumberError');
       document
         .getElementById("patientMobile")
-        .addEventListener("input", function (event) {
-          const mobile = event.target.value;
-          if (mobile.length <= 9 || mobile.length > 10) {
-            const defaultOption = document.createElement("option");
-            defaultOption.style.display = "none";
-            const patientDropdown =
-              document.getElementById("patientDropdown");
-            patientDropdown.style.display = "none";
-          }
-          if (!isValidMobile(mobile)) {
-            displayError(
-              event.target,
-              "Mobile number should be exactly 10 digits."
-            );
-            const patientDropdown =
-              document.getElementById("patientDropdown");
-            patientDropdown.style.display = "none";
-          } else {
-            if (mobile.length === 10 && !isNaN(mobile)) {
-              // Call function to handle mobile number with 10 digits
-              handleMobileNumberWith10Digits(mobile);
-            }
-            clearError(event.target);
+        .addEventListener('keydown', (event) => {
+          // Allow only numeric keys (0-9), backspace, delete, and arrow keys
+          const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+
+          if (!allowedKeys.includes(event.key)) {
+            event.preventDefault(); // Prevent input if the key is not allowed
           }
         });
+      document
+        .getElementById("alternateMobile")
+        .addEventListener('keydown', (event) => {
+          // Allow only numeric keys (0-9), backspace, delete, and arrow keys
+          const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+
+          if (!allowedKeys.includes(event.key)) {
+            event.preventDefault(); // Prevent input if the key is not allowed
+          }
+        });
+      document
+        .getElementById("patientMobile")
+        .addEventListener("input", function () {
+
+          let mobile = document.getElementById('patientMobile').value;
+          mobile = mobile.replace(/\D/g, '');
+          if (!isValidMobile(mobile)) {
+            const patientNameInput = document.getElementById("patientName");
+            const patientAgeInput = document.getElementById("patientAge");
+            const patientSexInput = document.getElementById("patientGender")
+
+            patientNameInput.disabled = false;
+            patientAgeInput.sdisabled = false;
+            patientSexInput.disabled = false;
+            patientNameInput.value = '';
+            patientAgeInput.value = '';
+            patientSexInput.value = ''
+            if (mobile == '') {
+              mobileNumberError.textContent = ''; // Clear error message
+              mobileNumberError.classList.remove('text-danger');
+              mobileNumberError.style.width = '0%';
+              document.getElementById('patientMobile').style.marginBottom = '10px'
+            }
+            else {
+              mobileNumberError.textContent = 'Enter a valid 10-digit number!!!';
+              mobileNumberError.classList.add('text-danger');
+              mobileNumberError.style.width = '100%'
+              const patientDropdown = document.getElementById("patientDropdown");
+              patientDropdown.style.display = "none";
+              document.getElementById('patientMobile').style.marginBottom = '0'
+            }
+
+          } else {
+
+            mobileNumberError.textContent = ''; // Clear error message
+            mobileNumberError.classList.remove('text-danger');
+            mobileNumberError.style.width = '0%';
+            document.getElementById('patientMobile').style.marginBottom = '10px'
+            // Call function to handle mobile number with 10 digits
+            handleMobileNumberWith10Digits(mobile);
+          }
+        });
+      document
+        .getElementById("alternateMobile")
+        .addEventListener("input", function () {
+          const mobileError = document.getElementById('alterMobileNumberError');
+          let mobile = document.getElementById('alternateMobile').value;
+          mobile = mobile.replace(/\D/g, '');
+          if (!isValidMobile(mobile)) {
+            if (mobile == '') {
+              mobileError.textContent = ''; // Clear error message
+              mobileError.classList.remove('text-danger');
+              mobileError.style.width = '0%';
+              document.getElementById('alternateMobile').style.marginBottom = '10px'
+            }
+            else {
+              console.log("not validate number");
+              mobileError.textContent = 'Enter a valid 10-digit number!!!';
+              mobileError.classList.add('text-danger');
+              mobileError.style.width = '100%'
+              document.getElementById('alternateMobile').style.marginBottom = '0'
+            }
+
+          } else {
+
+            mobileError.textContent = ''; // Clear error message
+            mobileError.classList.remove('text-danger');
+            mobileError.style.width = '0%';
+            document.getElementById('alternateMobile').style.marginBottom = '10px'
+          }
+        });
+
 
       async function handleMobileNumberWith10Digits(mobile) {
         const url = "http://easyhealths.com/api/srchmob";
@@ -1099,9 +1197,13 @@
             // Make name and age fields editable
             const patientNameInput = document.getElementById("patientName");
             const patientAgeInput = document.getElementById("patientAge");
-
-            patientNameInput.removeAttribute("readonly");
-            patientAgeInput.removeAttribute("readonly");
+            const patientSexInput = document.getElementById("patientGender")
+            patientSexInput.disabled = false;
+            patientNameInput.disabled = false;
+            patientAgeInput.disabled = false;
+            patientNameInput.value = '';
+            patientAgeInput.value = '';
+            patientSexInput.value = ''
           }
         } catch (error) {
           console.error("Error fetching patient data:", error);
@@ -1114,7 +1216,7 @@
 
       // Function to check if a mobile number is valid (exactly 10 digits)
       function isValidMobile(mobile) {
-        return /^\d{10}$/.test(mobile);
+        return /^[6-9]\d{9}$/.test(mobile);
       }
 
       // Function to check if age is not negative
@@ -1251,6 +1353,8 @@
 
           // If all fields are valid, submit the form
           if (isValid) {
+            console.log(slotTiming);
+            console.log(slotdetails);
             // Make an API call to book appointment
             // You can add your API endpoint here
             console.log(userData);
@@ -1263,10 +1367,10 @@
               DR_NAME: doctordata.DR_NAME,
               BOOK_BY_ID: userData.CLINIC_MOBILE,
               BOOK_BY_NAME: userData.PHARMA_NAME,
-              APNT_DT: slotTiming.SCH_DT,
+              APNT_DT: slotData ? slotData.SCH_DT : null,
               PHARMA_ID: userData.PHARMA_ID ? userData.PHARMA_ID : null,
               PHARMA_NAME: userData.PHARMA_NAME,
-              APNT_ID: slotTiming.ID,
+              APNT_ID: slotData.ID,
               FROM: slotdetails.FROM,
               TO: slotdetails.TO,
               DR_FEES: doctordata.DR_FEES,
@@ -1302,9 +1406,9 @@
         patientGenderInput.value = selectedOption.dataset.sex; // Populate gender input field
 
         // Make input fields non-editable
-        patientNameInput.setAttribute("readonly", true);
-        patientAgeInput.setAttribute("readonly", true);
-        patientGenderInput.setAttribute("readonly", true);
+        patientNameInput.disabled = true;
+        patientAgeInput.disabled = true;
+        patientGenderInput.disabled = true;
       });
 
       // Function to show the main popup
@@ -1788,16 +1892,7 @@
 
         return obj;
       }
-      // Parse URL parameters to get doctor's data
-      // const queryString = window.location.search;
-      // // Parse query string into object
-      // const doctordata = queryStringToObject(queryString);
 
-      // Retrieve slotData object
-      //const slotData = doctordata.slotData;
-
-      //console.log(slotData);
-      // Get the URLSearchParams object from the current URL
       const queryParams = new URLSearchParams(window.location.search);
 
       // Retrieve the JSON strings from the query parameters

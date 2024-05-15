@@ -11,6 +11,7 @@
             margin: 0;
             padding: 0;
             background-color: #f0f0f0;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         .header {
@@ -937,41 +938,25 @@
                         </div>
                     `;
                         listItem.appendChild(slotItem);
-                        slotItem.addEventListener("click", () => {
-                            console.log(slot);
-                            doctor.SlotId = slot.ID ? slot.ID : null;
-                            delete doctor.SCH_DT;
-                            const doctordata = doctor ? doctor : null;
-                            console.log(doctor);
-                            const object1String = JSON.stringify(doctordata);
-                            const object2String = JSON.stringify(slot);
-                            const baseUrl = "/doctor_profile_with_slots.html"; // Base URL of the destination page
-                            const queryParams = new URLSearchParams({
-                                data1: object1String,
-                                data2: object2String,
+                        if (slot.DR_STATUS != 'OUT') {
+                            slotItem.addEventListener("click", () => {
+                                console.log(slot);
+                                doctor.SlotId = slot.ID ? slot.ID : null;
+                                delete doctor.SCH_DT;
+                                const doctordata = doctor ? doctor : null;
+                                console.log(doctor);
+                                const object1String = JSON.stringify(doctordata);
+                                const object2String = JSON.stringify(slot);
+                                const baseUrl = "/doctor_profile_with_slots.html"; // Base URL of the destination page
+                                const queryParams = new URLSearchParams({
+                                    data1: object1String,
+                                    data2: object2String,
+                                });
+
+                                const url = `${baseUrl}?${queryParams}`;
+                                window.location.href = url;
                             });
-
-                            const url = `${baseUrl}?${queryParams}`;
-
-                            // Function to convert object to query string
-                            // function objectToQueryString(obj) {
-                            //   const keyValuePairs = [];
-                            //   for (const key in obj) {
-                            //     if (Object.hasOwnProperty.call(obj, key)) {
-                            //       keyValuePairs.push(
-                            //           `${key}=${encodeURIComponent(obj[key])}`
-                            //         );
-                            //     }
-                            //   }
-                            //   return keyValuePairs.join("&");
-                            // }
-
-                            // Convert object to query string
-                            // const queryParams = objectToQueryString(doctordata);
-                            // console.log(queryParams);
-
-                            window.location.href = url;
-                        });
+                        }
                     });
 
                     doctorPhotoContainer.addEventListener("click", () => {

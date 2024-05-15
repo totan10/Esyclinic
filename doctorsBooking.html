@@ -355,6 +355,15 @@
       /* text-align: center; */
     }
 
+    .feeText {
+      background: #01b5cd;
+      color: #fff;
+      padding: 3px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
     .gradientTexts {
       background: -webkit-linear-gradient(#43cea2, #185a9d);
       -webkit-background-clip: text;
@@ -902,13 +911,13 @@
               const doctorDetails = document.createElement("p");
               if (doctor.DR_STATUS === 'OUT') {
                 doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:red;">${doctor.DR_STATUS}</span> <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
-              <br><span style="font-size:large;"><strong>Fees:<span class='gradientTexts'> ₹${doctor.DR_FEES}</span></strong></span>`;
+              <br><span style="font-size:large;"><strong>Fees:<span class='feeText'> ₹${doctor.DR_FEES}</span></strong></span>`;
               }
               else {
                 doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:green;">${doctor.DR_STATUS}</span> <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
-              <br><span style="font-size:large;"><strong>Fees:<span class='gradientTexts'> ₹${doctor.DR_FEES}</span></strong></span>
-                <br><strong>Available Bookings: </strong>${doctor.SCH_DT[0].AVAILABLE}
-                <br><strong>Timing: </strong>${doctor.SCH_DT[0].FROM} - ${doctor.SCH_DT[0].TO}`;
+              <br><span style="font-size:large;"><strong>Fees:<span class='feeText'> ₹${doctor.DR_FEES}</span></strong></span>
+                <br><span style="font-size:15px;"><strong>Available Bookings: ${doctor.SCH_DT[0].AVAILABLE}
+                <br>Timing: ${doctor.SCH_DT[0].FROM} - ${doctor.SCH_DT[0].TO}</strong></span>`;
               }
 
               doctorDetails.style.fontSize = "14px";
@@ -1072,7 +1081,7 @@
             <span><strong>Specialization:</strong></span> ${specialist.D_CATG}
             <br>  <span><strong>Experience:</strong></span> ${specialist.EXPERIENCE}
                     <br> <span><strong>Qualification:</strong></span> ${specialist.QUALIFICATION}
-                <br><span style="font-size:large;"><strong>Fees:</strong><span class='gradientTexts'> ₹${specialist.DR_FEES}</span></span>`;
+                <br><span style="font-size:large;"><strong>Fees:</strong><span class='feeText'> ₹${specialist.DR_FEES}</span></span>`;
 
               const bookNowBtn = document.createElement("button");
               bookNowBtn.textContent = "Book Now";
@@ -1282,41 +1291,25 @@
                         </div>
                     `;
             listItem.appendChild(slotItem);
-            slotItem.addEventListener("click", () => {
-              console.log(slot);
-              doctor.SlotId = slot.ID ? slot.ID : null;
-              delete doctor.SCH_DT;
-              const doctordata = doctor ? doctor : null;
-              console.log(doctor);
-              const object1String = JSON.stringify(doctordata);
-              const object2String = JSON.stringify(slot);
-              const baseUrl = "/doctor_profile_with_slots.html"; // Base URL of the destination page
-              const queryParams = new URLSearchParams({
-                data1: object1String,
-                data2: object2String,
+            if (slot.DR_STATUS != 'OUT') {
+              slotItem.addEventListener("click", () => {
+                console.log(slot);
+                doctor.SlotId = slot.ID ? slot.ID : null;
+                delete doctor.SCH_DT;
+                const doctordata = doctor ? doctor : null;
+                console.log(doctor);
+                const object1String = JSON.stringify(doctordata);
+                const object2String = JSON.stringify(slot);
+                const baseUrl = "/doctor_profile_with_slots.html"; // Base URL of the destination page
+                const queryParams = new URLSearchParams({
+                  data1: object1String,
+                  data2: object2String,
+                });
+
+                const url = `${baseUrl}?${queryParams}`;
+                window.location.href = url;
               });
-
-              const url = `${baseUrl}?${queryParams}`;
-
-              // Function to convert object to query string
-              // function objectToQueryString(obj) {
-              //   const keyValuePairs = [];
-              //   for (const key in obj) {
-              //     if (Object.hasOwnProperty.call(obj, key)) {
-              //       keyValuePairs.push(
-              //           `${key}=${encodeURIComponent(obj[key])}`
-              //         );
-              //     }
-              //   }
-              //   return keyValuePairs.join("&");
-              // }
-
-              // Convert object to query string
-              // const queryParams = objectToQueryString(doctordata);
-              // console.log(queryParams);
-
-              window.location.href = url;
-            });
+            }
           });
 
           doctorPhotoContainer.addEventListener("click", () => {
