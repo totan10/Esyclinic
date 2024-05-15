@@ -190,7 +190,7 @@
       }
 
       .modal-slot-item:hover .availability {
-        color: greenyellow;
+        color: #04f504;
         font-weight: 700;
       }
 
@@ -969,7 +969,7 @@
                   }
                   else {
                     availability = 'Booking Available';
-                    textcolor = '#03cf03';
+                    textcolor = '#04f504';
                   }
                   const slottimeItem = document.createElement("div");
                   slottimeItem.classList.add("modal-slot-item", "col-md-3");
@@ -1387,6 +1387,9 @@
               FROM: slotdetails.FROM,
               TO: slotdetails.TO,
               DR_FEES: doctordata.DR_FEES,
+              DR_STATUS:slotData.DR_STATUS,
+              DR_ARRIVE:slotData.DR_ARRIVE,
+              CHEMBER_NO:slotData.CHEMBER_NO
             };
             console.log(patientDetails);
             showMainPopup(

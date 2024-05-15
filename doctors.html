@@ -548,8 +548,9 @@
             const doctorsContainer =
                 document.querySelector(".doctors-container");
             doctorsContainer.innerHTML = ''
+            const headername = specialistData.SPECIALIST ? specialistData.SPECIALIST : specialistData.SYM_NAME;
             const heading = document.querySelector('.doctors_heading', "wow", "fadeInLeft");
-            const headContent = specialistData.SYM_NAME ? `Doctors For ${specialistData.SYM_NAME} Treatment` : `Available ${specialistData.SPECIALIST}`
+            const headContent = specialistData.SYM_ID ? `Doctors For ${headername} Treatment` : `Available ${headername}`
             heading.textContent = headContent
             heading.style.display = 'block'
             // if (!isSortedByFees) {
@@ -616,8 +617,7 @@
                     <br> <span><strong>Qualification:</strong></span> ${doctor.QUALIFICATION}
                     <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
                 <br><span style="font-size:large;"><strong>Fees:<span class='gradientTexts'> ₹${doctor.DR_FEES}</span></strong></span>
-                <br><strong>Date of Avaibility: </strong>${availabe_date}
-            `
+                <br><span style='color:#3A76A5;'><strong>Next Available: ${availabe_date}</strong></span> `
 
                 doctorDetails.style.fontSize = "14px";
 
@@ -721,7 +721,8 @@
 
                 // Example: Access specific properties
                 console.log(specialistData.SPECIALIST);
-                document.title = `${specialistData.SPECIALIST}`
+                const pageTitle = specialistData.SPECIALIST ? specialistData.SPECIALIST : specialistData.SYM_NAME;
+                document.title = `${pageTitle}`
 
             }
             // Check if the user is already logged in
@@ -913,11 +914,9 @@
                         const slotItem = document.createElement("div");
                         slotItem.classList.add("slotitems");
                         // Determine status text and color based on conditions
-                        if (
-                            slot.SLOT_STATUS === "Available" &&
-                            slot.DR_STATUS === "TIMELY"
-                        ) {
-                            statusText = "ON TIME";
+                        if (slot.SLOT_STATUS === "Available" &&
+                            slot.DR_STATUS != "IN") {
+                            statusText = "Available";
                             statusColor = "green";
                         } else if (
                             slot.SLOT_STATUS === "Available" &&
@@ -1028,7 +1027,9 @@
           <p style='color:green'>${doctor.FIELD_TYPE}</p>`;
                     searchResults.appendChild(listItem)
                     listItem.addEventListener('click', () => {
-                        if (doctor.FIELD_TYPE === 'Symptom') {
+
+                        console.log(doctor);
+                        if (doctor.FIELD_TYPE === 'Symptom' || doctor.FIELD_TYPE === 'Specialist') {
                             const symptomData = doctor ? doctor.DETAILS : null
                             symptomData.SYM_NAME = doctor.ITEM_NAME ? doctor.ITEM_NAME : null
                             const encodedData = encodeURIComponent(JSON.stringify(symptomData));
@@ -1036,7 +1037,8 @@
 
                             // Redirect to doctors.html with the specified SPECIALIST parameter
                             window.location.href = redirectUrl;
-                        };
+                        }
+
                     })
                 }
             });

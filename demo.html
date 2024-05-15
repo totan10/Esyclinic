@@ -181,7 +181,7 @@
     }
 
     .modal-slot-item:hover .availability {
-      color: greenyellow;
+      color: #04f504;
       font-weight: 700;
     }
 
@@ -904,10 +904,10 @@
           // Determine status text and color based on conditions
           let statusText, statusColor;
           if (
-            slot.SLOT_STATUS === "Available" &&
-            slot.DR_STATUS === "TIMELY"
+            slot.SLOT_STATUS === "Available"
+           
           ) {
-            statusText = "ON TIME";
+            statusText = "Available";
             statusColor = "#7bf066";
           } else if (
             slot.SLOT_STATUS === "Available" &&
@@ -1017,7 +1017,7 @@
                   }
                   else {
                     availability = 'Booking Available';
-                    textcolor = '#03cf03';
+                    textcolor = '#04f504';
                   }
                   slottimeItem.innerHTML = `
                             <span>${timeSlot.FROM} - ${timeSlot.TO}</span>
@@ -1523,6 +1523,9 @@
             FROM: slotdetails.FROM,
             TO: slotdetails.TO,
             DR_FEES: doctordata.DR_FEES,
+            DR_STATUS: slotTiming.DR_STATUS,
+            DR_ARRIVE: slotTiming.DR_ARRIVE,
+            CHEMBER_NO: slotTiming.CHEMBER_NO
           };
           console.log(patientDetails);
           showMainPopup(
@@ -1883,10 +1886,10 @@
           LOGO_URL: userData.LOGO_64,
         };
         generatePDF(doctorData, clinicData, patientdetails);
-        setTimeout(()=>{
-          window.location.href='dashboard.html'
-        },2000)
-       
+        setTimeout(() => {
+          window.location.href = 'dashboard.html'
+        }, 2000)
+
       });
     }
 
@@ -1936,9 +1939,9 @@
           LOGO_URL: userData.LOGO_64,
         };
         generatePDF(doctorData, clinicData, patientdetails);
-        setTimeout(()=>{
-          window.location.href='dashboard.html'
-        },2000)
+        setTimeout(() => {
+          window.location.href = 'dashboard.html'
+        }, 2000)
       });
     }
 

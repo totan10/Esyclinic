@@ -574,9 +574,9 @@
             let statusText, statusColor;
             if (
               slot.SLOT_STATUS === "Available" &&
-              slot.DR_STATUS === "TIMELY"
+              slot.DR_STATUS != "IN"             
             ) {
-              statusText = "ON TIME";
+              statusText = "Available";
               statusColor = "green";
             } else if (
               slot.SLOT_STATUS === "Available" &&
@@ -688,7 +688,9 @@
           <p style='color:green'>${doctor.FIELD_TYPE}</p>`;
           searchResults.appendChild(listItem)
           listItem.addEventListener('click', () => {
-            if (doctor.FIELD_TYPE === 'Symptom') {
+
+            console.log(doctor);
+            if (doctor.FIELD_TYPE === 'Symptom' || doctor.FIELD_TYPE === 'Specialist') {
               const symptomData = doctor ? doctor.DETAILS : null
               symptomData.SYM_NAME = doctor.ITEM_NAME ? doctor.ITEM_NAME : null
               const encodedData = encodeURIComponent(JSON.stringify(symptomData));

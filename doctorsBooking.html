@@ -736,27 +736,7 @@
       }
     )
     wow.init();
-    document.addEventListener("DOMContentLoaded", function () {
-      // Check if the user is already logged in
-      const isLoggedIn = localStorage.getItem("isLoggedIn");
-      if (isLoggedIn) {
-        // Retrieve username from localStorage
-        const username = localStorage.getItem("username");
-        // Do something with the logged-in user's data
-        const storedUserData = localStorage.getItem("userData");
-        // Access and use the user's data
-        if (storedUserData) {
-          userData = JSON.parse(storedUserData);
-          console.log(userData);
-          userData = userData.data
-          // Set the logo URL dynamically
-          const companyLogo = document.getElementById("companyLogo");
-          const clinicName = document.querySelector(".profile-icon")
-          clinicName.innerHTML = `${userData.PHARMA_NAME}`
-          companyLogo.src = userData.LOGO_URL;
-        }
-      }
-    });
+
     function showOneRow(doctors) {
       const gridItems = document.querySelectorAll(doctors);
       gridItems.forEach((item, index) => {
@@ -769,7 +749,33 @@
         }
       });
     }
+    const formatDate = (dateStr) => {
+      const today = new Date(); // Get current date
+      const year = dateStr.slice(0, 4);
+      const month = parseInt(dateStr.slice(4, 6), 10); // Convert month part to integer
+      const day = dateStr.slice(6, 8);
 
+      // Create a Date object from the input date string
+      const inputDate = new Date(`${year}-${month}-${day}`);
+
+      // Compare the input date with today's date (ignore time for comparison)
+      if (inputDate.toDateString() === today.toDateString()) {
+        return 'Today';
+      } else {
+        // Array of month names
+        const monthNames = [
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
+
+        // Get month name based on month number (month - 1 due to zero-indexed array)
+        const monthName = monthNames[month - 1];
+
+        // Construct formatted date string
+        const formattedDate = `${day}-${monthName}-${year}`;
+        return formattedDate;
+      }
+    };
     function populateDoctors() {
       const PHARMA_ID = userData ? userData.PHARMA_ID : null
       const url = "http://easyhealths.com/api/searchDoctorTest";
@@ -800,6 +806,26 @@
 
     // Function to make a POST request on page load
     window.onload = function () {
+      // Check if the user is already logged in
+      const isLoggedIn = localStorage.getItem("isLoggedIn");
+      if (isLoggedIn) {
+        // Retrieve username from localStorage
+        const username = localStorage.getItem("username");
+        // Do something with the logged-in user's data
+        const storedUserData = localStorage.getItem("userData");
+        // Access and use the user's data
+        if (storedUserData) {
+          userData = JSON.parse(storedUserData);
+          console.log(userData);
+          userData = userData.data
+          // Set the logo URL dynamically
+          const companyLogo = document.getElementById("companyLogo");
+          const clinicName = document.querySelector(".profile-icon")
+          clinicName.innerHTML = `${userData.PHARMA_NAME}`
+          companyLogo.src = userData.LOGO_URL;
+        }
+      }
+
       document.getElementById('overlay').style.display = 'block';
       document.getElementById('loader').style.display = 'block';
       populateDoctors();
@@ -907,7 +933,7 @@
               const doctorName = document.createElement("p");
               doctorName.textContent = doctor.DR_NAME;
               doctorName.style.fontWeight = "bold";
-
+              const availabe_date = formatDate(doctor.SCH_DT[0].SCH_DT)
               const doctorDetails = document.createElement("p");
               let statusText, statusColor;
               if (
@@ -918,21 +944,27 @@
               } else if (
                 doctor.DR_STATUS === "IN"
               ) {
-                statusText = "In Clinic";
+                statusText = "In CLINIC";
                 statusColor = "#22b008";
-              } else {
+              } else if (doctor.DR_STATUS === 'OUT') {
                 statusText = "OUT";
+                statusColor = "red";
+              }
+              else {
+                statusText = doctor.DR_STATUS;
                 statusColor = "red";
               }
               if (doctor.DR_STATUS === 'OUT') {
                 doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:${statusColor}">${statusText}</span> <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
-              <br><span style="font-size:large;"><strong>Fees:<span class='feeText'> ₹${doctor.DR_FEES}</span></strong></span>`;
+              <br><span style="font-size:large;"><strong>Fees:<span class='feeText'> ₹${doctor.DR_FEES}</span></strong></span>
+              <br><span style='color:#3A76A5;'><strong>Next Available: ${availabe_date}</strong></span> `;
               }
               else {
                 doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:${statusColor}">${statusText}</span> <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
               <br><span style="font-size:large;"><strong>Fees:<span class='feeText'> ₹${doctor.DR_FEES}</span></strong></span>
                 <br><span style="font-size:15px;"><strong>Available Bookings: ${doctor.SCH_DT[0].AVAILABLE}
                 <br>Timing: ${doctor.SCH_DT[0].FROM} - ${doctor.SCH_DT[0].TO}</strong></span>`;
+                // <br><span style='color:#3A76A5;'><strong>Next Available: ${availabe_date}</strong></span> `;
               }
 
               doctorDetails.style.fontSize = "14px";
@@ -1019,11 +1051,12 @@
               const statusOrder = {
                 'IN': 1,
                 'TIMELY': 2,
-                'OUT': 3
+                'DELAY':3,
+                'OUT': 4
               };
 
-              const statusA = a.STATUS;
-              const statusB = b.STATUS;
+              const statusA = a.DR_STATUS;
+              const statusB = b.DR_STATUS;
 
               if (statusOrder[statusA] < statusOrder[statusB]) {
                 return -1;
@@ -1091,12 +1124,33 @@
               specialistName.classList.add("doctor-name"); // Added class for styling
               const doctorDetails = document.createElement("p");
               doctorDetails.classList.add("doctor-category"); // Added class for styling
-
+              const availabe_date = formatDate(specialist.SCH_DT[0].SCH_DT)
+              let statusText, statusColor;
+              if (
+                specialist.DR_STATUS === "TIMELY"
+              ) {
+                statusText = "ON TIME";
+                statusColor = "#22b008";
+              } else if (
+                specialist.DR_STATUS === "IN"
+              ) {
+                statusText = "In CLINIC";
+                statusColor = "#22b008";
+              } else if (specialist.DR_STATUS === 'OUT') {
+                statusText = "OUT";
+                statusColor = "red";
+              }
+              else {
+                statusText = specialist.DR_STATUS;
+                statusColor = "red";
+              }
               doctorDetails.innerHTML = `
+              <span><strong>Check In Status:</strong></span> <span style="color:${statusColor}">${statusText}</span> <br>
             <span><strong>Specialization:</strong></span> ${specialist.D_CATG}
             <br>  <span><strong>Experience:</strong></span> ${specialist.EXPERIENCE}
                     <br> <span><strong>Qualification:</strong></span> ${specialist.QUALIFICATION}
-                <br><span style="font-size:large;"><strong>Fees:</strong><span class='feeText'> ₹${specialist.DR_FEES}</span></span>`;
+                <br><span style="font-size:large;"><strong>Fees:</strong><span class='feeText'> ₹${specialist.DR_FEES}</span></span>
+                <br><span style='color:#3A76A5;'><strong>Next Available: ${availabe_date}</strong></span> `;
 
               const bookNowBtn = document.createElement("button");
               bookNowBtn.textContent = "Book Now";
@@ -1283,7 +1337,7 @@
             let statusText, statusColor;
             if (
               slot.SLOT_STATUS === "Available" &&
-              slot.DR_STATUS === "TIMELY"
+              slot.DR_STATUS != "IN"
             ) {
               statusText = "ON TIME";
               statusColor = "green";
