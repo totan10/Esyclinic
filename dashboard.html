@@ -506,11 +506,11 @@
         return aIndex - bIndex;
       });
       console.log(filtered);
-      // Define the specific order for certain Field_type values
-      const specificOrder = ['Doctor', 'Symptom', 'Test']; // Define specific types to appear first
+         // Define the specific order for certain Field_type values
+         const specificOrder = ['Doctor', 'Symptom', 'Test', 'Profile', 'Package', , 'PATHOLOGY', 'RADIOLOGY']; // Define specific types to appear first
       filtered.sort((a, b) => {
-        const fieldA = a.Field_type;
-        const fieldB = b.Field_type;
+        const fieldA = a.FIELD_TYPE;
+        const fieldB = b.FIELD_TYPE;
 
         // Get the index of Field_type values in the specificOrder array
         const indexA = specificOrder.indexOf(fieldA);
