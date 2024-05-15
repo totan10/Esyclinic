@@ -745,8 +745,9 @@
               <select id="patientDropdown">
                 <option value="">Select Patient</option>
               </select>
-              <input type="text" id="patientName" placeholder="Your Name" required />
-              <input type="tel" id="alternateMobile" placeholder="Your Alternate Mobile Number"
+              <input type="text" id="patientName" autocomplete="off" placeholder="Your Name" required />
+              <small id="nameError" class="text-danger"></small>
+              <input type="tel" id="alternateMobile" autocomplete="off" placeholder="Your Alternate Mobile Number"
                 pattern="[6-9]{1}[0-9]{9}" maxlength="10" />
               <small id="alterMobileNumberError" class="text-danger"></small>
               <select id="patientGender" required>
@@ -755,13 +756,13 @@
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
-              <input type="text" id="patientAddress" placeholder="Your Address" required />
+              <input type="text" id="patientAddress" autocomplete="off" placeholder="Your Address" required />
               <select id="M_STS">
                 <option value="">Marital Status</option>
                 <option value="Married">Married</option>
                 <option value="Unmarried">Unmarried</option>
               </select>
-              <input type="number" id="patientAge" placeholder="Your Age" required />
+              <input type="number" id="patientAge" autocomplete="off" placeholder="Your Age" required />
               <div class="buttonContainer">
                 <input type="submit" value="Proceed" />
                 <button type="button" id="cancelButton" onclick="closeForm()">
@@ -1256,14 +1257,26 @@
       document
         .getElementById("patientName")
         .addEventListener("input", function (event) {
-          const name = event.target.value;
-          if (!isValidName(name)) {
-            displayError(
-              event.target,
-              "Name should only contain alphabets."
-            );
+          const name = document.getElementById('patientName');
+          const nameError = document.getElementById('nameError');
+          if (!isValidName(name.value.trim())) {
+            if (name.value == '') {
+              nameError.textContent = "Name should not be blank!"
+              nameError.classList.add('text-danger');
+              nameError.style.width = '100%';
+              document.getElementById('patientName').style.marginBottom = '0px'
+            }
+            else {
+              nameError.textContent = "Name should contain only alphabets!"
+              nameError.classList.add('text-danger');
+              nameError.style.width = '100%';
+              document.getElementById('patientName').style.marginBottom = '0px'
+            }
           } else {
-            clearError(event.target);
+            nameError.textContent = ""
+            nameError.classList.remove('text-danger');
+            nameError.style.width = '0';
+            document.getElementById('patientName').style.marginBottom = '10px'
           }
         });
 
