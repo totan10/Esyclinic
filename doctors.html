@@ -593,7 +593,12 @@
 
             for (let i = 0; i < doctorsList.length; i++) {
                 const doctor = doctorsList[i].DETAILS;
-                const availabe_date = formatDate(doctor.SCH_DT[0].SCH_DT)
+                const nextAvailableSchedule = doctor.SCH_DT.find(schedule =>
+                    schedule.DR_STATUS !== 'OUT' && schedule.DR_STATUS !== 'CANCELLED'
+                );
+
+                const nextSCH_DT = nextAvailableSchedule ? nextAvailableSchedule.SCH_DT : null;
+                const availabe_date = formatDate(nextSCH_DT)
                 const doctorDiv = document.createElement("div");
                 doctorDiv.classList.add("doctor", "wow", "fadeInLeft");
 
@@ -621,7 +626,27 @@
                 //     <br><strong>Date of Avaibility: </strong>${availabe_date}
                 // `
                 //     }
+                let statusText, statusColor;
+                if (
+                    doctor.DR_STATUS === "TIMELY"
+                ) {
+                    statusText = "ON TIME";
+                    statusColor = "#22b008";
+                } else if (
+                    doctor.DR_STATUS === "IN"
+                ) {
+                    statusText = "In CLINIC";
+                    statusColor = "#22b008";
+                } else if (doctor.DR_STATUS === 'OUT') {
+                    statusText = "OUT";
+                    statusColor = "red";
+                }
+                else {
+                    statusText = doctor.DR_STATUS;
+                    statusColor = "red";
+                }
                 doctorDetails.innerHTML = ` 
+                <span><strong>Doctor Status:</strong></span> <span style="color:${statusColor}">${statusText}</span> <br>
                     <span><strong>Experience:</strong></span> ${doctor.EXPERIENCE}
                     <br> <span><strong>Qualification:</strong></span> ${doctor.QUALIFICATION}
                     <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}

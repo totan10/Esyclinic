@@ -367,6 +367,7 @@
     .gradientTexts {
       background: -webkit-linear-gradient(#43cea2, #185a9d);
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
@@ -875,7 +876,7 @@
       const todayeButton = document.getElementById('todayBtn');
       console.log(todayDoctorsData);
       todayDoctorsData.sort(sortByCheckInStatus);
-      
+
       for (let i = 0; i < todayDoctorsData.length; i++) {
         const doctor = todayDoctorsData[i];
         const doctorDiv = document.createElement("div");
