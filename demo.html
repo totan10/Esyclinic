@@ -598,7 +598,8 @@
     }
 
     .clinicDetails h2 {
-      color: cyan;
+      color: #18b5cd;
+      font-weight: 700;
       /* Header color */
       margin: 0;
     }
@@ -627,7 +628,7 @@
     }
 
     .column h6 {
-      color: rgb(30, 140, 231);
+      color: #18b5cd;
       /* Header color */
       margin: 0;
     }
@@ -670,6 +671,16 @@
       padding: 3px;
       text-align: center;
       border-bottom: 1px solid black;
+    }
+
+    .footer {
+      margin: 0;
+      margin-left: 60%;
+      margin-top: 10px;
+    }
+
+    .footer p {
+      font-size: small;
     }
 
     @media print {
@@ -817,7 +828,7 @@
         const username = localStorage.getItem("username");
         // Do something with the logged-in user's data
         const storedUserData = localStorage.getItem("userData");
-        console.log(storedUserData);
+
         // Access and use the user's data
         if (storedUserData) {
           userData = JSON.parse(storedUserData).data;
@@ -905,7 +916,8 @@
           let statusText, statusColor;
           if (
             slot.SLOT_STATUS === "Available"
-           
+            &&
+            slot.DR_STATUS === "TIMELY"
           ) {
             statusText = "Available";
             statusColor = "#7bf066";
@@ -915,7 +927,13 @@
           ) {
             statusText = "In Clinic";
             statusColor = "#7bf066";
-          } else {
+          } else if (
+            slot.DR_STATUS === "CANCELLED"
+          ) {
+            statusText = "Cancelled";
+            statusColor = "red";
+          }
+          else {
             statusText = "Not Available";
             statusColor = "red";
           }
@@ -927,22 +945,16 @@
                                 <div class="status" style="color: ${statusColor};">${statusText}</div>
                             </div>
                         `;
-          if (slot.DR_STATUS != 'OUT') {
-            slotItem.addEventListener("mouseenter", () => {
-              //handleSlotClick(slot);
-
-              //fetchSlotTimings(doctordata.DR_ID, slot.ID);
-              //console.log(SLOTS);
-              // slot.SLOTS = SLOTS ? SLOTS : null;
-              // console.log(slot);
-              // //console.log(slot);
-              // if(slot.SLOTS[0]){
-
-              // }
+          slotItem.addEventListener("mouseenter", () => {
+            if (slot.DR_STATUS != 'OUT' && slot.DR_STATUS !== 'CANCELLED') {
               generateSlotTimes(slot, j, rowclass);
-            });
-          }
-
+            }
+            else {
+              const slotTimeContainer = document.querySelector(`.${rowclass}`);
+            slotTimeContainer.classList.remove("active"); // Remove 'active' class to trigger transition
+            }
+            
+          });
           slotItem.addEventListener("click", () => {
             const slotTimeContainer = document.querySelector(`.${rowclass}`);
             slotTimeContainer.classList.remove("active"); // Remove 'active' class to trigger transition
@@ -1025,7 +1037,6 @@
                         `;
                   slotItemPair.appendChild(slottimeItem);
                   // console.log(JSON.parse(slottimeItem.dataset.slot));
-                  console.log(slottimeItem);
                   if (timeSlot.AVAIL_APNT != '0' && timeSlot.SLOT_STATUS !== 'Closed') {
                     slottimeItem.onclick = function () {
                       //console.log("inside the function");
@@ -2004,7 +2015,7 @@
             </div>
         </div>
         <div class="footer">
-                <p>&copy; ${new Date().getFullYear()} Easyhealths. All rights reserved.</p>
+                <p>&copy; ${new Date().getFullYear()} Easyhealths - All rights reserved.</p>
             </div>
     </div>`;
 

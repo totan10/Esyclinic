@@ -736,6 +736,27 @@
       }
     )
     wow.init();
+    function toggleGridView(doctors, button) {
+      const gridItems = document.querySelectorAll(doctors);
+      const toggleButton = document.getElementById(button);
+      const isExpanded = toggleButton.classList.contains('expanded');
+
+      if (isExpanded) {
+        // Collapse grid to show only one row
+        showOneRow(doctors);
+        toggleButton.innerHTML = 'View All'; // Change to expand icon
+        toggleButton.classList.remove('expanded');
+      } else {
+        // Expand grid to show all items
+        gridItems.forEach(item => {
+          item.style.display = 'block';
+          item.style.display = 'flex'
+          item.style.flexDirection = 'column'
+        });
+        toggleButton.innerHTML = 'View Less'; // Change to compress icon
+        toggleButton.classList.add('expanded');
+      }
+    }
 
     function showOneRow(doctors) {
       const gridItems = document.querySelectorAll(doctors);
@@ -804,6 +825,319 @@
         });
     }
 
+    // Custom sorting function based on CHK_IN_STATUS
+    function sortByCheckInStatus(a, b) {
+      const statusOrder = {
+        'IN': 1,
+        'TIMELY': 2,
+        'DELAY': 3,
+        'OUT': 4,
+        'CANCELLED': 5
+      };
+
+      const statusA = a.DR_STATUS;
+      const statusB = b.DR_STATUS;
+
+      if (statusOrder[statusA] < statusOrder[statusB]) {
+        return -1;
+      } else if (statusOrder[statusA] > statusOrder[statusB]) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+
+    // Function to convert object to query string
+    function objectToQueryString(obj) {
+      const keyValuePairs = [];
+      for (const key in obj) {
+        if (Object.hasOwnProperty.call(obj, key)) {
+          if (key === "SCH_DT") {
+            // Convert slotData object to JSON string
+            keyValuePairs.push(
+              `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
+            );
+          } else {
+            keyValuePairs.push(
+              `${key}=${encodeURIComponent(obj[key])}`
+            );
+          }
+        }
+      }
+      return keyValuePairs.join("&");
+    }
+
+
+    // Populate the doctors grid for today
+    function populateTodayDoctors(todayDoctorsData) {
+      const doctorsContainer =
+        document.querySelector(".doctors-container");
+      const todayeButton = document.getElementById('todayBtn');
+      console.log(todayDoctorsData);
+      todayDoctorsData.sort(sortByCheckInStatus);
+      
+      for (let i = 0; i < todayDoctorsData.length; i++) {
+        const doctor = todayDoctorsData[i];
+        const doctorDiv = document.createElement("div");
+        doctorDiv.classList.add("doctor", "wow", "fadeInLeft");
+
+        const doctorImg = document.createElement("img");
+        doctorImg.src = doctor.DR_PHOTO;
+
+        const doctorName = document.createElement("p");
+        doctorName.textContent = doctor.DR_NAME;
+        doctorName.style.fontWeight = "bold";
+        const nextAvailableSchedule = doctor.SCH_DT.find(schedule =>
+          schedule.DR_STATUS !== 'OUT' && schedule.DR_STATUS !== 'CANCELLED'
+        );
+
+        const nextSCH_DT = nextAvailableSchedule ? nextAvailableSchedule.SCH_DT : null;
+
+        console.log(nextSCH_DT);
+        const availabe_date = formatDate(nextSCH_DT)
+        const doctorDetails = document.createElement("p");
+        let statusText, statusColor;
+        if (
+          doctor.DR_STATUS === "TIMELY"
+        ) {
+          statusText = "ON TIME";
+          statusColor = "#22b008";
+        } else if (
+          doctor.DR_STATUS === "IN"
+        ) {
+          statusText = "In CLINIC";
+          statusColor = "#22b008";
+        } else if (doctor.DR_STATUS === 'OUT') {
+          statusText = "OUT";
+          statusColor = "red";
+        }
+        else {
+          statusText = doctor.DR_STATUS;
+          statusColor = "red";
+        }
+        if (doctor.DR_STATUS === 'OUT') {
+          doctorDetails.innerHTML = `<span><strong>Doctor Status:</strong></span> <span style="color:${statusColor}">${statusText}</span> <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
+              <br><span style="font-size:large;"><strong>Fees:<span class='feeText'> ₹${doctor.DR_FEES}</span></strong></span>
+              <br><span style='color:#3A76A5;'><strong>Next Available: ${availabe_date}</strong></span> `;
+        }
+        else {
+          doctorDetails.innerHTML = `<span><strong>Doctor Status:</strong></span> <span style="color:${statusColor}">${statusText}</span> <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
+              <br><span style="font-size:large;"><strong>Fees:<span class='feeText'> ₹${doctor.DR_FEES}</span></strong></span>
+                <br><span style="font-size:15px;"><strong>Available Bookings: ${doctor.SCH_DT[0].AVAILABLE}
+                <br>Timing: ${doctor.SCH_DT[0].FROM} - ${doctor.SCH_DT[0].TO}</strong></span>
+          <br><span style='color:#3A76A5;'><strong>Next Available: ${availabe_date}</strong></span> `;
+        }
+
+        doctorDetails.style.fontSize = "14px";
+
+        // const feeBookContainer = document.createElement("div");
+        // feeBookContainer.classList.add("fee-book-container");
+
+        const bookNowBtn = document.createElement("button");
+        bookNowBtn.textContent = "Book Now";
+        bookNowBtn.classList.add("book-now-btn");
+        //feeBookContainer.appendChild(bookNowBtn);
+        bookNowBtn.addEventListener("click", () => {
+          const doctordata = doctor ? doctor : null;
+          // Convert object to query string
+          const queryParams = objectToQueryString(doctordata);
+          console.log(queryParams);
+          window.location.href = `demo.html?${queryParams}`;
+          console.log(doctor);
+
+        });
+        doctorDiv.appendChild(doctorImg);
+        doctorDiv.appendChild(doctorName);
+        doctorDiv.appendChild(doctorDetails);
+        doctorDiv.appendChild(bookNowBtn); // Append fee and book container
+        doctorDiv.addEventListener("click", () => {
+          const doctordata = doctor ? doctor : null;
+          // Convert object to query string
+          const queryParams = objectToQueryString(doctordata);
+          console.log(queryParams);
+          window.location.href = `demo.html?${queryParams}`;
+          console.log(doctor);
+        })
+        doctorsContainer.appendChild(doctorDiv);
+      }
+      showOneRow('.doctor')
+      todayeButton.addEventListener('click', function () {
+        toggleGridView('.doctor', 'todayBtn');
+      });
+    }
+
+    //populate specialist grid
+    function populateSpecialistContainer(specialistsData) {
+      const specialistsContainer = document.querySelector(
+        ".specialists-container"
+      );
+      const specialistBtn = document.getElementById('specialistBtn')
+      for (let i = 0; i < specialistsData.length; i++) {
+        const specialist = specialistsData[i];
+        const specialistDiv = document.createElement("div");
+        specialistDiv.classList.add("specialist", "wow", "fadeInLeft");
+        specialistDiv.addEventListener("click", () => {
+          console.log(specialist); // Print specialist data when clicked
+          // Encode the SPECIALIST value for URL
+          // Encode object data as JSON and then as URL parameter
+          const encodedData = encodeURIComponent(JSON.stringify(specialist));
+          const redirectUrl = `doctors.html?data=${encodedData}`;
+
+          // Redirect to doctors.html with the specified SPECIALIST parameter
+          window.location.href = redirectUrl;
+        });
+        const specialistImg = document.createElement("img");
+        specialistImg.src = specialist.PHOTO_URL;
+        const specialistName = document.createElement("h3");
+        specialistName.style.fontWeight = '600';
+        specialistName.textContent = specialist.SPECIALIST;
+        const specialistDesignation = document.createElement("p");
+        specialistDesignation.textContent = specialist.SPECIALITY;
+        const totalDoctors = document.createElement("p");
+        totalDoctors.innerHTML = `<span class='gradientTexts'>Total Doctors: ${specialist.TOTAL}</span>`;
+        totalDoctors.style.fontWeight = '700'
+        totalDoctors.style.fontSize = 'medium'
+        specialistDiv.appendChild(specialistImg);
+        specialistDiv.appendChild(specialistName);
+        specialistDiv.appendChild(specialistDesignation);
+        specialistDiv.appendChild(totalDoctors);
+        specialistsContainer.appendChild(specialistDiv);
+      }
+      showOneRow('.specialist')
+      specialistBtn.addEventListener('click', () => {
+        toggleGridView('.specialist', 'specialistBtn');
+      })
+    }
+
+    // Populate the symptoms grid
+    function populateSymptomsContainer(symptomsData) {
+
+      const symptomsContainer = document.querySelector(
+        ".symptoms-container"
+      );
+      const symptomsBtn = document.getElementById('symptomsBtn')
+      for (let i = 0; i < symptomsData.length; i++) {
+        const symptom = symptomsData[i];
+        const symptomDiv = document.createElement("div");
+        symptomDiv.classList.add("symptom", "wow", "fadeInLeft");
+        symptomDiv.addEventListener("click", () => {
+          console.log(symptom); // Print symptom data when clicked
+        });
+        const symptomImg = document.createElement("img");
+        symptomImg.src = symptom.PHOTO_URL;
+        const symptomName = document.createElement("p");
+        symptomName.textContent = symptom.SYM_NAME;
+        symptomDiv.appendChild(symptomImg);
+        symptomDiv.appendChild(symptomName);
+        symptomsContainer.appendChild(symptomDiv);
+        symptomDiv.addEventListener("click", () => {
+          console.log(symptom); // Print specialist data when clicked
+          // Encode the SPECIALIST value for URL
+          // Encode object data as JSON and then as URL parameter
+          const encodedData = encodeURIComponent(JSON.stringify(symptom));
+          const redirectUrl = `doctors.html?data=${encodedData}`;
+
+          // Redirect to doctors.html with the specified SPECIALIST parameter
+          window.location.href = redirectUrl;
+        });
+      }
+      showOneRow('.symptom');
+      symptomsBtn.addEventListener('click', () => {
+        toggleGridView('.symptom', 'symptomsBtn')
+      })
+    }
+
+    function populateTotalDoctorsConatiner(doctorSpecialistsData) {
+      // Populate the specialists grid
+      const doctorSpecialistsContainer = document.querySelector(
+        ".doctor-specialists-container"
+      );
+      const doctorSpecialistBtn = document.getElementById('allSpecialistBtn');
+      for (
+        let i = 0;
+        i < doctorSpecialistsData.length;
+        i++
+      ) {
+        const specialist = doctorSpecialistsData[i];
+        const specialistDiv = document.createElement("div");
+        specialistDiv.classList.add("doctor-specialist", "wow", "fadeInLeft");
+        specialistDiv.addEventListener("click", () => {
+          console.log(specialist); // Print specialist data when clicked
+        });
+        const specialistImg = document.createElement("img");
+        specialistImg.src = specialist.DR_PHOTO;
+        const specialistName = document.createElement("p");
+        specialistName.textContent = specialist.DR_NAME;
+        specialistName.classList.add("doctor-name"); // Added class for styling
+        const doctorDetails = document.createElement("p");
+        doctorDetails.classList.add("doctor-category"); // Added class for styling
+        const nextAvailableSchedule = specialist.SCH_DT.find(schedule =>
+          schedule.DR_STATUS !== 'OUT' && schedule.DR_STATUS !== 'CANCELLED'
+        );
+
+        const nextSCH_DT = nextAvailableSchedule ? nextAvailableSchedule.SCH_DT : null;
+
+        console.log(nextSCH_DT);
+        const availabe_date = formatDate(nextSCH_DT)
+        let statusText, statusColor;
+        if (
+          specialist.DR_STATUS === "TIMELY"
+        ) {
+          statusText = "ON TIME";
+          statusColor = "#22b008";
+        } else if (
+          specialist.DR_STATUS === "IN"
+        ) {
+          statusText = "In CLINIC";
+          statusColor = "#22b008";
+        } else if (specialist.DR_STATUS === 'OUT') {
+          statusText = "OUT";
+          statusColor = "red";
+        }
+        else {
+          statusText = specialist.DR_STATUS;
+          statusColor = "red";
+        }
+        doctorDetails.innerHTML = `
+              <span><strong>Check In Status:</strong></span> <span style="color:${statusColor}">${statusText}</span> <br>
+            <span><strong>Specialization:</strong></span> ${specialist.D_CATG}
+            <br>  <span><strong>Experience:</strong></span> ${specialist.EXPERIENCE}
+                    <br> <span><strong>Qualification:</strong></span> ${specialist.QUALIFICATION}
+                <br><span style="font-size:large;"><strong>Fees:</strong><span class='feeText'> ₹${specialist.DR_FEES}</span></span>
+                <br><span style='color:#3A76A5;'><strong>Next Available: ${availabe_date}</strong></span> `;
+
+        const bookNowBtn = document.createElement("button");
+        bookNowBtn.textContent = "Book Now";
+        bookNowBtn.classList.add("book-now-btn");
+        specialistDiv.appendChild(specialistImg);
+        specialistDiv.appendChild(specialistName);
+        specialistDiv.appendChild(doctorDetails);
+        specialistDiv.appendChild(bookNowBtn);
+        bookNowBtn.addEventListener("click", () => {
+          const doctordata = specialist ? specialist : null;
+          // Convert object to query string
+          const queryParams = objectToQueryString(doctordata);
+          console.log(queryParams);
+          window.location.href = `demo.html?${queryParams}`;
+          console.log(doctor);
+        })
+        specialistDiv.addEventListener("click", () => {
+          const doctordata = specialist ? specialist : null;
+          // Convert object to query string
+          const queryParams = objectToQueryString(doctordata);
+          console.log(queryParams);
+          window.location.href = `demo.html?${queryParams}`;
+          console.log(doctor);
+        })
+
+        doctorSpecialistsContainer.appendChild(specialistDiv);
+
+      }
+      showOneRow('.doctor-specialist')
+      doctorSpecialistBtn.addEventListener('click', () => {
+        toggleGridView('.doctor-specialist', 'allSpecialistBtn')
+      })
+    }
     // Function to make a POST request on page load
     window.onload = function () {
       // Check if the user is already logged in
@@ -823,7 +1157,11 @@
           const clinicName = document.querySelector(".profile-icon")
           clinicName.innerHTML = `${userData.PHARMA_NAME}`
           companyLogo.src = userData.LOGO_URL;
+          document.title = `${userData.PHARMA_NAME} DOCTOR BOOKING`
         }
+      }
+      else {
+        window.location.href = '/'
       }
 
       document.getElementById('overlay').style.display = 'block';
@@ -875,332 +1213,15 @@
             //   sliderContainer.appendChild(slide);
             // });
 
-            // Populate the specialists grid
-            const specialistsContainer = document.querySelector(
-              ".specialists-container"
-            );
-            const specialistBtn = document.getElementById('specialistBtn')
-            for (let i = 0; i < specialistsData.length; i++) {
-              const specialist = specialistsData[i];
-              const specialistDiv = document.createElement("div");
-              specialistDiv.classList.add("specialist", "wow", "fadeInLeft");
-              specialistDiv.addEventListener("click", () => {
-                console.log(specialist); // Print specialist data when clicked
-                // Encode the SPECIALIST value for URL
-                // Encode object data as JSON and then as URL parameter
-                const encodedData = encodeURIComponent(JSON.stringify(specialist));
-                const redirectUrl = `doctors.html?data=${encodedData}`;
+            populateTodayDoctors(todayDoctorsData);
 
-                // Redirect to doctors.html with the specified SPECIALIST parameter
-                window.location.href = redirectUrl;
-              });
-              const specialistImg = document.createElement("img");
-              specialistImg.src = specialist.PHOTO_URL;
-              const specialistName = document.createElement("h3");
-              specialistName.style.fontWeight = '600';
-              specialistName.textContent = specialist.SPECIALIST;
-              const specialistDesignation = document.createElement("p");
-              specialistDesignation.textContent = specialist.SPECIALITY;
-              const totalDoctors = document.createElement("p");
-              totalDoctors.innerHTML = `<span class='gradientTexts'>Total Doctors: ${specialist.TOTAL}</span>`;
-              totalDoctors.style.fontWeight = '700'
-              totalDoctors.style.fontSize = 'medium'
-              specialistDiv.appendChild(specialistImg);
-              specialistDiv.appendChild(specialistName);
-              specialistDiv.appendChild(specialistDesignation);
-              specialistDiv.appendChild(totalDoctors);
-              specialistsContainer.appendChild(specialistDiv);
-            }
-            showOneRow('.specialist')
-            specialistBtn.addEventListener('click', () => {
-              toggleGridView('.specialist', 'specialistBtn');
-            })
+            populateSpecialistContainer(specialistsData)
 
-            // Populate the doctors grid for today
-            const doctorsContainer =
-              document.querySelector(".doctors-container");
-            const todayeButton = document.getElementById('todayBtn');
-            console.log(todayDoctorsData);
-            todayDoctorsData.sort(sortByCheckInStatus)
-            for (let i = 0; i < todayDoctorsData.length; i++) {
-              const doctor = todayDoctorsData[i];
-              const doctorDiv = document.createElement("div");
-              doctorDiv.classList.add("doctor", "wow", "fadeInLeft");
+            populateSymptomsContainer(symptomsData)
 
-              const doctorImg = document.createElement("img");
-              doctorImg.src = doctor.DR_PHOTO;
-
-              const doctorName = document.createElement("p");
-              doctorName.textContent = doctor.DR_NAME;
-              doctorName.style.fontWeight = "bold";
-              const availabe_date = formatDate(doctor.SCH_DT[0].SCH_DT)
-              const doctorDetails = document.createElement("p");
-              let statusText, statusColor;
-              if (
-                doctor.DR_STATUS === "TIMELY"
-              ) {
-                statusText = "ON TIME";
-                statusColor = "#22b008";
-              } else if (
-                doctor.DR_STATUS === "IN"
-              ) {
-                statusText = "In CLINIC";
-                statusColor = "#22b008";
-              } else if (doctor.DR_STATUS === 'OUT') {
-                statusText = "OUT";
-                statusColor = "red";
-              }
-              else {
-                statusText = doctor.DR_STATUS;
-                statusColor = "red";
-              }
-              if (doctor.DR_STATUS === 'OUT') {
-                doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:${statusColor}">${statusText}</span> <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
-              <br><span style="font-size:large;"><strong>Fees:<span class='feeText'> ₹${doctor.DR_FEES}</span></strong></span>
-              <br><span style='color:#3A76A5;'><strong>Next Available: ${availabe_date}</strong></span> `;
-              }
-              else {
-                doctorDetails.innerHTML = `<span><strong>Check In Status:</strong></span> <span style="color:${statusColor}">${statusText}</span> <br> <span><strong>Specialization:</strong></span> ${doctor.D_CATG}
-              <br><span style="font-size:large;"><strong>Fees:<span class='feeText'> ₹${doctor.DR_FEES}</span></strong></span>
-                <br><span style="font-size:15px;"><strong>Available Bookings: ${doctor.SCH_DT[0].AVAILABLE}
-                <br>Timing: ${doctor.SCH_DT[0].FROM} - ${doctor.SCH_DT[0].TO}</strong></span>`;
-                // <br><span style='color:#3A76A5;'><strong>Next Available: ${availabe_date}</strong></span> `;
-              }
-
-              doctorDetails.style.fontSize = "14px";
-
-              // const feeBookContainer = document.createElement("div");
-              // feeBookContainer.classList.add("fee-book-container");
-
-              const bookNowBtn = document.createElement("button");
-              bookNowBtn.textContent = "Book Now";
-              bookNowBtn.classList.add("book-now-btn");
-              //feeBookContainer.appendChild(bookNowBtn);
-              bookNowBtn.addEventListener("click", () => {
-                const doctordata = doctor ? doctor : null;
-                // Convert object to query string
-                const queryParams = objectToQueryString(doctordata);
-                console.log(queryParams);
-                window.location.href = `demo.html?${queryParams}`;
-                console.log(doctor);
-
-              });
-              doctorDiv.appendChild(doctorImg);
-              doctorDiv.appendChild(doctorName);
-              doctorDiv.appendChild(doctorDetails);
-              doctorDiv.appendChild(bookNowBtn); // Append fee and book container
-              doctorDiv.addEventListener("click", () => {
-                const doctordata = doctor ? doctor : null;
-                // Convert object to query string
-                const queryParams = objectToQueryString(doctordata);
-                console.log(queryParams);
-                window.location.href = `demo.html?${queryParams}`;
-                console.log(doctor);
-              })
-              // Function to convert object to query string
-              function objectToQueryString(obj) {
-                const keyValuePairs = [];
-                for (const key in obj) {
-                  if (Object.hasOwnProperty.call(obj, key)) {
-                    if (key === "SCH_DT") {
-                      // Convert slotData object to JSON string
-                      keyValuePairs.push(
-                        `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
-                      );
-                    } else {
-                      keyValuePairs.push(
-                        `${key}=${encodeURIComponent(obj[key])}`
-                      );
-                    }
-                  }
-                }
-                return keyValuePairs.join("&");
-              }
+            populateTotalDoctorsConatiner(doctorSpecialistsData)
 
 
-              doctorsContainer.appendChild(doctorDiv);
-            }
-            function toggleGridView(doctors, button) {
-              const gridItems = document.querySelectorAll(doctors);
-              const toggleButton = document.getElementById(button);
-              const isExpanded = toggleButton.classList.contains('expanded');
-
-              if (isExpanded) {
-                // Collapse grid to show only one row
-                showOneRow(doctors);
-                toggleButton.innerHTML = 'View All'; // Change to expand icon
-                toggleButton.classList.remove('expanded');
-              } else {
-                // Expand grid to show all items
-                gridItems.forEach(item => {
-                  item.style.display = 'block';
-                  item.style.display = 'flex'
-                  item.style.flexDirection = 'column'
-                });
-                toggleButton.innerHTML = 'View Less'; // Change to compress icon
-                toggleButton.classList.add('expanded');
-              }
-            }
-            showOneRow('.doctor')
-            todayeButton.addEventListener('click', function () {
-              toggleGridView('.doctor', 'todayBtn');
-            });
-
-            // Custom sorting function based on CHK_IN_STATUS
-            function sortByCheckInStatus(a, b) {
-              const statusOrder = {
-                'IN': 1,
-                'TIMELY': 2,
-                'DELAY':3,
-                'OUT': 4
-              };
-
-              const statusA = a.DR_STATUS;
-              const statusB = b.DR_STATUS;
-
-              if (statusOrder[statusA] < statusOrder[statusB]) {
-                return -1;
-              } else if (statusOrder[statusA] > statusOrder[statusB]) {
-                return 1;
-              } else {
-                return 0;
-              }
-            }
-
-            // Populate the symptoms grid
-            const symptomsContainer = document.querySelector(
-              ".symptoms-container"
-            );
-            const symptomsBtn = document.getElementById('symptomsBtn')
-            for (let i = 0; i < symptomsData.length; i++) {
-              const symptom = symptomsData[i];
-              const symptomDiv = document.createElement("div");
-              symptomDiv.classList.add("symptom", "wow", "fadeInLeft");
-              symptomDiv.addEventListener("click", () => {
-                console.log(symptom); // Print symptom data when clicked
-              });
-              const symptomImg = document.createElement("img");
-              symptomImg.src = symptom.PHOTO_URL;
-              const symptomName = document.createElement("p");
-              symptomName.textContent = symptom.SYM_NAME;
-              symptomDiv.appendChild(symptomImg);
-              symptomDiv.appendChild(symptomName);
-              symptomsContainer.appendChild(symptomDiv);
-              symptomDiv.addEventListener("click", () => {
-                console.log(symptom); // Print specialist data when clicked
-                // Encode the SPECIALIST value for URL
-                // Encode object data as JSON and then as URL parameter
-                const encodedData = encodeURIComponent(JSON.stringify(symptom));
-                const redirectUrl = `doctors.html?data=${encodedData}`;
-
-                // Redirect to doctors.html with the specified SPECIALIST parameter
-                window.location.href = redirectUrl;
-              });
-            }
-            showOneRow('.symptom');
-            symptomsBtn.addEventListener('click', () => {
-              toggleGridView('.symptom', 'symptomsBtn')
-            })
-            // Populate the specialists grid
-            const doctorSpecialistsContainer = document.querySelector(
-              ".doctor-specialists-container"
-            );
-            const doctorSpecialistBtn = document.getElementById('allSpecialistBtn');
-            for (
-              let i = 0;
-              i < doctorSpecialistsData.length;
-              i++
-            ) {
-              const specialist = doctorSpecialistsData[i];
-              const specialistDiv = document.createElement("div");
-              specialistDiv.classList.add("doctor-specialist", "wow", "fadeInLeft");
-              specialistDiv.addEventListener("click", () => {
-                console.log(specialist); // Print specialist data when clicked
-              });
-              const specialistImg = document.createElement("img");
-              specialistImg.src = specialist.DR_PHOTO;
-              const specialistName = document.createElement("p");
-              specialistName.textContent = specialist.DR_NAME;
-              specialistName.classList.add("doctor-name"); // Added class for styling
-              const doctorDetails = document.createElement("p");
-              doctorDetails.classList.add("doctor-category"); // Added class for styling
-              const availabe_date = formatDate(specialist.SCH_DT[0].SCH_DT)
-              let statusText, statusColor;
-              if (
-                specialist.DR_STATUS === "TIMELY"
-              ) {
-                statusText = "ON TIME";
-                statusColor = "#22b008";
-              } else if (
-                specialist.DR_STATUS === "IN"
-              ) {
-                statusText = "In CLINIC";
-                statusColor = "#22b008";
-              } else if (specialist.DR_STATUS === 'OUT') {
-                statusText = "OUT";
-                statusColor = "red";
-              }
-              else {
-                statusText = specialist.DR_STATUS;
-                statusColor = "red";
-              }
-              doctorDetails.innerHTML = `
-              <span><strong>Check In Status:</strong></span> <span style="color:${statusColor}">${statusText}</span> <br>
-            <span><strong>Specialization:</strong></span> ${specialist.D_CATG}
-            <br>  <span><strong>Experience:</strong></span> ${specialist.EXPERIENCE}
-                    <br> <span><strong>Qualification:</strong></span> ${specialist.QUALIFICATION}
-                <br><span style="font-size:large;"><strong>Fees:</strong><span class='feeText'> ₹${specialist.DR_FEES}</span></span>
-                <br><span style='color:#3A76A5;'><strong>Next Available: ${availabe_date}</strong></span> `;
-
-              const bookNowBtn = document.createElement("button");
-              bookNowBtn.textContent = "Book Now";
-              bookNowBtn.classList.add("book-now-btn");
-              specialistDiv.appendChild(specialistImg);
-              specialistDiv.appendChild(specialistName);
-              specialistDiv.appendChild(doctorDetails);
-              specialistDiv.appendChild(bookNowBtn);
-              bookNowBtn.addEventListener("click", () => {
-                const doctordata = specialist ? specialist : null;
-                // Convert object to query string
-                const queryParams = objectToQueryString(doctordata);
-                console.log(queryParams);
-                window.location.href = `demo.html?${queryParams}`;
-                console.log(doctor);
-              })
-              specialistDiv.addEventListener("click", () => {
-                const doctordata = specialist ? specialist : null;
-                // Convert object to query string
-                const queryParams = objectToQueryString(doctordata);
-                console.log(queryParams);
-                window.location.href = `demo.html?${queryParams}`;
-                console.log(doctor);
-              })
-              // Function to convert object to query string
-              function objectToQueryString(obj) {
-                const keyValuePairs = [];
-                for (const key in obj) {
-                  if (Object.hasOwnProperty.call(obj, key)) {
-                    if (key === "SCH_DT") {
-                      // Convert slotData object to JSON string
-                      keyValuePairs.push(
-                        `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
-                      );
-                    } else {
-                      keyValuePairs.push(
-                        `${key}=${encodeURIComponent(obj[key])}`
-                      );
-                    }
-                  }
-                }
-                return keyValuePairs.join("&");
-              }
-              doctorSpecialistsContainer.appendChild(specialistDiv);
-
-            }
-            showOneRow('.doctor-specialist')
-            doctorSpecialistBtn.addEventListener('click', () => {
-              toggleGridView('.doctor-specialist', 'allSpecialistBtn')
-            })
             const headers = document.querySelectorAll(`.header`)
             headers.forEach((header) => {
               header.style.display = 'block'
@@ -1336,18 +1357,16 @@
             // Determine status text and color based on conditions
             let statusText, statusColor;
             if (
-              slot.SLOT_STATUS === "Available" &&
-              slot.DR_STATUS != "IN"
-            ) {
-              statusText = "ON TIME";
+              slot.SLOT_STATUS === "Available" && slot.DR_STATUS !== 'CANCELLED') {
+              statusText = "Available";
               statusColor = "green";
-            } else if (
-              slot.SLOT_STATUS === "Available" &&
-              slot.DR_STATUS === "IN"
-            ) {
-              statusText = "In Clinic";
-              statusColor = "green";
-            } else {
+            }
+
+            else if (slot.DR_STATUS === 'CANCELLED') {
+              statusText = "Cancelled";
+              statusColor = "red";
+            }
+            else {
               statusText = "Not Available";
               statusColor = "red";
             }
@@ -1360,7 +1379,10 @@
                         </div>
                     `;
             listItem.appendChild(slotItem);
-            if (slot.DR_STATUS != 'OUT') {
+            if (slot.DR_STATUS === 'OUT' || slot.DR_STATUS === 'CANCELLED') {
+
+            }
+            else {
               slotItem.addEventListener("click", () => {
                 console.log(slot);
                 doctor.SlotId = slot.ID ? slot.ID : null;
@@ -1384,53 +1406,16 @@
           doctorPhotoContainer.addEventListener("click", () => {
             const doctordata = doctor ? doctor : null;
             console.log(doctor);
-            // Function to convert object to query string
-            function objectToQueryString(obj) {
-              const keyValuePairs = [];
-              for (const key in obj) {
-                if (Object.hasOwnProperty.call(obj, key)) {
-                  if (key === "SCH_DT") {
-                    // Convert slotData object to JSON string
-                    keyValuePairs.push(
-                      `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
-                    );
-                  } else {
-                    keyValuePairs.push(
-                      `${key}=${encodeURIComponent(obj[key])}`
-                    );
-                  }
-                }
-              }
-              return keyValuePairs.join("&");
-            }
 
             // Convert object to query string
             const queryParams = objectToQueryString(doctordata);
             console.log(queryParams);
             window.location.href = `demo.html?${queryParams}`;
           });
+
           doctorInfoContainer.addEventListener("click", () => {
             const doctordata = doctor ? doctor : null;
             console.log(doctor);
-            // Function to convert object to query string
-            function objectToQueryString(obj) {
-              const keyValuePairs = [];
-              for (const key in obj) {
-                if (Object.hasOwnProperty.call(obj, key)) {
-                  if (key === "SCH_DT") {
-                    // Convert slotData object to JSON string
-                    keyValuePairs.push(
-                      `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
-                    );
-                  } else {
-                    keyValuePairs.push(
-                      `${key}=${encodeURIComponent(obj[key])}`
-                    );
-                  }
-                }
-              }
-              return keyValuePairs.join("&");
-            }
 
             // Convert object to query string
             const queryParams = objectToQueryString(doctordata);

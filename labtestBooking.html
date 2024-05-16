@@ -438,18 +438,16 @@
                         // Determine status text and color based on conditions
                         let statusText, statusColor;
                         if (
-                            slot.SLOT_STATUS === "Available" &&
-                            slot.DR_STATUS != "IN"
-                        ) {
+                            slot.SLOT_STATUS === "Available" && slot.DR_STATUS !== 'CANCELLED') {
                             statusText = "Available";
                             statusColor = "green";
-                        } else if (
-                            slot.SLOT_STATUS === "Available" &&
-                            slot.DR_STATUS === "IN"
-                        ) {
-                            statusText = "In Clinic";
-                            statusColor = "green";
-                        } else {
+                        }
+
+                        else if (slot.DR_STATUS === 'CANCELLED') {
+                            statusText = "Cancelled";
+                            statusColor = "red";
+                        }
+                        else {
                             statusText = "Not Available";
                             statusColor = "red";
                         }
@@ -462,7 +460,11 @@
                         </div>
                     `;
                         listItem.appendChild(slotItem);
-                        if (slot.DR_STATUS != 'OUT') {
+                        listItem.appendChild(slotItem);
+                        if (slot.DR_STATUS === 'OUT' || slot.DR_STATUS === 'CANCELLED') {
+
+                        }
+                        else {
                             slotItem.addEventListener("click", () => {
                                 console.log(slot);
                                 doctor.SlotId = slot.ID ? slot.ID : null;

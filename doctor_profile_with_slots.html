@@ -600,7 +600,8 @@
       }
 
       .clinicDetails h2 {
-        color: cyan;
+        color: #18b5cd;
+        font-weight: 700;
         /* Header color */
         margin: 0;
       }
@@ -629,7 +630,7 @@
       }
 
       .column h6 {
-        color: rgb(30, 140, 231);
+        color: #18b5cd;
         /* Header color */
         margin: 0;
       }
@@ -672,6 +673,16 @@
         padding: 3px;
         text-align: center;
         border-bottom: 1px solid black;
+      }
+
+      .footer {
+        margin: 0;
+        margin-left: 60%;
+        margin-top: 10px;
+      }
+
+      .footer p {
+        font-size: small;
       }
 
       @media print {
@@ -1387,9 +1398,9 @@
               FROM: slotdetails.FROM,
               TO: slotdetails.TO,
               DR_FEES: doctordata.DR_FEES,
-              DR_STATUS:slotData.DR_STATUS,
-              DR_ARRIVE:slotData.DR_ARRIVE,
-              CHEMBER_NO:slotData.CHEMBER_NO
+              DR_STATUS: slotData.DR_STATUS,
+              DR_ARRIVE: slotData.DR_ARRIVE,
+              CHEMBER_NO: slotData.CHEMBER_NO
             };
             console.log(patientDetails);
             showMainPopup(
@@ -1398,7 +1409,7 @@
               patientAgeFromDataset
             );
             // Reset form fields
-           // this.reset();
+            // this.reset();
 
             // Hide booking form after submission
             document.querySelector(".booking-form").style.display = "none";
@@ -1859,7 +1870,7 @@
             </div>
         </div>
         <div class="footer">
-                <p>&copy; ${new Date().getFullYear()} EasyHealths. All rights reserved.</p>
+                <p>&copy; ${new Date().getFullYear()} EasyHealths - All rights reserved.</p>
             </div>
     </div>`;
 

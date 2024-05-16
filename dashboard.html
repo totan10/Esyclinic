@@ -13,6 +13,7 @@
       background-color: #f8f9fa;
       font-family: Arial, sans-serif;
     }
+
     .header {
       background-color: #00205b;
       /* Dark blue background */
@@ -242,7 +243,7 @@
       height: 150px;
       /* Set fixed height */
       width: 55%;
-      
+
     }
 
     .service-box svg {
@@ -398,14 +399,14 @@
     let userData = null;
     const searchInput = document.getElementById("searchInput");
     const searchResults = document.getElementById("searchResults");
-    function handleDoctorsBooking(){
-      window.location.href='doctorsBooking.html'
+    function handleDoctorsBooking() {
+      window.location.href = 'doctorsBooking.html'
     }
     function handleLabTestBooking() {
-      window.location.href='labtestBooking.html'
+      window.location.href = 'labtestBooking.html'
     }
     function handlePaymentModule() {
-      window.location.href='paymentModule.html'
+      window.location.href = 'paymentModule.html'
     }
     document.addEventListener("DOMContentLoaded", function () {
       // Check if the user is already logged in
@@ -506,8 +507,8 @@
         return aIndex - bIndex;
       });
       console.log(filtered);
-         // Define the specific order for certain Field_type values
-         const specificOrder = ['Doctor', 'Symptom', 'Test', 'Profile', 'Package', , 'PATHOLOGY', 'RADIOLOGY']; // Define specific types to appear first
+      // Define the specific order for certain Field_type values
+      const specificOrder = ['Doctor', 'Symptom', 'Test', 'Profile', 'Package', , 'PATHOLOGY', 'RADIOLOGY']; // Define specific types to appear first
       filtered.sort((a, b) => {
         const fieldA = a.FIELD_TYPE;
         const fieldB = b.FIELD_TYPE;
@@ -573,18 +574,16 @@
             // Determine status text and color based on conditions
             let statusText, statusColor;
             if (
-              slot.SLOT_STATUS === "Available" &&
-              slot.DR_STATUS != "IN"             
-            ) {
+              slot.SLOT_STATUS === "Available" && slot.DR_STATUS !== 'CANCELLED') {
               statusText = "Available";
               statusColor = "green";
-            } else if (
-              slot.SLOT_STATUS === "Available" &&
-              slot.DR_STATUS === "IN"
-            ) {
-              statusText = "In Clinic";
-              statusColor = "green";
-            } else {
+            }
+
+            else if (slot.DR_STATUS === 'CANCELLED') {
+              statusText = "Cancelled";
+              statusColor = "red";
+            }
+            else {
               statusText = "Not Available";
               statusColor = "red";
             }
@@ -597,26 +596,30 @@
                         </div>
                     `;
             listItem.appendChild(slotItem);
-            if(slot.DR_STATUS!='OUT'){
-              slotItem.addEventListener("click", () => {
-              console.log(slot);
-              doctor.SlotId = slot.ID ? slot.ID : null;
-              delete doctor.SCH_DT;
-              const doctordata = doctor ? doctor : null;
-              console.log(doctor);
-              const object1String = JSON.stringify(doctordata);
-              const object2String = JSON.stringify(slot);
-              const baseUrl = "/doctor_profile_with_slots.html"; // Base URL of the destination page
-              const queryParams = new URLSearchParams({
-                data1: object1String,
-                data2: object2String,
-              });
+            listItem.appendChild(slotItem);
+            if (slot.DR_STATUS === 'OUT' || slot.DR_STATUS === 'CANCELLED') {
 
-              const url = `${baseUrl}?${queryParams}`;
-              window.location.href = url;
-            });
             }
-            
+            else {
+              slotItem.addEventListener("click", () => {
+                console.log(slot);
+                doctor.SlotId = slot.ID ? slot.ID : null;
+                delete doctor.SCH_DT;
+                const doctordata = doctor ? doctor : null;
+                console.log(doctor);
+                const object1String = JSON.stringify(doctordata);
+                const object2String = JSON.stringify(slot);
+                const baseUrl = "/doctor_profile_with_slots.html"; // Base URL of the destination page
+                const queryParams = new URLSearchParams({
+                  data1: object1String,
+                  data2: object2String,
+                });
+
+                const url = `${baseUrl}?${queryParams}`;
+                window.location.href = url;
+              });
+            }
+
           });
 
           doctorPhotoContainer.addEventListener("click", () => {
