@@ -1053,6 +1053,7 @@
       const doctorSpecialistsContainer = document.querySelector(
         ".doctor-specialists-container"
       );
+     // doctorSpecialistsData.sort(sortByCheckInStatus);
       const doctorSpecialistBtn = document.getElementById('allSpecialistBtn');
       for (
         let i = 0;
@@ -1100,7 +1101,7 @@
           statusColor = "red";
         }
         doctorDetails.innerHTML = `
-              <span><strong>Check In Status:</strong></span> <span style="color:${statusColor}">${statusText}</span> <br>
+              <span><strong>Doctor Status:</strong></span> <span style="color:${statusColor}">${statusText}</span> <br>
             <span><strong>Specialization:</strong></span> ${specialist.D_CATG}
             <br>  <span><strong>Experience:</strong></span> ${specialist.EXPERIENCE}
                     <br> <span><strong>Qualification:</strong></span> ${specialist.QUALIFICATION}
@@ -1139,6 +1140,8 @@
         toggleGridView('.doctor-specialist', 'allSpecialistBtn')
       })
     }
+
+    
     // Function to make a POST request on page load
     window.onload = function () {
       // Check if the user is already logged in
