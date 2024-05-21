@@ -276,6 +276,107 @@
             border-radius: 10px;
         }
 
+        .test-header {
+            background-color: #c5d1dd;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .test-header h2 {
+            font-size: 24px;
+            color: #00205b;
+        }
+
+        .known-as {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .test-overview h3 {
+            font-size: 20px;
+            color: #00205b;
+            margin-top: 20px;
+        }
+
+        .test-overview p {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .test-instructions h3 {
+            font-size: 20px;
+            color: #00205b;
+            margin-top: 20px;
+        }
+
+        .test-instructions table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .test-instructions table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+
+        .test-instructions table .faded {
+            color: #999;
+        }
+
+        .qa-section {
+            margin-top: 20px;
+        }
+
+        .collapsible {
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+
+        .collapsible-header {
+            background-color: #c5d1dd;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .collapsible-header:hover {
+            background-color: #b0c7e1;
+        }
+
+        .collapsible-body {
+            padding: 10px;
+            display: none;
+        }
+
+        .collapsible-body.show {
+            display: block;
+        }
+
+        .collapsible-header .collapse-toggle {
+            float: right;
+        }
+
+        .collapsible-body {
+            display: none;
+        }
+
+        .collapsible.active .collapsible-body {
+            display: block;
+        }
+
+        .collapsible.active .collapse-toggle svg {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-header .collapse-toggle svg {
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header .collapse-toggle .rotate {
+            transform: rotate(180deg);
+        }
+
         .close {
             color: #aaa;
             float: right;
@@ -290,6 +391,7 @@
             text-decoration: none;
             cursor: pointer;
         }
+
 
         @keyframes slideIn {
             from {
@@ -388,16 +490,17 @@
             </div>
         </nav>
     </div>
+
+    <!-- Cart Container -->
+    <div id="cartContainer" class="cart-container">
+        <!-- Cart items will be rendered here -->
+    </div>
     <!-- Add the modal at the end of the body -->
     <div id="detailsModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <div id="modalDetailsContent"></div>
         </div>
-    </div>
-    <!-- Cart Container -->
-    <div id="cartContainer" class="cart-container">
-        <!-- Cart items will be rendered here -->
     </div>
     <!-- JavaScript libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
@@ -583,33 +686,46 @@
 
         // Function to open the modal and populate it with doctor details
         function openModal(doctor) {
-            const doctorDetails = doctor.DETAILS ? doctor.DETAILS : null
-            console.log(doctorDetails);
+            const doctorDetails = doctor.DETAILS ? doctor.DETAILS : null;
             const modal = document.getElementById("detailsModal");
             const modalContent = document.getElementById("modalDetailsContent");
             const closeModalButton = document.querySelector(".modal .close");
 
             // Populate modal content
             modalContent.innerHTML = `
+        <div class="test-header">
             <h2>${doctorDetails.TEST_NAME}</h2>
-            <p><strong>Test Code:</strong> ${doctorDetails.TEST_CODE}</p>
-            <p><strong>Sample:</strong> ${doctorDetails.TEST_SAMPLE}</p>
-            <p><strong>Department:</strong> ${doctorDetails.DEPARTMENT}</p>
-            <p><strong>Description:</strong> ${doctorDetails.TEST_DESC}</p>
-            <p><strong>Fasting:</strong> ${doctorDetails.FASTING}</p>
-            <p><strong>Gender:</strong> ${doctorDetails.GENDER_TYPE}</p>
-            <p><strong>Age:</strong> ${doctorDetails.AGE_TYPE}</p>
-            <p><strong>Report Time:</strong> ${doctorDetails.REPORT_TIME}</p>
-            <p><strong>Prescription Required:</strong> ${doctorDetails.PRESCRIPTION}</p>
-            <p><strong>ID Proof Required:</strong> ${doctorDetails.ID_PROOF}</p>
-            ${doctorDetails.QA1 ? `<p><strong>Q&A:</strong></p>` : ''}
-            ${doctorDetails.QA1 ? `<p>${doctorDetails.QA1}</p>` : ''}
-            ${doctorDetails.QA2 ? `<p>${doctorDetails.QA2}</p>` : ''}
-            ${doctorDetails.QA3 ? `<p>${doctorDetails.QA3}</p>` : ''}
-            ${doctorDetails.QA4 ? `<p>${doctorDetails.QA4}</p>` : ''}
-            ${doctorDetails.QA5 ? `<p>${doctorDetails.QA5}</p>` : ''}
-            ${doctorDetails.QA6 ? `<p>${doctorDetails.QA6}</p>` : ''}
-        `;
+            <p class="known-as">${doctorDetails.KNOWN_AS}</p>
+        </div>
+        <div class="test-overview">
+            <h3>Test Overview</h3>
+            <p>${doctorDetails.TEST_DESC}</p>
+        </div>
+        <div class="test-instructions">
+            <h3>Test Instructions</h3>
+            <table>
+                <tr>
+                    <td><span class="faded">Report Time:</span> ${doctorDetails.REPORT_TIME}</td>
+                    <td><span class="faded">Gender Type:</span> ${doctorDetails.GENDER_TYPE}</td>
+                    <td><span class="faded">Age Type:</span> ${doctorDetails.AGE_TYPE}</td>
+                </tr>
+                <tr>
+                    <td><span class="faded">Prescription:</span> ${doctorDetails.PRESCRIPTION}</td>
+                    <td><span class="faded">Fasting:</span> ${doctorDetails.FASTING}</td>
+                    <td><span class="faded">Home Collect:</span> ${doctorDetails.HOME_COLLECT}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="qa-section">
+            <h3>Questions & Answers</h3>
+            ${doctorDetails.QA1 ? createCollapsible(doctorDetails.QA1, "QA1") : ''}
+            ${doctorDetails.QA2 ? createCollapsible(doctorDetails.QA2, "QA2") : ''}
+            ${doctorDetails.QA3 ? createCollapsible(doctorDetails.QA3, "QA3") : ''}
+            ${doctorDetails.QA4 ? createCollapsible(doctorDetails.QA4, "QA4") : ''}
+            ${doctorDetails.QA5 ? createCollapsible(doctorDetails.QA5, "QA5") : ''}
+            ${doctorDetails.QA6 ? createCollapsible(doctorDetails.QA6, "QA6") : ''}
+        </div>
+    `;
 
             // Display the modal
             modal.style.display = "block";
@@ -617,18 +733,55 @@
             // Close the modal when the user clicks on the close button
             closeModalButton.onclick = function () {
                 modal.style.display = "none";
-                searchInput.click()
-                searchInput.focus()
-
+                searchInput.focus();
+                searchInput.click();
             };
+
             // Close the modal when the user clicks outside the modal
             window.onclick = function (event) {
                 if (event.target == modal) {
                     modal.style.display = "none";
-                    searchInput.focus()
-                    searchInput.click()
+                    searchInput.focus();
+                    searchInput.click();
                 }
             };
+        }
+        document.addEventListener('click', function (event) {
+            const target = event.target;
+
+            // Check if the target or any of its parents has the class 'collapse-toggle'
+            if (target.closest('.collapse-toggle')) {
+                const collapsibleHeader = target.closest('.collapsible-header');
+                const collapsibleBody = collapsibleHeader.nextElementSibling;
+
+                // Toggle active class on the collapsible body
+                if (collapsibleBody) {
+                    collapsibleBody.classList.toggle('active');
+                    collapsibleBody.style.display = collapsibleBody.style.display === 'block' ? 'none' : 'block';
+                }
+
+                // Toggle rotate class on the icon
+                const icon = collapsibleHeader.querySelector('.collapse-toggle svg');
+                if (icon) {
+                    icon.classList.toggle('rotate');
+                }
+            }
+        });
+
+
+
+        function createCollapsible(content, label) {
+            return `
+        <div class="collapsible">
+            <div class="collapsible-header">
+                ${label}
+                <span class="collapse-toggle">
+                    <i class="fas fa-chevron-up"></i>
+                </span>
+            </div>
+            <div class="collapsible-body">${content}</div>
+        </div>
+    `;
         }
         // Function to add item to cart
         function addItemToCart(item) {
