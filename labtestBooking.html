@@ -120,37 +120,87 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            animation: fadeIn 0.5s ease;
         }
 
         #searchResults li:hover {
             background-color: #f3f3f3;
         }
 
-        .doctor-info {
-            margin-left: 10px;
-        }
-
-        .doctor-info h5 {
+        /* Custom Styles for Search Results */
+        #searchResults li h4 {
+            color: red;
             margin: 0;
+            font-size: 16px;
+            width: 33%;
+            text-wrap: wrap;
         }
 
-        .doctor-info p {
-            margin: 5px 0;
+        #searchResults li .test-details-btn {
+            background-color: #01b5cd;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
-        .doctor-photo {
-            width: 60px;
-            height: 60px;
-            border-radius: 10%;
-            background-color: #ddd;
-            overflow: hidden;
+        #searchResults li .test-details-btn:hover {
+            background-color: #3794e6;
         }
 
-        .doctor-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        #searchResults li p {
+            color: blue;
+            margin: 0;
+            font-size: 14px;
         }
+
+        #searchResults li .book-now-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        #searchResults li .book-now-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        #searchResults li .remove-btn {
+            background-color: #ff3333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        #searchResults li .remove-btn:hover {
+            background-color: #cc0000;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
 
         .no-results {
             padding: 10px;
@@ -200,31 +250,116 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .slotitems {
-            width: 12.99%;
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn1 0.5s ease;
         }
 
-        .slot-item {
-            padding: 10px;
-            margin-left: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            /* Add shadow effect */
-            cursor: pointer;
-            /* Add pointer cursor */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            height: 90%;
+            overflow-y: auto;
+            animation: slideIn 0.5s ease;
             border-radius: 10px;
-            transition: background-color 1s, color 1s;
         }
 
-        .slot-item:hover {
-            color: #f0f0f0;
-            background-color: #007bff;
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
-        .slot-item .date-day,
-        .slot-item .status {
-            text-align: center;
-            padding: 4px;
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn1 {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Custom CSS for Cart Items */
+        .cart-container {
+            margin-top: 20px;
+            position: absolute;
+            bottom: 50px;
+            width: 100%;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            width: 90%;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item span {
+            flex: 1;
+        }
+
+        .cart-item .item-name {
+            font-weight: bold;
+        }
+
+        .cart-item .item-cost {
+            font-weight: bold;
+            color: green;
+        }
+
+        /* .cart-item .remove-btn {
+            background-color: #ff3333;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cart-item .remove-btn:hover {
+            background-color: #cc0000;
+        } */
     </style>
 </head>
 
@@ -253,6 +388,17 @@
             </div>
         </nav>
     </div>
+    <!-- Add the modal at the end of the body -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalDetailsContent"></div>
+        </div>
+    </div>
+    <!-- Cart Container -->
+    <div id="cartContainer" class="cart-container">
+        <!-- Cart items will be rendered here -->
+    </div>
     <!-- JavaScript libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -262,6 +408,10 @@
         let userData = null;
         const searchInput = document.getElementById("searchInput");
         const searchResults = document.getElementById("searchResults");
+        // Global array to store added items
+        let cartItems = [];
+
+
         wow = new WOW(
             {
                 boxClass: 'wow',      // default
@@ -293,11 +443,14 @@
                     populateDoctors();
                 }
             }
+            else {
+                window.location.href = '/'
+            }
         });
         // Function to format date from "YYYYMMDD" to "dd-Month-YYYY"
         function populateDoctors() {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "http://easyhealths.com/api/searchDoctorTest";
+            const url = "https://easyhealths.com/api/testsearch_dummy";
             const params = {
                 PHARMA_ID: PHARMA_ID,
             };
@@ -317,7 +470,6 @@
 
 
         searchInput.addEventListener("input", () => {
-            console.log(doctorsData);
             const query = searchInput.value;
             populateSearchResults(query);
         });
@@ -350,8 +502,6 @@
 
             const filteredDoctors = doctorsData.filter((item) => {
                 const cleanItemName = item.ITEM_NAME.toLowerCase();
-                // const cleanItemType = item.FIELD_TYPE ? item.FIELD_TYPE.toLowerCase() : '';
-                // const cleanBItemCat = item.DETAILS.D_CATG ? item.DETAILS.D_CATG.toLowerCase() : '';
                 return cleanItemName.includes(query.toLowerCase());
             });
 
@@ -363,6 +513,7 @@
                 searchResults.appendChild(noResultsItem);
                 return;
             }
+
             const filtered = filteredDoctors.sort((a, b) => {
                 const cleanAItemName = a.ITEM_NAME.toLowerCase();
                 const cleanBItemName = b.ITEM_NAME.toLowerCase();
@@ -370,208 +521,192 @@
                 const bIndex = cleanBItemName.indexOf(query.toLowerCase());
                 return aIndex - bIndex;
             });
-            console.log(filtered);
-            // Define the specific order for certain Field_type values
-            const specificOrder = ['Doctor', 'Symptom', 'Test', 'Profile', 'Package', , 'PATHOLOGY', 'RADIOLOGY']; // Define specific types to appear first
+
+            const specificOrder = ['PATHOLOGY', 'RADIOLOGY', 'Test', 'Profile', 'Package'];
             filtered.sort((a, b) => {
                 const fieldA = a.FIELD_TYPE;
                 const fieldB = b.FIELD_TYPE;
-
-                // Get the index of Field_type values in the specificOrder array
                 const indexA = specificOrder.indexOf(fieldA);
                 const indexB = specificOrder.indexOf(fieldB);
 
-                // Compare indices within the specificOrder array
                 if (indexA > -1 && indexB > -1) {
-                    return indexA - indexB; // Sort by specific order index
+                    return indexA - indexB;
                 } else if (indexA > -1) {
-                    return -1; // Place types in specificOrder before others
+                    return -1;
                 } else if (indexB > -1) {
-                    return 1; // Place types in specificOrder before others
+                    return 1;
                 } else {
-                    return 0; // Maintain original order for other types
+                    return 0;
                 }
             });
-            console.log(filtered);
-            function getFormattedDate(dateString) {
-                const year = dateString.substring(0, 4);
-                const month = dateString.substring(4, 6);
-                const day = dateString.substring(6, 8);
 
-                // Create a Date object using the parsed components
-                const date = new Date(`${year}-${month}-${day}`);
-
-                // Format the date as "DD Month"
-                const options = { day: "numeric", month: "long" };
-                return date.toLocaleDateString("en-US", options);
-            }
             filtered.forEach((doctor, index) => {
-                if (doctor.FIELD_TYPE === "Doctor") {
-                    doctor = doctor.DETAILS;
-                    const drId = doctor.DR_ID ? doctor.DR_ID : null;
-                    console.log(drId);
-                    const slotData = doctor.SCH_DT ? doctor.SCH_DT : null;
-                    console.log(slotData);
-                    const listItem = document.createElement("li");
-
-                    const doctorPhotoContainer = document.createElement("div");
-                    doctorPhotoContainer.classList.add("doctor-photo");
-                    doctorPhotoContainer.innerHTML = `
-          <img src="${doctor.DR_PHOTO}" alt="${doctor.DR_PHOTO}" class="me-3">
+                const listItem = document.createElement("li");
+                listItem.innerHTML = `
+            <h4>${doctor.ITEM_NAME}</h4>
+            <button class="test-details-btn">Test Details</button>
+            <p>${doctor.FIELD_TYPE}</p>
+            <button class="book-now-btn">Add to Cart</button>
         `;
+                searchResults.appendChild(listItem);
 
-                    const doctorInfoContainer = document.createElement("div");
-                    doctorInfoContainer.classList.add("doctor-info");
-                    doctorInfoContainer.innerHTML = `
-          <h5>${doctor.DR_NAME}</h5>
-          <p>${doctor.D_CATG}</p>
-        `;
+                listItem.querySelector('.test-details-btn').addEventListener('click', () => {
+                    openModal(doctor);
+                    console.log('Test Details clicked for:', doctor);
+                });
 
-                    listItem.appendChild(doctorPhotoContainer);
-                    listItem.appendChild(doctorInfoContainer);
-                    slotData.forEach((slot) => {
-                        const date = new Date(slot.SCH_DT);
-                        const formattedDate = getFormattedDate(slot.SCH_DT);
-                        const dayName = slot.SCH_DAY;
-                        const slotItem = document.createElement("div");
-                        slotItem.classList.add("slotitems");
-                        // Determine status text and color based on conditions
-                        let statusText, statusColor;
-                        if (
-                            slot.SLOT_STATUS === "Available" && slot.DR_STATUS !== 'CANCELLED') {
-                            statusText = "Available";
-                            statusColor = "green";
-                        }
-
-                        else if (slot.DR_STATUS === 'CANCELLED') {
-                            statusText = "Cancelled";
-                            statusColor = "red";
-                        }
-                        else {
-                            statusText = "Not Available";
-                            statusColor = "red";
-                        }
-
-                        // Modify slotItem HTML to call handleSlotClick with slot data
-                        slotItem.innerHTML = `
-                        <div class="slot-item">
-                            <div class="date-day">${formattedDate}<br>${dayName}</div>
-                            <div class="status" style="color: ${statusColor};">${statusText}</div>
-                        </div>
-                    `;
-                        listItem.appendChild(slotItem);
-                        listItem.appendChild(slotItem);
-                        if (slot.DR_STATUS === 'OUT' || slot.DR_STATUS === 'CANCELLED') {
-
-                        }
-                        else {
-                            slotItem.addEventListener("click", () => {
-                                console.log(slot);
-                                doctor.SlotId = slot.ID ? slot.ID : null;
-                                delete doctor.SCH_DT;
-                                const doctordata = doctor ? doctor : null;
-                                console.log(doctor);
-                                const object1String = JSON.stringify(doctordata);
-                                const object2String = JSON.stringify(slot);
-                                const baseUrl = "/doctor_profile_with_slots.html"; // Base URL of the destination page
-                                const queryParams = new URLSearchParams({
-                                    data1: object1String,
-                                    data2: object2String,
-                                });
-
-                                const url = `${baseUrl}?${queryParams}`;
-                                window.location.href = url;
-                            });
-                        }
-                    });
-
-                    doctorPhotoContainer.addEventListener("click", () => {
-                        const doctordata = doctor ? doctor : null;
-                        console.log(doctor);
-                        // Function to convert object to query string
-                        function objectToQueryString(obj) {
-                            const keyValuePairs = [];
-                            for (const key in obj) {
-                                if (Object.hasOwnProperty.call(obj, key)) {
-                                    if (key === "SCH_DT") {
-                                        // Convert slotData object to JSON string
-                                        keyValuePairs.push(
-                                            `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
-                                        );
-                                    } else {
-                                        keyValuePairs.push(
-                                            `${key}=${encodeURIComponent(obj[key])}`
-                                        );
-                                    }
-                                }
-                            }
-                            return keyValuePairs.join("&");
-                        }
-
-                        // Convert object to query string
-                        const queryParams = objectToQueryString(doctordata);
-                        console.log(queryParams);
-                        window.location.href = `demo.html?${queryParams}`;
-                    });
-                    doctorInfoContainer.addEventListener("click", () => {
-                        const doctordata = doctor ? doctor : null;
-                        console.log(doctor);
-                        // Function to convert object to query string
-                        function objectToQueryString(obj) {
-                            const keyValuePairs = [];
-                            for (const key in obj) {
-                                if (Object.hasOwnProperty.call(obj, key)) {
-                                    if (key === "SCH_DT") {
-                                        // Convert slotData object to JSON string
-                                        keyValuePairs.push(
-                                            `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`
-                                        );
-                                    } else {
-                                        keyValuePairs.push(
-                                            `${key}=${encodeURIComponent(obj[key])}`
-                                        );
-                                    }
-                                }
-                            }
-                            return keyValuePairs.join("&");
-                        }
-
-                        // Convert object to query string
-                        const queryParams = objectToQueryString(doctordata);
-                        console.log(queryParams);
-                        window.location.href = `demo.html?${queryParams}`;
-                    });
-
-                    searchResults.appendChild(listItem);
-                }
-                else {
-                    const listItem = document.createElement("li");
-                    listItem.style.justifyContent = 'space-between'
-                    listItem.style.padding = '0 5px'
-                    listItem.style.height = '45px'
-                    listItem.innerHTML = `
-          <h4>${doctor.ITEM_NAME}</h4>
-          <p style='color:green'>${doctor.FIELD_TYPE}</p>`;
-                    searchResults.appendChild(listItem)
-                    listItem.addEventListener('click', () => {
-
-                        console.log(doctor);
-                        if (doctor.FIELD_TYPE === 'Symptom' || doctor.FIELD_TYPE === 'Specialist') {
-                            const symptomData = doctor ? doctor.DETAILS : null
-                            symptomData.SYM_NAME = doctor.ITEM_NAME ? doctor.ITEM_NAME : null
-                            const encodedData = encodeURIComponent(JSON.stringify(symptomData));
-                            const redirectUrl = `doctors.html?data=${encodedData}`;
-
-                            // Redirect to doctors.html with the specified SPECIALIST parameter
-                            window.location.href = redirectUrl;
-                        }
-
-                    })
-                }
+                // listItem.querySelector('.book-now-btn').addEventListener('click', () => {
+                //     addItemToCart(doctor);
+                //     disableButton(listItem.querySelector('.book-now-btn'));
+                // });
             });
 
             searchResults.classList.add("active"); // Show search results
         }
+        // Updated event listener for "Book Now" button
+        searchResults.addEventListener('click', (event) => {
+            const target = event.target;
+            if (target.classList.contains('book-now-btn') || target.classList.contains('remove-btn')) {
+                const listItem = target.closest('li');
+                const doctorName = listItem.querySelector('h4').textContent;
+                const doctor = doctorsData.find(item => item.ITEM_NAME === doctorName);
+
+                if (target.classList.contains('book-now-btn')) {
+                    addItemToCart(doctor);
+                    enableButton(target, 'Remove', 'remove-btn');
+                } else if (target.classList.contains('remove-btn')) {
+                    removeItemFromCart(doctor);
+                    enableButton(target, 'Add to Cart', 'book-now-btn');
+                }
+            }
+        });
+
+        // Function to open the modal and populate it with doctor details
+        function openModal(doctor) {
+            const doctorDetails = doctor.DETAILS ? doctor.DETAILS : null
+            console.log(doctorDetails);
+            const modal = document.getElementById("detailsModal");
+            const modalContent = document.getElementById("modalDetailsContent");
+            const closeModalButton = document.querySelector(".modal .close");
+
+            // Populate modal content
+            modalContent.innerHTML = `
+            <h2>${doctorDetails.TEST_NAME}</h2>
+            <p><strong>Test Code:</strong> ${doctorDetails.TEST_CODE}</p>
+            <p><strong>Sample:</strong> ${doctorDetails.TEST_SAMPLE}</p>
+            <p><strong>Department:</strong> ${doctorDetails.DEPARTMENT}</p>
+            <p><strong>Description:</strong> ${doctorDetails.TEST_DESC}</p>
+            <p><strong>Fasting:</strong> ${doctorDetails.FASTING}</p>
+            <p><strong>Gender:</strong> ${doctorDetails.GENDER_TYPE}</p>
+            <p><strong>Age:</strong> ${doctorDetails.AGE_TYPE}</p>
+            <p><strong>Report Time:</strong> ${doctorDetails.REPORT_TIME}</p>
+            <p><strong>Prescription Required:</strong> ${doctorDetails.PRESCRIPTION}</p>
+            <p><strong>ID Proof Required:</strong> ${doctorDetails.ID_PROOF}</p>
+            ${doctorDetails.QA1 ? `<p><strong>Q&A:</strong></p>` : ''}
+            ${doctorDetails.QA1 ? `<p>${doctorDetails.QA1}</p>` : ''}
+            ${doctorDetails.QA2 ? `<p>${doctorDetails.QA2}</p>` : ''}
+            ${doctorDetails.QA3 ? `<p>${doctorDetails.QA3}</p>` : ''}
+            ${doctorDetails.QA4 ? `<p>${doctorDetails.QA4}</p>` : ''}
+            ${doctorDetails.QA5 ? `<p>${doctorDetails.QA5}</p>` : ''}
+            ${doctorDetails.QA6 ? `<p>${doctorDetails.QA6}</p>` : ''}
+        `;
+
+            // Display the modal
+            modal.style.display = "block";
+
+            // Close the modal when the user clicks on the close button
+            closeModalButton.onclick = function () {
+                modal.style.display = "none";
+                searchInput.click()
+                searchInput.focus()
+
+            };
+            // Close the modal when the user clicks outside the modal
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    searchInput.focus()
+                    searchInput.click()
+                }
+            };
+        }
+        // Function to add item to cart
+        function addItemToCart(item) {
+            cartItems.push(item);
+            console.log(cartItems);
+            renderCart();
+        }
+        // Function to remove item from cart
+        function removeItemFromCart(item) {
+            const index = cartItems.findIndex(cartItem => cartItem.ITEM_NAME === item.ITEM_NAME);
+            if (index !== -1) {
+                cartItems.splice(index, 1);
+            }
+            renderCart();
+        }
+        // Function to enable button and change text
+        function enableButton(button, text, newClass) {
+            button.textContent = text;
+            button.className = newClass;
+            button.style.transition = 'background-color 0.3s ease';
+        }
+
+        // Function to disable button and change text
+        function disableButton(button, text, newClass) {
+            button.textContent = text;
+            button.className = newClass;
+            button.style.transition = 'background-color 0.3s ease';
+        }
+
+        function renderCart() {
+            const cartContainer = document.getElementById('cartContainer');
+            cartContainer.innerHTML = '';
+
+            let totalItems = 0;
+            let totalCost = 0;
+
+            cartItems.forEach((item, index) => {
+                const cartItemElement = document.createElement('div');
+                cartItemElement.classList.add('cart-item');
+                cartItemElement.innerHTML = `
+            <span class="item-name">${item.ITEM_NAME}</span>
+            <span class="item-type">${item.FIELD_TYPE}</span>
+            <span class="item-cost">₹ ${item.COST}</span>
+        `;
+                cartContainer.appendChild(cartItemElement);
+
+                // Increment total items and cost
+                totalItems += 1;
+                totalCost += parseFloat(item.COST);
+            });
+            if (cartItems.length > 0) {
+                // Create and append the total cost row
+                const totalCostElement = document.createElement('div');
+                totalCostElement.classList.add('cart-item');
+                totalCostElement.style.fontWeight = 'bold';
+                totalCostElement.style.borderTop = '2px solid #ccc';
+                totalCostElement.style.marginTop = '10px';
+                totalCostElement.innerHTML = `
+        <span>Total Items: ${totalItems}</span>
+        <span></span> <!-- Empty span to fill the space -->
+        <span>Total Cost: ₹ ${totalCost.toFixed(2)}</span>
+    `;
+                cartContainer.appendChild(totalCostElement);
+            }
+
+        }
+        function removeItem(index) {
+            cartItems.splice(index, 1); // Remove the item at the specified index
+            renderCart(); // Re-render the cart
+        }
+
+
+        // Function to disable book_now_btn and change text to 'Added'
+        function disableButton(button) {
+            button.disabled = true;
+            button.textContent = 'Added';
+        }
+
         document.addEventListener("keydown", function (event) {
             // Check if the Shift key is pressed along with another key
             if (event.shiftKey) {

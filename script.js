@@ -1,6 +1,27 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const loginForm = document.getElementById("loginForm");
-
+    setTimeout(function() {
+        document.querySelector('.preloader').style.display = 'none';
+      }, 3000); // 3 seconds
+    // Check if the user is already logged in
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (isLoggedIn) {
+      // Retrieve username from localStorage
+      const username = localStorage.getItem("username");
+      // Do something with the logged-in user's data
+      const storedUserData = localStorage.getItem("userData");
+      // Access and use the user's data
+      if (storedUserData) {
+        userData = JSON.parse(storedUserData);
+        console.log(userData);
+        userData = userData.data
+        window.location.href ='/dashboard.html'
+      }
+    }
+    else {
+      window.location.href = '/'
+    }
+    const loginForm = document.getElementById("loginForm");
+    
   loginForm.addEventListener("submit", function (event) {
       event.preventDefault();
 

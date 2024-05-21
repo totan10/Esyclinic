@@ -292,7 +292,7 @@
     }
 
     .doctor {
-      margin-top: 35px;
+      margin-top: 45px;
       padding: 0 3px;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -359,9 +359,10 @@
       background: #01b5cd;
       color: #fff;
       padding: 3px;
+      padding-right: 5px;
       border-radius: 10px;
       text-align: center;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
     }
 
     .gradientTexts {
@@ -453,7 +454,7 @@
     }
 
     .doctor-specialist {
-      margin-top: 40px;
+      margin-top: 45px;
       margin-bottom: 5px;
       padding: 0 3px;
       border-radius: 10px;
@@ -494,57 +495,63 @@
       /* Adjust font weight */
     }
 
-    @media (max-width: 1200px) {
+    @media (max-width: 1400px) {
 
       .doctors-container,
       .specialists-container,
       .symptoms-container,
       .doctor-specialists-container {
         grid-template-columns: repeat(5, 1fr);
+        justify-items: center;
         /* Adjust for smaller screens */
       }
     }
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1200px) {
 
       .doctors-container,
       .specialists-container,
       .symptoms-container,
       .doctor-specialists-container {
         grid-template-columns: repeat(4, 1fr);
+        justify-items: center;
         /* Adjust for smaller screens */
       }
     }
 
-    @media (max-width: 825px) {
+    @media (max-width: 970px) {
 
       .doctors-container,
       .specialists-container,
       .symptoms-container,
       .doctor-specialists-container {
         grid-template-columns: repeat(3, 1fr);
+        gap: 7px;
+        justify-items: center;
         /* Adjust for smaller screens */
       }
     }
 
-    @media (max-width: 650px) {
+    @media (max-width: 700px) {
 
       .doctors-container,
       .specialists-container,
       .symptoms-container,
       .doctor-specialists-container {
         grid-template-columns: repeat(2, 1fr);
+        justify-items: center;
         /* Adjust for smaller screens */
       }
     }
 
-    @media (max-width: 400px) {
+    @media (max-width: 450px) {
 
       .doctors-container,
       .specialists-container,
       .symptoms-container,
       .doctor-specialists-container {
         grid-template-columns: repeat(1, 1fr);
+        justify-items: center;
         /* Single column layout for narrower screens */
       }
     }
@@ -1048,12 +1055,13 @@
       })
     }
 
+    // Populate the specialists grid
     function populateTotalDoctorsConatiner(doctorSpecialistsData) {
-      // Populate the specialists grid
+
       const doctorSpecialistsContainer = document.querySelector(
         ".doctor-specialists-container"
       );
-     // doctorSpecialistsData.sort(sortByCheckInStatus);
+      // doctorSpecialistsData.sort(sortByCheckInStatus);
       const doctorSpecialistBtn = document.getElementById('allSpecialistBtn');
       for (
         let i = 0;
@@ -1141,7 +1149,7 @@
       })
     }
 
-    
+
     // Function to make a POST request on page load
     window.onload = function () {
       // Check if the user is already logged in
@@ -1216,7 +1224,10 @@
             //   slide.appendChild(img);
             //   sliderContainer.appendChild(slide);
             // });
-
+            const headers = document.querySelectorAll(`.header`)
+            headers.forEach((header) => {
+              header.style.display = 'block'
+            })
             populateTodayDoctors(todayDoctorsData);
 
             populateSpecialistContainer(specialistsData)
@@ -1226,10 +1237,7 @@
             populateTotalDoctorsConatiner(doctorSpecialistsData)
 
 
-            const headers = document.querySelectorAll(`.header`)
-            headers.forEach((header) => {
-              header.style.display = 'block'
-            })
+
           })
           .catch((error) => {
             // Handle errors
