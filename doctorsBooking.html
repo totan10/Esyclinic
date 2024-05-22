@@ -878,6 +878,7 @@
 
     // Populate the doctors grid for today
     function populateTodayDoctors(todayDoctorsData) {
+      console.log(todayDoctorsData);
       const doctorsContainer =
         document.querySelector(".doctors-container");
       const todayeButton = document.getElementById('todayBtn');
@@ -1197,13 +1198,13 @@
           .post(apiUrl, postData)
           .then((response) => {
             // Handle response data
-            console.log(response.data);
+            console.log(response.data.data);
 
             const specialistsData = response.data.data
               ? response.data.data.specialist
               : null;
             const todayDoctorsData = response.data.data
-              ? response.data.data.today_doctors
+              ? response.data.data.today_doctor
               : null;
             const symptomsData = response.data.data
               ? response.data.data.symptoms
@@ -1214,16 +1215,7 @@
             // Hide overlay and loader when API call is completed
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('loader').style.display = 'none';
-            // Populate the slider with images
-            // const sliderContainer = document.querySelector(".swiper-wrapper");
-            // sliderData.forEach((item) => {
-            //   const slide = document.createElement("div");
-            //   slide.classList.add("swiper-slide");
-            //   const img = document.createElement("img");
-            //   img.src = item.SLIDER_URL;
-            //   slide.appendChild(img);
-            //   sliderContainer.appendChild(slide);
-            // });
+            console.log(todayDoctorsData);
             const headers = document.querySelectorAll(`.header`)
             headers.forEach((header) => {
               header.style.display = 'block'

@@ -259,19 +259,20 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
+            /* overflow: auto; */
+            overflow-y: auto;
             background-color: rgba(0, 0, 0, 0.5);
             animation: fadeIn1 0.5s ease;
         }
 
         .modal-content {
             background-color: #fefefe;
-            margin: 5% auto;
+            margin: 2% auto;
             padding: 20px;
             border: 1px solid #888;
             width: 90%;
-            height: 90%;
-            overflow-y: auto;
+            max-height: 100%;
+
             animation: slideIn 0.5s ease;
             border-radius: 10px;
         }
@@ -303,25 +304,23 @@
             color: #333;
         }
 
+        /* Test Instructions */
         .test-instructions h3 {
-            font-size: 20px;
-            color: #00205b;
             margin-top: 20px;
         }
 
-        .test-instructions table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
+        .instruction-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
 
-        .test-instructions table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            vertical-align: top;
+        .instruction-item {
+            margin-bottom: 5px;
         }
 
-        .test-instructions table .faded {
+
+        .instruction-item span {
             color: #999;
         }
 
@@ -335,6 +334,9 @@
         }
 
         .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             background-color: #c5d1dd;
             padding: 10px;
             cursor: pointer;
@@ -347,6 +349,11 @@
         .collapsible-body {
             padding: 10px;
             display: none;
+            overflow: hidden;
+        }
+
+        .collapsible-body.active {
+            display: block;
         }
 
         .collapsible-body.show {
@@ -649,7 +656,9 @@
             <h4>${doctor.ITEM_NAME}</h4>
             <button class="test-details-btn">Test Details</button>
             <p>${doctor.FIELD_TYPE}</p>
-            <button class="book-now-btn">Add to Cart</button>
+            <button class="${isItemInCart(doctor.ITEM_NAME) ? 'remove-btn' : 'book-now-btn'}">
+                ${isItemInCart(doctor.ITEM_NAME) ? 'Remove' : 'Add to Cart'}
+            </button>
         `;
                 searchResults.appendChild(listItem);
 
@@ -665,6 +674,9 @@
             });
 
             searchResults.classList.add("active"); // Show search results
+        }
+        function isItemInCart(itemName) {
+            return cartItems.some(cartItem => cartItem.ITEM_NAME === itemName);
         }
         // Updated event listener for "Book Now" button
         searchResults.addEventListener('click', (event) => {
@@ -702,20 +714,16 @@
             <p>${doctorDetails.TEST_DESC}</p>
         </div>
         <div class="test-instructions">
-            <h3>Test Instructions</h3>
-            <table>
-                <tr>
-                    <td><span class="faded">Report Time:</span> ${doctorDetails.REPORT_TIME}</td>
-                    <td><span class="faded">Gender Type:</span> ${doctorDetails.GENDER_TYPE}</td>
-                    <td><span class="faded">Age Type:</span> ${doctorDetails.AGE_TYPE}</td>
-                </tr>
-                <tr>
-                    <td><span class="faded">Prescription:</span> ${doctorDetails.PRESCRIPTION}</td>
-                    <td><span class="faded">Fasting:</span> ${doctorDetails.FASTING}</td>
-                    <td><span class="faded">Home Collect:</span> ${doctorDetails.HOME_COLLECT}</td>
-                </tr>
-            </table>
-        </div>
+                <h3>Test Instructions</h3>
+                <div class="instruction-grid">
+                    <div class="instruction-item"><span>Fasting:</span> ${doctorDetails.FASTING}</div>
+                    <div class="instruction-item"><span>Gender Type:</span> ${doctorDetails.GENDER_TYPE}</div>
+                    <div class="instruction-item"><span>Age Type:</span> ${doctorDetails.AGE_TYPE}</div>
+                    <div class="instruction-item"><span>Report Time:</span> ${doctorDetails.REPORT_TIME}</div>
+                    <div class="instruction-item"><span>Prescription Required:</span> ${doctorDetails.PRESCRIPTION}</div>
+                    <div class="instruction-item"><span>ID Proof Required:</span> ${doctorDetails.ID_PROOF}</div>
+                </div>
+            </div>
         <div class="qa-section">
             <h3>Questions & Answers</h3>
             ${doctorDetails.QA1 ? createCollapsible(doctorDetails.QA1, "QA1") : ''}
@@ -771,17 +779,27 @@
 
 
         function createCollapsible(content, label) {
-            return `
+            const splitIndex = content.indexOf('?') + 1;
+            if (splitIndex !== -1) {
+                const header = content.substring(0, splitIndex + 1);
+                const body = content.substring(splitIndex + 1).trim();
+                return `
         <div class="collapsible">
             <div class="collapsible-header">
-                ${label}
+                <div class="collapsible-header-name">
+                    <i class="fas fa-file-alt"></i>${header}
+                </div>
+
+                
                 <span class="collapse-toggle">
                     <i class="fas fa-chevron-up"></i>
                 </span>
             </div>
-            <div class="collapsible-body">${content}</div>
+            <div class="collapsible-body">${body}</div>
         </div>
     `;
+            }
+
         }
         // Function to add item to cart
         function addItemToCart(item) {
