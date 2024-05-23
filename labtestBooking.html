@@ -13,7 +13,7 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            background-color: #fff;
             font-family: Arial, Helvetica, sans-serif;
         }
 
@@ -469,10 +469,291 @@
         .cart-item .remove-btn:hover {
             background-color: #cc0000;
         } */
+
+        /* CSS for Cart Icon */
+        .cart-icon {
+            /* position: absolute;
+             top: 110px; 
+            right: 20px; */
+
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .cart-icon svg {
+            font-size: 26px;
+            /* Adjust icon size as needed */
+            color: #000;
+            /* Icon color */
+            transition: color 0.3s ease;
+            /* Smooth color transition */
+        }
+
+        .cart-icon span {
+            background-color: #ed0c0c;
+            /* Background color for cart count */
+            color: #f3f0f0;
+            /* Text color for cart count */
+            font-size: 10px;
+            padding: 2px 4px;
+            /* Padding around cart count */
+            border-radius: 50%;
+            /* Make it circular */
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.3s ease;
+            /* Animation for count change */
+            animation-fill-mode: forwards;
+            top: 18px;
+            right: 10px;
+        }
+
+        /* Animation for count change */
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+                /* Start with zero scale */
+                opacity: 0;
+                /* Start with zero opacity */
+            }
+
+            100% {
+                transform: scale(1);
+                /* End with normal scale */
+                opacity: 1;
+                /* End with full opacity */
+            }
+        }
+
+        #popularTest,
+        #symptomaticTest {
+            display: none;
+        }
+
+        .view-all-btn {
+            text-align: right;
+            margin-right: 20px;
+            margin-top: 10px;
+        }
+
+        .view-all-btn button {
+            color: #19cfc3;
+            background-color: transparent;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            font-size: large;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: color 0.3s ease, color 0.3s ease;
+        }
+
+        .view-all-btn button:hover {
+            color: #0056b3;
+        }
+
+        .popular-tests-container {
+            margin: 10px;
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            /* Maximum 6 items per row */
+            gap: 20px;
+            /* Gap between items */
+            /* justify-content: center; */
+        }
+
+        .test-item {
+            background-color: #F2F2F2;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            /* 3D effect */
+        }
+
+        .test-item:hover,
+        .symptom:hover,
+        profile_test:hover {
+            transform: translateY(-5px) scale(1.05);
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            background-color: #baacac;
+            color: #f3f3f3;
+            cursor: pointer;
+        }
+
+        .test-name {
+            color: red;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .test-details-btn {
+            background-color: #22e3ca;
+            color: #fff;
+            padding: 6px 36px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .test-price {
+            color: #00008b;
+            /* Dark blue font */
+        }
+
+        .price-value {
+            color: #000;
+            /* Black font */
+        }
+
+        .book-now-btn {
+            background-color: #07094a;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .book-now-btn:hover {
+            background-color: #f0f0f0;
+            /* Light gray background on hover */
+            color: #01b5cd;
+        }
+
+        #trendingTestsContainer,
+        #profileTestsContainer,
+        #commonScanContainer {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 20px;
+            /* Adjust the gap between grid items */
+            padding: 20px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .symptom,
+        .profile_test{
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Add shadow effect */
+            cursor: pointer;
+            /* Add pointer cursor */
+            background: #F2F2F2;
+            /* Gradient background */
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .symptom img {
+            width: 95%;
+            height: 80%;
+            margin: 2px;
+            /* Ensure proper image aspect ratio */
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .symptom-details {
+            padding: 10px;
+        }
+
+        .symptom p {
+            margin: 5px 0;
+            text-align: center;
+        }
+        .common_scan {
+            text-align: center;
+            padding: 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Add shadow effect */
+            cursor: pointer;
+            /* Add pointer cursor */
+            background: #F2F2F2;
+            /* Gradient background */
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            font-weight: 700;
+        }
+
+        .profile_test img, .common_scan img {
+            width: 100%;
+            height: 80%;
+            /* Ensure proper image aspect ratio */
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .profile_test p, .common_scan p {
+            margin: 5px 0;
+            text-align: center;
+        }
+
+        /* Styles for the overlay */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Semi-transparent black */
+            /* Initially hidden */
+        }
+
+        /* Styles for the loader */
+        #loader {
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #3498db;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -25px;
+            /* Half of height */
+            margin-left: -25px;
+            /* Half of width */
+            /* Initially hidden */
+            z-index: 9999;
+            /* Ensure loader is above the overlay */
+        }
+
+        /* Keyframe animation for spinner */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
 <body>
+    <div id="overlay"></div>
+    <div id="loader"></div>
     <!-- Navbar Container -->
     <div class="navbar-container">
         <!-- Navbar -->
@@ -495,8 +776,15 @@
                 <i class="fas fa-user"></i>
                 <!-- Adjust icon as needed -->
             </div>
+
+            <!-- Cart Icon -->
+            <div id="cartIcon" class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cartItemCount">0</span> <!-- Cart count -->
+            </div>
         </nav>
     </div>
+
 
     <!-- Cart Container -->
     <div id="cartContainer" class="cart-container">
@@ -509,6 +797,50 @@
             <div id="modalDetailsContent"></div>
         </div>
     </div>
+
+
+    <div class="header" id="commonScan" style="margin-top: 100px">
+        Most Common Scan
+        <div class="view-all-btn">
+            <button type="button" id="commonScanBtn">View All</button>
+        </div>
+    </div>
+    <div class="common-scan-container" id="commonScanContainer">
+        <!-- Tests will be dynamically added here -->
+    </div>
+
+    <div class="header" id="popularTest" >
+        Most Prescribed Doctor's Test
+        <div class="view-all-btn">
+            <button type="button" id="popularTestBtn">View All</button>
+        </div>
+    </div>
+    <div class="popular-tests-container" id="popularTestsContainer">
+        <!-- Tests will be dynamically added here -->
+    </div>
+
+    <div class="header" id="symptomaticTest">
+        Trending Symptomatic Test
+        <div class="view-all-btn">
+            <button type="button" id="symptomaticTestBtn">View All</button>
+        </div>
+    </div>
+    <div class="trending-tests-container" id="trendingTestsContainer">
+        <!-- Tests will be dynamically added here -->
+    </div>
+
+    <div class="header" id="profileTest">
+        Test by Health Risk
+        <div class="view-all-btn">
+            <button type="button" id="profileTestBtn">View All</button>
+        </div>
+    </div>
+    <div class="profile-tests-container" id="profileTestsContainer">
+        <!-- Tests will be dynamically added here -->
+    </div>
+
+    
+
     <!-- JavaScript libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -520,7 +852,9 @@
         const searchResults = document.getElementById("searchResults");
         // Global array to store added items
         let cartItems = [];
-
+        let labtests = []
+        // Global variable to store cart count
+        let cartCount = 0;
 
         wow = new WOW(
             {
@@ -550,13 +884,226 @@
                     const clinicName = document.querySelector(".profile-icon")
                     clinicName.innerHTML = `${userData.PHARMA_NAME}`
                     companyLogo.src = userData.LOGO_URL;
+                    document.getElementById('overlay').style.display = 'block';
+                    document.getElementById('loader').style.display = 'block';
+                    populateTests();
                     populateDoctors();
+                    console.log(labtests);
+
+
+
                 }
             }
             else {
                 window.location.href = '/'
             }
         });
+
+        function toggleGridView(tests, button) {
+            const gridItems = document.querySelectorAll(tests);
+            const toggleButton = document.getElementById(button);
+            const isExpanded = toggleButton.classList.contains('expanded');
+
+            if (isExpanded) {
+                // Collapse grid to show only one row
+                showOneRow(tests);
+                toggleButton.innerHTML = 'View All'; // Change to expand icon
+                toggleButton.classList.remove('expanded');
+            } else {
+                // Expand grid to show all items
+                gridItems.forEach(item => {
+                    item.style.display = 'block';
+                    item.style.display = 'flex'
+                    item.style.flexDirection = 'column'
+                });
+                toggleButton.innerHTML = 'View Less'; // Change to compress icon
+                toggleButton.classList.add('expanded');
+            }
+        }
+
+        function showOneRow(tests) {
+            const gridItems = document.querySelectorAll(tests);
+            gridItems.forEach((item, index) => {
+                if (index >= 6) {
+                    item.style.display = 'none';
+                } else {
+                    item.style.display = 'block'; // Display first row items
+                    item.style.display = 'flex'
+                    item.style.flexDirection = 'column'
+                }
+            });
+        }
+
+
+        function generateSingleTests(singleTests) {
+            const container = document.getElementById('popularTestsContainer');
+            const singleTestBtn = document.getElementById('popularTestBtn');
+            console.log('inside single tests', singleTests);
+            // Clear container
+            container.innerHTML = '';
+            singleTests.forEach(data => {
+                const testItem = createTestItem(data);
+                container.appendChild(testItem);
+            });
+
+            showOneRow('.test-item');
+            singleTestBtn.addEventListener('click', function () {
+                toggleGridView('.test-item', 'popularTestBtn');
+            });
+        }
+
+        // Function to dynamically create test items
+        function createTestItem(data) {
+            const testItem = document.createElement('div');
+            testItem.classList.add('test-item', "wow", "fadeInLeft");
+            testItem.innerHTML = `
+            <h4 class="test-name">${data.TEST_NAME}</h4>
+            <div class="test-details-btn">Test Details</div>
+            <p class="test-price">Price: <span class="price-value">₹${data.COST}</span></p>
+            <button class="book-now-btn">Book Now</button>
+        `;
+            return testItem;
+        }
+
+        function generateSymptomTests(symptomaticTests) {
+            console.log('inside');
+            const container = document.getElementById('trendingTestsContainer');
+            container.innerHTML = '';
+            const symptomBtn = document.getElementById('symptomaticTestBtn');
+            for (let i = 0; i < symptomaticTests.length; i++) {
+                const symptomTest = symptomaticTests[i];
+                const symptomDiv = document.createElement("div");
+                symptomDiv.classList.add("symptom", "wow", "fadeInLeft");
+
+                const symptomImg = document.createElement("img");
+                symptomImg.src = symptomTest.PHOTO_URL;
+                const symptomName = document.createElement("p");
+                symptomName.textContent = symptomTest.DASH_NAME;
+                symptomDiv.appendChild(symptomImg);
+                symptomDiv.appendChild(symptomName);
+                container.appendChild(symptomDiv);
+                console.log(symptomDiv);
+                symptomDiv.addEventListener("click", () => {
+                    console.log(symptomTest);
+                });
+            }
+            showOneRow('.symptom');
+            symptomaticTestBtn.addEventListener('click', () => {
+                toggleGridView('.symptom', 'symptomaticTestBtn')
+            })
+
+        }
+
+        function generateProfileTests(profileTests) {
+            const container = document.getElementById('profileTestsContainer');
+            container.innerHTML = '';
+            const profileBtn = document.getElementById('profileTestBtn');
+
+            profileTests.forEach(profileTest => {
+                const profileDiv = document.createElement("div");
+                profileDiv.classList.add("profile_test", "wow", "fadeInLeft");
+
+                const symptomImg = document.createElement("img");
+                symptomImg.src = profileTest.PHOTO_URL;
+                const symptomName = document.createElement("p");
+                symptomName.textContent = profileTest.DASH_NAME;
+                profileDiv.appendChild(symptomImg);
+                profileDiv.appendChild(symptomName);
+                container.appendChild(profileDiv);
+
+                profileDiv.addEventListener("click", () => {
+                    console.log(profileTest);
+                });
+            });
+            showOneRow('.profile_test');
+            profileBtn.addEventListener('click', () => {
+                toggleGridView('.profile_test', 'profileTestBtn')
+            })
+        }
+
+        function generateCommonScan(commonScans){
+            const container = document.getElementById('commonScanContainer');
+            container.innerHTML = '';
+            const commonScanBtn=document.getElementById('commonScanBtn');
+            commonScans.forEach(commonScan =>{
+                const profileDiv = document.createElement("div");
+                profileDiv.classList.add("common_scan", "wow", "fadeInLeft");
+
+                const symptomImg = document.createElement("img");
+                symptomImg.src = commonScan.PHOTO_URL;
+                const symptomName = document.createElement("p");
+                symptomName.textContent = commonScan.DASH_NAME;
+                profileDiv.appendChild(symptomImg);
+                profileDiv.appendChild(symptomName);
+                container.appendChild(profileDiv);
+
+                profileDiv.addEventListener("click", () => {
+                    console.log(commonScan);
+                });
+            })
+            showOneRow('.common_scan');
+            commonScanBtn.addEventListener('click', () => {
+                toggleGridView('.common_scan', 'commonScanBtn')
+            })
+        }
+
+        async function populateTests() {
+            const PHARMA_ID = userData ? userData.PHARMA_ID : null
+            const url = "https://easyhealths.com/api/labdashboard1_dummy";
+            const params = {
+                PHARMA_ID: PHARMA_ID,
+            };
+
+            await axios
+                .post(url, params)
+                .then((response) => {
+                    const data = response.data.data;
+                    labtests = data;
+                    console.log(labtests);
+                    const singleTests = labtests ? labtests.Popular_Single_Test : [];
+                    const symptomaticTests = labtests ? labtests.Symptomatic_Test : [];
+                    const profileTests = labtests ? labtests.Profile_Test : [];
+                    const commonScans=labtests ? labtests.Dashboard:[];
+
+                    // Hide overlay and loader when API call is completed
+                    document.getElementById('overlay').style.display = 'none';
+                    document.getElementById('loader').style.display = 'none';
+
+                    if (commonScans && commonScans.length > 0) {
+                        console.log(commonScans.length);
+                        document.getElementById('commonScan').style.display = 'block';
+                        generateCommonScan(commonScans);
+
+                    }
+
+                    if (singleTests && singleTests.length > 0) {
+                        console.log(singleTests.length);
+                        document.getElementById('popularTest').style.display = 'block';
+                        generateSingleTests(singleTests)
+                    }
+                    if (symptomaticTests && symptomaticTests.length > 0) {
+                        console.log(symptomaticTests.length);
+                        document.getElementById('symptomaticTest').style.display = 'block';
+                        generateSymptomTests(symptomaticTests)
+
+                    }
+                    if (profileTests && profileTests.length > 0) {
+                        console.log(profileTests.length);
+                        document.getElementById('profileTest').style.display = 'block';
+                        generateProfileTests(profileTests);
+
+                    }
+                    
+
+
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    return null;
+                });
+
+        }
+
         // Function to format date from "YYYYMMDD" to "dd-Month-YYYY"
         function populateDoctors() {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
@@ -675,6 +1222,7 @@
 
             searchResults.classList.add("active"); // Show search results
         }
+
         function isItemInCart(itemName) {
             return cartItems.some(cartItem => cartItem.ITEM_NAME === itemName);
         }
@@ -804,15 +1352,26 @@
         // Function to add item to cart
         function addItemToCart(item) {
             cartItems.push(item);
-            console.log(cartItems);
+            cartCount++; // Increment cart count
+            updateCartCount(); // Update cart count display
             renderCart();
         }
+
+        // Function to update cart count display
+        function updateCartCount() {
+            const cartItemCount = document.getElementById("cartItemCount");
+            cartItemCount.textContent = cartCount;
+        }
+
         // Function to remove item from cart
         function removeItemFromCart(item) {
             const index = cartItems.findIndex(cartItem => cartItem.ITEM_NAME === item.ITEM_NAME);
             if (index !== -1) {
                 cartItems.splice(index, 1);
+                cartCount--; // Decrement cart count
+                updateCartCount(); // Update cart count display
             }
+
             renderCart();
         }
         // Function to enable button and change text
