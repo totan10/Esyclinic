@@ -529,7 +529,7 @@
         }
 
         #popularTest,
-        #symptomaticTest {
+        #symptomaticTest,#familyPackage,#commonScan,#profileTest {
             display: none;
         }
 
@@ -579,7 +579,10 @@
 
         .test-item:hover,
         .symptom:hover,
-        profile_test:hover {
+        .profile_test:hover,
+        .family_package:hover,
+        .common_scan:hover
+         {
             transform: translateY(-5px) scale(1.05);
             transition: transform 0.3s ease;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -641,6 +644,15 @@
             margin-top: 20px;
             justify-content: center;
         }
+        #familyPackageContainer {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            /* Adjust the gap between grid items */
+            padding: 20px;
+            margin-top: 20px;
+            justify-content: center;
+        }
 
         .symptom,
         .profile_test{
@@ -676,7 +688,7 @@
             margin: 5px 0;
             text-align: center;
         }
-        .common_scan {
+        .common_scan,.family_package {
             text-align: center;
             padding: 0;
             border-radius: 10px;
@@ -693,7 +705,7 @@
             font-weight: 700;
         }
 
-        .profile_test img, .common_scan img {
+        .profile_test img, .common_scan img, .family_package img {
             width: 100%;
             height: 80%;
             /* Ensure proper image aspect ratio */
@@ -839,6 +851,15 @@
         <!-- Tests will be dynamically added here -->
     </div>
 
+    <div class="header" id="familyPackage">
+        Top Family Care Package
+        <div class="view-all-btn">
+            <button type="button" id="familyCareBtn">View All</button>
+        </div>
+    </div>
+    <div class="familyPackage-container" id="familyPackageContainer">
+        <!-- Tests will be dynamically added here -->
+    </div>
     
 
     <!-- JavaScript libraries -->
@@ -1047,6 +1068,32 @@
             })
         }
 
+        function generateFamilyPackage(familyPackage){
+            const container = document.getElementById('familyPackageContainer');
+            container.innerHTML = '';
+            const familyPackageBtn=document.getElementById('familyCareBtn');
+            familyPackage.forEach(commonScan =>{
+                const profileDiv = document.createElement("div");
+                profileDiv.classList.add("family_package", "wow", "fadeInLeft");
+
+                const symptomImg = document.createElement("img");
+                symptomImg.src = commonScan.PHOTO_URL;
+                const symptomName = document.createElement("p");
+                symptomName.textContent = commonScan.DASH_NAME;
+                profileDiv.appendChild(symptomImg);
+                profileDiv.appendChild(symptomName);
+                container.appendChild(profileDiv);
+
+                profileDiv.addEventListener("click", () => {
+                    console.log(commonScan);
+                });
+            })
+            showOneRow('.family_package');
+            commonScanBtn.addEventListener('click', () => {
+                toggleGridView('.family_package', 'familyCareBtn')
+            })
+        }
+
         async function populateTests() {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
             const url = "https://easyhealths.com/api/labdashboard1_dummy";
@@ -1064,6 +1111,7 @@
                     const symptomaticTests = labtests ? labtests.Symptomatic_Test : [];
                     const profileTests = labtests ? labtests.Profile_Test : [];
                     const commonScans=labtests ? labtests.Dashboard:[];
+                    const familyPackage=labtests ? labtests.Family_Care_Package:[];
 
                     // Hide overlay and loader when API call is completed
                     document.getElementById('overlay').style.display = 'none';
@@ -1094,7 +1142,12 @@
 
                     }
                     
+                    if (familyPackage && familyPackage.length > 0) {
+                        console.log(familyPackage.length);
+                        document.getElementById('familyPackage').style.display = 'block';
+                        generateFamilyPackage(familyPackage);
 
+                    }
 
                 })
                 .catch((error) => {
