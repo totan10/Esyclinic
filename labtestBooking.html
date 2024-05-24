@@ -1099,6 +1099,25 @@
             return testItem;
         }
 
+        // Function to convert the object to a query string
+        function objectToQueryString(obj) {
+            const parts = [];
+            for (const key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
+                        parts.push(objectToQueryString(obj[key]));
+                    } else if (Array.isArray(obj[key])) {
+                        obj[key].forEach((item, index) => {
+                            parts.push(`${key}[${index}]=${encodeURIComponent(JSON.stringify(item))}`);
+                        });
+                    } else {
+                        parts.push(`${key}=${encodeURIComponent(obj[key])}`);
+                    }
+                }
+            }
+            return parts.join('&');
+        }
+
         function generateSymptomTests(symptomaticTests) {
             console.log('inside');
             const container = document.getElementById('trendingTestsContainer');
@@ -1119,6 +1138,11 @@
                 console.log(symptomDiv);
                 symptomDiv.addEventListener("click", () => {
                     console.log(symptomTest);
+                    // // Create the query string
+                    const queryString = objectToQueryString(symptomTest);
+
+                    // // Redirect to the URL with the query string
+                    window.location.href = `singleTests.html?${queryString}`;
                 });
             }
             showOneRow('.symptom');

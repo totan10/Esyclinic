@@ -440,22 +440,7 @@
             border-bottom: 1px solid #ccc;
         }
 
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-
-        .cart-item span {
-            flex: 1;
-        }
-
-        .cart-item .item-name {
-            font-weight: bold;
-        }
-
-        .cart-item .item-cost {
-            font-weight: bold;
-            color: green;
-        }
+  
 
         /* CSS for Cart Icon */
         .cart-icon {
@@ -729,11 +714,16 @@
 
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
-            let testData = {};
+            const obj = {};
             for (const [key, value] of params.entries()) {
-                testData[key] = value;
+                if (value.startsWith('{') && value.endsWith('}')) {
+                    // Handle objects in the query string
+                    obj[key] = JSON.parse(decodeURIComponent(value));
+                } else {
+                    obj[key] = decodeURIComponent(value);
+                }
             }
-            return testData;
+            return obj;
         }
 
         document.addEventListener("DOMContentLoaded", function () {
@@ -757,9 +747,17 @@
                     document.getElementById('overlay').style.display = 'block';
                     document.getElementById('loader').style.display = 'block';
                     const organData = getQueryParams();
+                    if (organData.ORGAN_NAME) {
+                        document.title = `${organData.ORGAN_NAME} Test`
+                        populateTests(organData);
+                    }
+                    else if (organData.DASH_ID) {
+                        document.title = `${organData.DASH_NAME} Test`
+                        populateSymptomsTests(organData)
+                    }
                     console.log(organData);
                     populateDoctors();
-                    populateTests(organData);
+
                     loadCartItemsFromLocalStorage();
 
                     console.log(labtests);
@@ -771,6 +769,48 @@
                 window.location.href = '/'
             }
         });
+        function populateSymptomsTests(data) {
+            const PHARMA_ID = userData ? userData.PHARMA_ID : null
+            const url = "https://easyhealths.com/api/symptom_tests_dummy";
+            const params = {
+                PHARMA_ID: PHARMA_ID,
+                DASH_ID: data.DASH_ID
+            };
+
+            axios
+                .post(url, params)
+                .then((response) => {
+                    const data = response.data.data;
+                    labtests = data
+                    populateSymtomGrid(labtests)
+                    console.log(labtests);
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    return null;
+                });
+
+            // Hide overlay and loader when API call is completed
+
+        }
+        function populateSymtomGrid(data) {
+            labtests = data.DETAILS;
+            console.log(labtests);
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('loader').style.display = 'none';
+            const headContent = document.getElementById('popularTest')
+            headContent.style.display = 'block';
+            headContent.innerHTML = `Popular - ${data.DASH_NAME} Test`
+            if (labtests) {
+                console.log(headContent);
+                generateSingleTests(labtests);
+            }
+            else {
+                const noresult = document.createElement('h2')
+                noresult.innerHTML = 'No Matching Test Found!!'
+                document.body.appendChild(noresult)
+            }
+        }
         function loadCartItemsFromLocalStorage() {
             const storedCartItems = localStorage.getItem('cartItems');
             if (storedCartItems) {
@@ -976,7 +1016,7 @@
             button.className = newClass;
             button.style.transition = 'background-color 0.3s ease';
         }
-        
+
         function isItemInCart(itemName) {
             return cartItems.some(cartItem => cartItem.TEST_NAME === itemName);
         }
@@ -1004,14 +1044,16 @@
                     document.getElementById('overlay').style.display = 'none';
                     document.getElementById('loader').style.display = 'none';
                     const headContent = document.getElementById('popularTest')
-                    headContent.style.display='block';
+                    headContent.style.display = 'block';
+                    headContent.innerHTML = `Popular - ${organData.ORGAN_NAME} Test`
                     if (labtests.length > 0) {
-                        headContent.innerHTML=`Popular -${organData.ORGAN_NAME} Test`
                         console.log(headContent);
                         generateSingleTests(labtests);
                     }
                     else {
-                        headContent.innerText = 'No Matching Test Found!!';
+                        const noresult = document.createElement('h2')
+                        noresult.innerHTML = 'No Matching Test Found!!'
+                        document.body.appendChild(noresult)
                     }
 
                 })
