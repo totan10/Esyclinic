@@ -18,11 +18,12 @@
         }
 
         .header {
-            background-color: #00205b;
+            background-color: #01b5cd;
+            padding-top: 10px;
             /* Dark blue background */
             height: 40px;
             /* Height of the header */
-            color: white;
+            color: #fff;
             /* Text color */
             text-align: center;
             /* Center align text */
@@ -529,7 +530,10 @@
         }
 
         #popularTest,
-        #symptomaticTest,#familyPackage,#commonScan,#profileTest {
+        #symptomaticTest,
+        #familyPackage,
+        #commonScan,
+        #profileTest {
             display: none;
         }
 
@@ -581,8 +585,7 @@
         .symptom:hover,
         .profile_test:hover,
         .family_package:hover,
-        .common_scan:hover
-         {
+        .common_scan:hover,.organ:hover {
             transform: translateY(-5px) scale(1.05);
             transition: transform 0.3s ease;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -644,6 +647,7 @@
             margin-top: 20px;
             justify-content: center;
         }
+
         #familyPackageContainer {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -655,7 +659,7 @@
         }
 
         .symptom,
-        .profile_test{
+        .profile_test {
             text-align: center;
             padding: 10px;
             border-radius: 10px;
@@ -688,7 +692,9 @@
             margin: 5px 0;
             text-align: center;
         }
-        .common_scan,.family_package {
+
+        .common_scan,
+        .family_package {
             text-align: center;
             padding: 0;
             border-radius: 10px;
@@ -705,7 +711,14 @@
             font-weight: 700;
         }
 
-        .profile_test img, .common_scan img, .family_package img {
+        .family_package {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            height: 220px;
+        }
+
+        .profile_test img,
+        .common_scan img,
+        .family_package img {
             width: 100%;
             height: 80%;
             /* Ensure proper image aspect ratio */
@@ -713,11 +726,52 @@
             border-top-right-radius: 10px;
         }
 
-        .profile_test p, .common_scan p {
+        .profile_test p,
+        .common_scan p {
             margin: 5px 0;
             text-align: center;
         }
+        #modalOrgansContent{
+            height: 100%;
+        }
+        #organsContainer {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            /* Adjust the gap between grid items */
+            padding: 20px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        .organ {
+            text-align: center;
+            padding: 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Add shadow effect */
+            cursor: pointer;
+            /* Add pointer cursor */
+            background: #CBD7E3;
+            /* Gradient background */
+            height: 100px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            font-weight: 700;
+            padding: 5px;
+        }
 
+        .organ img {
+            width: 50%;
+            height: 80%;
+            /* Ensure proper image aspect ratio */
+            /* border-top-left-radius: 10px;
+            border-top-right-radius: 10px; */
+            border-radius: 50%;
+            background-color: #fff;
+            padding: 10px;
+        }
         /* Styles for the overlay */
         #overlay {
             position: fixed;
@@ -821,7 +875,15 @@
         <!-- Tests will be dynamically added here -->
     </div>
 
-    <div class="header" id="popularTest" >
+    <!-- Add the modal at the end of the body -->
+    <div id="organsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalOrgansContent"></div>
+        </div>
+    </div>
+
+    <div class="header" id="popularTest">
         Most Prescribed Doctor's Test
         <div class="view-all-btn">
             <button type="button" id="popularTestBtn">View All</button>
@@ -860,7 +922,7 @@
     <div class="familyPackage-container" id="familyPackageContainer">
         <!-- Tests will be dynamically added here -->
     </div>
-    
+
 
     <!-- JavaScript libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
@@ -909,6 +971,8 @@
                     document.getElementById('loader').style.display = 'block';
                     populateTests();
                     populateDoctors();
+                    // Load cart items from localStorage
+                    loadCartItemsFromLocalStorage();
                     console.log(labtests);
 
 
@@ -965,12 +1029,17 @@
             singleTests.forEach(data => {
                 const testItem = createTestItem(data);
                 container.appendChild(testItem);
+                const testDetails = document.querySelector('.test-details-btn');
+                testDetails.addEventListener('click', () => {
+
+                });
             });
 
             showOneRow('.test-item');
             singleTestBtn.addEventListener('click', function () {
                 toggleGridView('.test-item', 'popularTestBtn');
             });
+
         }
 
         // Function to dynamically create test items
@@ -983,6 +1052,12 @@
             <p class="test-price">Price: <span class="price-value">₹${data.COST}</span></p>
             <button class="book-now-btn">Book Now</button>
         `;
+            // Add event listener for test details button
+            const testDetailsBtn = testItem.querySelector('.test-details-btn');
+            testDetailsBtn.addEventListener('click', () => {
+                openModal(data);
+            });
+            
             return testItem;
         }
 
@@ -1042,11 +1117,11 @@
             })
         }
 
-        function generateCommonScan(commonScans){
+        function generateCommonScan(commonScans) {
             const container = document.getElementById('commonScanContainer');
             container.innerHTML = '';
-            const commonScanBtn=document.getElementById('commonScanBtn');
-            commonScans.forEach(commonScan =>{
+            const commonScanBtn = document.getElementById('commonScanBtn');
+            commonScans.forEach(commonScan => {
                 const profileDiv = document.createElement("div");
                 profileDiv.classList.add("common_scan", "wow", "fadeInLeft");
 
@@ -1059,7 +1134,8 @@
                 container.appendChild(profileDiv);
 
                 profileDiv.addEventListener("click", () => {
-                    console.log(commonScan);
+                    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                    openOrgansModal(commonScan);
                 });
             })
             showOneRow('.common_scan');
@@ -1068,11 +1144,11 @@
             })
         }
 
-        function generateFamilyPackage(familyPackage){
+        function generateFamilyPackage(familyPackage) {
             const container = document.getElementById('familyPackageContainer');
             container.innerHTML = '';
-            const familyPackageBtn=document.getElementById('familyCareBtn');
-            familyPackage.forEach(commonScan =>{
+            const familyPackageBtn = document.getElementById('familyCareBtn');
+            familyPackage.forEach(commonScan => {
                 const profileDiv = document.createElement("div");
                 profileDiv.classList.add("family_package", "wow", "fadeInLeft");
 
@@ -1089,7 +1165,7 @@
                 });
             })
             showOneRow('.family_package');
-            commonScanBtn.addEventListener('click', () => {
+            familyPackageBtn.addEventListener('click', () => {
                 toggleGridView('.family_package', 'familyCareBtn')
             })
         }
@@ -1110,8 +1186,8 @@
                     const singleTests = labtests ? labtests.Popular_Single_Test : [];
                     const symptomaticTests = labtests ? labtests.Symptomatic_Test : [];
                     const profileTests = labtests ? labtests.Profile_Test : [];
-                    const commonScans=labtests ? labtests.Dashboard:[];
-                    const familyPackage=labtests ? labtests.Family_Care_Package:[];
+                    const commonScans = labtests ? labtests.Dashboard : [];
+                    const familyPackage = labtests ? labtests.Family_Care_Package : [];
 
                     // Hide overlay and loader when API call is completed
                     document.getElementById('overlay').style.display = 'none';
@@ -1141,7 +1217,7 @@
                         generateProfileTests(profileTests);
 
                     }
-                    
+
                     if (familyPackage && familyPackage.length > 0) {
                         console.log(familyPackage.length);
                         document.getElementById('familyPackage').style.display = 'block';
@@ -1263,7 +1339,7 @@
                 searchResults.appendChild(listItem);
 
                 listItem.querySelector('.test-details-btn').addEventListener('click', () => {
-                    openModal(doctor);
+                    openModal(doctor.DETAILS);
                     console.log('Test Details clicked for:', doctor);
                 });
 
@@ -1276,9 +1352,6 @@
             searchResults.classList.add("active"); // Show search results
         }
 
-        function isItemInCart(itemName) {
-            return cartItems.some(cartItem => cartItem.ITEM_NAME === itemName);
-        }
         // Updated event listener for "Book Now" button
         searchResults.addEventListener('click', (event) => {
             const target = event.target;
@@ -1297,9 +1370,59 @@
             }
         });
 
+        function openOrgansModal(commonScans) {
+            const modal = document.getElementById("organsModal");
+            const modalContent = document.getElementById("modalOrgansContent");
+            const closeModalButton = document.querySelector("#organsModal .close");
+
+            modalContent.innerHTML = `
+            <div class="header">
+                Select an Organ for ${commonScans.DASH_NAME}
+            </div>
+            <div class="organs-container" id="organsContainer"></div>
+            `;
+            const container = document.getElementById('organsContainer');
+            container.innerHTML = '';
+            commonScans.ORGANS.forEach(commonScan => {
+                const profileDiv = document.createElement("div");
+                profileDiv.classList.add("organ", "wow", "fadeInLeft");
+
+                const symptomImg = document.createElement("img");
+                symptomImg.src = commonScan.ORGAN_URL;
+                const symptomName = document.createElement("p");
+                symptomName.textContent = commonScan.ORGAN_NAME;
+                profileDiv.appendChild(symptomImg);
+                profileDiv.appendChild(symptomName);
+                container.appendChild(profileDiv);
+
+                profileDiv.addEventListener("click", () => {
+                    console.log(commonScan);
+                });
+            })
+
+            // Display the modal
+            modal.style.display = "block";
+
+            // Close the modal when the user clicks on the close button
+            closeModalButton.onclick = function () {
+                modal.style.display = "none";
+                searchInput.focus();
+                searchInput.click();
+            };
+
+            // Close the modal when the user clicks outside the modal
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    searchInput.focus();
+                    searchInput.click();
+                }
+            };
+        }
+
         // Function to open the modal and populate it with doctor details
-        function openModal(doctor) {
-            const doctorDetails = doctor.DETAILS ? doctor.DETAILS : null;
+        function openModal(doctorDetails) {
+
             const modal = document.getElementById("detailsModal");
             const modalContent = document.getElementById("modalDetailsContent");
             const closeModalButton = document.querySelector(".modal .close");
@@ -1402,12 +1525,18 @@
             }
 
         }
+
+
+        function isItemInCart(itemName) {
+            return cartItems.some(cartItem => cartItem.TEST_NAME === itemName);
+        }
         // Function to add item to cart
         function addItemToCart(item) {
-            cartItems.push(item);
+            cartItems.push(item.DETAILS);
             cartCount++; // Increment cart count
             updateCartCount(); // Update cart count display
-            renderCart();
+            saveCartItemsToLocalStorage(); // Save cart items to localStorage
+            //renderCart();
         }
 
         // Function to update cart count display
@@ -1418,14 +1547,15 @@
 
         // Function to remove item from cart
         function removeItemFromCart(item) {
-            const index = cartItems.findIndex(cartItem => cartItem.ITEM_NAME === item.ITEM_NAME);
+            const index = cartItems.findIndex(cartItem => cartItem.TEST_NAME === item.ITEM_NAME);
             if (index !== -1) {
                 cartItems.splice(index, 1);
                 cartCount--; // Decrement cart count
                 updateCartCount(); // Update cart count display
+                saveCartItemsToLocalStorage(); // Save cart items to localStorage
             }
 
-            renderCart();
+            //renderCart();
         }
         // Function to enable button and change text
         function enableButton(button, text, newClass) {
@@ -1441,46 +1571,61 @@
             button.style.transition = 'background-color 0.3s ease';
         }
 
-        function renderCart() {
-            const cartContainer = document.getElementById('cartContainer');
-            cartContainer.innerHTML = '';
-
-            let totalItems = 0;
-            let totalCost = 0;
-
-            cartItems.forEach((item, index) => {
-                const cartItemElement = document.createElement('div');
-                cartItemElement.classList.add('cart-item');
-                cartItemElement.innerHTML = `
-            <span class="item-name">${item.ITEM_NAME}</span>
-            <span class="item-type">${item.FIELD_TYPE}</span>
-            <span class="item-cost">₹ ${item.COST}</span>
-        `;
-                cartContainer.appendChild(cartItemElement);
-
-                // Increment total items and cost
-                totalItems += 1;
-                totalCost += parseFloat(item.COST);
-            });
-            if (cartItems.length > 0) {
-                // Create and append the total cost row
-                const totalCostElement = document.createElement('div');
-                totalCostElement.classList.add('cart-item');
-                totalCostElement.style.fontWeight = 'bold';
-                totalCostElement.style.borderTop = '2px solid #ccc';
-                totalCostElement.style.marginTop = '10px';
-                totalCostElement.innerHTML = `
-        <span>Total Items: ${totalItems}</span>
-        <span></span> <!-- Empty span to fill the space -->
-        <span>Total Cost: ₹ ${totalCost.toFixed(2)}</span>
-    `;
-                cartContainer.appendChild(totalCostElement);
-            }
-
+        function saveCartItemsToLocalStorage() {
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
         }
+
+        function loadCartItemsFromLocalStorage() {
+            const storedCartItems = localStorage.getItem('cartItems');
+            if (storedCartItems) {
+                cartItems = JSON.parse(storedCartItems);
+                console.log(cartItems);
+                cartCount = cartItems.length;
+                updateCartCount();
+            }
+        }
+
+        //     function renderCart() {
+        //         const cartContainer = document.getElementById('cartContainer');
+        //         cartContainer.innerHTML = '';
+
+        //         let totalItems = 0;
+        //         let totalCost = 0;
+
+        //         cartItems.forEach((item, index) => {
+        //             const cartItemElement = document.createElement('div');
+        //             cartItemElement.classList.add('cart-item');
+        //             cartItemElement.innerHTML = `
+        //         <span class="item-name">${item.ITEM_NAME}</span>
+        //         <span class="item-type">${item.FIELD_TYPE}</span>
+        //         <span class="item-cost">₹ ${item.COST}</span>
+        //     `;
+        //             cartContainer.appendChild(cartItemElement);
+
+        //             // Increment total items and cost
+        //             totalItems += 1;
+        //             totalCost += parseFloat(item.COST);
+        //         });
+        //         if (cartItems.length > 0) {
+        //             // Create and append the total cost row
+        //             const totalCostElement = document.createElement('div');
+        //             totalCostElement.classList.add('cart-item');
+        //             totalCostElement.style.fontWeight = 'bold';
+        //             totalCostElement.style.borderTop = '2px solid #ccc';
+        //             totalCostElement.style.marginTop = '10px';
+        //             totalCostElement.innerHTML = `
+        //     <span>Total Items: ${totalItems}</span>
+        //     <span></span> <!-- Empty span to fill the space -->
+        //     <span>Total Cost: ₹ ${totalCost.toFixed(2)}</span>
+        // `;
+        //             cartContainer.appendChild(totalCostElement);
+        //         }
+
+        //     }
+
         function removeItem(index) {
             cartItems.splice(index, 1); // Remove the item at the specified index
-            renderCart(); // Re-render the cart
+            //renderCart(); // Re-render the cart
         }
 
 
