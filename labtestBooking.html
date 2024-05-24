@@ -580,6 +580,7 @@
             align-items: center;
             /* 3D effect */
         }
+
         .test-item .remove-btn {
             background-color: #ff3333;
             color: white;
@@ -589,6 +590,7 @@
             border: none;
             transition: background-color 0.4s ease, transform 0.4s ease;
         }
+
         .test-item .remove-btn:hover {
             background-color: #f0f0f0;
             /* Light gray background on hover */
@@ -1002,9 +1004,9 @@
                 window.location.href = '/'
             }
         });
-        function openCart(){
+        function openCart() {
             console.log("inside cart");
-            window.location.href="cart.html"
+            window.location.href = "cart.html"
         }
         function toggleGridView(tests, button) {
             const gridItems = document.querySelectorAll(tests);
@@ -1092,7 +1094,7 @@
                     removeItemFromCart(data);
                     enableButton(bookNowBtn, 'Book Now', 'book-now-btn');
                 }
-                else{}
+                else { }
             })
             return testItem;
         }
@@ -1432,7 +1434,8 @@
                 container.appendChild(profileDiv);
 
                 profileDiv.addEventListener("click", () => {
-                    console.log(commonScan);
+                    const queryString = new URLSearchParams(commonScan).toString();
+                    window.location.href = `singleTests.html?${queryString}`;
                 });
             })
 
@@ -1627,7 +1630,7 @@
         function loadCartItemsFromLocalStorage() {
             const storedCartItems = localStorage.getItem('cartItems');
             if (storedCartItems) {
-                
+
                 cartItems = JSON.parse(storedCartItems);
                 console.log(cartItems);
                 cartCount = cartItems.length;
@@ -1679,11 +1682,6 @@
         }
 
 
-        // Function to disable book_now_btn and change text to 'Added'
-        function disableButton(button) {
-            button.disabled = true;
-            button.textContent = 'Added';
-        }
 
         document.addEventListener("keydown", function (event) {
             // Check if the Shift key is pressed along with another key

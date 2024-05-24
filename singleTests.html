@@ -1,11 +1,1182 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css">
+    <style>
+        /* Custom CSS */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .header {
+            background-color: #01b5cd;
+            padding-top: 10px;
+            /* Dark blue background */
+            height: 40px;
+            /* Height of the header */
+            color: #fff;
+            /* Text color */
+            text-align: center;
+            /* Center align text */
+            font-size: 24px;
+            /* Font size */
+        }
+
+        /* Custom CSS */
+        .navbar-container {
+            position: fixed;
+            /* Fix the navbar container */
+            top: 0;
+            /* Position at the top */
+            width: 100%;
+            /* Full width */
+            z-index: 999;
+            /* Ensure it's above other content */
+        }
+
+        .navbar {
+            background-color: #f8f9fa;
+            /* Navbar background color */
+            padding: 10px;
+            /* Padding for navbar content */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
+            /* Add shadow effect */
+        }
+
+        .searchbar-container {
+            position: relative;
+            width: 60%;
+            /* Search bar takes 60% of the navbar width */
+        }
+
+        .searchbar {
+            width: calc(100% - 40px);
+            /* Adjusted width considering icon padding */
+            padding: 10px 30px 10px 10px;
+            /* Adjust padding to your preference */
+            font-size: 16px;
+            outline: none;
+            border: none;
+            border-radius: 20px;
+            /* Rounded corners */
+            border: 2px solid #ccc;
+            /* Border around search bar */
+        }
+
+        /* Other styles remain the same */
+
+        .navbar-brand img {
+            max-height: 60px;
+            margin-right: 10px;
+        }
+
+        .searchbar:focus {
+            border-color: #007bff;
+            /* Border color when focused */
+        }
+
+        .searchbar:focus+.input-group-text {
+            color: #007bff;
+            /* Icon color when search bar is focused */
+        }
+
+        #searchResults {
+            list-style-type: none;
+            padding: 0;
+            position: absolute;
+            z-index: 1;
+            width: 100%;
+            background-color: #fff;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            /* Add scrollbar if needed */
+            max-height: 200px;
+            /* Limit max height to show scrollbar */
+            display: none;
+            /* Hide by default */
+            top: 25px;
+        }
+
+        #searchResults.active {
+            display: block;
+            /* Show when active */
+        }
+
+        #searchResults li {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        #searchResults li:hover {
+            background-color: #f3f3f3;
+        }
+
+        /* Custom Styles for Search Results */
+        #searchResults li h4 {
+            color: red;
+            margin: 0;
+            font-size: 16px;
+            width: 33%;
+            text-wrap: wrap;
+        }
+
+        #searchResults li .test-details-btn {
+            background-color: #01b5cd;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #searchResults li .test-details-btn:hover {
+            background-color: #3794e6;
+        }
+
+        #searchResults li p {
+            color: blue;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        #searchResults li .book-now-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        #searchResults li .book-now-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        #searchResults li .remove-btn {
+            background-color: #ff3333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        #searchResults li .remove-btn:hover {
+            background-color: #cc0000;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        .no-results {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .input-group-text {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            /* Adjust padding to your preference */
+        }
+
+        .input-group-text i {
+            color: #ccc;
+            /* Icon color */
+            border: none;
+        }
+
+        .profile-icon {
+            margin-right: 20px;
+            /* Margin between search bar and profile icon */
+            font-size: 20px;
+            font-weight: 700;
+            /* Font size for profile icon */
+            cursor: pointer;
+            width: 120px;
+            background: -webkit-linear-gradient(#05639b, #01e096);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: solid;
+            text-align: center;
+            transition: background 1s;
+        }
+
+        .profile-icon:hover {
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background: -webkit-linear-gradient(#01e096, #05639b);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            /* overflow: auto; */
+            overflow-y: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn1 0.5s ease;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 2% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-height: 100%;
+
+            animation: slideIn 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .test-header {
+            background-color: #c5d1dd;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .test-header h2 {
+            font-size: 24px;
+            color: #00205b;
+        }
+
+        .known-as {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .test-overview h3 {
+            font-size: 20px;
+            color: #00205b;
+            margin-top: 20px;
+        }
+
+        .test-overview p {
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* Test Instructions */
+        .test-instructions h3 {
+            margin-top: 20px;
+        }
+
+        .instruction-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .instruction-item {
+            margin-bottom: 5px;
+        }
+
+
+        .instruction-item span {
+            color: #999;
+        }
+
+        .qa-section {
+            margin-top: 20px;
+        }
+
+        .collapsible {
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+
+        .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #c5d1dd;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .collapsible-header:hover {
+            background-color: #b0c7e1;
+        }
+
+        .collapsible-body {
+            padding: 10px;
+            display: none;
+            overflow: hidden;
+        }
+
+        .collapsible-body.active {
+            display: block;
+        }
+
+        .collapsible-body.show {
+            display: block;
+        }
+
+        .collapsible-header .collapse-toggle {
+            float: right;
+        }
+
+        .collapsible-body {
+            display: none;
+        }
+
+        .collapsible.active .collapsible-body {
+            display: block;
+        }
+
+        .collapsible.active .collapse-toggle svg {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-header .collapse-toggle svg {
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-header .collapse-toggle .rotate {
+            transform: rotate(180deg);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn1 {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Custom CSS for Cart Items */
+        .cart-container {
+            margin-top: 20px;
+            position: absolute;
+            bottom: 50px;
+            width: 100%;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            width: 90%;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item span {
+            flex: 1;
+        }
+
+        .cart-item .item-name {
+            font-weight: bold;
+        }
+
+        .cart-item .item-cost {
+            font-weight: bold;
+            color: green;
+        }
+
+        /* CSS for Cart Icon */
+        .cart-icon {
+            /* position: absolute;
+             top: 110px; 
+            right: 20px; */
+
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .cart-icon svg {
+            font-size: 26px;
+            /* Adjust icon size as needed */
+            color: #000;
+            /* Icon color */
+            transition: color 0.3s ease;
+            /* Smooth color transition */
+        }
+
+        .cart-icon span {
+            background-color: #ed0c0c;
+            /* Background color for cart count */
+            color: #f3f0f0;
+            /* Text color for cart count */
+            font-size: 10px;
+            padding: 2px 4px;
+            /* Padding around cart count */
+            border-radius: 50%;
+            /* Make it circular */
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.3s ease;
+            /* Animation for count change */
+            animation-fill-mode: forwards;
+            top: 18px;
+            right: 10px;
+        }
+
+        /* Animation for count change */
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+                /* Start with zero scale */
+                opacity: 0;
+                /* Start with zero opacity */
+            }
+
+            100% {
+                transform: scale(1);
+                /* End with normal scale */
+                opacity: 1;
+                /* End with full opacity */
+            }
+        }
+
+
+        /* Styles for the overlay */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Semi-transparent black */
+            /* Initially hidden */
+        }
+
+        /* Styles for the loader */
+        #loader {
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #3498db;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -25px;
+            /* Half of height */
+            margin-left: -25px;
+            /* Half of width */
+            /* Initially hidden */
+            z-index: 9999;
+            /* Ensure loader is above the overlay */
+        }
+
+        /* Keyframe animation for spinner */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #popularTest {
+            display: none;
+            margin-top: 100px;
+        }
+
+        .popular-tests-container {
+            margin: 10px;
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            /* Maximum 6 items per row */
+            gap: 20px;
+            /* Gap between items */
+            /* justify-content: center; */
+        }
+
+        .test-item {
+            background-color: #F2F2F2;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            /* 3D effect */
+        }
+
+        .test-item .remove-btn {
+            background-color: #ff3333;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.4s ease, transform 0.4s ease;
+        }
+
+        .test-item .remove-btn:hover {
+            background-color: #f0f0f0;
+            /* Light gray background on hover */
+            color: #ff3333;
+        }
+
+        .test-item:hover {
+            transform: translateY(-5px) scale(1.05);
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            background-color: #baacac;
+            color: #f3f3f3;
+            cursor: pointer;
+        }
+
+        .test-name {
+            color: red;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .test-details-btn {
+            background-color: #22e3ca;
+            color: #fff;
+            padding: 6px 36px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .test-price {
+            color: #00008b;
+            /* Dark blue font */
+        }
+
+        .price-value {
+            color: #000;
+            /* Black font */
+        }
+
+        .book-now-btn {
+            background-color: #07094a;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .book-now-btn:hover {
+            background-color: #f0f0f0;
+            /* Light gray background on hover */
+            color: #01b5cd;
+        }
+    </style>
 </head>
+
 <body>
-    
+    <div id="overlay"></div>
+    <div id="loader"></div>
+    <!-- Navbar Container -->
+    <div class="navbar-container">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <!-- Logo -->
+            <a class="navbar-brand" href="dashboard.html">
+                <img src="logo.png" alt="Company Logo" id="companyLogo" />
+            </a>
+            <!-- Search Bar with Search Icon -->
+            <div class="input-group searchbar-container">
+                <input type="text" class="form-control searchbar" placeholder="Search" aria-label="Search"
+                    aria-describedby="search-button" id="searchInput" autocomplete="off" />
+                <div class="input-group-text">
+                    <i class="fas fa-search"></i>
+                </div>
+                <ul id="searchResults"></ul>
+            </div>
+            <!-- Profile Icon -->
+            <div class="profile-icon">
+                <i class="fas fa-user"></i>
+                <!-- Adjust icon as needed -->
+            </div>
+
+            <!-- Cart Icon -->
+            <div id="cartIcon" class="cart-icon" onclick="openCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cartItemCount">0</span> <!-- Cart count -->
+            </div>
+        </nav>
+    </div>
+    <div class="header" id="popularTest">
+    </div>
+    <div class="popular-tests-container" id="popularTestsContainer">
+        <!-- Tests will be dynamically added here -->
+    </div>
+    <!-- Add the modal at the end of the body -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalDetailsContent"></div>
+        </div>
+    </div>
+
+    <!-- JavaScript libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+    <script>
+        let userData = null;
+        const searchInput = document.getElementById("searchInput");
+        const searchResults = document.getElementById("searchResults");
+        // Global array to store added items
+        let cartItems = [];
+        let labtests = []
+        // Global variable to store cart count
+        let cartCount = 0;
+
+        wow = new WOW(
+            {
+                boxClass: 'wow',      // default
+                animateClass: 'animated', // change this if you are not using animate.css
+                offset: 0,          // default
+                mobile: true,       // keep it on mobile
+                live: true        // track if element updates
+            }
+        )
+        wow.init();
+
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            let testData = {};
+            for (const [key, value] of params.entries()) {
+                testData[key] = value;
+            }
+            return testData;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Check if the user is already logged in
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            if (isLoggedIn) {
+                // Retrieve username from localStorage
+                const username = localStorage.getItem("username");
+                // Do something with the logged-in user's data
+                const storedUserData = localStorage.getItem("userData");
+                // Access and use the user's data
+                if (storedUserData) {
+                    userData = JSON.parse(storedUserData);
+                    console.log(userData);
+                    userData = userData.data
+                    // Set the logo URL dynamically
+                    const companyLogo = document.getElementById("companyLogo");
+                    const clinicName = document.querySelector(".profile-icon")
+                    clinicName.innerHTML = `${userData.PHARMA_NAME}`
+                    companyLogo.src = userData.LOGO_URL;
+                    document.getElementById('overlay').style.display = 'block';
+                    document.getElementById('loader').style.display = 'block';
+                    const organData = getQueryParams();
+                    console.log(organData);
+                    populateDoctors();
+                    populateTests(organData);
+                    loadCartItemsFromLocalStorage();
+
+                    console.log(labtests);
+
+
+                }
+            }
+            else {
+                window.location.href = '/'
+            }
+        });
+        function loadCartItemsFromLocalStorage() {
+            const storedCartItems = localStorage.getItem('cartItems');
+            if (storedCartItems) {
+
+                cartItems = JSON.parse(storedCartItems);
+                console.log(cartItems);
+                cartCount = cartItems.length;
+                updateCartCount();
+            }
+        }
+
+        // Function to format date from "YYYYMMDD" to "dd-Month-YYYY"
+        function populateDoctors() {
+            const PHARMA_ID = userData ? userData.PHARMA_ID : null
+            const url = "https://easyhealths.com/api/testsearch_dummy";
+            const params = {
+                PHARMA_ID: PHARMA_ID,
+            };
+
+            axios
+                .post(url, params)
+                .then((response) => {
+                    const data = response.data.data;
+                    doctorsData = data;
+                    console.log(doctorsData);
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    return null;
+                });
+        }
+
+
+        searchInput.addEventListener("input", () => {
+            const query = searchInput.value;
+            populateSearchResults(query);
+        });
+        // Close search results when clicking outside the search container
+        document.addEventListener("click", (event) => {
+            const isClickInsideSearchContainer =
+                searchInput.contains(event.target) ||
+                searchResults.contains(event.target);
+            if (!isClickInsideSearchContainer) {
+                closeSearchResults();
+            }
+        });
+        function closeSearchResults() {
+            searchResults.classList.remove("active"); // Hide search results
+        }
+        searchInput.addEventListener("click", (event) => {
+            event.stopPropagation();
+            if (searchResults.innerHTML.trim() !== "") {
+                searchResults.classList.add("active");
+            }
+        });
+
+        function populateSearchResults(query) {
+            console.log(doctorsData);
+            searchResults.innerHTML = "";
+
+            if (query.trim() === "") {
+                return;
+            }
+
+            const filteredDoctors = doctorsData.filter((item) => {
+                const cleanItemName = item.ITEM_NAME.toLowerCase();
+                return cleanItemName.includes(query.toLowerCase());
+            });
+
+            if (filteredDoctors.length === 0) {
+                console.log(filteredDoctors);
+                const noResultsItem = document.createElement("li");
+                noResultsItem.classList.add("no-results");
+                noResultsItem.textContent = "No match found.";
+                searchResults.appendChild(noResultsItem);
+                return;
+            }
+
+            const filtered = filteredDoctors.sort((a, b) => {
+                const cleanAItemName = a.ITEM_NAME.toLowerCase();
+                const cleanBItemName = b.ITEM_NAME.toLowerCase();
+                const aIndex = cleanAItemName.indexOf(query.toLowerCase());
+                const bIndex = cleanBItemName.indexOf(query.toLowerCase());
+                return aIndex - bIndex;
+            });
+
+            const specificOrder = ['PATHOLOGY', 'RADIOLOGY', 'Test', 'Profile', 'Package'];
+            filtered.sort((a, b) => {
+                const fieldA = a.FIELD_TYPE;
+                const fieldB = b.FIELD_TYPE;
+                const indexA = specificOrder.indexOf(fieldA);
+                const indexB = specificOrder.indexOf(fieldB);
+
+                if (indexA > -1 && indexB > -1) {
+                    return indexA - indexB;
+                } else if (indexA > -1) {
+                    return -1;
+                } else if (indexB > -1) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+
+            filtered.forEach((doctor, index) => {
+                const listItem = document.createElement("li");
+                listItem.innerHTML = `
+            <h4>${doctor.ITEM_NAME}</h4>
+            <button class="test-details-btn">Test Details</button>
+            <p>${doctor.FIELD_TYPE}</p>
+            <button class="${isItemInCart(doctor.ITEM_NAME) ? 'remove-btn' : 'book-now-btn'}">
+                ${isItemInCart(doctor.ITEM_NAME) ? 'Remove' : 'Add to Cart'}
+            </button>
+        `;
+                searchResults.appendChild(listItem);
+
+                listItem.querySelector('.test-details-btn').addEventListener('click', () => {
+                    openModal(doctor.DETAILS);
+                    console.log('Test Details clicked for:', doctor);
+                });
+
+                // listItem.querySelector('.book-now-btn').addEventListener('click', () => {
+                //     addItemToCart(doctor);
+                //     disableButton(listItem.querySelector('.book-now-btn'));
+                // });
+            });
+
+            searchResults.classList.add("active"); // Show search results
+        }
+
+        // Updated event listener for "Book Now" button
+        searchResults.addEventListener('click', (event) => {
+            const target = event.target;
+            if (target.classList.contains('book-now-btn') || target.classList.contains('remove-btn')) {
+                const listItem = target.closest('li');
+                const doctorName = listItem.querySelector('h4').textContent;
+                const doctor = doctorsData.find(item => item.ITEM_NAME === doctorName);
+
+                if (target.classList.contains('book-now-btn')) {
+                    addItemToCart(doctor);
+                    enableButton(target, 'Remove', 'remove-btn');
+                } else if (target.classList.contains('remove-btn')) {
+                    removeItemFromCart(doctor);
+                    enableButton(target, 'Add to Cart', 'book-now-btn');
+                }
+            }
+        });
+
+        function openCart() {
+            console.log("inside cart");
+            window.location.href = "cart.html"
+        }
+        // Function to add item to cart
+        function addItemToCart(item) {
+            if (item.DETAILS) {
+                cartItems.push(item.DETAILS);
+            }
+            else {
+                cartItems.push(item);
+            }
+
+            cartCount++; // Increment cart count
+            updateCartCount(); // Update cart count display
+            saveCartItemsToLocalStorage(); // Save cart items to localStorage
+            //renderCart();
+        }
+
+        // Function to update cart count display
+        function updateCartCount() {
+            const cartItemCount = document.getElementById("cartItemCount");
+            cartItemCount.textContent = cartCount;
+        }
+
+        // Function to remove item from cart
+        function removeItemFromCart(item) {
+            let index = null;
+            if (item.DETAILS) {
+                index = cartItems.findIndex(cartItem => cartItem.TEST_NAME === item.ITEM_NAME);
+            }
+            else {
+                index = cartItems.findIndex(cartItem => cartItem.TEST_NAME === item.TEST_NAME);
+            }
+
+            if (index !== -1) {
+                cartItems.splice(index, 1);
+                cartCount--; // Decrement cart count
+                updateCartCount(); // Update cart count display
+                saveCartItemsToLocalStorage(); // Save cart items to localStorage
+            }
+
+            //renderCart();
+        }
+        // Function to enable button and change text
+        function enableButton(button, text, newClass) {
+            button.textContent = text;
+            button.className = newClass;
+            button.style.transition = 'background-color 0.3s ease';
+        }
+
+        // Function to disable button and change text
+        function disableButton(button, text, newClass) {
+            button.textContent = text;
+            button.className = newClass;
+            button.style.transition = 'background-color 0.3s ease';
+        }
+        
+        function isItemInCart(itemName) {
+            return cartItems.some(cartItem => cartItem.TEST_NAME === itemName);
+        }
+        function saveCartItemsToLocalStorage() {
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        }
+
+        async function populateTests(organData) {
+            const PHARMA_ID = userData ? userData.PHARMA_ID : null
+            const url = "https://easyhealths.com/api/clinicitemorgantest_dummy";
+            const params = {
+                PHARMA_ID: PHARMA_ID,
+                DASH_NAME: organData.DASH_NAME,
+                ORGAN_ID: organData.ORGAN_ID
+            };
+
+            await axios
+                .post(url, params)
+                .then((response) => {
+                    const data = response.data.data;
+                    labtests = data.TEST;
+                    console.log(labtests);
+
+                    // Hide overlay and loader when API call is completed
+                    document.getElementById('overlay').style.display = 'none';
+                    document.getElementById('loader').style.display = 'none';
+                    const headContent = document.getElementById('popularTest')
+                    headContent.style.display='block';
+                    if (labtests.length > 0) {
+                        headContent.innerHTML=`Popular -${organData.ORGAN_NAME} Test`
+                        console.log(headContent);
+                        generateSingleTests(labtests);
+                    }
+                    else {
+                        headContent.innerText = 'No Matching Test Found!!';
+                    }
+
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    return null;
+                });
+
+        }
+
+
+        function generateSingleTests(singleTests) {
+            const container = document.getElementById('popularTestsContainer');
+            // Clear container
+            container.innerHTML = '';
+            singleTests.forEach(data => {
+                const testItem = createTestItem(data);
+                container.appendChild(testItem);
+                const testDetails = document.querySelector('.test-details-btn');
+                testDetails.addEventListener('click', () => {
+
+                });
+            });
+
+        }
+        // Function to dynamically create test items
+        function createTestItem(data) {
+            const testItem = document.createElement('div');
+            testItem.classList.add('test-item', "wow", "fadeInLeft");
+            testItem.innerHTML = `
+            <h4 class="test-name">${data.TEST_NAME}</h4>
+            <div class="test-details-btn">Test Details</div>
+            <p class="test-price">Price: <span class="price-value">₹${data.COST}</span></p>
+            <button class="${isItemInCart(data.TEST_NAME) ? 'remove-btn' : 'book-now-btn'}">
+                ${isItemInCart(data.TEST_NAME) ? 'Remove' : 'Book Now'}
+            </button>
+        `;
+            // Add event listener for test details button
+            const testDetailsBtn = testItem.querySelector('.test-details-btn');
+            testDetailsBtn.addEventListener('click', () => {
+                openModal(data);
+            });
+            const bookNowBtn = testItem.querySelector('button');
+            console.log(bookNowBtn);
+            bookNowBtn.addEventListener('click', () => {
+                if (bookNowBtn.classList.contains('book-now-btn')) {
+                    addItemToCart(data);
+                    enableButton(bookNowBtn, 'Remove', 'remove-btn');
+                } else if (bookNowBtn.classList.contains('remove-btn')) {
+                    removeItemFromCart(data);
+                    enableButton(bookNowBtn, 'Book Now', 'book-now-btn');
+                }
+                else { }
+            })
+            return testItem;
+        }
+
+
+        // Function to open the modal and populate it with doctor details
+        function openModal(doctorDetails) {
+
+            const modal = document.getElementById("detailsModal");
+            const modalContent = document.getElementById("modalDetailsContent");
+            const closeModalButton = document.querySelector(".modal .close");
+
+            // Populate modal content
+            modalContent.innerHTML = `
+<div class="test-header">
+<h2>${doctorDetails.TEST_NAME}</h2>
+<p class="known-as">${doctorDetails.KNOWN_AS}</p>
+</div>
+<div class="test-overview">
+<h3>Test Overview</h3>
+<p>${doctorDetails.TEST_DESC}</p>
+</div>
+<div class="test-instructions">
+    <h3>Test Instructions</h3>
+    <div class="instruction-grid">
+        <div class="instruction-item"><span>Fasting:</span> ${doctorDetails.FASTING}</div>
+        <div class="instruction-item"><span>Gender Type:</span> ${doctorDetails.GENDER_TYPE}</div>
+        <div class="instruction-item"><span>Age Type:</span> ${doctorDetails.AGE_TYPE}</div>
+        <div class="instruction-item"><span>Report Time:</span> ${doctorDetails.REPORT_TIME}</div>
+        <div class="instruction-item"><span>Prescription Required:</span> ${doctorDetails.PRESCRIPTION}</div>
+        <div class="instruction-item"><span>ID Proof Required:</span> ${doctorDetails.ID_PROOF}</div>
+    </div>
+</div>
+<div class="qa-section">
+<h3>Questions & Answers</h3>
+${doctorDetails.QA1 ? createCollapsible(doctorDetails.QA1, "QA1") : ''}
+${doctorDetails.QA2 ? createCollapsible(doctorDetails.QA2, "QA2") : ''}
+${doctorDetails.QA3 ? createCollapsible(doctorDetails.QA3, "QA3") : ''}
+${doctorDetails.QA4 ? createCollapsible(doctorDetails.QA4, "QA4") : ''}
+${doctorDetails.QA5 ? createCollapsible(doctorDetails.QA5, "QA5") : ''}
+${doctorDetails.QA6 ? createCollapsible(doctorDetails.QA6, "QA6") : ''}
+</div>
+`;
+
+            // Display the modal
+            modal.style.display = "block";
+
+            // Close the modal when the user clicks on the close button
+            closeModalButton.onclick = function () {
+                modal.style.display = "none";
+                searchInput.focus();
+                searchInput.click();
+            };
+
+            // Close the modal when the user clicks outside the modal
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    searchInput.focus();
+                    searchInput.click();
+                }
+            };
+        }
+        document.addEventListener('click', function (event) {
+            const target = event.target;
+
+            // Check if the target or any of its parents has the class 'collapse-toggle'
+            if (target.closest('.collapse-toggle')) {
+                const collapsibleHeader = target.closest('.collapsible-header');
+                const collapsibleBody = collapsibleHeader.nextElementSibling;
+
+                // Toggle active class on the collapsible body
+                if (collapsibleBody) {
+                    collapsibleBody.classList.toggle('active');
+                    collapsibleBody.style.display = collapsibleBody.style.display === 'block' ? 'none' : 'block';
+                }
+
+                // Toggle rotate class on the icon
+                const icon = collapsibleHeader.querySelector('.collapse-toggle svg');
+                if (icon) {
+                    icon.classList.toggle('rotate');
+                }
+            }
+        });
+
+
+
+        function createCollapsible(content, label) {
+            const splitIndex = content.indexOf('?') + 1;
+            if (splitIndex !== -1) {
+                const header = content.substring(0, splitIndex + 1);
+                const body = content.substring(splitIndex + 1).trim();
+                return `
+                <div class="collapsible">
+                <div class="collapsible-header">
+                    <div class="collapsible-header-name">
+                        <i class="fas fa-file-alt"></i>${header}
+                    </div>
+
+                    
+                    <span class="collapse-toggle">
+                        <i class="fas fa-chevron-up"></i>
+                    </span>
+                </div>
+                <div class="collapsible-body">${body}</div>
+                </div>
+                `;
+            }
+
+        }
+
+    </script>
 </body>
+
 </html>
