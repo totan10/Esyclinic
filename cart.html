@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .cart-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item h4 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .cart-item p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .cart-item .delete-btn {
+            background: none;
+            border: none;
+            color: #d9534f;
+            cursor: pointer;
+            font-size: 24px;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .cart-item .delete-btn:hover {
+            color: #b52b27;
+            transform: scale(1.1);
+        }
+
+        #totalCost {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            font-size: 16px;
+            color: #999;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(100%);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cart-container">
+        <h1>Your Cart</h1>
+        <div id="cartItemsContainer"></div>
+        <div id="totalCost"></div>
+    </div>
+    <script>
+       function loadCartItems() {
+    const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+    console.log(cart);
+    const container = document.getElementById('cartItemsContainer');
+    const totalCostElem = document.getElementById('totalCost');
+
+    container.innerHTML = '';
+    let totalCost = 0;
+
+    if (cart.length === 0) {
+        container.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
+    } else {
+        cart.forEach((item, index) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('cart-item');
+
+            const discount = item.DISCOUNT || 0;
+            const finalCost = item.COST - (item.COST * discount / 100);
+            const itemName=item.TEST_NAME?item.TEST_NAME:item.DASH_NAME;
+            itemDiv.innerHTML = `
+                <div class="item-details">
+                    <h4 class="cart-item-name">${itemName}</h4>
+                    <p class="cart-item-cost">Cost: ₹${item.COST}</p>
+                    <p class="cart-item-discount">Discount: ${discount}%</p>
+                    <p class="cart-item-final-cost">Final Cost: ₹${finalCost}</p>
+                </div>
+                <button class="delete-btn" onclick="deleteItem(${index})">&times;</button>
+            `;
+
+            container.appendChild(itemDiv);
+            totalCost += finalCost;
+        });
+
+        totalCostElem.textContent = `Total Cost: ₹${totalCost}`;
+    }
+}
+
+function deleteItem(index) {
+    let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const container = document.getElementById('cartItemsContainer');
+    const itemDiv = container.children[index];
+
+    // Add slide out animation
+    itemDiv.style.animation = 'slideOutRight 0.5s forwards';
+
+    // Wait for the animation to finish
+    setTimeout(() => {
+        cart.splice(index, 1);
+        localStorage.setItem('cartItems', JSON.stringify(cart));
+        loadCartItems();
+    }, 500);
+}
+
+// Load cart items when cart page is loaded
+window.addEventListener('DOMContentLoaded', loadCartItems);
+
+    </script>
+</body>
+
+</html>

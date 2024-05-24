@@ -580,12 +580,27 @@
             align-items: center;
             /* 3D effect */
         }
+        .test-item .remove-btn {
+            background-color: #ff3333;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.4s ease, transform 0.4s ease;
+        }
+        .test-item .remove-btn:hover {
+            background-color: #f0f0f0;
+            /* Light gray background on hover */
+            color: #ff3333;
+        }
 
         .test-item:hover,
         .symptom:hover,
         .profile_test:hover,
         .family_package:hover,
-        .common_scan:hover,.organ:hover {
+        .common_scan:hover,
+        .organ:hover {
             transform: translateY(-5px) scale(1.05);
             transition: transform 0.3s ease;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -731,9 +746,11 @@
             margin: 5px 0;
             text-align: center;
         }
-        #modalOrgansContent{
+
+        #modalOrgansContent {
             height: 100%;
         }
+
         #organsContainer {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -743,6 +760,7 @@
             margin-top: 20px;
             justify-content: center;
         }
+
         .organ {
             text-align: center;
             padding: 0;
@@ -772,6 +790,7 @@
             background-color: #fff;
             padding: 10px;
         }
+
         /* Styles for the overlay */
         #overlay {
             position: fixed;
@@ -844,7 +863,7 @@
             </div>
 
             <!-- Cart Icon -->
-            <div id="cartIcon" class="cart-icon">
+            <div id="cartIcon" class="cart-icon" onclick="openCart()">
                 <i class="fas fa-shopping-cart"></i>
                 <span id="cartItemCount">0</span> <!-- Cart count -->
             </div>
@@ -983,7 +1002,10 @@
                 window.location.href = '/'
             }
         });
-
+        function openCart(){
+            console.log("inside cart");
+            window.location.href="cart.html"
+        }
         function toggleGridView(tests, button) {
             const gridItems = document.querySelectorAll(tests);
             const toggleButton = document.getElementById(button);
@@ -1007,6 +1029,7 @@
         }
 
         function showOneRow(tests) {
+            console.log('inside one row', tests);
             const gridItems = document.querySelectorAll(tests);
             gridItems.forEach((item, index) => {
                 if (index >= 6) {
@@ -1050,14 +1073,27 @@
             <h4 class="test-name">${data.TEST_NAME}</h4>
             <div class="test-details-btn">Test Details</div>
             <p class="test-price">Price: <span class="price-value">₹${data.COST}</span></p>
-            <button class="book-now-btn">Book Now</button>
+            <button class="${isItemInCart(data.TEST_NAME) ? 'remove-btn' : 'book-now-btn'}">
+                ${isItemInCart(data.TEST_NAME) ? 'Remove' : 'Book Now'}
+            </button>
         `;
             // Add event listener for test details button
             const testDetailsBtn = testItem.querySelector('.test-details-btn');
             testDetailsBtn.addEventListener('click', () => {
                 openModal(data);
             });
-            
+            const bookNowBtn = testItem.querySelector('button');
+            console.log(bookNowBtn);
+            bookNowBtn.addEventListener('click', () => {
+                if (bookNowBtn.classList.contains('book-now-btn')) {
+                    addItemToCart(data);
+                    enableButton(bookNowBtn, 'Remove', 'remove-btn');
+                } else if (bookNowBtn.classList.contains('remove-btn')) {
+                    removeItemFromCart(data);
+                    enableButton(bookNowBtn, 'Book Now', 'book-now-btn');
+                }
+                else{}
+            })
             return testItem;
         }
 
@@ -1532,7 +1568,13 @@
         }
         // Function to add item to cart
         function addItemToCart(item) {
-            cartItems.push(item.DETAILS);
+            if (item.DETAILS) {
+                cartItems.push(item.DETAILS);
+            }
+            else {
+                cartItems.push(item);
+            }
+
             cartCount++; // Increment cart count
             updateCartCount(); // Update cart count display
             saveCartItemsToLocalStorage(); // Save cart items to localStorage
@@ -1547,7 +1589,14 @@
 
         // Function to remove item from cart
         function removeItemFromCart(item) {
-            const index = cartItems.findIndex(cartItem => cartItem.TEST_NAME === item.ITEM_NAME);
+            let index = null;
+            if (item.DETAILS) {
+                index = cartItems.findIndex(cartItem => cartItem.TEST_NAME === item.ITEM_NAME);
+            }
+            else {
+                index = cartItems.findIndex(cartItem => cartItem.TEST_NAME === item.TEST_NAME);
+            }
+
             if (index !== -1) {
                 cartItems.splice(index, 1);
                 cartCount--; // Decrement cart count
@@ -1578,6 +1627,7 @@
         function loadCartItemsFromLocalStorage() {
             const storedCartItems = localStorage.getItem('cartItems');
             if (storedCartItems) {
+                
                 cartItems = JSON.parse(storedCartItems);
                 console.log(cartItems);
                 cartCount = cartItems.length;
