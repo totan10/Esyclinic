@@ -4,9 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Cart</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css">
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family:'Arial', 'Roboto', sans-serif;
             background-color: #f9f9f9;
             color: #333;
             margin: 0;
@@ -14,7 +17,7 @@
         }
 
         .cart-container {
-            max-width: 800px;
+            width: 90%;
             margin: 0 auto;
             background-color: #fff;
             padding: 20px;
@@ -25,53 +28,124 @@
 
         h1,
         h2 {
-            text-align: center;
+            text-align: left;
         }
 
         .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
+            background-color: #eaeef3;
+            margin: 10px 0;
             position: relative;
+            border-radius: 10px;
+            padding: 4px 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
 
-        .cart-item:last-child {
-            border-bottom: none;
+        .cart-item-details {
+            display: flex;
+            align-items: center;
         }
 
-        .cart-item h4 {
-            margin: 0;
+        .item-name {
             font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .item_heading {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #999;
+        }
+
+        .cart-item-cost {
+            margin-right: 10px;
+            font-size: 14px;
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .discount-badge {
+            margin-right: 10px;
+            font-size: 14px;
+            background-color: orange;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .cart-item-final-cost {
+            margin-right: 10px;
+            font-size: 16px;
             color: #333;
         }
 
-        .cart-item p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .cart-item .delete-btn {
+        .delete-btn {
             background: none;
             border: none;
-            color: #d9534f;
+            color: #f1120b;
             cursor: pointer;
-            font-size: 24px;
+            font-size: 28px;
+            margin-left: auto;
+            font-weight: 700;
+            margin-top: -25px;
             transition: color 0.3s, transform 0.3s;
         }
 
-        .cart-item .delete-btn:hover {
+        .delete-btn:hover {
             color: #b52b27;
             transform: scale(1.1);
         }
 
         #totalCost {
-            text-align: right;
-            font-weight: bold;
             margin-top: 20px;
-            font-size: 18px;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .total-cost-item {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .total-cost-item .label {
+
+            color: #999;
+        }
+
+        .total-cost-item .value {
+            color: #999;
+        }
+
+        .total-savings .value {
+            color: green;
+        }
+
+        .amount-payable {
+            font-weight: bold;
+        }
+
+        .next-button {
+            background-color: #01b5cd;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            align-self: flex-end;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .next-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
         }
 
         .empty-cart {
@@ -105,67 +179,95 @@
 </head>
 
 <body>
-    <div class="cart-container">
-        <h1>Your Cart</h1>
+    <div class="cart-container" id="cartContainer">
+        <h2>Cart Details</h2>
         <div id="cartItemsContainer"></div>
         <div id="totalCost"></div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     <script>
-       function loadCartItems() {
-    const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-    console.log(cart);
-    const container = document.getElementById('cartItemsContainer');
-    const totalCostElem = document.getElementById('totalCost');
+        function loadCartItems() {
+            const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            console.log(cart);
+            const container = document.getElementById('cartItemsContainer');
+            const totalCostElem = document.getElementById('totalCost');
 
-    container.innerHTML = '';
-    let totalCost = 0;
+            container.innerHTML = '';
+            let totalCost = 0;
+            let totalDiscount = 0;
+            let bagTotal = 0;
 
-    if (cart.length === 0) {
-        container.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
-    } else {
-        cart.forEach((item, index) => {
-            const itemDiv = document.createElement('div');
-            itemDiv.classList.add('cart-item');
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.classList.add('cart-item');
+                    const nameHeading = item.DASH_TYPE ? item.DASH_TYPE + " Name: " : "Test Name: ";
+                    const discount = item.DISCOUNT || 0;
+                    const finalCost = item.COST - (item.COST * discount / 100);
+                    const itemName = item.TEST_NAME ? item.TEST_NAME : item.DASH_NAME;
 
-            const discount = item.DISCOUNT || 0;
-            const finalCost = item.COST - (item.COST * discount / 100);
-            const itemName=item.TEST_NAME?item.TEST_NAME:item.DASH_NAME;
-            itemDiv.innerHTML = `
-                <div class="item-details">
-                    <h4 class="cart-item-name">${itemName}</h4>
-                    <p class="cart-item-cost">Cost: ₹${item.COST}</p>
-                    <p class="cart-item-discount">Discount: ${discount}%</p>
-                    <p class="cart-item-final-cost">Final Cost: ₹${finalCost}</p>
+                    // Modify the itemDiv.innerHTML to incorporate the updated design
+                    itemDiv.innerHTML = `
+                <p class="item-name"><span class="item_heading">${nameHeading}</span>${itemName}</p>
+                <div class="cart-item-details">
+                    <p class="cart-item-final-cost">Price: </p>
+                    <p class="cart-item-cost">₹${item.COST}</p>
+                    <p class="cart-item-final-cost">₹${finalCost}</p>
+                    <p class="discount-badge">${discount}%</p>
+                    <button class="delete-btn" onclick="deleteItem(${index})"><i class="fas fa-trash-alt"></i></button>
                 </div>
-                <button class="delete-btn" onclick="deleteItem(${index})">&times;</button>
             `;
 
-            container.appendChild(itemDiv);
-            totalCost += finalCost;
-        });
+                    container.appendChild(itemDiv);
+                    totalDiscount += item.COST - finalCost;
+                    totalCost += finalCost;
+                    bagTotal += item.COST;
+                });
 
-        totalCostElem.textContent = `Total Cost: ₹${totalCost}`;
-    }
-}
+                totalCostElem.innerHTML = `
+            <div class="total-cost-item">
+                <span class="label">Bag Total:</span>
+                <span class="value">₹${bagTotal}</span>
+            </div>
+            <div class="total-cost-item total-savings">
+                <span class="label">Bag Savings:</span>
+                <span class="value">₹${totalDiscount}</span>
+            </div>
+            <div class="total-cost-item amount-payable">
+                <span>Amount Payable:</span>
+                <span>₹${totalCost}</span>
+            </div>
+            <button class="next-button" onclick="proceedToNext()">Next</button>
+        `;
+            }
+        }
 
-function deleteItem(index) {
-    let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-    const container = document.getElementById('cartItemsContainer');
-    const itemDiv = container.children[index];
+        function deleteItem(index) {
+            let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const container = document.getElementById('cartItemsContainer');
+            const itemDiv = container.children[index];
 
-    // Add slide out animation
-    itemDiv.style.animation = 'slideOutRight 0.5s forwards';
+            // Add slide out animation
+            itemDiv.style.animation = 'slideOutRight 0.5s forwards';
 
-    // Wait for the animation to finish
-    setTimeout(() => {
-        cart.splice(index, 1);
-        localStorage.setItem('cartItems', JSON.stringify(cart));
-        loadCartItems();
-    }, 500);
-}
+            // Wait for the animation to finish
+            setTimeout(() => {
+                cart.splice(index, 1);
+                localStorage.setItem('cartItems', JSON.stringify(cart));
+                loadCartItems();
+            }, 500);
+        }
 
-// Load cart items when cart page is loaded
-window.addEventListener('DOMContentLoaded', loadCartItems);
+        function proceedToNext() {
+            // Implement the logic to proceed to the next step, e.g., checkout page
+            alert("Proceeding to the next step...");
+        }
+
+        // Load cart items when cart page is loaded
+        window.addEventListener('DOMContentLoaded', loadCartItems);
+
 
     </script>
 </body>
