@@ -440,7 +440,7 @@
             border-bottom: 1px solid #ccc;
         }
 
-  
+
 
         /* CSS for Cart Icon */
         .cart-icon {
@@ -1118,38 +1118,42 @@
             const modal = document.getElementById("detailsModal");
             const modalContent = document.getElementById("modalDetailsContent");
             const closeModalButton = document.querySelector(".modal .close");
+            const testName = doctorDetails.TEST_NAME ? doctorDetails.TEST_NAME : doctorDetails.DASH_NAME;
+            const testDesc = doctorDetails.TEST_DESC ? doctorDetails.TEST_DESC : doctorDetails.DESCRIPTION;
+            const testKnownAs = doctorDetails.KNOWN_AS ? doctorDetails.KNOWN_AS : doctorDetails.DASH_SECTION_NAME;
+            const idProof=doctorDetails.ID_PROOF?doctorDetails.ID_PROOF:'';
 
             // Populate modal content
             modalContent.innerHTML = `
-<div class="test-header">
-<h2>${doctorDetails.TEST_NAME}</h2>
-<p class="known-as">${doctorDetails.KNOWN_AS}</p>
-</div>
-<div class="test-overview">
-<h3>Test Overview</h3>
-<p>${doctorDetails.TEST_DESC}</p>
-</div>
-<div class="test-instructions">
-    <h3>Test Instructions</h3>
-    <div class="instruction-grid">
-        <div class="instruction-item"><span>Fasting:</span> ${doctorDetails.FASTING}</div>
-        <div class="instruction-item"><span>Gender Type:</span> ${doctorDetails.GENDER_TYPE}</div>
-        <div class="instruction-item"><span>Age Type:</span> ${doctorDetails.AGE_TYPE}</div>
-        <div class="instruction-item"><span>Report Time:</span> ${doctorDetails.REPORT_TIME}</div>
-        <div class="instruction-item"><span>Prescription Required:</span> ${doctorDetails.PRESCRIPTION}</div>
-        <div class="instruction-item"><span>ID Proof Required:</span> ${doctorDetails.ID_PROOF}</div>
-    </div>
-</div>
-<div class="qa-section">
-<h3>Questions & Answers</h3>
-${doctorDetails.QA1 ? createCollapsible(doctorDetails.QA1, "QA1") : ''}
-${doctorDetails.QA2 ? createCollapsible(doctorDetails.QA2, "QA2") : ''}
-${doctorDetails.QA3 ? createCollapsible(doctorDetails.QA3, "QA3") : ''}
-${doctorDetails.QA4 ? createCollapsible(doctorDetails.QA4, "QA4") : ''}
-${doctorDetails.QA5 ? createCollapsible(doctorDetails.QA5, "QA5") : ''}
-${doctorDetails.QA6 ? createCollapsible(doctorDetails.QA6, "QA6") : ''}
-</div>
-`;
+                <div class="test-header">
+                <h2>${testName}</h2>
+                <p class="known-as">${testKnownAs}</p>
+                </div>
+                <div class="test-overview">
+                <h3>Test Overview</h3>
+                <p>${testDesc}</p>
+                </div>
+                <div class="test-instructions">
+                <h3>Test Instructions</h3>
+                <div class="instruction-grid">
+                <div class="instruction-item"><span>Fasting:</span> ${doctorDetails.FASTING}</div>
+                <div class="instruction-item"><span>Gender Type:</span> ${doctorDetails.GENDER_TYPE}</div>
+                <div class="instruction-item"><span>Age Type:</span> ${doctorDetails.AGE_TYPE}</div>
+                <div class="instruction-item"><span>Report Time:</span> ${doctorDetails.REPORT_TIME}</div>
+                <div class="instruction-item"><span>Prescription Required:</span> ${doctorDetails.PRESCRIPTION}</div>
+                <div class="instruction-item"><span>ID Proof Required:</span> ${idProof}</div>
+                </div>
+                </div>
+                <div class="qa-section">
+                <h3>Questions & Answers</h3>
+                ${doctorDetails.QA1 ? createCollapsible(doctorDetails.QA1, "QA1") : ''}
+                ${doctorDetails.QA2 ? createCollapsible(doctorDetails.QA2, "QA2") : ''}
+                ${doctorDetails.QA3 ? createCollapsible(doctorDetails.QA3, "QA3") : ''}
+                ${doctorDetails.QA4 ? createCollapsible(doctorDetails.QA4, "QA4") : ''}
+                ${doctorDetails.QA5 ? createCollapsible(doctorDetails.QA5, "QA5") : ''}
+                ${doctorDetails.QA6 ? createCollapsible(doctorDetails.QA6, "QA6") : ''}
+                </div>
+                `;
 
             // Display the modal
             modal.style.display = "block";
@@ -1170,6 +1174,8 @@ ${doctorDetails.QA6 ? createCollapsible(doctorDetails.QA6, "QA6") : ''}
                 }
             };
         }
+
+
         document.addEventListener('click', function (event) {
             const target = event.target;
 
