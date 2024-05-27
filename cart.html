@@ -325,25 +325,42 @@
 
         .qa-section {
             margin-top: 20px;
+            background-color: #c5d1dd;
         }
 
         .collapsible {
-            border: 1px solid #ddd;
+            /* border: 1px solid #ddd; */
             margin-bottom: 10px;
+        }
+
+        .qa-section h3 {
+            background-color: #fff;
+            margin: 0;
+            padding: 10px 0px;
+        }
+
+        .qa-section h5 {
+            color: #8d7c7c;
+            font-size: small;
+            font-weight: 500;
+            margin: 0;
+            background-color: white;
+            padding: 10px 0px;
+            /* margin-left: 5px; */
         }
 
         .collapsible-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #c5d1dd;
+
             padding: 10px;
             cursor: pointer;
         }
 
-        .collapsible-header:hover {
-            background-color: #b0c7e1;
-        }
+        /* .collapsible-header:hover {
+            background-color: white;
+        } */
 
         .collapsible-body {
             padding: 10px;
@@ -918,6 +935,47 @@
             /* Change background color on hover */
             border: none;
         }
+
+        /* Popup styles */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            text-align: center;
+        }
+
+        /* OK button styles */
+        .ok-button {
+            background-color: #4CAF50;
+            /* Green background */
+            color: white;
+            /* White font */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .ok-button:hover {
+            transform: translateY(-2px);
+            /* 3D effect on hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .ok-button:active {
+            transform: translateY(2px);
+            /* 3D effect on active */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 
@@ -1223,45 +1281,52 @@
         }
         // Function to open the modal and populate it with doctor details
         function openModal(doctorDetails) {
-
             const modal = document.getElementById("detailsModal");
             const modalContent = document.getElementById("modalDetailsContent");
             const closeModalButton = document.querySelector(".modal .close");
-            const testName=doctorDetails.TEST_NAME?doctorDetails.TEST_NAME:doctorDetails.DASH_NAME;
-            const testDesc=doctorDetails.TEST_DESC?doctorDetails.TEST_DESC:doctorDetails.DESCRIPTION;
-            const testKnownAs=doctorDetails.KNOWN_AS?doctorDetails.KNOWN_AS:doctorDetails.DASH_SECTION_NAME;
-            const idProof=doctorDetails.ID_PROOF?doctorDetails.ID_PROOF:'';
+            const testName = doctorDetails.TEST_NAME ? doctorDetails.TEST_NAME : doctorDetails.DASH_NAME;
+            const testDesc = doctorDetails.TEST_DESC ? doctorDetails.TEST_DESC : doctorDetails.DESCRIPTION;
+            const testKnownAs = doctorDetails.KNOWN_AS ? doctorDetails.KNOWN_AS : doctorDetails.DASH_SECTION_NAME;
+            const idProof = doctorDetails.ID_PROOF ? doctorDetails.ID_PROOF : '';
+
             // Populate modal content
             modalContent.innerHTML = `
-                <div class="test-header">
-                <h2>${testName}</h2>
-                <p class="known-as">${testKnownAs}</p>
-                </div>
-                <div class="test-overview">
-                <h3>Test Overview</h3>
-                <p>${testDesc}</p>
-                </div>
-                <div class="test-instructions">
-                <h3>Test Instructions</h3>
-                <div class="instruction-grid">
+        <div class="test-header">
+            <h2>${testName}</h2>
+            <p class="known-as">${testKnownAs}</p>
+        </div>
+        <div class="test-overview">
+            <h3>Test Overview</h3>
+            <p>${testDesc}</p>
+        </div>
+        <div class="test-parameter-details">
+            <h3>Test/Parameter Details</h3>
+            <ul class="parameter-list">
+                ${createInitialCollapsible(testName, createTestDetailsList(doctorDetails.TestDetails))}
+            </ul>
+        </div>
+        <div class="test-instructions">
+            <h3>Test Instructions</h3>
+            <div class="instruction-grid">
                 <div class="instruction-item"><span>Fasting:</span> ${doctorDetails.FASTING}</div>
                 <div class="instruction-item"><span>Gender Type:</span> ${doctorDetails.GENDER_TYPE}</div>
                 <div class="instruction-item"><span>Age Type:</span> ${doctorDetails.AGE_TYPE}</div>
                 <div class="instruction-item"><span>Report Time:</span> ${doctorDetails.REPORT_TIME}</div>
                 <div class="instruction-item"><span>Prescription Required:</span> ${doctorDetails.PRESCRIPTION}</div>
                 <div class="instruction-item"><span>ID Proof Required:</span> ${idProof}</div>
-                </div>
-                </div>
-                <div class="qa-section">
-                <h3>Questions & Answers</h3>
-                ${doctorDetails.QA1 ? createCollapsible(doctorDetails.QA1, "QA1") : ''}
-                ${doctorDetails.QA2 ? createCollapsible(doctorDetails.QA2, "QA2") : ''}
-                ${doctorDetails.QA3 ? createCollapsible(doctorDetails.QA3, "QA3") : ''}
-                ${doctorDetails.QA4 ? createCollapsible(doctorDetails.QA4, "QA4") : ''}
-                ${doctorDetails.QA5 ? createCollapsible(doctorDetails.QA5, "QA5") : ''}
-                ${doctorDetails.QA6 ? createCollapsible(doctorDetails.QA6, "QA6") : ''}
-                </div>
-                `;
+            </div>
+        </div>
+        <div class="qa-section">
+            <h3>Test Related Information:</h3>
+            <h5>Helps you know your test better</h5>
+            ${doctorDetails.QA1 ? createCollapsible(doctorDetails.QA1, "QA1") : ''}
+            ${doctorDetails.QA2 ? createCollapsible(doctorDetails.QA2, "QA2") : ''}
+            ${doctorDetails.QA3 ? createCollapsible(doctorDetails.QA3, "QA3") : ''}
+            ${doctorDetails.QA4 ? createCollapsible(doctorDetails.QA4, "QA4") : ''}
+            ${doctorDetails.QA5 ? createCollapsible(doctorDetails.QA5, "QA5") : ''}
+            ${doctorDetails.QA6 ? createCollapsible(doctorDetails.QA6, "QA6") : ''}
+        </div>
+    `;
 
             // Display the modal
             modal.style.display = "block";
@@ -1298,39 +1363,69 @@
                 }
 
                 // Toggle rotate class on the icon
-                const icon = collapsibleHeader.querySelector('.collapse-toggle svg');
+                const icon = collapsibleHeader.querySelector('.collapse-toggle i');
                 if (icon) {
                     icon.classList.toggle('rotate');
                 }
             }
         });
 
-
-
         function createCollapsible(content, label) {
             const splitIndex = content.indexOf('?') + 1;
             if (splitIndex !== -1) {
-                const header = content.substring(0, splitIndex + 1);
-                const body = content.substring(splitIndex + 1).trim();
+                const header = content.substring(0, splitIndex);
+                const body = content.substring(splitIndex).trim();
                 return `
-                <div class="collapsible">
+            <div class="collapsible">
                 <div class="collapsible-header">
                     <div class="collapsible-header-name">
                         <i class="fas fa-file-alt"></i>${header}
                     </div>
-
-                    
                     <span class="collapse-toggle">
-                        <i class="fas fa-chevron-up"></i>
+                        <i class="fas fa-chevron-down"></i>
                     </span>
                 </div>
                 <div class="collapsible-body">${body}</div>
-                </div>
-                `;
+            </div>
+        `;
             }
-
         }
 
+        function createTestDetailsList(testDetails) {
+            return testDetails.map(test => {
+                if (test.TEST_TYPE === 'Profile' && test.NestedDetails) {
+                    return `
+                <li class="collapsible">
+                    <div class="collapsible-header" style="padding-left:0">
+                        ${test.TEST_NAME}
+                        <span class="collapse-toggle"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <ul class="collapsible-body">
+                        ${createTestDetailsList(test.NestedDetails)}
+                    </ul>
+                </li>
+            `;
+                } else {
+                    return `
+                <li class="collapsible">${test.TEST_NAME}</li>
+            `;
+                }
+            }).join('');
+        }
+
+        function createInitialCollapsible(headerName, bodyContent) {
+            return `
+        <li class="collapsible">
+            <div class="collapsible-header">
+                ${headerName}
+                <span class="collapse-toggle"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <ul class="collapsible-body">
+                ${bodyContent}
+            </ul>
+        </li>
+    `;
+        }
 
 
         // Updated event listener for "Book Now" button
@@ -1905,7 +2000,9 @@
             // Show modal
             const modal = document.getElementById("mainPopup");
             modal.style.display = "block";
-
+            const bookingContainer = document.querySelector(".booking-container");
+            bookingContainer.style.display = "none";
+           
             // Close modal when the close button or outside modal area is clicked
             const closeButton = document.querySelector(".close");
             closeButton.onclick = function () {
@@ -1954,6 +2051,8 @@
 
         // Function to open time slot modal
         function openTimeSlotModal() {
+            const modal = document.getElementById("mainPopup");
+            modal.style.display = "none";
             console.log(patientData);
             const timeSlotModal = document.getElementById("timeSlotModal");
             timeSlotModal.style.display = "block";
@@ -1962,6 +2061,7 @@
             const closeButton = document.querySelector("#timeSlotModal .close-btn");
             closeButton.onclick = function () {
                 timeSlotModal.style.display = "none";
+                modal.style.display = "block";
             };
             window.onclick = function (event) {
                 if (event.target == timeSlotModal) {
@@ -2042,6 +2142,7 @@
                     const testdata = {
                         PKG_ID: cartItem ? cartItem.DASH_ID : null,
                         PKG_NAME: cartItem ? cartItem.DASH_NAME : null,
+                        PKG_TYPE: cartItem ? cartItem.DASH_TYPE : null,
                         //PHARMA_ID: patientDetails.PHARMA_ID,
                         BOOK_DATE: formattedDate,
                         BOOK_TIME: formattedTime,
@@ -2062,7 +2163,7 @@
                 else {
                     const testdata = {
                         TEST_ID: cartItem ? cartItem.TEST_ID : null,
-                        PKG_NAME: cartItem ? cartItem.TEST_NAME : null,
+                        TEST_NAME: cartItem ? cartItem.TEST_NAME : null,
                         CATEGORY: cartItem ? cartItem.TEST_CATG : null,
                         //PHARMA_ID: patientDetails.PHARMA_ID,
                         BOOK_DATE: formattedDate,
@@ -2075,7 +2176,7 @@
                         ADVICED_BY: patientDetails.ADVICED_BY,
                         PRESCRIPTION_URL: cartItem ? cartItem.PRESCRIPTION : null,
                         HOME_COLLECT: cartItem ? cartItem.HOME_COLLECT : null,
-                        COST: PKG_COST,
+                        COST: PKG_COST
                     }
 
 
@@ -2085,13 +2186,59 @@
             }
 
             console.log(tests);
-            const booking_data=[
+            const booking_data = [
                 {
-                    PHARMA_ID:patientDetails.PHARMA_ID,
-                    DETAILS:tests
+                    PHARMA_ID: patientDetails.PHARMA_ID,
+                    DETAILS: tests
                 }
             ]
             console.log(booking_data);
+            booking_confirm(booking_data)
+        }
+
+        async function booking_confirm(booking_data) {
+
+            const url = "https://easyhealths.com/api/booktest_dummy";
+            const params = {
+                BOOK_TEST: booking_data,
+            };
+
+            axios
+                .post(url, params)
+                .then((response) => {
+                    const data = response.data;
+                    console.log(data);
+                    openSuccesModal(data)
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    return null;
+                });
+        }
+        function openSuccesModal(data) {
+            const timeSlotModal = document.getElementById("timeSlotModal");
+            timeSlotModal.style.display = "none";
+            cartItems = []
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            // Create popup element
+            const bookingId = data.BOOK_ID ? data.BOOK_ID : null;
+            const popup = document.createElement("div");
+            popup.classList.add("popup");
+            popup.innerHTML = `
+            <h4 style="text-align:center;">${data.Message}</h4>
+            Booking ID: ${bookingId}<br>
+            <button class="ok-button" onclick="closePopup(this)">OK</button>
+        `;
+            // Append popup to body
+            document.body.appendChild(popup);
+        }
+
+        // Function to close popup
+        function closePopup(button) {
+            const popup = button.parentElement;
+            document.body.removeChild(popup);
+            window.location.href='/'
+
         }
 
     </script>

@@ -327,25 +327,42 @@
 
         .qa-section {
             margin-top: 20px;
+            background-color: #c5d1dd;
         }
 
         .collapsible {
-            border: 1px solid #ddd;
+            /* border: 1px solid #ddd; */
             margin-bottom: 10px;
+        }
+
+        .qa-section h3 {
+            background-color: #fff;
+            margin: 0;
+            padding: 10px 0px;
+        }
+
+        .qa-section h5 {
+            color: #8d7c7c;
+            font-size: small;
+            font-weight: 500;
+            margin: 0;
+            background-color: white;
+            padding: 10px 0px;
+            /* margin-left: 5px; */
         }
 
         .collapsible-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #c5d1dd;
+
             padding: 10px;
             cursor: pointer;
         }
 
-        .collapsible-header:hover {
+        /* .collapsible-header:hover {
             background-color: #b0c7e1;
-        }
+        } */
 
         .collapsible-body {
             padding: 10px;
@@ -1492,7 +1509,7 @@
             const testName = doctorDetails.TEST_NAME ? doctorDetails.TEST_NAME : doctorDetails.DASH_NAME;
             const testDesc = doctorDetails.TEST_DESC ? doctorDetails.TEST_DESC : doctorDetails.DESCRIPTION;
             const testKnownAs = doctorDetails.KNOWN_AS ? doctorDetails.KNOWN_AS : doctorDetails.DASH_SECTION_NAME;
-            const idProof=doctorDetails.ID_PROOF?doctorDetails.ID_PROOF:'';
+            const idProof = doctorDetails.ID_PROOF ? doctorDetails.ID_PROOF : '';
             // Populate modal content
             modalContent.innerHTML = `
                 <div class="test-header">
@@ -1515,7 +1532,8 @@
                 </div>
                 </div>
                 <div class="qa-section">
-                <h3>Questions & Answers</h3>
+                <h3>Test Related Information:</h3>
+                <h5>Helps you know your test better</h5>
                 ${doctorDetails.QA1 ? createCollapsible(doctorDetails.QA1, "QA1") : ''}
                 ${doctorDetails.QA2 ? createCollapsible(doctorDetails.QA2, "QA2") : ''}
                 ${doctorDetails.QA3 ? createCollapsible(doctorDetails.QA3, "QA3") : ''}
