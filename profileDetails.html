@@ -465,36 +465,7 @@
             border-bottom: 1px solid #ccc;
         }
 
-        .cart-item:last-child {
-            border-bottom: none;
-        }
 
-        .cart-item span {
-            flex: 1;
-        }
-
-        .cart-item .item-name {
-            font-weight: bold;
-        }
-
-        .cart-item .item-cost {
-            font-weight: bold;
-            color: green;
-        }
-
-        /* .cart-item .remove-btn {
-            background-color: #ff3333;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .cart-item .remove-btn:hover {
-            background-color: #cc0000;
-        } */
 
         /* CSS for Cart Icon */
         .cart-icon {
@@ -554,269 +525,6 @@
             }
         }
 
-        #popularTest,
-        #symptomaticTest,
-        #familyPackage,
-        #commonScan,
-        #profileTest {
-            display: none;
-        }
-
-        .view-all-btn {
-            text-align: right;
-            margin-right: 20px;
-            margin-top: 10px;
-        }
-
-        .view-all-btn button {
-            color: #19cfc3;
-            background-color: transparent;
-            text-decoration: none;
-            font-weight: bold;
-            border: none;
-            font-size: large;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: color 0.3s ease, color 0.3s ease;
-        }
-
-        .view-all-btn button:hover {
-            color: #0056b3;
-        }
-
-        .popular-tests-container {
-            margin: 10px;
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            /* Maximum 6 items per row */
-            gap: 20px;
-            /* Gap between items */
-            /* justify-content: center; */
-        }
-
-        .test-item {
-            background-color: #F2F2F2;
-            padding: 10px;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            /* 3D effect */
-        }
-
-        .test-item .remove-btn {
-            background-color: #ff3333;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            border: none;
-            transition: background-color 0.4s ease, transform 0.4s ease;
-        }
-
-        .test-item .remove-btn:hover {
-            background-color: #f0f0f0;
-            /* Light gray background on hover */
-            color: #ff3333;
-        }
-
-        .test-item:hover,
-        .symptom:hover,
-        .profile_test:hover,
-        .family_package:hover,
-        .common_scan:hover,
-        .organ:hover {
-            transform: translateY(-5px) scale(1.05);
-            transition: transform 0.3s ease;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            background-color: #baacac;
-            color: #f3f3f3;
-            cursor: pointer;
-        }
-
-        .test-name {
-            color: red;
-            margin-top: 0;
-            text-align: center;
-        }
-
-        .test-details-btn {
-            background-color: #22e3ca;
-            color: #fff;
-            padding: 6px 36px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .test-price {
-            color: #00008b;
-            /* Dark blue font */
-        }
-
-        .price-value {
-            color: #000;
-            /* Black font */
-        }
-
-        .book-now-btn {
-            background-color: #07094a;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: background-color 0.4s ease, color 0.4s ease;
-        }
-
-        .book-now-btn:hover {
-            background-color: #f0f0f0;
-            /* Light gray background on hover */
-            color: #01b5cd;
-        }
-
-        #trendingTestsContainer,
-        #profileTestsContainer,
-        #commonScanContainer {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 20px;
-            /* Adjust the gap between grid items */
-            padding: 20px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-
-        #familyPackageContainer {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 20px;
-            /* Adjust the gap between grid items */
-            padding: 20px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-
-        .symptom,
-        .profile_test {
-            text-align: center;
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            /* Add shadow effect */
-            cursor: pointer;
-            /* Add pointer cursor */
-            background: #F2F2F2;
-            /* Gradient background */
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-        }
-
-        .symptom img {
-            width: 95%;
-            height: 80%;
-            margin: 2px;
-            /* Ensure proper image aspect ratio */
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
-
-        .symptom-details {
-            padding: 10px;
-        }
-
-        .symptom p {
-            margin: 5px 0;
-            text-align: center;
-        }
-
-        .common_scan,
-        .family_package {
-            text-align: center;
-            padding: 0;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            /* Add shadow effect */
-            cursor: pointer;
-            /* Add pointer cursor */
-            background: #F2F2F2;
-            /* Gradient background */
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            font-weight: 700;
-        }
-
-        .family_package {
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            height: 220px;
-        }
-
-        .profile_test img,
-        .common_scan img,
-        .family_package img {
-            width: 100%;
-            height: 80%;
-            /* Ensure proper image aspect ratio */
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
-
-        .profile_test p,
-        .common_scan p {
-            margin: 5px 0;
-            text-align: center;
-        }
-
-        #modalOrgansContent {
-            height: 100%;
-        }
-
-        #organsContainer {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 20px;
-            /* Adjust the gap between grid items */
-            padding: 20px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-
-        .organ {
-            text-align: center;
-            padding: 0;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            /* Add shadow effect */
-            cursor: pointer;
-            /* Add pointer cursor */
-            background: #CBD7E3;
-            /* Gradient background */
-            height: 100px;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-            align-items: center;
-            font-weight: 700;
-            padding: 5px;
-        }
-
-        .organ img {
-            width: 50%;
-            height: 80%;
-            /* Ensure proper image aspect ratio */
-            /* border-top-left-radius: 10px;
-            border-top-right-radius: 10px; */
-            border-radius: 50%;
-            background-color: #fff;
-            padding: 10px;
-        }
 
         /* Styles for the overlay */
         #overlay {
@@ -860,6 +568,144 @@
                 transform: rotate(360deg);
             }
         }
+
+        #popularTest {
+            display: none;
+            margin-top: 100px;
+        }
+
+        .profile-tests-container {
+            margin: 20px;
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            justify-content: space-around;
+            /* Maximum 6 items per row */
+            gap: 20px;
+            /* Gap between items */
+            /* justify-content: center; */
+        }
+
+        .test-item {
+            background-color: #F2F2F2;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 500px;
+
+            /* 3D effect */
+        }
+
+        .test-item .remove-btn {
+            background-color: #ff3333;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.4s ease, transform 0.4s ease;
+        }
+
+        .test-item .remove-btn:hover {
+            background-color: #f0f0f0;
+            /* Light gray background on hover */
+            color: #ff3333;
+        }
+
+        .test-item:hover {
+            transform: translateY(-5px) scale(1.05);
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            background-color: #baacac;
+            color: #f3f3f3;
+            cursor: pointer;
+        }
+
+        .test-name {
+            color: rgb(9, 9, 9);
+            margin-top: 0;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .test-item button {
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .test-details-btn {
+            background-color: #07094a;
+            color: #fff;
+            padding: 6px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .cart-item-details {
+            display: flex;
+            align-items: center;
+        }
+
+        .cart-item-details1 {
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .item_heading {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #999;
+        }
+
+        .cart-item-cost {
+            margin-right: 10px;
+            font-size: 14px;
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .discount-badge {
+            margin-right: 10px;
+            font-size: 14px;
+            background-color: transparent;
+            color: green;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .cart-item-final-cost {
+            margin-right: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .book-now-btn {
+            background-color: #22e3ca;
+            color: #fff;
+
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .book-now-btn:hover {
+            background-color: #f0f0f0;
+            /* Light gray background on hover */
+            color: #01b5cd;
+        }
     </style>
 </head>
 
@@ -896,11 +742,10 @@
             </div>
         </nav>
     </div>
-
-
-    <!-- Cart Container -->
-    <div id="cartContainer" class="cart-container">
-        <!-- Cart items will be rendered here -->
+    <div class="header" id="popularTest">
+    </div>
+    <div class="profile-tests-container" id="profileTestsContainer">
+        <!-- Tests will be dynamically added here -->
     </div>
     <!-- Add the modal at the end of the body -->
     <div id="detailsModal" class="modal">
@@ -909,66 +754,6 @@
             <div id="modalDetailsContent"></div>
         </div>
     </div>
-
-
-    <div class="header" id="commonScan" style="margin-top: 100px">
-        Most Common Scan
-        <div class="view-all-btn">
-            <button type="button" id="commonScanBtn">View All</button>
-        </div>
-    </div>
-    <div class="common-scan-container" id="commonScanContainer">
-        <!-- Tests will be dynamically added here -->
-    </div>
-
-    <!-- Add the modal at the end of the body -->
-    <div id="organsModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modalOrgansContent"></div>
-        </div>
-    </div>
-
-    <div class="header" id="popularTest">
-        Most Prescribed Doctor's Test
-        <div class="view-all-btn">
-            <button type="button" id="popularTestBtn">View All</button>
-        </div>
-    </div>
-    <div class="popular-tests-container" id="popularTestsContainer">
-        <!-- Tests will be dynamically added here -->
-    </div>
-
-    <div class="header" id="symptomaticTest">
-        Trending Symptomatic Test
-        <div class="view-all-btn">
-            <button type="button" id="symptomaticTestBtn">View All</button>
-        </div>
-    </div>
-    <div class="trending-tests-container" id="trendingTestsContainer">
-        <!-- Tests will be dynamically added here -->
-    </div>
-
-    <div class="header" id="profileTest">
-        Test by Health Risk
-        <div class="view-all-btn">
-            <button type="button" id="profileTestBtn">View All</button>
-        </div>
-    </div>
-    <div class="profile-tests-container" id="profileTestsContainer">
-        <!-- Tests will be dynamically added here -->
-    </div>
-
-    <div class="header" id="familyPackage">
-        Top Family Care Package
-        <div class="view-all-btn">
-            <button type="button" id="familyCareBtn">View All</button>
-        </div>
-    </div>
-    <div class="familyPackage-container" id="familyPackageContainer">
-        <!-- Tests will be dynamically added here -->
-    </div>
-
 
     <!-- JavaScript libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
@@ -995,6 +780,21 @@
             }
         )
         wow.init();
+
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            const obj = {};
+            for (const [key, value] of params.entries()) {
+                if (value.startsWith('{') && value.endsWith('}')) {
+                    // Handle objects in the query string
+                    obj[key] = JSON.parse(decodeURIComponent(value));
+                } else {
+                    obj[key] = decodeURIComponent(value);
+                }
+            }
+            return obj;
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             // Check if the user is already logged in
             const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -1015,12 +815,21 @@
                     companyLogo.src = userData.LOGO_URL;
                     document.getElementById('overlay').style.display = 'block';
                     document.getElementById('loader').style.display = 'block';
-                    populateTests();
-                    populateDoctors();
-                    // Load cart items from localStorage
-                    loadCartItemsFromLocalStorage();
-                    console.log(labtests);
+                    const organData = getQueryParams();
+                    console.log(organData);
+                    populateDoctors()
+                    if(organData.DASH_SECTION_ID=='C'){
+                        populateProfiles(organData)
+                    }
+                    else{
+                        populatePackages(organData);
+                    }
+                    
+                   
 
+                    loadCartItemsFromLocalStorage();
+
+                    console.log(labtests);
 
 
                 }
@@ -1029,77 +838,43 @@
                 window.location.href = '/'
             }
         });
-        function openCart() {
-            console.log("inside cart");
-            window.location.href = "cart.html"
-        }
-        function toggleGridView(tests, button) {
-            const gridItems = document.querySelectorAll(tests);
-            const toggleButton = document.getElementById(button);
-            const isExpanded = toggleButton.classList.contains('expanded');
 
-            if (isExpanded) {
-                // Collapse grid to show only one row
-                showOneRow(tests);
-                toggleButton.innerHTML = 'View All'; // Change to expand icon
-                toggleButton.classList.remove('expanded');
-            } else {
-                // Expand grid to show all items
-                gridItems.forEach(item => {
-                    item.style.display = 'block';
-                    item.style.display = 'flex'
-                    item.style.flexDirection = 'column'
-                });
-                toggleButton.innerHTML = 'View Less'; // Change to compress icon
-                toggleButton.classList.add('expanded');
-            }
-        }
-
-        function showOneRow(tests) {
-            console.log('inside one row', tests);
-            const gridItems = document.querySelectorAll(tests);
-            gridItems.forEach((item, index) => {
-                if (index >= 6) {
-                    item.style.display = 'none';
-                } else {
-                    item.style.display = 'block'; // Display first row items
-                    item.style.display = 'flex'
-                    item.style.flexDirection = 'column'
-                }
-            });
-        }
-
-
-        function generateSingleTests(singleTests) {
-            const container = document.getElementById('popularTestsContainer');
-            const singleTestBtn = document.getElementById('popularTestBtn');
-            console.log('inside single tests', singleTests);
+        function generateProfiles(labtests) {
+            const container = document.getElementById('profileTestsContainer');
             // Clear container
             container.innerHTML = '';
-            singleTests.forEach(data => {
+            labtests.forEach(data => {
                 const testItem = createTestItem(data);
                 container.appendChild(testItem);
                 const testDetails = document.querySelector('.test-details-btn');
                 testDetails.addEventListener('click', () => {
-
+                    openModal(data)
                 });
             });
-
-            showOneRow('.test-item');
-            singleTestBtn.addEventListener('click', function () {
-                toggleGridView('.test-item', 'popularTestBtn');
-            });
-
         }
 
         // Function to dynamically create test items
         function createTestItem(data) {
+            const discount = data.DISCOUNT || 0;
+            const finalCost = data.COST - (data.COST * discount / 100);
+
             const testItem = document.createElement('div');
             testItem.classList.add('test-item', "wow", "fadeInLeft");
             testItem.innerHTML = `
-            <h4 class="test-name">${data.TEST_NAME}</h4>
-            <div class="test-details-btn">Test Details</div>
-            <p class="test-price">Price: <span class="price-value">₹${data.COST}</span></p>
+            <h5 class="test-name"><span class="item_heading">${data.DASH_TYPE} Name: </span>${data.DASH_NAME}</h5>
+            <h5 class="test-name"><span class="item_heading">No of Tests: </span>${data.TOT_TEST}</h5>
+            <div class="cart-item-details1">
+                <h5 class="test-name"><span class="item_heading">Home Collection: </span>${data.HOME_COLLECT}</h5>
+                <div class="test-details-btn">Know More</div>
+            </div>
+            
+            
+             <div class="cart-item-details">
+                    <p class="cart-item-final-cost">Price: </p>
+                    <p class="cart-item-final-cost">₹${finalCost}</p>
+                    <p class="cart-item-cost">₹${data.COST}</p>
+                    <p class="discount-badge">${discount}% Off</p>
+                    </div>
             <button class="${isItemInCart(data.TEST_NAME) ? 'remove-btn' : 'book-now-btn'}">
                 ${isItemInCart(data.TEST_NAME) ? 'Remove' : 'Book Now'}
             </button>
@@ -1110,7 +885,6 @@
                 openModal(data);
             });
             const bookNowBtn = testItem.querySelector('button');
-            console.log(bookNowBtn);
             bookNowBtn.addEventListener('click', () => {
                 if (bookNowBtn.classList.contains('book-now-btn')) {
                     addItemToCart(data);
@@ -1124,206 +898,16 @@
             return testItem;
         }
 
-        // Function to convert the object to a query string
-        function objectToQueryString(obj) {
-            const parts = [];
-            for (const key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
-                        parts.push(objectToQueryString(obj[key]));
-                    } else if (Array.isArray(obj[key])) {
-                        obj[key].forEach((item, index) => {
-                            parts.push(`${key}[${index}]=${encodeURIComponent(JSON.stringify(item))}`);
-                        });
-                    } else {
-                        parts.push(`${key}=${encodeURIComponent(obj[key])}`);
-                    }
-                }
+
+        function loadCartItemsFromLocalStorage() {
+            const storedCartItems = localStorage.getItem('cartItems');
+            if (storedCartItems) {
+
+                cartItems = JSON.parse(storedCartItems);
+                console.log(cartItems);
+                cartCount = cartItems.length;
+                updateCartCount();
             }
-            return parts.join('&');
-        }
-
-        function generateSymptomTests(symptomaticTests) {
-            console.log('inside');
-            const container = document.getElementById('trendingTestsContainer');
-            container.innerHTML = '';
-            const symptomBtn = document.getElementById('symptomaticTestBtn');
-            for (let i = 0; i < symptomaticTests.length; i++) {
-                const symptomTest = symptomaticTests[i];
-                const symptomDiv = document.createElement("div");
-                symptomDiv.classList.add("symptom", "wow", "fadeInLeft");
-
-                const symptomImg = document.createElement("img");
-                symptomImg.src = symptomTest.PHOTO_URL;
-                const symptomName = document.createElement("p");
-                symptomName.textContent = symptomTest.DASH_NAME;
-                symptomDiv.appendChild(symptomImg);
-                symptomDiv.appendChild(symptomName);
-                container.appendChild(symptomDiv);
-                console.log(symptomDiv);
-                symptomDiv.addEventListener("click", () => {
-                    console.log(symptomTest);
-                    // // Create the query string
-                    const queryString = objectToQueryString(symptomTest);
-
-                    // // Redirect to the URL with the query string
-                    window.location.href = `singleTests.html?${queryString}`;
-                });
-            }
-            showOneRow('.symptom');
-            symptomaticTestBtn.addEventListener('click', () => {
-                toggleGridView('.symptom', 'symptomaticTestBtn')
-            })
-
-        }
-
-        function generateProfileTests(profileTests) {
-            const container = document.getElementById('profileTestsContainer');
-            container.innerHTML = '';
-            const profileBtn = document.getElementById('profileTestBtn');
-
-            profileTests.forEach(profileTest => {
-                const profileDiv = document.createElement("div");
-                profileDiv.classList.add("profile_test", "wow", "fadeInLeft");
-
-                const symptomImg = document.createElement("img");
-                symptomImg.src = profileTest.PHOTO_URL;
-                const symptomName = document.createElement("p");
-                symptomName.textContent = profileTest.DASH_NAME;
-                profileDiv.appendChild(symptomImg);
-                profileDiv.appendChild(symptomName);
-                container.appendChild(profileDiv);
-
-                profileDiv.addEventListener("click", () => {
-                    const queryString = objectToQueryString(profileTest);
-
-                    // // Redirect to the URL with the query string
-                    window.location.href = `profileDetails.html?${queryString}`;
-                });
-            });
-            showOneRow('.profile_test');
-            profileBtn.addEventListener('click', () => {
-                toggleGridView('.profile_test', 'profileTestBtn')
-            })
-        }
-
-        function generateCommonScan(commonScans) {
-            const container = document.getElementById('commonScanContainer');
-            container.innerHTML = '';
-            const commonScanBtn = document.getElementById('commonScanBtn');
-            commonScans.forEach(commonScan => {
-                const profileDiv = document.createElement("div");
-                profileDiv.classList.add("common_scan", "wow", "fadeInLeft");
-
-                const symptomImg = document.createElement("img");
-                symptomImg.src = commonScan.PHOTO_URL;
-                const symptomName = document.createElement("p");
-                symptomName.textContent = commonScan.DASH_NAME;
-                profileDiv.appendChild(symptomImg);
-                profileDiv.appendChild(symptomName);
-                container.appendChild(profileDiv);
-
-                profileDiv.addEventListener("click", () => {
-                    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-                    openOrgansModal(commonScan);
-                });
-            })
-            showOneRow('.common_scan');
-            commonScanBtn.addEventListener('click', () => {
-                toggleGridView('.common_scan', 'commonScanBtn')
-            })
-        }
-
-        function generateFamilyPackage(familyPackage) {
-            const container = document.getElementById('familyPackageContainer');
-            container.innerHTML = '';
-            const familyPackageBtn = document.getElementById('familyCareBtn');
-            familyPackage.forEach(commonScan => {
-                const profileDiv = document.createElement("div");
-                profileDiv.classList.add("family_package", "wow", "fadeInLeft");
-
-                const symptomImg = document.createElement("img");
-                symptomImg.src = commonScan.PHOTO_URL;
-                const symptomName = document.createElement("p");
-                symptomName.textContent = commonScan.DASH_NAME;
-                profileDiv.appendChild(symptomImg);
-                profileDiv.appendChild(symptomName);
-                container.appendChild(profileDiv);
-
-                profileDiv.addEventListener("click", () => {
-                    const queryString = objectToQueryString(commonScan);
-
-                    // // Redirect to the URL with the query string
-                    window.location.href = `profileDetails.html?${queryString}`;
-                });
-            })
-            showOneRow('.family_package');
-            familyPackageBtn.addEventListener('click', () => {
-                toggleGridView('.family_package', 'familyCareBtn')
-            })
-        }
-
-        async function populateTests() {
-            const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "https://easyhealths.com/api/labdashboard1_dummy";
-            const params = {
-                PHARMA_ID: PHARMA_ID,
-            };
-
-            await axios
-                .post(url, params)
-                .then((response) => {
-                    const data = response.data.data;
-                    labtests = data;
-                    console.log(labtests);
-                    const singleTests = labtests ? labtests.Popular_Single_Test : [];
-                    const symptomaticTests = labtests ? labtests.Symptomatic_Test : [];
-                    const profileTests = labtests ? labtests.Profile_Test : [];
-                    const commonScans = labtests ? labtests.Dashboard : [];
-                    const familyPackage = labtests ? labtests.Family_Care_Package : [];
-
-                    // Hide overlay and loader when API call is completed
-                    document.getElementById('overlay').style.display = 'none';
-                    document.getElementById('loader').style.display = 'none';
-
-                    if (commonScans && commonScans.length > 0) {
-                        console.log(commonScans.length);
-                        document.getElementById('commonScan').style.display = 'block';
-                        generateCommonScan(commonScans);
-
-                    }
-
-                    if (singleTests && singleTests.length > 0) {
-                        console.log(singleTests.length);
-                        document.getElementById('popularTest').style.display = 'block';
-                        generateSingleTests(singleTests)
-                    }
-                    if (symptomaticTests && symptomaticTests.length > 0) {
-                        console.log(symptomaticTests.length);
-                        document.getElementById('symptomaticTest').style.display = 'block';
-                        generateSymptomTests(symptomaticTests)
-
-                    }
-                    if (profileTests && profileTests.length > 0) {
-                        console.log(profileTests.length);
-                        document.getElementById('profileTest').style.display = 'block';
-                        generateProfileTests(profileTests);
-
-                    }
-
-                    if (familyPackage && familyPackage.length > 0) {
-                        console.log(familyPackage.length);
-                        document.getElementById('familyPackage').style.display = 'block';
-                        generateFamilyPackage(familyPackage);
-
-                    }
-
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    return null;
-                });
-
         }
 
         // Function to format date from "YYYYMMDD" to "dd-Month-YYYY"
@@ -1463,217 +1047,9 @@
             }
         });
 
-        function openOrgansModal(commonScans) {
-            const modal = document.getElementById("organsModal");
-            const modalContent = document.getElementById("modalOrgansContent");
-            const closeModalButton = document.querySelector("#organsModal .close");
-
-            modalContent.innerHTML = `
-            <div class="header">
-                Select an Organ for ${commonScans.DASH_NAME}
-            </div>
-            <div class="organs-container" id="organsContainer"></div>
-            `;
-            const container = document.getElementById('organsContainer');
-            container.innerHTML = '';
-            commonScans.ORGANS.forEach(commonScan => {
-                const profileDiv = document.createElement("div");
-                profileDiv.classList.add("organ", "wow", "fadeInLeft");
-
-                const symptomImg = document.createElement("img");
-                symptomImg.src = commonScan.ORGAN_URL;
-                const symptomName = document.createElement("p");
-                symptomName.textContent = commonScan.ORGAN_NAME;
-                profileDiv.appendChild(symptomImg);
-                profileDiv.appendChild(symptomName);
-                container.appendChild(profileDiv);
-
-                profileDiv.addEventListener("click", () => {
-                    const queryString = new URLSearchParams(commonScan).toString();
-                    window.location.href = `singleTests.html?${queryString}`;
-                });
-            })
-
-            // Display the modal
-            modal.style.display = "block";
-
-            // Close the modal when the user clicks on the close button
-            closeModalButton.onclick = function () {
-                modal.style.display = "none";
-                searchInput.focus();
-                searchInput.click();
-            };
-
-            // Close the modal when the user clicks outside the modal
-            window.onclick = function (event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                    searchInput.focus();
-                    searchInput.click();
-                }
-            };
-        }
-
-        // Function to open the modal and populate it with doctor details
-        function openModal(doctorDetails) {
-            const modal = document.getElementById("detailsModal");
-            const modalContent = document.getElementById("modalDetailsContent");
-            const closeModalButton = document.querySelector("#detailsModal .close");
-            const testName = doctorDetails.TEST_NAME ? doctorDetails.TEST_NAME : doctorDetails.DASH_NAME;
-            const testDesc = doctorDetails.TEST_DESC ? doctorDetails.TEST_DESC : doctorDetails.DESCRIPTION;
-            const testKnownAs = doctorDetails.KNOWN_AS ? doctorDetails.KNOWN_AS : doctorDetails.DASH_SECTION_NAME;
-            const idProof = doctorDetails.ID_PROOF ? doctorDetails.ID_PROOF : '';
-
-            // Populate modal content
-            modalContent.innerHTML = `
-        <div class="test-header">
-            <h2>${testName}</h2>
-            <p class="known-as">${testKnownAs}</p>
-        </div>
-        <div class="test-overview">
-            <h3>Test Overview</h3>
-            <p>${testDesc}</p>
-        </div>
-
-            <h3 style="font-weight:600;">Test Included: ${doctorDetails.TOT_TEST} Test / Parameters</h3>          
-
-        <div class="test-parameter-details">
-            <h3>Test/Parameter Details</h3>
-            <ul class="parameter-list">
-                ${createInitialCollapsible(testName, createTestDetailsList(doctorDetails.TestDetails))}
-            </ul>
-        </div>
-        <div class="test-instructions">
-            <h3>Test Instructions</h3>
-            <div class="instruction-grid">
-                <div class="instruction-item"><span>Fasting:</span> ${doctorDetails.FASTING}</div>
-                <div class="instruction-item"><span>Gender Type:</span> ${doctorDetails.GENDER_TYPE}</div>
-                <div class="instruction-item"><span>Age Type:</span> ${doctorDetails.AGE_TYPE}</div>
-                <div class="instruction-item"><span>Report Time:</span> ${doctorDetails.REPORT_TIME}</div>
-                <div class="instruction-item"><span>Prescription Required:</span> ${doctorDetails.PRESCRIPTION}</div>
-                <div class="instruction-item"><span>ID Proof Required:</span> ${idProof}</div>
-            </div>
-        </div>
-        <div class="qa-section">
-            <h3>Test Related Information:</h3>
-            <h5>Helps you know your test better</h5>
-            ${doctorDetails.QA1 ? createCollapsible(doctorDetails.QA1, "QA1") : ''}
-            ${doctorDetails.QA2 ? createCollapsible(doctorDetails.QA2, "QA2") : ''}
-            ${doctorDetails.QA3 ? createCollapsible(doctorDetails.QA3, "QA3") : ''}
-            ${doctorDetails.QA4 ? createCollapsible(doctorDetails.QA4, "QA4") : ''}
-            ${doctorDetails.QA5 ? createCollapsible(doctorDetails.QA5, "QA5") : ''}
-            ${doctorDetails.QA6 ? createCollapsible(doctorDetails.QA6, "QA6") : ''}
-        </div>
-    `;
-
-            // Display the modal
-            modal.style.display = "block";
-
-            // Close the modal when the user clicks on the close button
-            closeModalButton.onclick = function () {
-                console.log("close modal");
-                modal.style.display = "none";
-                searchInput.focus();
-                searchInput.click();
-            };
-
-            // Close the modal when the user clicks outside the modal
-            window.onclick = function (event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                    searchInput.focus();
-                    searchInput.click();
-                }
-            };
-        }
-
-        document.addEventListener('click', function (event) {
-            const target = event.target;
-
-            // Check if the target or any of its parents has the class 'collapse-toggle'
-            if (target.closest('.collapse-toggle')) {
-                const collapsibleHeader = target.closest('.collapsible-header');
-                const collapsibleBody = collapsibleHeader.nextElementSibling;
-
-                // Toggle active class on the collapsible body
-                if (collapsibleBody) {
-                    collapsibleBody.classList.toggle('active');
-                    collapsibleBody.style.display = collapsibleBody.style.display === 'block' ? 'none' : 'block';
-                }
-
-                // Toggle rotate class on the icon
-                const icon = collapsibleHeader.querySelector('.collapse-toggle svg');
-                if (icon) {
-                    icon.classList.toggle('rotate');
-                }
-            }
-        });
-
-
-
-
-        function createCollapsible(content, label) {
-            const splitIndex = content.indexOf('?') + 1;
-            if (splitIndex !== -1) {
-                const header = content.substring(0, splitIndex);
-                const body = content.substring(splitIndex).trim();
-                return `
-            <div class="collapsible">
-                <div class="collapsible-header">
-                    <div class="collapsible-header-name">
-                        <i class="fas fa-file-alt"></i>${header}
-                    </div>
-                    <span class="collapse-toggle">
-                        <i class="fas fa-chevron-down"></i>
-                    </span>
-                </div>
-                <div class="collapsible-body">${body}</div>
-            </div>
-        `;
-            }
-        }
-
-        function createTestDetailsList(testDetails) {
-            console.log(testDetails);
-            return testDetails.map(test => {
-                if (test.TEST_TYPE === 'Profile' && test.NestedDetails) {
-                    return `
-                <li class="collapsible">
-                    <div class="collapsible-header" style="padding-left:0">
-                       <span><span class="listBullet" class="listBullet"> &#x2022;</span > ${test.TEST_NAME}</span>
-                        <span class="collapse-toggle"><i class="fas fa-chevron-down"></i></span>
-                    </div>
-                    <ul class="collapsible-body">
-                        ${createTestDetailsList(test.NestedDetails)}
-                    </ul>
-                </li>
-            `;
-                } else {
-                    return `
-                <li class="collapsible"><span class="listBullet"> &#x2022;</span> ${test.TEST_NAME}</li>
-            `;
-                }
-            }).join('');
-        }
-
-        function createInitialCollapsible(headerName, bodyContent) {
-            return `
-        <li class="collapsible">
-            <div class="collapsible-header">
-                ${headerName}
-                <span class="collapse-toggle"><i class="fas fa-chevron-down"></i></span>
-            </div>
-            <ul class="collapsible-body">
-                ${bodyContent}
-            </ul>
-        </li>
-    `;
-        }
-
-
-
-        function isItemInCart(itemName) {
-            return cartItems.some(cartItem => cartItem.TEST_NAME === itemName);
+        function openCart() {
+            console.log("inside cart");
+            window.location.href = "cart.html"
         }
         // Function to add item to cart
         function addItemToCart(item) {
@@ -1729,93 +1105,244 @@
             button.style.transition = 'background-color 0.3s ease';
         }
 
+        function isItemInCart(itemName) {
+            return cartItems.some(cartItem => cartItem.TEST_NAME === itemName);
+        }
         function saveCartItemsToLocalStorage() {
             localStorage.setItem('cartItems', JSON.stringify(cartItems));
         }
+        async function populatePackages(organData){
+            const PHARMA_ID = userData ? userData.PHARMA_ID : null
+            const url = "https://easyhealths.com/api/labpackagesdtl_dummy";
+            const params = {
+                PHARMA_ID: PHARMA_ID,
+                DASH_ID: organData.DASH_ID,
+                DASH_SECTION_ID:organData.DASH_SECTION_ID
+            };
 
-        function loadCartItemsFromLocalStorage() {
-            const storedCartItems = localStorage.getItem('cartItems');
-            if (storedCartItems) {
+            await axios
+                .post(url, params)
+                .then((response) => {
+                    const data = response.data.data;
+                    labtests = data;
+                    console.log(labtests);
 
-                cartItems = JSON.parse(storedCartItems);
-                console.log(cartItems);
-                cartCount = cartItems.length;
-                updateCartCount();
-            }
+                    // Hide overlay and loader when API call is completed
+                    document.getElementById('overlay').style.display = 'none';
+                    document.getElementById('loader').style.display = 'none';
+                    const headContent = document.getElementById('popularTest')
+                    headContent.style.display = 'block';
+                    headContent.innerHTML = `Popular - ${organData.DASH_NAME} Test`
+                    if (labtests.length > 0) {
+                        console.log(headContent);
+                        generateProfiles(labtests);
+                    }
+                    else {
+                        const noresult = document.createElement('h2')
+                        noresult.innerHTML = 'No Matching Test Found!!'
+                        document.body.appendChild(noresult)
+                    }
+
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    return null;
+                });
+        }
+        async function populateProfiles(organData) {
+            const PHARMA_ID = userData ? userData.PHARMA_ID : null
+            const url = "https://easyhealths.com/api/labprofilesdtl_dummy";
+            const params = {
+                PHARMA_ID: PHARMA_ID,
+                DASH_ID: organData.DASH_ID,
+            };
+
+            await axios
+                .post(url, params)
+                .then((response) => {
+                    const data = response.data.data;
+                    labtests = data;
+                    console.log(labtests);
+
+                    // Hide overlay and loader when API call is completed
+                    document.getElementById('overlay').style.display = 'none';
+                    document.getElementById('loader').style.display = 'none';
+                    const headContent = document.getElementById('popularTest')
+                    headContent.style.display = 'block';
+                    headContent.innerHTML = `Popular - ${organData.DASH_NAME} Test`
+                    if (labtests.length > 0) {
+                        console.log(headContent);
+                        generateProfiles(labtests);
+                    }
+                    else {
+                        const noresult = document.createElement('h2')
+                        noresult.innerHTML = 'No Matching Test Found!!'
+                        document.body.appendChild(noresult)
+                    }
+
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    return null;
+                });
+
         }
 
-        //     function renderCart() {
-        //         const cartContainer = document.getElementById('cartContainer');
-        //         cartContainer.innerHTML = '';
 
-        //         let totalItems = 0;
-        //         let totalCost = 0;
 
-        //         cartItems.forEach((item, index) => {
-        //             const cartItemElement = document.createElement('div');
-        //             cartItemElement.classList.add('cart-item');
-        //             cartItemElement.innerHTML = `
-        //         <span class="item-name">${item.ITEM_NAME}</span>
-        //         <span class="item-type">${item.FIELD_TYPE}</span>
-        //         <span class="item-cost">₹ ${item.COST}</span>
-        //     `;
-        //             cartContainer.appendChild(cartItemElement);
+        // Function to open the modal and populate it with doctor details
+        function openModal(doctorDetails) {
+            const modal = document.getElementById("detailsModal");
+            const modalContent = document.getElementById("modalDetailsContent");
+            const closeModalButton = document.querySelector("#detailsModal .close");
+            const testName = doctorDetails.TEST_NAME ? doctorDetails.TEST_NAME : doctorDetails.DASH_NAME;
+            const testDesc = doctorDetails.TEST_DESC ? doctorDetails.TEST_DESC : doctorDetails.DESCRIPTION;
+            const testKnownAs = doctorDetails.KNOWN_AS ? doctorDetails.KNOWN_AS : doctorDetails.DASH_SECTION_NAME;
+            const idProof = doctorDetails.ID_PROOF ? doctorDetails.ID_PROOF : '';
 
-        //             // Increment total items and cost
-        //             totalItems += 1;
-        //             totalCost += parseFloat(item.COST);
-        //         });
-        //         if (cartItems.length > 0) {
-        //             // Create and append the total cost row
-        //             const totalCostElement = document.createElement('div');
-        //             totalCostElement.classList.add('cart-item');
-        //             totalCostElement.style.fontWeight = 'bold';
-        //             totalCostElement.style.borderTop = '2px solid #ccc';
-        //             totalCostElement.style.marginTop = '10px';
-        //             totalCostElement.innerHTML = `
-        //     <span>Total Items: ${totalItems}</span>
-        //     <span></span> <!-- Empty span to fill the space -->
-        //     <span>Total Cost: ₹ ${totalCost.toFixed(2)}</span>
-        // `;
-        //             cartContainer.appendChild(totalCostElement);
-        //         }
+            // Populate modal content
+            modalContent.innerHTML = `
+        <div class="test-header">
+            <h2>${testName}</h2>
+            <p class="known-as">${testKnownAs}</p>
+        </div>
+        <div class="test-overview">
+            <h3>Test Overview</h3>
+            <p>${testDesc}</p>
+        </div>
+        <h3 style="font-weight:600;">Test Included: ${doctorDetails.TOT_TEST} Test / Parameters</h3>        
+        <div class="test-parameter-details">
+            <h3>Test/Parameter Details</h3>
+            <ul class="parameter-list">
+                ${createInitialCollapsible(testName, createTestDetailsList(doctorDetails.TestDetails))}
+            </ul>
+        </div>
+        <div class="test-instructions">
+            <h3>Test Instructions</h3>
+            <div class="instruction-grid">
+                <div class="instruction-item"><span>Fasting:</span> ${doctorDetails.FASTING}</div>
+                <div class="instruction-item"><span>Gender Type:</span> ${doctorDetails.GENDER_TYPE}</div>
+                <div class="instruction-item"><span>Age Type:</span> ${doctorDetails.AGE_TYPE}</div>
+                <div class="instruction-item"><span>Report Time:</span> ${doctorDetails.REPORT_TIME}</div>
+                <div class="instruction-item"><span>Prescription Required:</span> ${doctorDetails.PRESCRIPTION}</div>
+                <div class="instruction-item"><span>ID Proof Required:</span> ${idProof}</div>
+            </div>
+        </div>
+        <div class="qa-section">
+            <h3>Test Related Information:</h3>
+            <h5>Helps you know your test better</h5>
+            ${doctorDetails.QA1 ? createCollapsible(doctorDetails.QA1, "QA1") : ''}
+            ${doctorDetails.QA2 ? createCollapsible(doctorDetails.QA2, "QA2") : ''}
+            ${doctorDetails.QA3 ? createCollapsible(doctorDetails.QA3, "QA3") : ''}
+            ${doctorDetails.QA4 ? createCollapsible(doctorDetails.QA4, "QA4") : ''}
+            ${doctorDetails.QA5 ? createCollapsible(doctorDetails.QA5, "QA5") : ''}
+            ${doctorDetails.QA6 ? createCollapsible(doctorDetails.QA6, "QA6") : ''}
+        </div>
+    `;
 
-        //     }
+            // Display the modal
+            modal.style.display = "block";
 
-        function removeItem(index) {
-            cartItems.splice(index, 1); // Remove the item at the specified index
-            //renderCart(); // Re-render the cart
+            // Close the modal when the user clicks on the close button
+            closeModalButton.onclick = function () {
+                console.log("close modal");
+                modal.style.display = "none";
+                searchInput.focus();
+                searchInput.click();
+            };
+
+            // Close the modal when the user clicks outside the modal
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    searchInput.focus();
+                    searchInput.click();
+                }
+            };
         }
 
 
+        document.addEventListener('click', function (event) {
+            const target = event.target;
 
-        document.addEventListener("keydown", function (event) {
-            // Check if the Shift key is pressed along with another key
-            if (event.shiftKey) {
-                console.log("clicked");
-                switch (event.key) {
-                    case "D": // Shift + D for Doctors Booking
-                        event.preventDefault(); // Prevent default action
-                        window.location.href = "doctorsBooking.html";
-                        break;
-                    case "T": // Shift + L for Lab Test Booking
-                        event.preventDefault(); // Prevent default action
-                        window.location.href = "labtestBooking.html";
-                        break;
-                    case "R": // Shift + T for Report Transfer
-                        event.preventDefault(); // Prevent default action
-                        window.location.href = "reportTransfer.html";
-                        break;
-                    case "H": // Shift + T for Report Transfer
-                        event.preventDefault(); // Prevent default action
-                        window.location.href = "dashboard.html";
-                        break;
-                    default:
-                        break;
+            // Check if the target or any of its parents has the class 'collapse-toggle'
+            if (target.closest('.collapse-toggle')) {
+                const collapsibleHeader = target.closest('.collapsible-header');
+                const collapsibleBody = collapsibleHeader.nextElementSibling;
+
+                // Toggle active class on the collapsible body
+                if (collapsibleBody) {
+                    collapsibleBody.classList.toggle('active');
+                    collapsibleBody.style.display = collapsibleBody.style.display === 'block' ? 'none' : 'block';
+                }
+
+                // Toggle rotate class on the icon
+                const icon = collapsibleHeader.querySelector('.collapse-toggle svg');
+                if (icon) {
+                    icon.classList.toggle('rotate');
                 }
             }
         });
 
+
+
+
+        function createCollapsible(content, label) {
+            const splitIndex = content.indexOf('?') + 1;
+            if (splitIndex !== -1) {
+                const header = content.substring(0, splitIndex);
+                const body = content.substring(splitIndex).trim();
+                return `
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <div class="collapsible-header-name">
+                        <i class="fas fa-file-alt"></i>${header}
+                    </div>
+                    <span class="collapse-toggle">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                </div>
+                <div class="collapsible-body">${body}</div>
+            </div>
+        `;
+            }
+        }
+
+        function createTestDetailsList(testDetails) {
+            return testDetails.map(test => {
+                if (test.TEST_TYPE === 'Profile' && test.NestedDetails) {
+                    return `
+                <li class="collapsible">
+                    <div class="collapsible-header" style="padding-left:0">
+                       <span><span class="listBullet" class="listBullet"> &#x2022;</span > ${test.TEST_NAME}</span>
+                        <span class="collapse-toggle"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <ul class="collapsible-body">
+                        ${createTestDetailsList(test.NestedDetails)}
+                    </ul>
+                </li>
+            `;
+                } else {
+                    return `
+                <li class="collapsible"><span class="listBullet"> &#x2022;</span> ${test.TEST_NAME}</li>
+            `;
+                }
+            }).join('');
+        }
+
+        function createInitialCollapsible(headerName, bodyContent) {
+            return `
+        <li class="collapsible">
+            <div class="collapsible-header">
+                ${headerName}
+                <span class="collapse-toggle"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <ul class="collapsible-body">
+                ${bodyContent}
+            </ul>
+        </li>
+    `;
+        }
     </script>
 </body>
 

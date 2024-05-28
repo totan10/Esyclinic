@@ -270,14 +270,14 @@
             padding: 20px;
             border: 1px solid #888;
             width: 90%;
-            max-height: 100%;
+            /* max-height: 100%; */
 
             animation: slideIn 0.5s ease;
             border-radius: 10px;
         }
 
         .test-header {
-            background-color: #c5d1dd;
+            background-color: #DCF0F7;
             padding: 20px;
             border-radius: 10px;
         }
@@ -325,7 +325,7 @@
 
         .qa-section {
             margin-top: 20px;
-            background-color: #c5d1dd;
+            background-color: #DCF0F7;
         }
 
         .collapsible {
@@ -383,7 +383,9 @@
         .collapsible-body {
             display: none;
         }
-
+        .listBullet{
+            font-size: x-large;
+        }
         .collapsible.active .collapsible-body {
             display: block;
         }
@@ -415,7 +417,10 @@
             cursor: pointer;
         }
 
-
+        .parameter-list{
+            list-style-type: none;
+            background-color: #DCF0F7;
+        }
         @keyframes slideIn {
             from {
                 transform: translateY(-50px);
@@ -545,6 +550,7 @@
 
         .cart-container {
             width: 90%;
+            min-height: 70vh;
             margin: 0 auto;
             margin-top: 100px;
             background-color: #fff;
@@ -705,9 +711,9 @@
         }
 
         .booking-form {
-            margin-top: 120px;
-            margin-left: 10%;
-            padding: 30px;
+            margin-top: 100px;
+            margin-left: 15%;
+            padding: 20px;
             border: 1px solid #ccc;
             border-radius: 10px;
             background-color: #fff;
@@ -716,6 +722,7 @@
         }
 
         .booking-form h3 {
+            margin-top: 0;
             font-size: (1.3rem + .6vw);
             font-weight: 500;
         }
@@ -730,6 +737,7 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: large;
             transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         }
 
@@ -748,6 +756,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: large;
             transition: background-color 0.15s ease-in-out;
             width: 150px;
         }
@@ -765,6 +774,7 @@
             border-radius: 5px;
             cursor: pointer;
             width: 150px;
+            font-size: large;
             transition: background-color 0.15s ease-in-out;
         }
 
@@ -1039,14 +1049,14 @@
                     <option value="Female">Female</option>
                     <option value="Other">Other</option>
                 </select>
-                <input type="text" id="patientAddress" autocomplete="off" placeholder="Your Address" required />
+                <input type="text" id="patientAddress" autocomplete="off" placeholder="Your Address*" required />
                 <select id="M_STS">
                     <option value="">Marital Status</option>
                     <option value="Married">Married</option>
                     <option value="Unmarried">Unmarried</option>
                 </select>
                 <input type="number" id="patientAge" autocomplete="off" placeholder="Your Age*" required />
-                <input type="text" id="advicedBy" autocomplete="off" placeholder="Advised By" />
+                <input type="text" id="advicedBy" autocomplete="off" placeholder="Advised By"/>
                 <small id="advisorError" class="text-danger"></small>
                 <div class="buttonContainer">
                     <input type="submit" value="Proceed" />
@@ -1283,7 +1293,7 @@
         function openModal(doctorDetails) {
             const modal = document.getElementById("detailsModal");
             const modalContent = document.getElementById("modalDetailsContent");
-            const closeModalButton = document.querySelector(".modal .close");
+            const closeModalButton = document.querySelector("#detailsModal .close");
             const testName = doctorDetails.TEST_NAME ? doctorDetails.TEST_NAME : doctorDetails.DASH_NAME;
             const testDesc = doctorDetails.TEST_DESC ? doctorDetails.TEST_DESC : doctorDetails.DESCRIPTION;
             const testKnownAs = doctorDetails.KNOWN_AS ? doctorDetails.KNOWN_AS : doctorDetails.DASH_SECTION_NAME;
@@ -1299,6 +1309,7 @@
             <h3>Test Overview</h3>
             <p>${testDesc}</p>
         </div>
+        <h3 style="font-weight:600;">Test Included: ${doctorDetails.TOT_TEST} Test / Parameters</h3>        
         <div class="test-parameter-details">
             <h3>Test/Parameter Details</h3>
             <ul class="parameter-list">
@@ -1333,6 +1344,7 @@
 
             // Close the modal when the user clicks on the close button
             closeModalButton.onclick = function () {
+                console.log("close modal");
                 modal.style.display = "none";
                 searchInput.focus();
                 searchInput.click();
@@ -1397,7 +1409,7 @@
                     return `
                 <li class="collapsible">
                     <div class="collapsible-header" style="padding-left:0">
-                        ${test.TEST_NAME}
+                       <span><span class="listBullet" class="listBullet"> &#x2022;</span > ${test.TEST_NAME}</span>
                         <span class="collapse-toggle"><i class="fas fa-chevron-down"></i></span>
                     </div>
                     <ul class="collapsible-body">
@@ -1407,7 +1419,7 @@
             `;
                 } else {
                     return `
-                <li class="collapsible">${test.TEST_NAME}</li>
+                <li class="collapsible"><span class="listBullet"> &#x2022;</span> ${test.TEST_NAME}</li>
             `;
                 }
             }).join('');
@@ -1756,7 +1768,7 @@
         }
         // Function to check if a string contains only alphabets
         function isValidName(name) {
-            return /^[a-zA-Z]+$/.test(name);
+            return /^[A-Za-z\s]+$/.test(name);
         }
 
         // Function to check if a mobile number is valid (exactly 10 digits)
@@ -1975,7 +1987,7 @@
                         MOBILE: patientMobile,
                         PHARMA_ID: userData.PHARMA_ID ? userData.PHARMA_ID : null,
                         PHARMA_NAME: userData.PHARMA_NAME,
-                        ADVICED_BY: advisedBy,
+                        ADVICED_BY: advisedBy?advisedBy:"",
                     };
                     console.log(patientDetails);
                     patientData = patientDetails;
@@ -2002,7 +2014,7 @@
             modal.style.display = "block";
             const bookingContainer = document.querySelector(".booking-container");
             bookingContainer.style.display = "none";
-           
+
             // Close modal when the close button or outside modal area is clicked
             const closeButton = document.querySelector(".close");
             closeButton.onclick = function () {
@@ -2125,33 +2137,27 @@
         function bookTest() {
             console.log(patientData);
             const patientDetails = patientData;
+            const now = new Date();
+            const formattedDate = dbformatDate(now)
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
             let tests = [];
             for (let i = 0; i < cartItems.length; i++) {
                 // Create a new Date object
-                const now = new Date();
-                const formattedDate = dbformatDate(now)
-                const hours = now.getHours();
-                const minutes = now.getMinutes();
-                const seconds = now.getSeconds();
-                const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
                 const cartItem = cartItems[i];
                 const PKG_COST = cartItem.COST - cartItem.COST * cartItem.DISCOUNT / 100;
                 if (cartItem.DASH_TYPE) {
                     const testdata = {
-                        PKG_ID: cartItem ? cartItem.DASH_ID : null,
-                        PKG_NAME: cartItem ? cartItem.DASH_NAME : null,
+                        PKG_ID: cartItem.DASH_ID ? cartItem.DASH_ID : cartItem.PKG_ID,
+                        PKG_NAME: cartItem.DASH_NAME ? cartItem.DASH_NAME : cartItem.TEST_NAME,
                         PKG_TYPE: cartItem ? cartItem.DASH_TYPE : null,
-                        //PHARMA_ID: patientDetails.PHARMA_ID,
-                        BOOK_DATE: formattedDate,
-                        BOOK_TIME: formattedTime,
                         SLOT_DATE: patientDetails.BOOKING_DT,
                         FROM: patientDetails.FROM,
                         TO: patientDetails.TO,
-                        PATIENT_ID: patientDetails.PATIENT_ID,
-                        PATIENT_NAME: patientDetails.PATIENT_NAME,
-                        ADVICED_BY: patientDetails.ADVICED_BY,
                         PRESCRIPTION_URL: cartItem ? cartItem.PRESCRIPTION : null,
                         HOME_COLLECT: cartItem ? cartItem.HOME_COLLECT : null,
                         PKG_COST: PKG_COST
@@ -2165,15 +2171,9 @@
                         TEST_ID: cartItem ? cartItem.TEST_ID : null,
                         TEST_NAME: cartItem ? cartItem.TEST_NAME : null,
                         CATEGORY: cartItem ? cartItem.TEST_CATG : null,
-                        //PHARMA_ID: patientDetails.PHARMA_ID,
-                        BOOK_DATE: formattedDate,
-                        BOOK_TIME: formattedTime,
                         SLOT_DATE: patientDetails.BOOKING_DT,
                         FROM: patientDetails.FROM,
                         TO: patientDetails.TO,
-                        PATIENT_ID: patientDetails.PATIENT_ID,
-                        PATIENT_NAME: patientDetails.PATIENT_NAME,
-                        ADVICED_BY: patientDetails.ADVICED_BY,
                         PRESCRIPTION_URL: cartItem ? cartItem.PRESCRIPTION : null,
                         HOME_COLLECT: cartItem ? cartItem.HOME_COLLECT : null,
                         COST: PKG_COST
@@ -2189,6 +2189,13 @@
             const booking_data = [
                 {
                     PHARMA_ID: patientDetails.PHARMA_ID,
+                    BOOK_DATE: formattedDate,
+                    BOOK_TIME: formattedTime,
+                    BOOK_BY_ID: userData ? userData.CLINIC_MOBILE : null,
+                    BOOK_BY_NAME: userData ? userData.PHARMA_NAME : null,
+                    PATIENT_ID: patientDetails.PATIENT_ID,
+                    PATIENT_NAME: patientDetails.PATIENT_NAME,
+                    ADVICED_BY: patientDetails.ADVICED_BY,
                     DETAILS: tests
                 }
             ]
@@ -2237,7 +2244,7 @@
         function closePopup(button) {
             const popup = button.parentElement;
             document.body.removeChild(popup);
-            window.location.href='/'
+            window.location.href = '/'
 
         }
 

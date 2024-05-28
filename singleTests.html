@@ -272,14 +272,14 @@
             padding: 20px;
             border: 1px solid #888;
             width: 90%;
-            max-height: 100%;
+            /* max-height: 100%; */
 
             animation: slideIn 0.5s ease;
             border-radius: 10px;
         }
 
         .test-header {
-            background-color: #c5d1dd;
+            background-color: #DCF0F7;
             padding: 20px;
             border-radius: 10px;
         }
@@ -327,7 +327,7 @@
 
         .qa-section {
             margin-top: 20px;
-            background-color: #c5d1dd;
+            background-color: #DCF0F7;
         }
 
         .collapsible {
@@ -361,7 +361,7 @@
         }
 
         /* .collapsible-header:hover {
-            background-color: #b0c7e1;
+            background-color: white;
         } */
 
         .collapsible-body {
@@ -384,6 +384,10 @@
 
         .collapsible-body {
             display: none;
+        }
+
+        .listBullet {
+            font-size: x-large;
         }
 
         .collapsible.active .collapsible-body {
@@ -417,6 +421,10 @@
             cursor: pointer;
         }
 
+        .parameter-list {
+            list-style-type: none;
+            background-color: #DCF0F7;
+        }
 
         @keyframes slideIn {
             from {
@@ -1091,7 +1099,7 @@
                 container.appendChild(testItem);
                 const testDetails = document.querySelector('.test-details-btn');
                 testDetails.addEventListener('click', () => {
-
+                    openModal(data)
                 });
             });
 
@@ -1128,12 +1136,11 @@
         }
 
 
-        // Function to open the modal and populate it with doctor details
-        function openModal(doctorDetails) {
-
+         // Function to open the modal and populate it with doctor details
+         function openModal(doctorDetails) {
             const modal = document.getElementById("detailsModal");
             const modalContent = document.getElementById("modalDetailsContent");
-            const closeModalButton = document.querySelector(".modal .close");
+            const closeModalButton = document.querySelector("#detailsModal .close");
             const testName = doctorDetails.TEST_NAME ? doctorDetails.TEST_NAME : doctorDetails.DASH_NAME;
             const testDesc = doctorDetails.TEST_DESC ? doctorDetails.TEST_DESC : doctorDetails.DESCRIPTION;
             const testKnownAs = doctorDetails.KNOWN_AS ? doctorDetails.KNOWN_AS : doctorDetails.DASH_SECTION_NAME;
@@ -1141,42 +1148,50 @@
 
             // Populate modal content
             modalContent.innerHTML = `
-                <div class="test-header">
-                <h2>${testName}</h2>
-                <p class="known-as">${testKnownAs}</p>
-                </div>
-                <div class="test-overview">
-                <h3>Test Overview</h3>
-                <p>${testDesc}</p>
-                </div>
-                <div class="test-instructions">
-                <h3>Test Instructions</h3>
-                <div class="instruction-grid">
+        <div class="test-header">
+            <h2>${testName}</h2>
+            <p class="known-as">${testKnownAs}</p>
+        </div>
+        <div class="test-overview">
+            <h3>Test Overview</h3>
+            <p>${testDesc}</p>
+        </div>
+        <h3 style="font-weight:600;">Test Included: ${doctorDetails.TOT_TEST} Test / Parameters</h3>        
+        <div class="test-parameter-details">
+            <h3>Test/Parameter Details</h3>
+            <ul class="parameter-list">
+                ${createInitialCollapsible(testName, createTestDetailsList(doctorDetails.TestDetails))}
+            </ul>
+        </div>
+        <div class="test-instructions">
+            <h3>Test Instructions</h3>
+            <div class="instruction-grid">
                 <div class="instruction-item"><span>Fasting:</span> ${doctorDetails.FASTING}</div>
                 <div class="instruction-item"><span>Gender Type:</span> ${doctorDetails.GENDER_TYPE}</div>
                 <div class="instruction-item"><span>Age Type:</span> ${doctorDetails.AGE_TYPE}</div>
                 <div class="instruction-item"><span>Report Time:</span> ${doctorDetails.REPORT_TIME}</div>
                 <div class="instruction-item"><span>Prescription Required:</span> ${doctorDetails.PRESCRIPTION}</div>
                 <div class="instruction-item"><span>ID Proof Required:</span> ${idProof}</div>
-                </div>
-                </div>
-                <div class="qa-section">
-                <h3>Test Related Information:</h3>
-                <h5>Helps you know your test better</h5>
-                ${doctorDetails.QA1 ? createCollapsible(doctorDetails.QA1, "QA1") : ''}
-                ${doctorDetails.QA2 ? createCollapsible(doctorDetails.QA2, "QA2") : ''}
-                ${doctorDetails.QA3 ? createCollapsible(doctorDetails.QA3, "QA3") : ''}
-                ${doctorDetails.QA4 ? createCollapsible(doctorDetails.QA4, "QA4") : ''}
-                ${doctorDetails.QA5 ? createCollapsible(doctorDetails.QA5, "QA5") : ''}
-                ${doctorDetails.QA6 ? createCollapsible(doctorDetails.QA6, "QA6") : ''}
-                </div>
-                `;
+            </div>
+        </div>
+        <div class="qa-section">
+            <h3>Test Related Information:</h3>
+            <h5>Helps you know your test better</h5>
+            ${doctorDetails.QA1 ? createCollapsible(doctorDetails.QA1, "QA1") : ''}
+            ${doctorDetails.QA2 ? createCollapsible(doctorDetails.QA2, "QA2") : ''}
+            ${doctorDetails.QA3 ? createCollapsible(doctorDetails.QA3, "QA3") : ''}
+            ${doctorDetails.QA4 ? createCollapsible(doctorDetails.QA4, "QA4") : ''}
+            ${doctorDetails.QA5 ? createCollapsible(doctorDetails.QA5, "QA5") : ''}
+            ${doctorDetails.QA6 ? createCollapsible(doctorDetails.QA6, "QA6") : ''}
+        </div>
+    `;
 
             // Display the modal
             modal.style.display = "block";
 
             // Close the modal when the user clicks on the close button
             closeModalButton.onclick = function () {
+                console.log("close modal");
                 modal.style.display = "none";
                 searchInput.focus();
                 searchInput.click();
@@ -1192,7 +1207,7 @@
             };
         }
 
-
+       
         document.addEventListener('click', function (event) {
             const target = event.target;
 
@@ -1217,29 +1232,64 @@
 
 
 
+
         function createCollapsible(content, label) {
             const splitIndex = content.indexOf('?') + 1;
             if (splitIndex !== -1) {
-                const header = content.substring(0, splitIndex + 1);
-                const body = content.substring(splitIndex + 1).trim();
+                const header = content.substring(0, splitIndex);
+                const body = content.substring(splitIndex).trim();
                 return `
-                <div class="collapsible">
+            <div class="collapsible">
                 <div class="collapsible-header">
                     <div class="collapsible-header-name">
                         <i class="fas fa-file-alt"></i>${header}
                     </div>
-
-                    
                     <span class="collapse-toggle">
-                        <i class="fas fa-chevron-up"></i>
+                        <i class="fas fa-chevron-down"></i>
                     </span>
                 </div>
                 <div class="collapsible-body">${body}</div>
-                </div>
-                `;
+            </div>
+        `;
             }
-
         }
+
+        function createTestDetailsList(testDetails) {
+            return testDetails.map(test => {
+                if (test.TEST_TYPE === 'Profile' && test.NestedDetails) {
+                    return `
+                <li class="collapsible">
+                    <div class="collapsible-header" style="padding-left:0">
+                       <span><span class="listBullet" class="listBullet"> &#x2022;</span > ${test.TEST_NAME}</span>
+                        <span class="collapse-toggle"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <ul class="collapsible-body">
+                        ${createTestDetailsList(test.NestedDetails)}
+                    </ul>
+                </li>
+            `;
+                } else {
+                    return `
+                <li class="collapsible"><span class="listBullet"> &#x2022;</span> ${test.TEST_NAME}</li>
+            `;
+                }
+            }).join('');
+        }
+
+        function createInitialCollapsible(headerName, bodyContent) {
+            return `
+        <li class="collapsible">
+            <div class="collapsible-header">
+                ${headerName}
+                <span class="collapse-toggle"><i class="fas fa-chevron-down"></i></span>
+            </div>
+            <ul class="collapsible-body">
+                ${bodyContent}
+            </ul>
+        </li>
+    `;
+        }
+
 
     </script>
 </body>
