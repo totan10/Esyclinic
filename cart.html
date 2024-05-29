@@ -1542,6 +1542,7 @@
             let bagTotal = 0;
 
             if (cart.length === 0) {
+                totalCostElem.style.display='none';
                 container.style.height='400px';
                 // container.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
                 // Load animation data
@@ -1558,6 +1559,7 @@
                 // Resize animation
                 
             } else {
+                totalCostElem.style.display='block';
                 cart.forEach((item, index) => {
                     const itemDiv = document.createElement('div');
                     itemDiv.classList.add('cart-item');
