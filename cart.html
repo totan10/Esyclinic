@@ -383,9 +383,11 @@
         .collapsible-body {
             display: none;
         }
-        .listBullet{
+
+        .listBullet {
             font-size: x-large;
         }
+
         .collapsible.active .collapsible-body {
             display: block;
         }
@@ -417,10 +419,11 @@
             cursor: pointer;
         }
 
-        .parameter-list{
+        .parameter-list {
             list-style-type: none;
             background-color: #DCF0F7;
         }
+
         @keyframes slideIn {
             from {
                 transform: translateY(-50px);
@@ -1056,7 +1059,7 @@
                     <option value="Unmarried">Unmarried</option>
                 </select>
                 <input type="number" id="patientAge" autocomplete="off" placeholder="Your Age*" required />
-                <input type="text" id="advicedBy" autocomplete="off" placeholder="Advised By"/>
+                <input type="text" id="advicedBy" autocomplete="off" placeholder="Advised By" />
                 <small id="advisorError" class="text-danger"></small>
                 <div class="buttonContainer">
                     <input type="submit" value="Proceed" />
@@ -1101,6 +1104,8 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.8/lottie.min.js"></script>
+
     <script>
         let userData = null;
         const searchInput = document.getElementById("searchInput");
@@ -1537,7 +1542,21 @@
             let bagTotal = 0;
 
             if (cart.length === 0) {
-                container.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
+                container.style.height='400px';
+                // container.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
+                // Load animation data
+                var animationData = {
+                    container: container,
+                    renderer: 'svg',
+                    loop: true,
+                    autoplay: true,
+                    path: 'emptycart.json' // Path to your JSON animation file
+                };
+
+                // Set up Lottie animation
+                var anim = lottie.loadAnimation(animationData);
+                // Resize animation
+                
             } else {
                 cart.forEach((item, index) => {
                     const itemDiv = document.createElement('div');
@@ -1987,7 +2006,7 @@
                         MOBILE: patientMobile,
                         PHARMA_ID: userData.PHARMA_ID ? userData.PHARMA_ID : null,
                         PHARMA_NAME: userData.PHARMA_NAME,
-                        ADVICED_BY: advisedBy?advisedBy:"",
+                        ADVICED_BY: advisedBy ? advisedBy : "",
                     };
                     console.log(patientDetails);
                     patientData = patientDetails;
@@ -2149,7 +2168,9 @@
                 // Create a new Date object
 
                 const cartItem = cartItems[i];
+
                 const PKG_COST = cartItem.COST - cartItem.COST * cartItem.DISCOUNT / 100;
+                console.log(PKG_COST);
                 if (cartItem.DASH_TYPE) {
                     const testdata = {
                         PKG_ID: cartItem.DASH_ID ? cartItem.DASH_ID : cartItem.PKG_ID,
@@ -2178,7 +2199,7 @@
                         HOME_COLLECT: cartItem ? cartItem.HOME_COLLECT : null,
                         COST: PKG_COST
                     }
-
+                    console.log(testdata.HOME_COLLECT);
 
                     tests.push(testdata)
                 }

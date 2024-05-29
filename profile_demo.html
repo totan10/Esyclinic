@@ -1,170 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bill Receipt</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .receipt {
-            width: 80mm;
-            margin: 0 auto;
-            padding: 10px;
-            font-size: 12px;
-            background-color: #fff;
-        }
-        .receipt h2 {
-            text-align: center;
-            margin: 10px 0;
-            font-size: 14px;
-        }
-        .receipt p {
-            margin: 4px 0;
-        }
-        .receipt table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        .receipt th, .receipt td {
-            padding: 5px;
-            text-align: left;
-            font-size: 10px;
-        }
-        .receipt th {
-            border-bottom: 1px solid #000;
-        }
-        .receipt .total-row td {
-            border-top: 2px dashed #000;
-            font-weight: bold;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 10px;
-            font-size: 10px;
-        }
-        .bold {
-            font-weight: bold;
-        }
-    </style>
+    <title>Upload Prescription</title>
 </head>
-<body>
-    <div id="receipt" class="receipt">
-        <h2>Pharmacy Bill Receipt</h2>
-        <p><strong>Pharmacy Name:</strong> <span id="pharmacyName"></span></p>
-        <p><strong>Address:</strong> <span id="pharmacyAddress"></span></p>
-        <p><strong>Patient Name:</strong> <span id="patientName"></span></p>
-        <p><strong>Date:</strong> <span id="bookingDate"></span></p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Qty</th>
-                    <th>Price</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody id="detailsBody">
-                <!-- Details will be inserted here dynamically -->
-            </tbody>
-            <tfoot>
-                <tr class="total-row">
-                    <td colspan="3" class="text-center">Total</td>
-                    <td id="totalAmount"></td>
-                </tr>
-            </tfoot>
-        </table>
-        <p class="footer">Thank you for your visit!</p>
-    </div>
-    <button onclick="generatePDF()">Download PDF</button>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<body>
+    <input type="file" id="prescriptionFile">
+    <button onclick="uploadPrescription()">Upload Prescription</button>
+
     <script>
-        const data = {
-            "PHARMA_NAME": "XYZ Pharmacy",
-            "ADDRESS": "123 Main Street, Bangalore, Karnataka",
-            "Patient_Name": "John Doe",
-            "BOOKING_DT": "2023-05-20",
-            "DETAILS": [
+        // Function to create sample FormData and send it to the server
+        async function uploadPrescription() {
+            // Create a new FormData object
+            let formData = new FormData();
+
+            // Append data to the FormData object
+            formData.append('ADVICE_DR', 'Dr. Smith');
+            formData.append('PATIENT_ID', '123456');
+            formData.append('MOBILE', '9876543210');
+            formData.append('PHARMA_ID', '654321');
+            formData.append('MESSAGE', 'Take medication twice a day');
+            const data = [
                 {
-                    "PKG_NAME": "Basic Health Package",
-                    "TEST_COST": 500,
-                    "QTY": 1
-                },
-                {
-                    "PKG_NAME": "Advanced Health Package",
-                    "TEST_COST": 1000,
-                    "QTY": 1
+                    "PHARMA_ID": 8,
+                    "BOOK_DATE": "20240528",
+                    "BOOK_TIME": "13:13:16",
+                    "BOOK_BY_ID": "8170087168",
+                    "BOOK_BY_NAME": "SURAKSHA CLINIC",
+                    "PATIENT_ID": "7001930641",
+                    "PATIENT_NAME": "Totan Debnath",
+                    "ADVICED_BY": "",
+                    "PRESCRIPTION_URL": "file:///storage/emulated/0/Android/data/com.easyhealthb2b/files/Pictures/e22a4fd3-6688-4255-ac48-239f424a1b21.jpg",
+                    "MESSAGE": "this is tinku",
+                    "MOBILE_NO": 7001930641,
+                    "DETAILS": [
+                        {
+                            "TEST_ID": 1020,
+                            "TEST_NAME": "Hb%",
+                            "CATEGORY": "",
+                            "SLOT_DATE": "20240528",
+                            "FROM": "6AM",
+                            "TO": "7AM",
+                            "HOME_COLLECT": "TRUE",
+                            "COST": 100
+                        },
+                        {
+                            "TEST_ID": 100,
+                            "TEST_NAME": "MP (THICK & THIN)",
+                            "CATEGORY": "",
+                            "SLOT_DATE": "20240528",
+                            "FROM": "6AM",
+                            "TO": "7AM",
+                            "HOME_COLLECT": "TRUE",
+                            "COST": 100
+                        },
+                        {
+                            "TEST_ID": 10,
+                            "TEST_NAME": "BICARBONATE (HCO3-)",
+                            "CATEGORY": "",
+                            "SLOT_DATE": "20240528",
+                            "FROM": "6AM",
+                            "TO": "7AM",
+                            "HOME_COLLECT": "TRUE",
+                            "COST": 500
+                        }
+                    ]
                 }
             ]
-        };
 
-        document.getElementById('pharmacyName').innerText = data.PHARMA_NAME;
-        document.getElementById('pharmacyAddress').innerText = data.ADDRESS;
-        document.getElementById('patientName').innerText = data.Patient_Name;
-        document.getElementById('bookingDate').innerText = data.BOOKING_DT;
+            formData.append('BOOK_TEST', data);
+            // Get the file input element
+            let fileInput = document.getElementById('prescriptionFile');
+            if (fileInput.files.length > 0) {
+                formData.append('file', fileInput.files[0]);
+            } else {
+                console.error('No file selected!');
+                return;
+            }
+            console.log(formData);
+            for (const [key, value] of formData) {
+                console.log(`${key}: ${value}`)
+            }
+            // Send the FormData using fetch
+            try {
+                let response = await fetch('http://yourapiurl/upprescription', {
+                    method: 'POST',
+                    body: formData,
+                });
 
-        const detailsBody = document.getElementById('detailsBody');
-        let totalAmount = 0;
-
-        data.DETAILS.forEach(detail => {
-            const row = document.createElement('tr');
-
-            const itemNameCell = document.createElement('td');
-            itemNameCell.innerText = detail.PKG_NAME;
-            row.appendChild(itemNameCell);
-
-            const qtyCell = document.createElement('td');
-            qtyCell.innerText = detail.QTY;
-            row.appendChild(qtyCell);
-
-            const priceCell = document.createElement('td');
-            priceCell.innerText = detail.TEST_COST;
-            row.appendChild(priceCell);
-
-            const totalCell = document.createElement('td');
-            const itemTotal = detail.QTY * detail.TEST_COST;
-            totalCell.innerText = itemTotal;
-            row.appendChild(totalCell);
-
-            totalAmount += itemTotal;
-            detailsBody.appendChild(row);
-        });
-
-        document.getElementById('totalAmount').innerText = totalAmount;
-
-        function generatePDF() {
-            const element = document.getElementById('receipt');
-            html2pdf().from(element).set({
-                margin: 0,
-                filename: 'bill_receipt.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: [80, 297], orientation: 'portrait' }
-            }).toPdf()
-          .output("datauristring")
-          .then(function (pdfDataUri) {
-            const pdfWindow = window.open();
-            pdfWindow.document.write(
-              '<iframe width="100%" height="100%" src="' +
-              pdfDataUri +
-              '" frameborder="0"></iframe>'
-            );
-            pdfWindow.document.close();
-
-            // Automatically focus the new window/tab
-
-            pdfWindow.focus();
-            //location.reload();
-          });
+                let result = await response.json();
+                console.log(result);
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
+
+        // Event listener for button click (optional, can be used instead of inline onclick)
+        // document.getElementById('uploadButton').addEventListener('click', uploadPrescription);
+
     </script>
 </body>
+
 </html>
