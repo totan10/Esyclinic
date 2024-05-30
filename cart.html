@@ -726,8 +726,9 @@
 
         .booking-form h3 {
             margin-top: 0;
+            margin-bottom: 10px;
             font-size: (1.3rem + .6vw);
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .booking-form input[type="text"],
@@ -740,12 +741,12 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: large;
+            font-size: medium;
             transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         }
 
         .buttonContainer {
-            margin-top: 20px;
+            margin-top: 10px;
             display: flex;
             flex-direction: row;
             justify-content: space-evenly;
@@ -1033,7 +1034,7 @@
     <div class="container booking-container">
         <!-- Appointment Booking Form -->
         <div class="booking-form">
-            <h3 class="mb-4">Book Appointment</h3>
+            <h3 class="mb-4">Book Test</h3>
             <form id="appointmentForm">
                 <input type="tel" id="patientMobile" placeholder="Your Mobile Number*" pattern="[6-9]{1}[0-9]{9}"
                     maxlength="10" required />
@@ -1061,6 +1062,7 @@
                 <input type="number" id="patientAge" autocomplete="off" placeholder="Your Age*" required />
                 <input type="text" id="advicedBy" autocomplete="off" placeholder="Advised By" />
                 <small id="advisorError" class="text-danger"></small>
+                <input type="text" id="drmessage" autocomplete="off" placeholder="Doctor Message" />
                 <div class="buttonContainer">
                     <input type="submit" value="Proceed" />
                     <button type="button" id="cancelButton" onclick="closeForm()">
@@ -1941,6 +1943,7 @@
                 const patientMobile = document.getElementById("patientMobile").value;
                 const patientGender = document.getElementById("patientGender").value;
                 const advisedBy = document.getElementById('advicedBy').value;
+                const drmessage= document.getElementById('drmessage').value;
 
                 const patientAge = parseInt(
                     document.getElementById("patientAge").value
@@ -2009,6 +2012,8 @@
                         PHARMA_ID: userData.PHARMA_ID ? userData.PHARMA_ID : null,
                         PHARMA_NAME: userData.PHARMA_NAME,
                         ADVICED_BY: advisedBy ? advisedBy : "",
+                        Message:drmessage?drmessage:"",
+
                     };
                     console.log(patientDetails);
                     patientData = patientDetails;
@@ -2158,12 +2163,12 @@
         function bookTest() {
             console.log(patientData);
             const patientDetails = patientData;
-            const now = new Date();
-            const formattedDate = dbformatDate(now)
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const seconds = now.getSeconds();
-            const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            // const now = new Date();
+            // const formattedDate = dbformatDate(now)
+            // const hours = now.getHours();
+            // const minutes = now.getMinutes();
+            // const seconds = now.getSeconds();
+            // const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
             let tests = [];
             for (let i = 0; i < cartItems.length; i++) {
@@ -2181,7 +2186,7 @@
                         SLOT_DATE: patientDetails.BOOKING_DT,
                         FROM: patientDetails.FROM,
                         TO: patientDetails.TO,
-                        PRESCRIPTION_URL: cartItem ? cartItem.PRESCRIPTION : null,
+                        // PRESCRIPTION_URL: cartItem ? cartItem.PRESCRIPTION : null,
                         HOME_COLLECT: cartItem ? cartItem.HOME_COLLECT : null,
                         PKG_COST: PKG_COST
                     }
@@ -2197,7 +2202,7 @@
                         SLOT_DATE: patientDetails.BOOKING_DT,
                         FROM: patientDetails.FROM,
                         TO: patientDetails.TO,
-                        PRESCRIPTION_URL: cartItem ? cartItem.PRESCRIPTION : null,
+                        // PRESCRIPTION_URL: cartItem ? cartItem.PRESCRIPTION : null,
                         HOME_COLLECT: cartItem ? cartItem.HOME_COLLECT : null,
                         COST: PKG_COST
                     }
@@ -2212,29 +2217,32 @@
             const booking_data = [
                 {
                     PHARMA_ID: patientDetails.PHARMA_ID,
-                    BOOK_DATE: formattedDate,
-                    BOOK_TIME: formattedTime,
+                    // BOOK_DATE: formattedDate,
+                    // BOOK_TIME: formattedTime,
                     BOOK_BY_ID: userData ? userData.CLINIC_MOBILE : null,
                     BOOK_BY_NAME: userData ? userData.PHARMA_NAME : null,
                     PATIENT_ID: patientDetails.PATIENT_ID,
                     PATIENT_NAME: patientDetails.PATIENT_NAME,
                     ADVICED_BY: patientDetails.ADVICED_BY,
+                    MESSAGE:patientDetails.Message,
+                    MOBILE_NO:patientDetails.MOBILE,
                     DETAILS: tests
                 }
             ]
+            const formData = new FormData();
+            formData.append('BOOK_TEST',JSON.stringify(booking_data))
             console.log(booking_data);
-            booking_confirm(booking_data)
+            console.log(formData);
+            booking_confirm(formData)
         }
 
         async function booking_confirm(booking_data) {
 
             const url = "https://easyhealths.com/api/booktest_dummy";
-            const params = {
-                BOOK_TEST: booking_data,
-            };
+            
 
             axios
-                .post(url, params)
+                .post(url, booking_data)
                 .then((response) => {
                     const data = response.data;
                     console.log(data);

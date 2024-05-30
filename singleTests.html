@@ -585,9 +585,43 @@
             /* justify-content: center; */
         }
 
+        @media (max-width: 1400px) {
+
+            .popular-tests-container {
+                grid-template-columns: repeat(5, 1fr);
+                justify-items: center;
+                /* Adjust for smaller screens */
+            }
+        }
+
+        @media (max-width: 1200px) {
+
+            .popular-tests-container {
+                grid-template-columns: repeat(4, 1fr);
+                /* Adjust for smaller screens */
+            }
+        }
+
+        @media (max-width: 970px) {
+
+            .popular-tests-container {
+                grid-template-columns: repeat(3, 1fr);
+                /* Adjust for smaller screens */
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .popular-tests-container {
+                grid-template-columns: repeat(2, 1fr);
+                /* Adjust for smaller screens */
+            }
+        }
+
         .test-item {
             background-color: #F2F2F2;
             padding: 10px;
+            width: 200px;
             border-radius: 10px;
             display: flex;
             flex-direction: column;
@@ -1136,8 +1170,8 @@
         }
 
 
-         // Function to open the modal and populate it with doctor details
-         function openModal(doctorDetails) {
+        // Function to open the modal and populate it with doctor details
+        function openModal(doctorDetails) {
             const modal = document.getElementById("detailsModal");
             const modalContent = document.getElementById("modalDetailsContent");
             const closeModalButton = document.querySelector("#detailsModal .close");
@@ -1207,7 +1241,7 @@
             };
         }
 
-       
+
         document.addEventListener('click', function (event) {
             const target = event.target;
 
