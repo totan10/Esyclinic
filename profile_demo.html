@@ -25,20 +25,21 @@
             font-family: 'Courier New', Courier, monospace;
         }
 
+        .clinic-info {
+            border-bottom: 1px solid #b8b5b5;
+        }
+
         .clinic-info,
-        .booking-info,
-        .patient-info,
         .test-details,
         .total-cost,
         .footer {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .clinic-info h2 {
             margin: 0;
             text-align: center;
             font-size: 1em;
-            border-bottom: 1px dashed #000;
             padding-bottom: 10px;
             color: #19bde6dc;
         }
@@ -65,10 +66,15 @@
             font-size: 0.6em;
         }
 
+        .test-details,
+        .footer {
+            border-top: 1px solid #b8b5b5;
+        }
+
         .test-details h3 {
             margin: 10px 0 5px;
             font-size: 0.8em;
-            border-bottom: 1px dashed #000;
+
             padding-bottom: 5px;
             color: #19bde6dc;
         }
@@ -98,7 +104,6 @@
         .footer {
             text-align: center;
             font-size: 0.8em;
-            border-top: 1px dotted #000;
             padding-top: 5px;
             margin-bottom: 0;
         }
@@ -124,7 +129,10 @@
             margin-bottom: 5px;
         }
 
-        @page {}
+        #info-container {
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
 </head>
 
@@ -467,30 +475,33 @@
             receipt.appendChild(clinicInfo);
 
 
-
+            const infoContainer = document.createElement('div');
+            infoContainer.id = 'info-container'
             // Booking Info
             const bookingInfo = document.createElement('div');
             bookingInfo.className = 'booking-info';
             bookingInfo.innerHTML = `
-        <p>Booking ID: ${data.BOOKING_ID}</p>
-        <p>Booking Date: ${data.BOOKING_DT}</p>
-        <p>Booking Time: ${data.BOOKING_TM}</p>
+            <p style="color:#19bde6dc;font-weight: 600;">BOOKING DETAILS</P>
+        <p><span style="color:grey;">Booking ID:</span><span style="color:#19bde6dc;"> ${data.BOOKING_ID}</span></p>
+        <p><span style="color:grey;">Booking Date:</span> ${data.BOOKING_DT}</p>
+        <p><span style="color:grey;">Booking Time:</span> ${data.BOOKING_TM}</p>
     `;
-            receipt.appendChild(bookingInfo);
 
             // Patient Info
             const patientInfo = document.createElement('div');
             patientInfo.className = 'patient-info';
             patientInfo.innerHTML = `
-        <p>Patient ID: ${data.PATIENT_ID}</p>
-        <p>Patient Name: ${data.Patient_Name}</p>
-        <p>Sex: ${data.SEX}</p>
-        <p>Age: ${data.AGE}</p>
-        <p>Mobile: ${data.MOBILE}</p>
-        <p>Advised By: ${data.ADVICED_BY}</p>
+        <p style="color:#19bde6dc;font-weight: 600;">PATIENT DETAILS</P>
+        <p><span style="color:grey;">Name:</span> ${data.Patient_Name}</p>
+        <p><span style="color:grey;">Gender:</span> ${data.SEX}</p>
+        <p><span style="color:grey;">Age:</span> ${data.AGE}</p>
+        <p><span style="color:grey;">Mobile:</span> ${data.MOBILE}</p>
+        <p><span style="color:grey;">Patient Address:</span> ${data.PATIENT_ADDRESS}</p>
     `;
-            receipt.appendChild(patientInfo);
+            infoContainer.appendChild(patientInfo);
+            infoContainer.appendChild(bookingInfo);
 
+            receipt.appendChild(infoContainer);
             // Test Details
             const testDetails = document.createElement('div');
             testDetails.className = 'test-details';
@@ -584,37 +595,37 @@
             }
 
             function generatePDF() {
-                const receiptWidth = receipt.offsetWidth;
-                const receiptHeight = receipt.offsetHeight + 30;
+                //     const receiptWidth = receipt.offsetWidth;
+                //     const receiptHeight = receipt.offsetHeight + 30;
 
-                html2pdf().from(receipt).set({
-                    margin: 0,
-                    image: { type: "jpeg", quality: 0.98 },
-                    filename: 'receipt.pdf',
-                    html2canvas: {
-                        scale: 1.5
-                    },
-                    jsPDF: {
-                        unit: 'px',
-                        format: [receiptWidth, receiptHeight]
-                    }
-                })
-                    .toPdf()
-                    .output("datauristring")
-                    .then(function (pdfDataUri) {
-                        const pdfWindow = window.open();
-                        pdfWindow.document.write(
-                            '<iframe width="100%" height="100%" src="' +
-                            pdfDataUri +
-                            '" frameborder="0"></iframe>'
-                        );
-                        pdfWindow.document.close();
+                //     html2pdf().from(receipt).set({
+                //         margin: 0,
+                //         image: { type: "jpeg", quality: 0.98 },
+                //         filename: 'receipt.pdf',
+                //         html2canvas: {
+                //             scale: 1.5
+                //         },
+                //         jsPDF: {
+                //             unit: 'px',
+                //             format: [receiptWidth, receiptHeight]
+                //         }
+                //     })
+                //         .toPdf()
+                //         .output("datauristring")
+                //         .then(function (pdfDataUri) {
+                //             const pdfWindow = window.open();
+                //             pdfWindow.document.write(
+                //                 '<iframe width="100%" height="100%" src="' +
+                //                 pdfDataUri +
+                //                 '" frameborder="0"></iframe>'
+                //             );
+                //             pdfWindow.document.close();
 
-                        // Automatically focus the new window/tab
+                //             // Automatically focus the new window/tab
 
-                        pdfWindow.focus();
-                        //location.reload();
-                    });
+                //             pdfWindow.focus();
+                //             //location.reload();
+                //         });
             }
         });
 

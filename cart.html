@@ -1001,20 +1001,21 @@
             font-family: 'Courier New', Courier, monospace;
         }
 
+        .clinic-info {
+            border-bottom: 1px solid #b8b5b5;
+        }
+
         .clinic-info,
-        .booking-info,
-        .patient-info,
         .test-details,
         .total-cost,
         .footer {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .clinic-info h2 {
             margin: 0;
             text-align: center;
             font-size: 1em;
-            border-bottom: 1px dashed #000;
             padding-bottom: 10px;
             color: #19bde6dc;
         }
@@ -1041,10 +1042,15 @@
             font-size: 0.6em;
         }
 
+        .test-details,
+        .footer {
+            border-top: 1px solid #b8b5b5;
+        }
+
         .test-details h3 {
             margin: 10px 0 5px;
             font-size: 0.8em;
-            border-bottom: 1px dashed #000;
+
             padding-bottom: 5px;
             color: #19bde6dc;
         }
@@ -1056,7 +1062,14 @@
 
         .test-item div {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+        }
+        .test-cost{
+            width: 30%;
+            text-align: right;
+        }
+        .test-name{
+            width: 50%;
         }
 
         .test-item p {
@@ -1074,10 +1087,12 @@
         .footer {
             text-align: center;
             font-size: 0.8em;
-            border-top: 1px dotted #000;
             padding-top: 5px;
             margin-bottom: 0;
         }
+
+        /* Previous CSS remains unchanged */
+
 
         .test-name,
         .test-cost,
@@ -1096,9 +1111,11 @@
         .test-home-collect {
             margin-bottom: 5px;
         }
-        /* #receipt-container{
-            display: none;
-        } */
+
+        #info-container {
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
 </head>
 
@@ -2409,15 +2426,17 @@
         }
         function generateinvoice(data) {
             const receiptContainer = document.getElementById('receipt-container');
-            receiptContainer.innerHTML='';
+            receiptContainer.innerHTML = '';
+            // Create receipt structure
             // Create receipt structure
             const receipt = document.createElement('div');
             receipt.id = 'receipt';
 
             // Clinic Photo
+            const LOGO_URL = `data:image/jpeg;base64,` + userData.LOGO_64;
+            // Clinic Photo
             const clinicPhoto = document.createElement('div');
             clinicPhoto.className = 'clinic-photo';
-            const LOGO_URL = `data:image/jpeg;base64,` + userData.LOGO_64;
             const img = document.createElement('img');
             img.src = LOGO_URL;
             img.alt = 'Clinic Photo';
@@ -2436,30 +2455,33 @@
             receipt.appendChild(clinicInfo);
 
 
-
+            const infoContainer = document.createElement('div');
+            infoContainer.id = 'info-container'
             // Booking Info
+            const bookingdt=convertDateFormat(data.BOOKING_DT)
             const bookingInfo = document.createElement('div');
             bookingInfo.className = 'booking-info';
             bookingInfo.innerHTML = `
-        <p>Booking ID: ${data.BOOKING_ID}</p>
-        <p>Booking Date: ${data.BOOKING_DT}</p>
-        <p>Booking Time: ${data.BOOKING_TM}</p>
+            <p style="color:#19bde6dc;font-weight: 600;">BOOKING DETAILS</P>
+        <p><span style="color:grey;">Booking ID:</span><span style="color:#19bde6dc;"> ${data.BOOKING_ID}</span></p>
+        <p><span style="color:grey;">Booking Date:</span> ${bookingdt}</p>
     `;
-            receipt.appendChild(bookingInfo);
 
             // Patient Info
             const patientInfo = document.createElement('div');
             patientInfo.className = 'patient-info';
             patientInfo.innerHTML = `
-        <p>Patient ID: ${data.PATIENT_ID}</p>
-        <p>Patient Name: ${data.Patient_Name}</p>
-        <p>Sex: ${data.SEX}</p>
-        <p>Age: ${data.AGE}</p>
-        <p>Mobile: ${data.MOBILE}</p>
-        <p>Advised By: ${data.ADVICED_BY}</p>
+        <p style="color:#19bde6dc;font-weight: 600;">PATIENT DETAILS</P>
+        <p><span style="color:grey;">Name:</span> ${data.Patient_Name}</p>
+        <p><span style="color:grey;">Gender:</span> ${data.SEX}</p>
+        <p><span style="color:grey;">Age:</span> ${data.AGE}</p>
+        <p><span style="color:grey;">Mobile:</span> ${data.MOBILE}</p>
+        <p><span style="color:grey;">Patient Address:</span> ${data.PATIENT_ADDRESS}</p>
     `;
-            receipt.appendChild(patientInfo);
+            infoContainer.appendChild(patientInfo);
+            infoContainer.appendChild(bookingInfo);
 
+            receipt.appendChild(infoContainer);
             // Test Details
             const testDetails = document.createElement('div');
             testDetails.className = 'test-details';
@@ -2468,6 +2490,7 @@
             testList.id = 'test-list';
             let i = 1;
             data.DETAILS.forEach(test => {
+                const converteddate=convertDateFormat(test.SLOT_DT)
                 const testItem = document.createElement('div');
                 testItem.className = 'test-item';
 
@@ -2486,7 +2509,7 @@
                 const testSlotDiv = document.createElement('div');
                 testSlotDiv.className = 'test-slot';
                 const testSlot = document.createElement('p');
-                testSlot.textContent = `Date: ${test.SLOT_DT}`;
+                testSlot.textContent = `Date:  ${converteddate}`;
                 testSlotDiv.appendChild(testSlot);
 
                 const testHomeCollectDiv = document.createElement('div');
@@ -2525,6 +2548,7 @@
         <p>Visit Again!</p>
     `;
             receipt.appendChild(footer);
+
             console.log(receipt);
             receiptContainer.appendChild(receipt);
             // // Wait for images to load before calculating height
@@ -2554,14 +2578,13 @@
 
             function generatePDF() {
                 const receiptWidth = receipt.offsetWidth;
-                const receiptHeight = receipt.offsetHeight + 30;
+                const receiptHeight = receipt.offsetHeight + 10;
 
                 html2pdf().set({
                     margin: 0,
-                    image: { type: "jpeg", quality: 0.98 },
                     filename: 'receipt.pdf',
                     html2canvas: {
-                        scale: 1.5
+                        scale: 3
                     },
                     jsPDF: {
                         unit: 'px',
@@ -2585,17 +2608,22 @@
                         //location.reload();
                     });
             }
-            // setTimeout(() => {
-            //     window.location.href = '/';
-            // }, 2000);
-            
-        }
-        // Function to close popup
-        function closePopup(button) {
-            const popup = button.parentElement;
-            document.body.removeChild(popup);
-            
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
 
+        }
+        function convertDateFormat(inputDate) {
+            // Ensure the input date is a string
+            inputDate = inputDate.toString();
+
+            // Extract the year, month, and day from the input date
+            let year = inputDate.substring(0, 4);
+            let month = inputDate.substring(4, 6);
+            let day = inputDate.substring(6, 8);
+
+            // Return the date in dd/mm/yyyy format
+            return `${day}/${month}/${year}`;
         }
 
     </script>
