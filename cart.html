@@ -669,6 +669,7 @@
 
         .next-button {
             background-color: #01b5cd;
+            margin-left: 90%;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -990,6 +991,114 @@
             /* 3D effect on active */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
+
+        #receipt {
+            width: 2.7in;
+            padding: 10px;
+            /* border: 1px solid #000; */
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .clinic-info,
+        .booking-info,
+        .patient-info,
+        .test-details,
+        .total-cost,
+        .footer {
+            margin-bottom: 15px;
+        }
+
+        .clinic-info h2 {
+            margin: 0;
+            text-align: center;
+            font-size: 1em;
+            border-bottom: 1px dashed #000;
+            padding-bottom: 10px;
+            color: #19bde6dc;
+        }
+
+        .clinic-info p {
+            text-align: center;
+            margin: 5px 0;
+            font-size: 0.5em;
+        }
+
+        .clinic-photo img {
+            width: 100%;
+            height: 100px;
+            display: block;
+            margin: 10px 0;
+
+        }
+
+        .booking-info p,
+        .patient-info p,
+        .total-cost p,
+        .footer p {
+            margin: 5px 0;
+            font-size: 0.6em;
+        }
+
+        .test-details h3 {
+            margin: 10px 0 5px;
+            font-size: 0.8em;
+            border-bottom: 1px dashed #000;
+            padding-bottom: 5px;
+            color: #19bde6dc;
+        }
+
+        .test-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .test-item div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .test-item p {
+            margin: 2px 0;
+        }
+
+        #total-cost {
+            font-weight: bold;
+            /* font-size: 0.8em; */
+            text-align: right;
+            float: right;
+            color: #19bde6dc;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.8em;
+            border-top: 1px dotted #000;
+            padding-top: 5px;
+            margin-bottom: 0;
+        }
+
+        .test-name,
+        .test-cost,
+        .test-slot,
+        .test-home-collect {
+            font-size: 0.6em;
+        }
+
+        .test-name p,
+        .test-cost p,
+        .test-slot p,
+        .test-home-collect p {
+            margin: 0;
+        }
+
+        .test-home-collect {
+            margin-bottom: 5px;
+        }
+        /* #receipt-container{
+            display: none;
+        } */
     </style>
 </head>
 
@@ -1100,13 +1209,16 @@
                         <div class="time-slot-grid" id="eveningSlotGrid"></div>
         </div>
     </div>
+    <div id="receipt-container">
 
+    </div>
     <!-- JavaScript libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.8/lottie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 
     <script>
         let userData = null;
@@ -1544,8 +1656,8 @@
             let bagTotal = 0;
 
             if (cart.length === 0) {
-                totalCostElem.style.display='none';
-                container.style.height='400px';
+                totalCostElem.style.display = 'none';
+                container.style.height = '400px';
                 // container.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
                 // Load animation data
                 var animationData = {
@@ -1559,9 +1671,10 @@
                 // Set up Lottie animation
                 var anim = lottie.loadAnimation(animationData);
                 // Resize animation
-                
+
             } else {
-                totalCostElem.style.display='block';
+                totalCostElem.style.display = 'block';
+                container.style.height = '90%'
                 cart.forEach((item, index) => {
                     const itemDiv = document.createElement('div');
                     itemDiv.classList.add('cart-item');
@@ -1943,7 +2056,7 @@
                 const patientMobile = document.getElementById("patientMobile").value;
                 const patientGender = document.getElementById("patientGender").value;
                 const advisedBy = document.getElementById('advicedBy').value;
-                const drmessage= document.getElementById('drmessage').value;
+                const drmessage = document.getElementById('drmessage').value;
 
                 const patientAge = parseInt(
                     document.getElementById("patientAge").value
@@ -2012,7 +2125,7 @@
                         PHARMA_ID: userData.PHARMA_ID ? userData.PHARMA_ID : null,
                         PHARMA_NAME: userData.PHARMA_NAME,
                         ADVICED_BY: advisedBy ? advisedBy : "",
-                        Message:drmessage?drmessage:"",
+                        Message: drmessage ? drmessage : "",
 
                     };
                     console.log(patientDetails);
@@ -2224,13 +2337,13 @@
                     PATIENT_ID: patientDetails.PATIENT_ID,
                     PATIENT_NAME: patientDetails.PATIENT_NAME,
                     ADVICED_BY: patientDetails.ADVICED_BY,
-                    MESSAGE:patientDetails.Message,
-                    MOBILE_NO:patientDetails.MOBILE,
+                    MESSAGE: patientDetails.Message,
+                    MOBILE_NO: patientDetails.MOBILE,
                     DETAILS: tests
                 }
             ]
             const formData = new FormData();
-            formData.append('BOOK_TEST',JSON.stringify(booking_data))
+            formData.append('BOOK_TEST', JSON.stringify(booking_data))
             console.log(booking_data);
             console.log(formData);
             booking_confirm(formData)
@@ -2239,7 +2352,7 @@
         async function booking_confirm(booking_data) {
 
             const url = "https://easyhealths.com/api/booktest_dummy";
-            
+
 
             axios
                 .post(url, booking_data)
@@ -2265,17 +2378,223 @@
             popup.innerHTML = `
             <h4 style="text-align:center;">${data.Message}</h4>
             Booking ID: ${bookingId}<br>
-            <button class="ok-button" onclick="closePopup(this)">OK</button>
+            <button class="ok-button" onclick="getinvoice('${bookingId}')">OK</button>
         `;
             // Append popup to body
             document.body.appendChild(popup);
         }
+        async function getinvoice(boKingId) {
+            const url = "https://easyhealths.com/api/testinvoice_dummy";
+            const params = {
+                BOOKING_ID: boKingId,
+                PHARMA_ID: userData.PHARMA_ID,
+                PATIENT_ID: patientData.PATIENT_ID
+            };
 
+            axios
+                .post(url, params)
+                .then((response) => {
+                    const data = response.data.data;
+                    console.log(data);
+                    generateinvoice(data);
+                    // setTimeout(()=>{
+                    //     window.location.href='/';
+                    // },1000);
+
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    return null;
+                });
+        }
+        function generateinvoice(data) {
+            const receiptContainer = document.getElementById('receipt-container');
+            receiptContainer.innerHTML='';
+            // Create receipt structure
+            const receipt = document.createElement('div');
+            receipt.id = 'receipt';
+
+            // Clinic Photo
+            const clinicPhoto = document.createElement('div');
+            clinicPhoto.className = 'clinic-photo';
+            const LOGO_URL = `data:image/jpeg;base64,` + userData.LOGO_64;
+            const img = document.createElement('img');
+            img.src = LOGO_URL;
+            img.alt = 'Clinic Photo';
+            clinicPhoto.appendChild(img);
+            receipt.appendChild(clinicPhoto);
+            // Clinic Info
+            const clinicInfo = document.createElement('div');
+            clinicInfo.className = 'clinic-info';
+            clinicInfo.innerHTML = `
+        <h2>${data.PHARMA_NAME}</h2>
+        <p>${data.ADDRESS}</p>
+        <p>${data.CITY}, ${data.DIST}</p>
+        <p>${data.STATE}, PIN: ${data.PIN}</p>
+        <p>Contact: ${data.CLINIC_MOBILE}</p>
+    `;
+            receipt.appendChild(clinicInfo);
+
+
+
+            // Booking Info
+            const bookingInfo = document.createElement('div');
+            bookingInfo.className = 'booking-info';
+            bookingInfo.innerHTML = `
+        <p>Booking ID: ${data.BOOKING_ID}</p>
+        <p>Booking Date: ${data.BOOKING_DT}</p>
+        <p>Booking Time: ${data.BOOKING_TM}</p>
+    `;
+            receipt.appendChild(bookingInfo);
+
+            // Patient Info
+            const patientInfo = document.createElement('div');
+            patientInfo.className = 'patient-info';
+            patientInfo.innerHTML = `
+        <p>Patient ID: ${data.PATIENT_ID}</p>
+        <p>Patient Name: ${data.Patient_Name}</p>
+        <p>Sex: ${data.SEX}</p>
+        <p>Age: ${data.AGE}</p>
+        <p>Mobile: ${data.MOBILE}</p>
+        <p>Advised By: ${data.ADVICED_BY}</p>
+    `;
+            receipt.appendChild(patientInfo);
+
+            // Test Details
+            const testDetails = document.createElement('div');
+            testDetails.className = 'test-details';
+            testDetails.innerHTML = `<h3>Test Details:</h3>`;
+            const testList = document.createElement('div');
+            testList.id = 'test-list';
+            let i = 1;
+            data.DETAILS.forEach(test => {
+                const testItem = document.createElement('div');
+                testItem.className = 'test-item';
+
+                const testNameDiv = document.createElement('div');
+                testNameDiv.className = 'test-name';
+                const testName = document.createElement('p');
+                testName.textContent = `${i}. ${test.PKG_NAME}`;
+                testNameDiv.appendChild(testName);
+                i++;
+                const testCostDiv = document.createElement('div');
+                testCostDiv.className = 'test-cost';
+                const testCost = document.createElement('p');
+                testCost.textContent = `Price: ₹${test.TEST_COST}`;
+                testCostDiv.appendChild(testCost);
+
+                const testSlotDiv = document.createElement('div');
+                testSlotDiv.className = 'test-slot';
+                const testSlot = document.createElement('p');
+                testSlot.textContent = `Date: ${test.SLOT_DT}`;
+                testSlotDiv.appendChild(testSlot);
+
+                const testHomeCollectDiv = document.createElement('div');
+                testHomeCollectDiv.className = 'test-home-collect';
+                const testHomeCollect = document.createElement('p');
+                testHomeCollect.textContent = `Time: ${test.FROM} - ${test.TO}`;
+                testHomeCollectDiv.appendChild(testHomeCollect);
+
+                testItem.appendChild(testNameDiv);
+                testItem.appendChild(testCostDiv);
+
+                testList.appendChild(testItem);
+                testList.appendChild(testSlotDiv);
+                testList.appendChild(testHomeCollectDiv);
+            });
+            testDetails.appendChild(testList);
+            receipt.appendChild(testDetails);
+
+            // Total Cost
+            const totalCost = document.createElement('div');
+            totalCost.className = 'total-cost';
+            const totalAmount = data.DETAILS.reduce((sum, test) => sum + test.TEST_COST, 0);
+            totalCost.innerHTML = `
+            <p>Payment Mode: Offline</p>
+        <p>Total Cost: <span id="total-cost">₹${totalAmount}</span></p>
+        <p>Tax: <span id="total-cost">₹0</span></p>
+        <p>Amount Payable: <span id="total-cost">₹${totalAmount}</span></p>
+    `;
+            receipt.appendChild(totalCost);
+
+            // Footer
+            const footer = document.createElement('div');
+            footer.className = 'footer';
+            footer.innerHTML = `
+        <p>Thank you for choosing <span style="color:#19bde6dc;">${data.PHARMA_NAME}</span></p>
+        <p>Visit Again!</p>
+    `;
+            receipt.appendChild(footer);
+            console.log(receipt);
+            receiptContainer.appendChild(receipt);
+            // // Wait for images to load before calculating height
+            // const images = receipt.getElementsByTagName('img');
+            // let imagesLoaded = 0;
+
+            // const onImageLoad = () => {
+            //     imagesLoaded++;
+            //     if (imagesLoaded === images.length) {
+            //         generatePDF();
+            //     }
+            // };
+
+            // for (let i = 0; i < images.length; i++) {
+            //     if (images[i].complete) {
+            //         onImageLoad();
+            //     } else {
+            //         images[i].addEventListener('load', onImageLoad);
+            //         images[i].addEventListener('error', onImageLoad);
+            //     }
+            // }
+
+            // if (images.length === 0) {
+            //     generatePDF();
+            // }
+            generatePDF();
+
+            function generatePDF() {
+                const receiptWidth = receipt.offsetWidth;
+                const receiptHeight = receipt.offsetHeight + 30;
+
+                html2pdf().set({
+                    margin: 0,
+                    image: { type: "jpeg", quality: 0.98 },
+                    filename: 'receipt.pdf',
+                    html2canvas: {
+                        scale: 1.5
+                    },
+                    jsPDF: {
+                        unit: 'px',
+                        format: [receiptWidth, receiptHeight]
+                    }
+                }).from(receipt)
+                    .toPdf()
+                    .output("datauristring")
+                    .then(function (pdfDataUri) {
+                        const pdfWindow = window.open();
+                        pdfWindow.document.write(
+                            '<iframe width="100%" height="100%" src="' +
+                            pdfDataUri +
+                            '" frameborder="0"></iframe>'
+                        );
+                        pdfWindow.document.close();
+
+                        // Automatically focus the new window/tab
+
+                        pdfWindow.focus();
+                        //location.reload();
+                    });
+            }
+            // setTimeout(() => {
+            //     window.location.href = '/';
+            // }, 2000);
+            
+        }
         // Function to close popup
         function closePopup(button) {
             const popup = button.parentElement;
             document.body.removeChild(popup);
-            window.location.href = '/'
+            
 
         }
 
