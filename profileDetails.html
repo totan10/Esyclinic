@@ -585,6 +585,7 @@
             /* Gap between items */
             /* justify-content: center; */
         }
+       
 
         .test-item {
             background-color: #F2F2F2;
@@ -597,6 +598,36 @@
             width: 500px;
 
             /* 3D effect */
+        }
+        @media (max-width:1000px){
+            .profile-tests-container{
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .test-item{
+                width: 350px;
+                padding: 10px;
+            }
+        }
+        @media (max-width: 800px){
+            .profile-tests-container{
+                grid-template-columns: repeat(1, 1fr);
+
+            }
+            .test-item{
+                width: 500px;
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 600px){
+            .profile-tests-container{
+                grid-template-columns: repeat(1, 1fr);
+
+            }
+            .test-item{
+                width: 400px;
+                padding: 10px;
+            }
         }
 
         .test-item .remove-btn {

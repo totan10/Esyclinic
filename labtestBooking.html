@@ -703,9 +703,47 @@
 
         @media (max-width: 1400px) {
 
+
+            #familyPackageContainer {
+                grid-template-columns: repeat(4, 1fr);
+                ;
+            }
+        }
+
+        @media (max-width: 1100px) {
+
+
+            #familyPackageContainer {
+                grid-template-columns: repeat(3, 1fr);
+                ;
+            }
+        }
+
+        @media (max-width: 800px) {
+
+            #familyPackageContainer {
+                grid-template-columns: repeat(2, 1fr);
+                ;
+            }
+
+        }
+
+        @media (max-width: 550px) {
+
+            #familyPackageContainer {
+                grid-template-columns: repeat(1, 1fr);
+                ;
+            }
+
+        }
+
+
+        @media (max-width: 1400px) {
+
             #trendingTestsContainer,
             #profileTestsContainer,
-            #commonScanContainer {
+            #commonScanContainer,
+            .popular-tests-container {
                 grid-template-columns: repeat(5, 1fr);
                 justify-items: center;
                 /* Adjust for smaller screens */
@@ -716,7 +754,8 @@
 
             #trendingTestsContainer,
             #profileTestsContainer,
-            #commonScanContainer {
+            #commonScanContainer,
+            .popular-tests-container {
                 grid-template-columns: repeat(4, 1fr);
                 /* Adjust for smaller screens */
             }
@@ -726,7 +765,8 @@
 
             #trendingTestsContainer,
             #profileTestsContainer,
-            #commonScanContainer {
+            #commonScanContainer,
+            .popular-tests-container {
                 grid-template-columns: repeat(3, 1fr);
                 /* Adjust for smaller screens */
             }
@@ -736,7 +776,8 @@
 
             #trendingTestsContainer,
             #profileTestsContainer,
-            #commonScanContainer {
+            #commonScanContainer,
+            .popular-tests-container {
                 grid-template-columns: repeat(2, 1fr);
                 /* Adjust for smaller screens */
             }
@@ -806,7 +847,7 @@
             /* Add pointer cursor */
             background: #F2F2F2;
             /* Gradient background */
-            height: 200px;
+            height: 230px;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
