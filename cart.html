@@ -1064,11 +1064,13 @@
             display: flex;
             justify-content: space-between;
         }
-        .test-cost{
+
+        .test-cost {
             width: 30%;
             text-align: right;
         }
-        .test-name{
+
+        .test-name {
             width: 50%;
         }
 
@@ -1746,11 +1748,29 @@
 
             // Wait for the animation to finish
             setTimeout(() => {
-                cart.splice(index, 1);
+                //cart.splice(index, 1);
+                console.log(cart);
+                const removedItem = cart.splice(index, 1)[0];
+                console.log(cart);
                 localStorage.setItem('cartItems', JSON.stringify(cart));
-                cartCount =cartCount-1;
+                cartCount = cartCount - 1;
                 updateCartCount();
                 loadCartItems();
+                // If the removed item is present in the search results, update its button
+                const searchResultItems = document.querySelectorAll('#searchResults li');
+                searchResultItems.forEach(item => {
+                    const itemName = item.querySelector('h4').textContent.trim();
+                    const button = item.querySelector('.remove-btn');
+                    if (removedItem.DETAILS) {
+                        if (removedItem.DETAILS.TEST_NAME.trim() === itemName) {
+                            enableButton(button, 'Add to Cart', 'book-now-btn');
+                        }
+                    } else {
+                        if (removedItem.TEST_NAME.trim() === itemName) {
+                            enableButton(button, 'Add to Cart', 'book-now-btn');
+                        }
+                    }
+                });
             }, 500);
         }
 
@@ -2460,7 +2480,7 @@
             const infoContainer = document.createElement('div');
             infoContainer.id = 'info-container'
             // Booking Info
-            const bookingdt=convertDateFormat(data.BOOKING_DT)
+            const bookingdt = convertDateFormat(data.BOOKING_DT)
             const bookingInfo = document.createElement('div');
             bookingInfo.className = 'booking-info';
             bookingInfo.innerHTML = `
@@ -2492,7 +2512,7 @@
             testList.id = 'test-list';
             let i = 1;
             data.DETAILS.forEach(test => {
-                const converteddate=convertDateFormat(test.SLOT_DT)
+                const converteddate = convertDateFormat(test.SLOT_DT)
                 const testItem = document.createElement('div');
                 testItem.className = 'test-item';
 
