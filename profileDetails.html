@@ -818,14 +818,14 @@
                     const organData = getQueryParams();
                     console.log(organData);
                     populateDoctors()
-                    if(organData.DASH_SECTION_ID=='C'){
+                    if (organData.DASH_SECTION_ID == 'C') {
                         populateProfiles(organData)
                     }
-                    else{
+                    else {
                         populatePackages(organData);
                     }
-                    
-                   
+
+
 
                     loadCartItemsFromLocalStorage();
 
@@ -886,6 +886,8 @@
             });
             const bookNowBtn = testItem.querySelector('button');
             bookNowBtn.addEventListener('click', () => {
+                const isInCart = bookNowBtn.classList.contains('book-now-btn');
+                console.log(isInCart);
                 if (bookNowBtn.classList.contains('book-now-btn')) {
                     addItemToCart(data);
                     enableButton(bookNowBtn, 'Remove', 'remove-btn');
@@ -894,10 +896,27 @@
                     enableButton(bookNowBtn, 'Book Now', 'book-now-btn');
                 }
                 else { }
+                // toggleButtonState(data.TEST_NAME, isInCart);
+                toggleSearchButtonState(data.DASH_NAME, isInCart);
             })
             return testItem;
         }
-
+        function toggleSearchButtonState(testName, isInCart) {
+            const testItems = document.querySelectorAll(' #searchResults li');
+            testItems.forEach(item => {
+                const testNameElement = item.querySelector('h4');
+                if (testNameElement && testNameElement.textContent === testName) {
+                    const button = item.querySelector('.book-now-btn, .remove-btn');
+                    if (button) {
+                        if (isInCart) {
+                            enableButton(button, 'Remove', 'remove-btn');
+                        } else {
+                            enableButton(button, 'Add to Cart', 'book-now-btn');
+                        }
+                    }
+                }
+            });
+        }
 
         function loadCartItemsFromLocalStorage() {
             const storedCartItems = localStorage.getItem('cartItems');
@@ -1040,12 +1059,44 @@
                 if (target.classList.contains('book-now-btn')) {
                     addItemToCart(doctor);
                     enableButton(target, 'Remove', 'remove-btn');
+                    updateSingleTestButtonState(doctorName, 'remove-btn');
                 } else if (target.classList.contains('remove-btn')) {
                     removeItemFromCart(doctor);
                     enableButton(target, 'Add to Cart', 'book-now-btn');
+                    updateSingleTestButtonState(doctorName, 'book-now-btn');
                 }
             }
         });
+
+        // Function to update the state of corresponding button in single tests grid
+        function updateSingleTestButtonState(testName, newClass) {
+            console.log('clicked');
+            const testItems = document.querySelectorAll('.test-item');
+            console.log(testItems);
+            testItems.forEach(testItem => {
+                const testNameElement = testItem.querySelector('.test-name');
+                const test=(testNameElement.textContent).split(':')[1].trim();
+                console.log(test);
+                console.log(testName);
+                if (test === testName) {
+                    // const bookNowButton = testItem.querySelector('.book-now-btn');
+                    if (newClass === 'remove-btn') {
+                        const bookNowButton = testItem.querySelector('.book-now-btn');
+                        bookNowButton.textContent = 'Remove';
+                        bookNowButton.classList.remove('book-now-btn', 'remove-btn');
+                        bookNowButton.classList.add(newClass);
+                    } else {
+                        const bookNowButton = testItem.querySelector('.remove-btn');
+                        bookNowButton.textContent = 'Book Now';
+                        bookNowButton.classList.remove('book-now-btn', 'remove-btn');
+                        bookNowButton.classList.add(newClass);
+                    }
+
+                }
+            });
+        }
+
+
 
         function openCart() {
             console.log("inside cart");
@@ -1111,13 +1162,13 @@
         function saveCartItemsToLocalStorage() {
             localStorage.setItem('cartItems', JSON.stringify(cartItems));
         }
-        async function populatePackages(organData){
+        async function populatePackages(organData) {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
             const url = "https://easyhealths.com/api/labpackagesdtl_dummy";
             const params = {
                 PHARMA_ID: PHARMA_ID,
                 DASH_ID: organData.DASH_ID,
-                DASH_SECTION_ID:organData.DASH_SECTION_ID
+                DASH_SECTION_ID: organData.DASH_SECTION_ID
             };
 
             await axios
@@ -1343,6 +1394,33 @@
         </li>
     `;
         }
+
+        document.addEventListener("keydown", function (event) {
+            // Check if the Shift key is pressed along with another key
+            if (event.shiftKey) {
+                console.log("clicked");
+                switch (event.key) {
+                    case "D": // Shift + D for Doctors Booking
+                        event.preventDefault(); // Prevent default action
+                        window.location.href = "doctorsBooking.html";
+                        break;
+                    case "T": // Shift + L for Lab Test Booking
+                        event.preventDefault(); // Prevent default action
+                        window.location.href = "labtestBooking.html";
+                        break;
+                    case "R": // Shift + T for Report Transfer
+                        event.preventDefault(); // Prevent default action
+                        window.location.href = "reportTransfer.html";
+                        break;
+                    case "H": // Shift + T for Report Transfer
+                        event.preventDefault(); // Prevent default action
+                        window.location.href = "dashboard.html";
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     </script>
 </body>
 

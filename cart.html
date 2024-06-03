@@ -2648,6 +2648,33 @@
             return `${day}/${month}/${year}`;
         }
 
+        document.addEventListener("keydown", function (event) {
+            // Check if the Shift key is pressed along with another key
+            if (event.shiftKey) {
+                console.log("clicked");
+                switch (event.key) {
+                    case "D": // Shift + D for Doctors Booking
+                        event.preventDefault(); // Prevent default action
+                        window.location.href = "doctorsBooking.html";
+                        break;
+                    case "T": // Shift + L for Lab Test Booking
+                        event.preventDefault(); // Prevent default action
+                        window.location.href = "labtestBooking.html";
+                        break;
+                    case "R": // Shift + T for Report Transfer
+                        event.preventDefault(); // Prevent default action
+                        window.location.href = "reportTransfer.html";
+                        break;
+                    case "H": // Shift + T for Report Transfer
+                        event.preventDefault(); // Prevent default action
+                        window.location.href = "dashboard.html";
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
     </script>
 </body>
 
