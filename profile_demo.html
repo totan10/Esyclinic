@@ -7,19 +7,16 @@
     <title>Bill Receipt</title>
     <style>
         body {
-
             background-color: #f7f7f7;
             display: flex;
             justify-content: center;
             align-items: center;
-
             margin: 0;
         }
 
         #receipt {
             width: 2.7in;
             padding: 10px;
-            /* border: 1px solid #000; */
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             font-family: 'Courier New', Courier, monospace;
@@ -55,7 +52,6 @@
             height: 100px;
             display: block;
             margin: 10px 0;
-
         }
 
         .booking-info p,
@@ -74,7 +70,6 @@
         .test-details h3 {
             margin: 10px 0 5px;
             font-size: 0.8em;
-
             padding-bottom: 5px;
             color: #19bde6dc;
         }
@@ -95,7 +90,6 @@
 
         #total-cost {
             font-weight: bold;
-            /* font-size: 0.8em; */
             text-align: right;
             float: right;
             color: #19bde6dc;
@@ -107,9 +101,6 @@
             padding-top: 5px;
             margin-bottom: 0;
         }
-
-        /* Previous CSS remains unchanged */
-
 
         .test-name,
         .test-cost,
@@ -133,15 +124,21 @@
             display: flex;
             justify-content: space-between;
         }
+
+        #qr-code {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 
 <body>
     <div id="receipt-container">
-
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const data = {
@@ -203,237 +200,7 @@
                         FROM: "7AM",
                         TO: "8AM"
                     },
-                    {
-                        PKG_ID: "2",
-                        PKG_NAME: "DC (DIFFERENTIAL COUNT)",
-                        TEST_COST: 250,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "23",
-                        PKG_NAME: "Thyroid Profile",
-                        TEST_COST: 910,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "YES",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "1020",
-                        PKG_NAME: "Hb%",
-                        TEST_COST: 100,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "100",
-                        PKG_NAME: "MP (THICK & THIN)",
-                        TEST_COST: 100,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "10",
-                        PKG_NAME: "BICARBONATE (HCO3-)",
-                        TEST_COST: 500,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "2",
-                        PKG_NAME: "DC (DIFFERENTIAL COUNT)",
-                        TEST_COST: 250,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "23",
-                        PKG_NAME: "Thyroid Profile",
-                        TEST_COST: 910,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "YES",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "1020",
-                        PKG_NAME: "Hb%",
-                        TEST_COST: 100,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "100",
-                        PKG_NAME: "MP (THICK & THIN)",
-                        TEST_COST: 100,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "10",
-                        PKG_NAME: "BICARBONATE (HCO3-)",
-                        TEST_COST: 500,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "2",
-                        PKG_NAME: "DC (DIFFERENTIAL COUNT)",
-                        TEST_COST: 250,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "23",
-                        PKG_NAME: "Thyroid Profile",
-                        TEST_COST: 910,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "YES",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "1020",
-                        PKG_NAME: "Hb%",
-                        TEST_COST: 100,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "100",
-                        PKG_NAME: "MP (THICK & THIN)",
-                        TEST_COST: 100,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "10",
-                        PKG_NAME: "BICARBONATE (HCO3-)",
-                        TEST_COST: 500,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "2",
-                        PKG_NAME: "DC (DIFFERENTIAL COUNT)",
-                        TEST_COST: 250,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "23",
-                        PKG_NAME: "Thyroid Profile",
-                        TEST_COST: 910,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "YES",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "1020",
-                        PKG_NAME: "Hb%",
-                        TEST_COST: 100,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "100",
-                        PKG_NAME: "MP (THICK & THIN)",
-                        TEST_COST: 100,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "10",
-                        PKG_NAME: "BICARBONATE (HCO3-)",
-                        TEST_COST: 500,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
-                    {
-                        PKG_ID: "2",
-                        PKG_NAME: "DC (DIFFERENTIAL COUNT)",
-                        TEST_COST: 250,
-                        PAY_MODE: "Offline",
-                        HOME_COLLECT: "TRUE",
-                        TRANS_ID: null,
-                        SLOT_DT: "20240530",
-                        FROM: "7AM",
-                        TO: "8AM"
-                    },
+                    
                     {
                         PKG_ID: "23",
                         PKG_NAME: "Thyroid Profile",
@@ -466,38 +233,42 @@
             const clinicInfo = document.createElement('div');
             clinicInfo.className = 'clinic-info';
             clinicInfo.innerHTML = `
-        <h2>${data.PHARMA_NAME}</h2>
-        <p>${data.ADDRESS}</p>
-        <p>${data.CITY}, ${data.DIST}</p>
-        <p>${data.STATE}, PIN: ${data.PIN}</p>
-        <p>Contact: ${data.CLINIC_MOBILE}</p>
-    `;
+                <h2>${data.PHARMA_NAME}</h2>
+                <div style="display: flex; justify-content: space-between;">
+                    <div>
+                        <p>${data.ADDRESS}</p>
+                        <p>${data.CITY}, ${data.DIST}</p>
+                        <p>${data.STATE}, PIN: ${data.PIN}</p>
+                        <p>Contact: ${data.CLINIC_MOBILE}</p>
+                    </div>
+                    <div id="qr-code-container"></div>
+                </div>
+            `;
             receipt.appendChild(clinicInfo);
 
-
             const infoContainer = document.createElement('div');
-            infoContainer.id = 'info-container'
+            infoContainer.id = 'info-container';
             // Booking Info
             const bookingInfo = document.createElement('div');
             bookingInfo.className = 'booking-info';
             bookingInfo.innerHTML = `
-            <p style="color:#19bde6dc;font-weight: 600;">BOOKING DETAILS</P>
-        <p><span style="color:grey;">Booking ID:</span><span style="color:#19bde6dc;"> ${data.BOOKING_ID}</span></p>
-        <p><span style="color:grey;">Booking Date:</span> ${data.BOOKING_DT}</p>
-        <p><span style="color:grey;">Booking Time:</span> ${data.BOOKING_TM}</p>
-    `;
+                <p style="color:#19bde6dc;font-weight: 600;">BOOKING DETAILS</P>
+                <p><span style="color:grey;">Booking ID:</span><span style="color:#19bde6dc;"> ${data.BOOKING_ID}</span></p>
+                <p><span style="color:grey;">Booking Date:</span> ${data.BOOKING_DT}</p>
+                <p><span style="color:grey;">Booking Time:</span> ${data.BOOKING_TM}</p>
+            `;
 
             // Patient Info
             const patientInfo = document.createElement('div');
             patientInfo.className = 'patient-info';
             patientInfo.innerHTML = `
-        <p style="color:#19bde6dc;font-weight: 600;">PATIENT DETAILS</P>
-        <p><span style="color:grey;">Name:</span> ${data.Patient_Name}</p>
-        <p><span style="color:grey;">Gender:</span> ${data.SEX}</p>
-        <p><span style="color:grey;">Age:</span> ${data.AGE}</p>
-        <p><span style="color:grey;">Mobile:</span> ${data.MOBILE}</p>
-        <p><span style="color:grey;">Patient Address:</span> ${data.PATIENT_ADDRESS}</p>
-    `;
+                <p style="color:#19bde6dc;font-weight: 600;">PATIENT DETAILS</P>
+                <p><span style="color:grey;">Name:</span> ${data.Patient_Name}</p>
+                <p><span style="color:grey;">Gender:</span> ${data.SEX}</p>
+                <p><span style="color:grey;">Age:</span> ${data.AGE}</p>
+                <p><span style="color:grey;">Mobile:</span> ${data.MOBILE}</p>
+                <p><span style="color:grey;">Patient Address:</span> ${data.PATIENT_ADDRESS}</p>
+            `;
             infoContainer.appendChild(patientInfo);
             infoContainer.appendChild(bookingInfo);
 
@@ -552,24 +323,36 @@
             totalCost.className = 'total-cost';
             const totalAmount = data.DETAILS.reduce((sum, test) => sum + test.TEST_COST, 0);
             totalCost.innerHTML = `
-            <p>Payment Mode: Offline</p>
-        <p>Total Cost: <span id="total-cost">₹${totalAmount}</span></p>
-        <p>Tax: <span id="total-cost">₹0</span></p>
-        <p>Amount Payable: <span id="total-cost">₹${totalAmount}</span></p>
-    `;
+                <p>Payment Mode: Offline</p>
+                <p>Total Cost: <span id="total-cost">₹${totalAmount}</span></p>
+                <p>Tax: <span id="total-cost">₹0</span></p>
+                <p>Amount Payable: <span id="total-cost">₹${totalAmount}</span></p>
+            `;
             receipt.appendChild(totalCost);
 
             // Footer
             const footer = document.createElement('div');
             footer.className = 'footer';
             footer.innerHTML = `
-        <p>Thank you for choosing <span style="color:#19bde6dc;">${data.PHARMA_NAME}</span></p>
-        <p>Visit Again!</p>
-    `;
+                <p>Thank you for choosing <span style="color:#19bde6dc;">${data.PHARMA_NAME}</span></p>
+                <p>Visit Again!</p>
+            `;
             receipt.appendChild(footer);
 
-
             receiptContainer.appendChild(receipt);
+
+            // Generate QR Code
+            const qrCodeContainer = document.getElementById('qr-code-container');
+            const qrCode = document.createElement('canvas');
+            qrCode.id = 'qr-code';
+            qrCodeContainer.appendChild(qrCode);
+
+            const qr = new QRious({
+                element: qrCode,
+                value: data.BOOKING_ID,
+                size: 80
+            });
+
             // Wait for images to load before calculating height
             const images = receipt.getElementsByTagName('img');
             let imagesLoaded = 0;
@@ -595,40 +378,35 @@
             }
 
             function generatePDF() {
-                //     const receiptWidth = receipt.offsetWidth;
-                //     const receiptHeight = receipt.offsetHeight + 30;
+                const receiptWidth = receipt.offsetWidth;
+                const receiptHeight = receipt.offsetHeight + 30;
 
-                //     html2pdf().from(receipt).set({
-                //         margin: 0,
-                //         image: { type: "jpeg", quality: 0.98 },
-                //         filename: 'receipt.pdf',
-                //         html2canvas: {
-                //             scale: 1.5
-                //         },
-                //         jsPDF: {
-                //             unit: 'px',
-                //             format: [receiptWidth, receiptHeight]
-                //         }
-                //     })
-                //         .toPdf()
-                //         .output("datauristring")
-                //         .then(function (pdfDataUri) {
-                //             const pdfWindow = window.open();
-                //             pdfWindow.document.write(
-                //                 '<iframe width="100%" height="100%" src="' +
-                //                 pdfDataUri +
-                //                 '" frameborder="0"></iframe>'
-                //             );
-                //             pdfWindow.document.close();
-
-                //             // Automatically focus the new window/tab
-
-                //             pdfWindow.focus();
-                //             //location.reload();
-                //         });
+                html2pdf().from(receipt).set({
+                    margin: 0,
+                    image: { type: "jpeg", quality: 0.98 },
+                    filename: 'receipt.pdf',
+                    html2canvas: {
+                        scale: 1.5
+                    },
+                    jsPDF: {
+                        unit: 'px',
+                        format: [receiptWidth, receiptHeight]
+                    }
+                })
+                .toPdf()
+                .output("datauristring")
+                .then(function (pdfDataUri) {
+                    const pdfWindow = window.open();
+                    pdfWindow.document.write(
+                        '<iframe width="100%" height="100%" src="' +
+                        pdfDataUri +
+                        '" frameborder="0"></iframe>'
+                    );
+                    pdfWindow.document.close();
+                    pdfWindow.focus();
+                });
             }
         });
-
     </script>
 </body>
 
