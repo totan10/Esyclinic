@@ -1011,12 +1011,39 @@
                 if (target.classList.contains('book-now-btn')) {
                     addItemToCart(doctor);
                     enableButton(target, 'Remove', 'remove-btn');
+                    updateSingleTestButtonState(doctorName, 'remove-btn');
                 } else if (target.classList.contains('remove-btn')) {
                     removeItemFromCart(doctor);
                     enableButton(target, 'Add to Cart', 'book-now-btn');
+                    updateSingleTestButtonState(doctorName, 'book-now-btn');
                 }
             }
         });
+
+         // Function to update the state of corresponding button in single tests grid
+         function updateSingleTestButtonState(testName, newClass) {
+            const testItems = document.querySelectorAll('.test-item');
+            testItems.forEach(testItem => {
+                const testNameElement = testItem.querySelector('.test-name');
+                if (testNameElement.textContent === testName) {
+                    // const bookNowButton = testItem.querySelector('.book-now-btn');
+                    if (newClass === 'remove-btn') {
+                        const bookNowButton = testItem.querySelector('.book-now-btn');
+                        bookNowButton.textContent = 'Remove';
+                        bookNowButton.classList.remove('book-now-btn', 'remove-btn');
+                        bookNowButton.classList.add(newClass);
+                    } else {
+                        const bookNowButton = testItem.querySelector('.remove-btn');
+                        bookNowButton.textContent = 'Book Now';
+                        bookNowButton.classList.remove('book-now-btn', 'remove-btn');
+                        bookNowButton.classList.add(newClass);
+                    }
+
+                }
+            });
+        }
+
+
 
         function openCart() {
             console.log("inside cart");
@@ -1157,6 +1184,7 @@
             });
             const bookNowBtn = testItem.querySelector('button');
             bookNowBtn.addEventListener('click', () => {
+                const isInCart = bookNowBtn.classList.contains('book-now-btn');
                 if (bookNowBtn.classList.contains('book-now-btn')) {
                     addItemToCart(data);
                     enableButton(bookNowBtn, 'Remove', 'remove-btn');
@@ -1165,10 +1193,26 @@
                     enableButton(bookNowBtn, 'Book Now', 'book-now-btn');
                 }
                 else { }
+                toggleSearchButtonState(data.TEST_NAME, isInCart);
             })
             return testItem;
         }
-
+        function toggleSearchButtonState(testName, isInCart) {
+            const testItems = document.querySelectorAll(' #searchResults li');
+            testItems.forEach(item => {
+                const testNameElement = item.querySelector('h4');
+                if (testNameElement && testNameElement.textContent === testName) {
+                    const button = item.querySelector('.book-now-btn, .remove-btn');
+                    if (button) {
+                        if (isInCart) {
+                            enableButton(button, 'Remove', 'remove-btn');
+                        } else {
+                            enableButton(button, 'Add to Cart', 'book-now-btn');
+                        }
+                    }
+                }
+            });
+        }
 
         // Function to open the modal and populate it with doctor details
         function openModal(doctorDetails) {
