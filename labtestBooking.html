@@ -1128,11 +1128,11 @@
                     populateDoctors();
                     // Load cart items from localStorage
                     loadCartItemsFromLocalStorage();
-                    setTimeout(()=>{
-                         // Hide overlay and loader when API call is completed
-                    document.getElementById('overlay').style.display = 'none';
-                    document.getElementById('loader').style.display = 'none';
-                    },500)
+                    setTimeout(() => {
+                        // Hide overlay and loader when API call is completed
+                        document.getElementById('overlay').style.display = 'none';
+                        document.getElementById('loader').style.display = 'none';
+                    }, 500)
                     console.log(labtests);
 
 
@@ -1226,6 +1226,7 @@
             const bookNowBtn = testItem.querySelector('button');
             console.log(bookNowBtn);
             bookNowBtn.addEventListener('click', () => {
+                const isInCart = bookNowBtn.classList.contains('book-now-btn');
                 if (bookNowBtn.classList.contains('book-now-btn')) {
                     addItemToCart(data);
                     enableButton(bookNowBtn, 'Remove', 'remove-btn');
@@ -1234,8 +1235,43 @@
                     enableButton(bookNowBtn, 'Book Now', 'book-now-btn');
                 }
                 else { }
+                toggleButtonState(data.TEST_NAME, isInCart);
+                toggleSearchButtonState(data.TEST_NAME, isInCart);
+
             })
             return testItem;
+        }
+        function toggleSearchButtonState(testName, isInCart) {
+            const testItems = document.querySelectorAll(' #searchResults li');
+            testItems.forEach(item => {
+                const testNameElement = item.querySelector('h4');
+                if (testNameElement && testNameElement.textContent === testName) {
+                    const button = item.querySelector('.book-now-btn, .remove-btn');
+                    if (button) {
+                        if (isInCart) {
+                            enableButton(button, 'Remove', 'remove-btn');
+                        } else {
+                            enableButton(button, 'Add to Cart', 'book-now-btn');
+                        }
+                    }
+                }
+            });
+        }
+        function toggleButtonState(testName, isInCart) {
+            const testItems = document.querySelectorAll('.test-item');
+            testItems.forEach(item => {
+                const testNameElement = item.querySelector('.test-name');
+                if (testNameElement && testNameElement.textContent === testName) {
+                    const button = item.querySelector('.book-now-btn, .remove-btn');
+                    if (button) {
+                        if (isInCart) {
+                            enableButton(button, 'Remove', 'remove-btn');
+                        } else {
+                            enableButton(button, 'Book Now', 'book-now-btn');
+                        }
+                    }
+                }
+            });
         }
 
         // Function to convert the object to a query string
@@ -1396,7 +1432,7 @@
                     const commonScans = labtests ? labtests.Dashboard : [];
                     const familyPackage = labtests ? labtests.Family_Care_Package : [];
 
-                   
+
 
                     if (commonScans && commonScans.length > 0) {
                         console.log(commonScans.length);
@@ -1469,13 +1505,16 @@
             const isClickInsideSearchContainer =
                 searchInput.contains(event.target) ||
                 searchResults.contains(event.target);
+            console.log(isClickInsideSearchContainer);
             if (!isClickInsideSearchContainer) {
                 closeSearchResults();
             }
         });
+
         function closeSearchResults() {
             searchResults.classList.remove("active"); // Hide search results
         }
+
         searchInput.addEventListener("click", (event) => {
             event.stopPropagation();
             if (searchResults.innerHTML.trim() !== "") {
@@ -1557,7 +1596,7 @@
             searchResults.classList.add("active"); // Show search results
         }
 
-        // Updated event listener for "Book Now" button
+        // Updated event listener for "Book Now" button in search results
         searchResults.addEventListener('click', (event) => {
             const target = event.target;
             if (target.classList.contains('book-now-btn') || target.classList.contains('remove-btn')) {
@@ -1568,12 +1607,40 @@
                 if (target.classList.contains('book-now-btn')) {
                     addItemToCart(doctor);
                     enableButton(target, 'Remove', 'remove-btn');
+                    // Update state of corresponding button in single tests grid
+                    updateSingleTestButtonState(doctorName, 'remove-btn');
                 } else if (target.classList.contains('remove-btn')) {
                     removeItemFromCart(doctor);
                     enableButton(target, 'Add to Cart', 'book-now-btn');
+                    // Update state of corresponding button in single tests grid
+                    updateSingleTestButtonState(doctorName, 'book-now-btn');
                 }
             }
         });
+
+        // Function to update the state of corresponding button in single tests grid
+        function updateSingleTestButtonState(testName, newClass) {
+            const testItems = document.querySelectorAll('.test-item');
+            testItems.forEach(testItem => {
+                const testNameElement = testItem.querySelector('.test-name');
+                if (testNameElement.textContent === testName) {
+                    // const bookNowButton = testItem.querySelector('.book-now-btn');
+                    if (newClass === 'remove-btn') {
+                        const bookNowButton = testItem.querySelector('.book-now-btn');
+                        bookNowButton.textContent = 'Remove';
+                        bookNowButton.classList.remove('book-now-btn', 'remove-btn');
+                        bookNowButton.classList.add(newClass);
+                    } else {
+                        const bookNowButton = testItem.querySelector('.remove-btn');
+                        bookNowButton.textContent = 'Book Now';
+                        bookNowButton.classList.remove('book-now-btn', 'remove-btn');
+                        bookNowButton.classList.add(newClass);
+                    }
+
+                }
+            });
+        }
+
 
         function openOrgansModal(commonScans) {
             const modal = document.getElementById("organsModal");
@@ -1799,7 +1866,6 @@
             cartCount++; // Increment cart count
             updateCartCount(); // Update cart count display
             saveCartItemsToLocalStorage(); // Save cart items to localStorage
-            //renderCart();
         }
 
         // Function to update cart count display

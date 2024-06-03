@@ -1748,6 +1748,8 @@
             setTimeout(() => {
                 cart.splice(index, 1);
                 localStorage.setItem('cartItems', JSON.stringify(cart));
+                cartCount =cartCount-1;
+                updateCartCount();
                 loadCartItems();
             }, 500);
         }
