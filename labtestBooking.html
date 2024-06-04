@@ -1169,11 +1169,6 @@
                     populateDoctors();
                     // Load cart items from localStorage
                     loadCartItemsFromLocalStorage();
-                    setTimeout(() => {
-                        // Hide overlay and loader when API call is completed
-                        document.getElementById('overlay').style.display = 'none';
-                        document.getElementById('loader').style.display = 'none';
-                    }, 500)
                     console.log(labtests);
 
 
@@ -1506,6 +1501,9 @@
                         generateFamilyPackage(familyPackage);
 
                     }
+                    // Hide overlay and loader when API call is completed
+                    document.getElementById('overlay').style.display = 'none';
+                    document.getElementById('loader').style.display = 'none';
 
                 })
                 .catch((error) => {

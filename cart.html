@@ -1114,7 +1114,7 @@
             margin-bottom: 5px;
         }
 
-        
+
         #info-container {
             display: flex;
             justify-content: space-between;
@@ -2316,6 +2316,8 @@
                     console.log(patientData);
                     patientData.FROM = slot.FROM ? slot.FROM : null;
                     patientData.TO = slot.TO ? slot.TO : null;
+                    document.getElementById('overlay').style.display = 'block';
+                    document.getElementById('loader').style.display = 'block';
                     bookTest()
                 })
             });
@@ -2419,6 +2421,8 @@
             timeSlotModal.style.display = "none";
             cartItems = []
             localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('loader').style.display = 'none';
             // Create popup element
             const bookingId = data.BOOK_ID ? data.BOOK_ID : null;
             const popup = document.createElement("div");
@@ -2442,6 +2446,7 @@
             axios
                 .post(url, params)
                 .then((response) => {
+                    console.log(response);
                     const data = response.data.data;
                     console.log(data);
                     generateinvoice(data);
@@ -2673,32 +2678,32 @@
             return `${day}/${month}/${year}`;
         }
 
-        document.addEventListener("keydown", function (event) {
-            // Check if the Shift key is pressed along with another key
-            if (event.shiftKey) {
-                console.log("clicked");
-                switch (event.key) {
-                    case "D": // Shift + D for Doctors Booking
-                        event.preventDefault(); // Prevent default action
-                        window.location.href = "doctorsBooking.html";
-                        break;
-                    case "T": // Shift + L for Lab Test Booking
-                        event.preventDefault(); // Prevent default action
-                        window.location.href = "labtestBooking.html";
-                        break;
-                    case "R": // Shift + T for Report Transfer
-                        event.preventDefault(); // Prevent default action
-                        window.location.href = "reportTransfer.html";
-                        break;
-                    case "H": // Shift + T for Report Transfer
-                        event.preventDefault(); // Prevent default action
-                        window.location.href = "dashboard.html";
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        // document.addEventListener("keydown", function (event) {
+        //     // Check if the Shift key is pressed along with another key
+        //     if (event.shiftKey) {
+        //         console.log("clicked");
+        //         switch (event.key) {
+        //             case "D": // Shift + D for Doctors Booking
+        //                 event.preventDefault(); // Prevent default action
+        //                 window.location.href = "doctorsBooking.html";
+        //                 break;
+        //             case "T": // Shift + L for Lab Test Booking
+        //                 event.preventDefault(); // Prevent default action
+        //                 window.location.href = "labtestBooking.html";
+        //                 break;
+        //             case "R": // Shift + T for Report Transfer
+        //                 event.preventDefault(); // Prevent default action
+        //                 window.location.href = "reportTransfer.html";
+        //                 break;
+        //             case "H": // Shift + T for Report Transfer
+        //                 event.preventDefault(); // Prevent default action
+        //                 window.location.href = "dashboard.html";
+        //                 break;
+        //             default:
+        //                 break;
+        //         }
+        //     }
+        // });
 
     </script>
 </body>
