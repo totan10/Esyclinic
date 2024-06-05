@@ -664,7 +664,7 @@
         .profile_test:hover,
         .family_package:hover,
         .common_scan:hover,
-        .organ:hover {
+        .organ:hover,.sample:hover {
             transform: translateY(-5px) scale(1.05);
             transition: transform 0.3s ease;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -894,7 +894,9 @@
             justify-content: space-around;
             font-weight: 700;
         }
-
+        .common_scan img{
+            margin-top: -5px;
+        }
         .profile_test img,
         .common_scan img,
         .family_package img {
@@ -954,6 +956,38 @@
             border-top-right-radius: 10px; */
             border-radius: 50%;
             background-color: #fff;
+            padding: 10px;
+        }
+        .sample {
+            text-align: center;
+            padding: 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Add shadow effect */
+            cursor: pointer;
+            /* Add pointer cursor */
+            background: #CBD7E3;
+            /* Gradient background */
+            height: 200px;
+            width: 200px;
+            max-width: 220px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            font-weight: 700;
+            padding: 5px;
+        }
+
+        .sample img {
+            width: 70%;
+            height: 70%;
+            /* Ensure proper image aspect ratio */
+            /* border-top-left-radius: 10px;
+            border-top-right-radius: 10px; */
+            border-radius: 50%;
+            background-color: #a5a1a1;
+            box-shadow:  0 4px 8px rgba(0, 0, 0, 0.1);;
             padding: 10px;
         }
 
@@ -1505,7 +1539,7 @@
 
                 profileDiv.addEventListener("click", () => {
                     localStorage.setItem('cartItems', JSON.stringify(cartItems));
-
+                    fetchSearchCommonScan(commonScan.DASH_NAME);
                     const symptomImg1 = document.createElement("img");
                     symptomImg1.src = commonScan.PHOTO_URL;
                     const symptomName1 = document.createElement("p");
@@ -1567,7 +1601,26 @@
                 toggleGridView('.family_package', 'familyCareBtn')
             })
         }
+        async function fetchSearchCommonScan(DASH_NAME){
+            const url = "https://easyhealths.com/api/radiologyscan_search_dummy";
+            const params = {
+                PHARMA_ID: userData.PHARMA_ID,
+                DASH_NAME:DASH_NAME,
+            };
 
+            await axios
+                .post(url, params)
+                .then((response) => {
+                    const data = response.data.data;
+                    console.log(data);
+                    doctorsData = data;
+
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    return null;
+                });
+        }
         async function fetchSearchPathology() {
             const url = "https://easyhealths.com/api/pathologysearch_dummy";
             const params = {
@@ -1852,7 +1905,7 @@
             const familyPackageBtn = document.getElementById('commonOrganBtn');
             commonScans.forEach(commonScan => {
                 const profileDiv = document.createElement("div");
-                profileDiv.classList.add("organ", "wow", "fadeInLeft");
+                profileDiv.classList.add("sample", "wow", "fadeInLeft");
 
                 const symptomImg = document.createElement("img");
                 // symptomImg.src = commonScan.ORGAN_URL;
@@ -1870,9 +1923,9 @@
                 headerContent.style.marginTop = '100px'
                 headerContent.style.display = 'block'
             })
-            showOneRow('.organ');
+            showOneRow('.sample');
             familyPackageBtn.addEventListener('click', () => {
-                toggleGridView('.organ', 'commonOrganBtn')
+                toggleGridView('.sample', 'commonOrganBtn')
             })
         }
         function openOrganGrid(commonScans) {
