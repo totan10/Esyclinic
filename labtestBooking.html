@@ -66,6 +66,10 @@
             min-width: 110px;
         }
 
+        .scan-type-container:hover {
+            cursor: pointer;
+        }
+
         .scan-type-container p {
             color: #01b5cd;
             font-size: large;
@@ -1179,6 +1183,7 @@
         // Global array to store added items
         let cartItems = [];
         let labtests = []
+        let searchtests = []
         // Global variable to store cart count
         let cartCount = 0;
 
@@ -1454,9 +1459,15 @@
             pathoDiv.appendChild(symptomName);
             container.appendChild(pathoDiv)
             pathoDiv.addEventListener('click', () => {
+                // Hide overlay and loader when API call is completed
+                document.getElementById('overlay').style.display = 'block';
+                document.getElementById('loader').style.display = 'block';
+                fetchSearchPathology()
                 fetchAllpathology();
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('loader').style.display = 'none';
                 const symptomImg1 = document.createElement("img");
-                symptomImg1.src =  'pathology_btn.jpeg';
+                symptomImg1.src = 'pathology_btn.jpeg';
                 const symptomName1 = document.createElement("p");
                 symptomName1.textContent = 'Pathology Test';
                 const scanImageContainer = document.querySelector('.scan-type-container');
@@ -1470,6 +1481,14 @@
                 const searchbar = document.querySelector('.searchbar-container');
                 searchbar.style.width = '58%';
                 scanImageContainer.style.display = 'flex';
+                scanImageContainer.addEventListener('click', () => {
+                    scanImageContainer.style.display = 'none';
+                    doctorsData = searchtests;
+                    const headerContent = document.getElementById('commonOrgan');
+                    headerContent.style.display = 'none'
+                    const container = document.getElementById('commonOrganContainer');
+                    container.innerHTML = '';
+                })
 
             });
             commonScans.forEach(commonScan => {
@@ -1503,6 +1522,14 @@
                     searchbar.style.width = '58%';
                     scanImageContainer.style.display = 'flex';
                     openOrganGrid(commonScan);
+                    scanImageContainer.addEventListener('click', () => {
+                    scanImageContainer.style.display = 'none';
+                    doctorsData = searchtests;
+                    const headerContent = document.getElementById('commonOrgan');
+                    headerContent.style.display = 'none'
+                    const container = document.getElementById('commonOrganContainer');
+                    container.innerHTML = '';
+                })
                     // openOrgansModal(commonScan);
                 });
             })
@@ -1539,6 +1566,26 @@
             familyPackageBtn.addEventListener('click', () => {
                 toggleGridView('.family_package', 'familyCareBtn')
             })
+        }
+
+        async function fetchSearchPathology() {
+            const url = "https://easyhealths.com/api/pathologysearch_dummy";
+            const params = {
+                PHARMA_ID: userData.PHARMA_ID,
+            };
+
+            await axios
+                .post(url, params)
+                .then((response) => {
+                    const data = response.data.data;
+                    console.log(data);
+                    doctorsData = data;
+
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    return null;
+                });
         }
         async function fetchAllpathology() {
             const url = "https://easyhealths.com/api/clinic_pathology_dummy";
@@ -1636,6 +1683,7 @@
                 .post(url, params)
                 .then((response) => {
                     const data = response.data.data;
+                    searchtests = data;
                     doctorsData = data;
                     console.log(doctorsData);
                 })
@@ -1815,7 +1863,8 @@
                 container.appendChild(profileDiv);
 
                 profileDiv.addEventListener("click", () => {
-
+                    const queryString = new URLSearchParams(commonScan).toString();
+                    window.location.href = `singleTests.html?${queryString}`;
                 });
                 document.getElementById('commonScan').style.marginTop = '10px'
                 headerContent.style.marginTop = '100px'

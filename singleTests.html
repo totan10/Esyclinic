@@ -814,6 +814,10 @@
                         document.title = `${organData.DASH_NAME} Test`
                         populateSymptomsTests(organData)
                     }
+                    else if (organData.SAMPLE_NAME) {
+                        document.title = `${organData.SAMPLE_NAME} Pathology Test`
+                        populateSampleTests(organData);
+                    }
                     console.log(organData);
                     populateDoctors();
 
@@ -828,6 +832,28 @@
                 window.location.href = '/'
             }
         });
+        function populateSampleTests(data) {
+            const PHARMA_ID = userData ? userData.PHARMA_ID : null
+            const url = "https://easyhealths.com/api/sample_pathology_dummy";
+            const params = {
+                PHARMA_ID: PHARMA_ID,
+                SAMPLE_NAME: data.SAMPLE_NAME
+            };
+
+            axios
+                .post(url, params)
+                .then((response) => {
+                    const data = response.data.data;
+                    labtests = data
+                    populateSymtomGrid(labtests)
+                    console.log(labtests);
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    return null;
+                });
+        }
+
         function populateSymptomsTests(data) {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
             const url = "https://easyhealths.com/api/symptom_tests_dummy";
@@ -853,13 +879,13 @@
 
         }
         function populateSymtomGrid(data) {
-            labtests = data.DETAILS;
-            console.log(labtests);
+            labtests = data.DETAILS ? data.DETAILS : data;
+            const heading = data.DASH_NAME ? data.DASH_NAME : labtests[0].TEST_SAMPLE;
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('loader').style.display = 'none';
             const headContent = document.getElementById('popularTest')
             headContent.style.display = 'block';
-            headContent.innerHTML = `Popular - ${data.DASH_NAME} Test`
+            headContent.innerHTML = `Popular - ${heading} Test`
             if (labtests) {
                 console.log(headContent);
                 generateSingleTests(labtests);
@@ -1020,8 +1046,8 @@
             }
         });
 
-         // Function to update the state of corresponding button in single tests grid
-         function updateSingleTestButtonState(testName, newClass) {
+        // Function to update the state of corresponding button in single tests grid
+        function updateSingleTestButtonState(testName, newClass) {
             const testItems = document.querySelectorAll('.test-item');
             testItems.forEach(testItem => {
                 const testNameElement = testItem.querySelector('.test-name');
@@ -1194,6 +1220,9 @@
                 }
                 else { }
                 toggleSearchButtonState(data.TEST_NAME, isInCart);
+                setTimeout(() => {
+                    window, location.href = '/labtestBooking.html';
+                }, 500);
             })
             return testItem;
         }
