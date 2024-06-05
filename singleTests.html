@@ -809,17 +809,20 @@
                     if (organData.ORGAN_NAME) {
                         document.title = `${organData.ORGAN_NAME} Test`
                         populateTests(organData);
+                        populateDoctors();
                     }
                     else if (organData.DASH_ID) {
                         document.title = `${organData.DASH_NAME} Test`
                         populateSymptomsTests(organData)
+                        populateDoctors();
                     }
                     else if (organData.SAMPLE_NAME) {
                         document.title = `${organData.SAMPLE_NAME} Pathology Test`
                         populateSampleTests(organData);
+                        populateSampleSearch(organData.SAMPLE_NAME);
                     }
                     console.log(organData);
-                    populateDoctors();
+                    
 
                     loadCartItemsFromLocalStorage();
 
@@ -921,6 +924,31 @@
                     const data = response.data.data;
                     doctorsData = data;
                     console.log(doctorsData);
+                    document.getElementById('overlay').style.display = 'none';
+                    document.getElementById('loader').style.display = 'none';
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    return null;
+                });
+        }
+        // Function to format date from "YYYYMMDD" to "dd-Month-YYYY"
+        function populateSampleSearch(sample_name) {
+            const PHARMA_ID = userData ? userData.PHARMA_ID : null
+            const url = "https://easyhealths.com/api/pathology_samplesrch_dummy";
+            const params = {
+                PHARMA_ID: PHARMA_ID,
+                SAMPLE_NAME:sample_name
+            };
+
+            axios
+                .post(url, params)
+                .then((response) => {
+                    const data = response.data.data;
+                    doctorsData = data;
+                    console.log(doctorsData);
+                    document.getElementById('overlay').style.display = 'none';
+                    document.getElementById('loader').style.display = 'none';
                 })
                 .catch((error) => {
                     console.error("Error:", error);
@@ -1153,8 +1181,7 @@
                     console.log(labtests);
 
                     // Hide overlay and loader when API call is completed
-                    document.getElementById('overlay').style.display = 'none';
-                    document.getElementById('loader').style.display = 'none';
+                   
                     const headContent = document.getElementById('popularTest')
                     headContent.style.display = 'block';
                     headContent.innerHTML = `Popular - ${organData.ORGAN_NAME} Test`
