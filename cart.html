@@ -2121,7 +2121,7 @@
                 }
 
                 // Retrieve data from dataset attributes of the selected option
-                const patientId = selectedOption ? selectedOption.value : patientMobile; // This would be the entire patient object as a JSON string
+                const patientId = selectedOption.value; // This would be the entire patient object as a JSON string
                 const patientNameFromDataset = selectedOption != null ? selectedOption.dataset.name : patientName;
                 const patientAgeFromDataset = selectedOption != null ? selectedOption.dataset.age : patientAge;
                 const patientSexFromDataset = selectedOption != null ? selectedOption.dataset.sex : patientGender;
@@ -2174,7 +2174,12 @@
                         PHARMA_NAME: userData.PHARMA_NAME,
                         ADVICED_BY: advisedBy ? advisedBy : "",
                         Message: drmessage ? drmessage : "",
-
+                        Sex: patientSexFromDataset,
+                        Age: patientAgeFromDataset,
+                        FamilyId: patientFamilyIdFromDataset,
+                        m_sts: m_sts,
+                        Address: Address,
+                        alternateMobile: alternateMobile,
                     };
                     console.log(patientDetails);
                     patientData = patientDetails;
@@ -2389,6 +2394,12 @@
                     ADVICED_BY: patientDetails.ADVICED_BY,
                     MESSAGE: patientDetails.Message,
                     MOBILE_NO: patientDetails.MOBILE,
+                    ADDRESS: patientDetails.Address,
+                    ALT_MOB: patientDetails.alternateMobile,
+                    SEX: patientDetails.Sex,
+                    AGE: patientDetails.Age,
+                    FAMILY_ID: patientDetails.FamilyId,
+                    M_STS: patientDetails.m_sts,
                     DETAILS: tests
                 }
             ]
@@ -2424,24 +2435,26 @@
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('loader').style.display = 'none';
             // Create popup element
-            const bookingId = data.BOOK_ID ? data.BOOK_ID : null;
+            // const bookingId = data.BOOK_ID ? data.BOOK_ID : null;
+            // const patientId=data.PATIENT_ID?data.PATIENT_ID :patientData.PATIENT_ID;
             const popup = document.createElement("div");
             popup.classList.add("popup");
             popup.innerHTML = `
-            <h4 style="text-align:center;">${data.Message}</h4>
-            Booking ID: ${bookingId}<br>
-            <button class="ok-button" onclick="getinvoice('${bookingId}')">OK</button>
-        `;
+                <h4 style="text-align:center;">${data.Message}</h4>
+                Booking ID: ${data.BOOK_ID}<br>
+                <button class="ok-button" onclick="getinvoice('${data.BOOK_ID}', '${patientData.PATIENT_ID}')">OK</button>
+            `;
             // Append popup to body
             document.body.appendChild(popup);
         }
-        async function getinvoice(boKingId) {
+        async function getinvoice(bookingId, patientId) {
             const url = "https://easyhealths.com/api/testinvoice_dummy";
             const params = {
-                BOOKING_ID: boKingId,
+                BOOKING_ID: bookingId,
                 PHARMA_ID: userData.PHARMA_ID,
-                PATIENT_ID: patientData.PATIENT_ID
+                PATIENT_ID: patientId ? patientId : patientData.PATIENT_ID
             };
+            console.log(params);
 
             axios
                 .post(url, params)
