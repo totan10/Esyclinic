@@ -262,7 +262,8 @@
             height: 100%;
             /* overflow: auto; */
             overflow-y: auto;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
             animation: fadeIn1 0.5s ease;
         }
 
@@ -585,7 +586,7 @@
             /* Gap between items */
             /* justify-content: center; */
         }
-       
+
 
         .test-item {
             background-color: #F2F2F2;
@@ -599,32 +600,37 @@
 
             /* 3D effect */
         }
-        @media (max-width:1000px){
-            .profile-tests-container{
+
+        @media (max-width:1000px) {
+            .profile-tests-container {
                 grid-template-columns: repeat(2, 1fr);
             }
-            .test-item{
+
+            .test-item {
                 width: 350px;
                 padding: 10px;
             }
         }
-        @media (max-width: 800px){
-            .profile-tests-container{
+
+        @media (max-width: 800px) {
+            .profile-tests-container {
                 grid-template-columns: repeat(1, 1fr);
 
             }
-            .test-item{
+
+            .test-item {
                 width: 500px;
                 padding: 10px;
             }
         }
 
-        @media (max-width: 600px){
-            .profile-tests-container{
+        @media (max-width: 600px) {
+            .profile-tests-container {
                 grid-template-columns: repeat(1, 1fr);
 
             }
-            .test-item{
+
+            .test-item {
                 width: 400px;
                 padding: 10px;
             }
@@ -738,7 +744,218 @@
             color: #01b5cd;
         }
 
-        
+        /* Modal styles */
+        #mainPopup,
+        #timeSlotModal {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            max-height: 100vh;
+            overflow-y: hidden;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            /* Apply blur effect to the background */
+
+        }
+
+        .modal-content1 {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 10px;
+            border: 1px solid #888;
+            width: 40%;
+            min-width: 620px;
+            height: 60%;
+            min-height: 420px;
+            border-radius: 15px;
+        }
+
+        /* Grid styles */
+        #dateGridContainer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 10px;
+            max-width: 600px;
+            justify-content: space-around;
+        }
+
+        .grid-item {
+            background-color: #f0f0f0;
+            padding: 10px;
+            text-align: center;
+            border-radius: 10px;
+            max-width: 150px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            color: #05639b;
+        }
+
+        .grid-item:hover {
+            background-color: #ddd;
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+
+        #timeSlotModal .modal-content {
+            background-color: #fefefe;
+            border-radius: 15px;
+            margin: 10% auto;
+            padding: 10px;
+            border: 1px solid #888;
+            width: 60%;
+            min-width: 620px;
+
+        }
+
+        #timeSlotModal h2 {
+            margin-top: 0;
+            text-align: center;
+            color: #007bff;
+            border-radius: 15px;
+            background-color: #f4f2f2;
+            z-index: 9999;
+        }
+
+        .time-slot-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            /* Adjust as needed */
+            gap: 10px;
+            margin-bottom: 20px;
+
+        }
+
+        .time-slot-item {
+            background-color: transparent;
+            border: 2px solid rgb(54, 53, 53);
+            border-radius: 10px;
+            padding-top: 10px;
+            /* Adjust padding */
+            margin-right: 5px;
+            /* Add margin between slot items */
+            margin-bottom: 10px;
+            color: #0a4aab;
+            text-align: center;
+            font-size: larger;
+            height: 40px;
+            /* Adjust margin bottom */
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Add shadow effect */
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            /* Add transition for transform and background-color */
+        }
+
+        .close-btn {
+            font-size: xx-large;
+            float: right;
+            color: red;
+            margin: -10px;
+        }
+
+        .close-btn:hover {
+            cursor: pointer;
+        }
+
+        .time-slot-item:hover {
+            transform: translateY(-5px);
+            color: white;
+            background-color: #00b2c8;
+            /* Change background color on hover */
+            border: none;
+        }
+
+        /* Popup styles */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            text-align: center;
+        }
+
+        .confirmation-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            animation: slideDown 0.5s;
+            z-index: 9999;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        /* Test Location Modal Specific Styles */
+        #testLocationModal .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            animation: slideDown 0.5s;
+            z-index: 9999;
+        }
+
+        #testLocationModal p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #051a68;
+            text-align: center;
+        }
+
+        #testAtHomeBtn,
+        #testAtClinicBtn,
+        #addMoreTestBtn,
+        #proceedToCartBtn {
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #051a68;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Add shadow effect */
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        #testAtHomeBtn:hover,
+        #testAtClinicBtn:hover,
+        #addMoreTestBtn:hover,
+        #proceedToCartBtn:hover {
+            background-color: #00b2c8;
+            transform: translateY(-5px);
+            border: none;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 
@@ -785,6 +1002,49 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <div id="modalDetailsContent"></div>
+        </div>
+    </div>
+
+    <div id="mainPopup" class="modal">
+        <div class="modal-content1">
+            <span class="close">&times;</span>
+            <div class="grid-container" id="dateGridContainer"></div>
+        </div>
+    </div>
+    <!-- New modal for selecting preferred time slots -->
+    <div id="timeSlotModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Select Preferred Time Slot</h2>
+            <h3>Morning <img src="/morning_icon.jpeg" alt="Morning" style="width: 30px; height: 30px;"></h4>
+                <div class="time-slot-grid" id="morningSlotGrid"></div>
+                <h3>Afternoon <img src="/afternoon_icon.jpeg" alt="Afternoon" style="width: 30px; height: 30px;"></h4>
+                    <div class="time-slot-grid" id="afternoonSlotGrid"></div>
+                    <h3>Evening <img src="/evening_icon.jpeg" alt="Evening" style="width: 30px; height: 30px;"></h4>
+                        <div class="time-slot-grid" id="eveningSlotGrid"></div>
+        </div>
+    </div>
+
+    <!-- New Modal for "Test at Home" and "Test at Clinic" -->
+    <div id="testLocationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <p>Test Mode</p>
+            <div class="button-group">
+                <button id="testAtHomeBtn">Test from Home</button>
+                <button id="testAtClinicBtn">Test at Center</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Modal for "Test added to Cart" -->
+    <div id="confirmationModal" class="modal">
+        <div class="confirmation-content">
+            <p>Test added to Cart successfully</p>
+            <div class="button-group">
+                <button id="addMoreTestBtn">Add more Tests</button>
+                <button id="proceedToCartBtn">Proceed to Cart</button>
+            </div>
         </div>
     </div>
 
@@ -1108,7 +1368,7 @@
             console.log(testItems);
             testItems.forEach(testItem => {
                 const testNameElement = testItem.querySelector('.test-name');
-                const test=(testNameElement.textContent).split(':')[1].trim();
+                const test = (testNameElement.textContent).split(':')[1].trim();
                 console.log(test);
                 console.log(testName);
                 if (test === testName) {
@@ -1136,19 +1396,211 @@
             window.location.href = "cart.html"
         }
         // Function to add item to cart
-        function addItemToCart(item) {
-            if (item.DETAILS) {
-                cartItems.push(item.DETAILS);
-            }
-            else {
-                cartItems.push(item);
-            }
+        async function addItemToCart(item) {
+            let testdata = item.DETAILS ? item.DETAILS : item;
 
-            cartCount++; // Increment cart count
-            updateCartCount(); // Update cart count display
-            saveCartItemsToLocalStorage(); // Save cart items to localStorage
-            //renderCart();
+            await showMainPopup(testdata)
+
         }
+
+
+
+        async function showMainPopup(testdata) {
+
+            console.log("inside", testdata);
+            // Show modal
+            const modal = document.getElementById("mainPopup");
+            modal.style.display = "block";
+
+            // Close modal when the close button or outside modal area is clicked
+            const closeButton = document.querySelector(".close");
+            closeButton.onclick = function () {
+                modal.style.display = "none";
+            };
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    modal.style.overflowY = "auto";
+
+                }
+            };
+
+            // Populate grid with dates
+            const gridContainer = document.getElementById("dateGridContainer");
+            gridContainer.innerHTML = ""; // Clear previous content
+            const today = new Date();
+            const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            for (let i = 0; i < 15; i++) {
+                const date = new Date(today);
+                date.setDate(date.getDate() + i);
+                const formattedDate = formatDate(date);
+                const booking_dt = dbformatDate(date);
+                const dayName = date.toLocaleDateString('en-US', { weekday: 'long' }); // Get full day name
+                const gridItem = document.createElement("div");
+                gridItem.classList.add("grid-item");
+                gridItem.innerHTML = `<div style="margin:5px;">${formattedDate}</div><div>${dayName}</div>`; // Include day name below date
+                gridContainer.appendChild(gridItem);
+                gridItem.addEventListener('click', async () => {
+                    console.log('booking date ', booking_dt);
+                    testdata.BOOKING_DT = testdata.BOOKING_DT ? testdata.BOOKING_DT : booking_dt;
+                    await openTimeSlotModal(testdata);
+                })
+            }
+        }
+        function dbformatDate(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${year}${month}${day}`;
+        }
+
+        function formatDate(date) {
+            const options = { day: "numeric", month: "short" };
+            return date.toLocaleDateString("en-US", options);
+        }
+
+        // Function to open time slot modal
+        async function openTimeSlotModal(testdata) {
+            const modal = document.getElementById("mainPopup");
+            modal.style.display = "none";
+            const timeSlotModal = document.getElementById("timeSlotModal");
+            timeSlotModal.style.display = "block";
+
+            // Close modal when the close button or outside modal area is clicked
+            const closeButton = document.querySelector("#timeSlotModal .close-btn");
+            closeButton.onclick = function () {
+                timeSlotModal.style.display = "none";
+                modal.style.display = "block";
+            };
+            window.onclick = function (event) {
+                if (event.target == timeSlotModal) {
+                    timeSlotModal.style.display = "none";
+                }
+            };
+            // Populate time slot grids
+            const morningGrid = document.getElementById("morningSlotGrid");
+            const afternoonGrid = document.getElementById("afternoonSlotGrid");
+            const eveningGrid = document.getElementById("eveningSlotGrid");
+            morningGrid.innerHTML = ""; // Clear previous content
+            afternoonGrid.innerHTML = "";
+            eveningGrid.innerHTML = "";
+
+
+            const slots = {
+                "MORNING": [
+                    { FROM: "06:00 AM", TO: "07:00 AM" },
+                    { FROM: "07:00 AM", TO: "08:00 AM" },
+                    { FROM: "08:00 AM", TO: "09:00 AM" },
+                    { FROM: "09:00 AM", TO: "10:00 AM" },
+                    { FROM: "10:00 AM", TO: "11:00 AM" },
+                    { FROM: "11:00 AM", TO: "12:00 PM" },
+                ],
+                "AFTERNOON": [
+                    { FROM: "12:00 PM", TO: "01:00 PM" },
+                    { FROM: "01:00 PM", TO: "02:00 PM" },
+                    { FROM: "02:00 PM", TO: "03:00 PM" },
+                    { FROM: "03:00 PM", TO: "04:00 PM" },
+                ],
+                "EVENING": [
+                    { FROM: "04:00 PM", TO: "05:00 PM" },
+                    { FROM: "05:00 PM", TO: "06:00 PM" },
+                    { FROM: "06:00 PM", TO: "07:00 PM" },
+                    { FROM: "07:00 PM", TO: "08:00 PM" },
+                ]
+            };
+
+            await populateTimeSlotGrid(testdata, morningGrid, slots["MORNING"]);
+            await populateTimeSlotGrid(testdata, afternoonGrid, slots["AFTERNOON"]);
+            await populateTimeSlotGrid(testdata, eveningGrid, slots["EVENING"]);
+        }
+
+        // Function to populate time slot grids
+        function populateTimeSlotGrid(testdata, grid, slots) {
+            slots.forEach(slot => {
+                const slotItem = document.createElement("div");
+                slotItem.classList.add("time-slot-item");
+                slotItem.textContent = `${slot.FROM} - ${slot.TO}`;
+                grid.appendChild(slotItem);
+                slotItem.addEventListener('click', async () => {
+                    testdata.FROM = slot.FROM ? slot.FROM : null;
+                    testdata.TO = slot.TO ? slot.TO : null;
+                    if (testdata.DEPARTMENT !== "RADIOLOGY") {
+                        openTestLocationModal(testdata);
+                    } else {
+                        cartItems.push(testdata);
+                        cartCount++; // Increment cart count
+                        updateCartCount(); // Update cart count display
+                        saveCartItemsToLocalStorage(); // Save cart items to localStorage
+                        openConfirmationModal()
+                    }
+
+
+                })
+            });
+        }
+
+        // Function to open the test location modal
+        function openTestLocationModal(testdata) {
+            const timeSlotModal = document.getElementById("timeSlotModal");
+            timeSlotModal.style.display = "none";
+            const testLocationModal = document.getElementById("testLocationModal");
+            testLocationModal.style.display = "block";
+
+            // Close test location modal when clicking outside of it
+            const closeButton = document.querySelector("#testLocationModal .close-btn");
+            closeButton.onclick = function () {
+                testLocationModal.style.display = "none";
+            };
+            window.onclick = function (event) {
+                if (event.target == testLocationModal) {
+                    testLocationModal.style.display = "none";
+                }
+            };
+
+            // Handle button clicks
+            document.getElementById("testAtHomeBtn").onclick = function () {
+                testLocationModal.style.display = "none";
+                cartItems.push(testdata);
+                cartCount++; // Increment cart count
+                updateCartCount(); // Update cart count display
+                saveCartItemsToLocalStorage(); // Save cart items to localStorage
+                openConfirmationModal()
+            };
+
+            document.getElementById("testAtClinicBtn").onclick = function () {
+                testLocationModal.style.display = "none";
+                cartItems.push(testdata);
+                cartCount++; // Increment cart count
+                updateCartCount(); // Update cart count display
+                saveCartItemsToLocalStorage(); // Save cart items to localStorage
+                openConfirmationModal()
+            };
+        }
+        // Function to open the confirmation modal
+        function openConfirmationModal() {
+            const confirmationModal = document.getElementById("confirmationModal");
+            confirmationModal.style.display = "block";
+
+            // Close confirmation modal when clicking outside of it
+            window.onclick = function (event) {
+                if (event.target == confirmationModal) {
+                    confirmationModal.style.display = "none";
+                }
+            };
+
+            // Handle button clicks
+            document.getElementById("addMoreTestBtn").onclick = function () {
+                confirmationModal.style.display = "none";
+                document.getElementById("timeSlotModal").style.display = "none";
+                // document.getElementById("dateGridContainer").style.display = "none";
+                document.querySelectorAll('.modal').style.display = 'none'
+            };
+
+            document.getElementById("proceedToCartBtn").onclick = function () {
+                window.location.href = '/cart.html'
+            };
+        }
+
 
         // Function to update cart count display
         function updateCartCount() {
