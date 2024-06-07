@@ -581,19 +581,24 @@
             display: flex;
             align-items: center;
         }
-        .cart-item-details p{
+
+        .cart-item-details p {
             margin-top: 0;
         }
-        .cart-item-timing{
+
+        .cart-item-timing {
             display: flex;
             flex-direction: column;
         }
-        .cart-item-date, .cart-item-time{
+
+        .cart-item-date,
+        .cart-item-time {
             margin: 5px 0;
             font-size: 12px;
         }
-        .cart-item-timing span{
-            color:#999;
+
+        .cart-item-timing span {
+            color: #999;
         }
 
         .item-name {
@@ -749,7 +754,8 @@
         .booking-form input[type="text"],
         .booking-form input[type="tel"],
         .booking-form select,
-        #patientAge {
+        #patientAge,
+        #paidAmount {
             width: 90%;
             margin: 0 25px;
             margin-bottom: 10px;
@@ -808,7 +814,8 @@
         .booking-form select,
         #patientAge,
         #patientDropdown .booking-form input[type="submit"],
-        #cancelButton {
+        #cancelButton,
+        #paidAmount {
             transition: transform 0.3s ease-in-out;
         }
 
@@ -821,7 +828,8 @@
         .booking-form select:focus,
         #patientAge:focus,
         #patientDropdown:focus .booking-form input[type="submit"]:focus,
-        #cancelButton:focus {
+        #cancelButton:focus,
+        #paidAmount:focus {
             transform: scale(1.05);
             /* Scale up on focus */
         }
@@ -853,6 +861,18 @@
                 transform: translateX(0);
                 opacity: 1;
             }
+        }
+
+        .modal.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .total-cost,
+        .amount-left {
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 10px;
         }
 
         /* Modal styles */
@@ -1360,6 +1380,9 @@
                 <button id="proceedToCartBtn">Proceed to Cart</button>
             </div>
         </div>
+    </div>
+    <!-- New Modal for "Payment" -->
+    <div id="paymentModal" class="modal">
     </div>
 
     <div id="receipt-container">
@@ -1945,7 +1968,7 @@
                 document.getElementById("timeSlotModal").style.display = "none";
                 // document.getElementById("dateGridContainer").style.display = "none";
                 document.querySelectorAll('.modal').style.display = 'none'
-               
+
             };
 
             document.getElementById("proceedToCartBtn").onclick = function () {
@@ -2004,7 +2027,7 @@
             const totalCostElem = document.getElementById('totalCost');
 
             container.innerHTML = '';
-           
+
             let totalDiscount = 0;
             let bagTotal = 0;
 
@@ -2035,7 +2058,7 @@
                     const discount = item.DISCOUNT || 0;
                     const finalCost = item.COST - (item.COST * discount / 100);
                     const itemName = item.TEST_NAME ? item.TEST_NAME : item.DASH_NAME;
-                    const slotdate= convertDateFormat(item.BOOKING_DT);
+                    const slotdate = convertDateFormat(item.BOOKING_DT);
                     // Modify the itemDiv.innerHTML to incorporate the updated design
                     itemDiv.innerHTML = `
                 <p class="item-name"><span class="item_heading">${nameHeading}</span>${itemName}</p>
@@ -2291,7 +2314,7 @@
 
         // Function to check if age is not negative
         function isValidAge(age) {
-            return age >= 0;
+            return (age >= 0&& age<140);
         }
 
         // Function to display error message
@@ -2519,15 +2542,55 @@
                     const bookingForm = document.querySelector(".booking-form");
 
                     bookingForm.style.display = "none"; // Show booking form
+
+                    // proceedToPay();
                     document.getElementById('overlay').style.display = 'block';
                     document.getElementById('loader').style.display = 'block';
                     bookTest();
-
 
                 }
 
 
             });
+        function proceedToPay() {
+            const modal = document.getElementById('paymentModal');
+            modal.classList.add('modal');
+
+            modal.innerHTML = `
+        <div class="confirmation-content">
+            <h2>Booking Summary</h2>
+            <label for="totalBookingCost">Total Cost: </label>
+            <span id="totalBookingCost" class="total-cost">${totalCost}</span>
+            <br>
+            <input type="number" min="0" max="${totalCost}" step="1" id="paidAmount" placeholder="Paid Amount"> 
+            <br>
+            <label for="amountLeft">Amount Left: </label>
+            <span id="amountLeft" class="amount-left">${totalCost}</span>
+            <br>
+            <button id="bookNowButton">Confirm Booking</button>
+        </div>
+    `;
+
+            modal.style.display = 'block'
+
+            const payNowInput = modal.querySelector('#paidAmount');
+            const amountLeftSpan = modal.querySelector('#amountLeft');
+
+            payNowInput.addEventListener('input', () => {
+                const payNowValue = parseFloat(payNowInput.value) || 0;
+                const amountLeft = totalCost - payNowValue;
+                amountLeftSpan.textContent = amountLeft.toFixed(2);
+            });
+
+            document.getElementById('bookNowButton').addEventListener('click', () => {
+                modal.remove();
+                document.getElementById('overlay').style.display = 'block';
+                document.getElementById('loader').style.display = 'block';
+                bookTest();
+
+            });
+
+        }
 
         function bookTest() {
             console.log(patientData);

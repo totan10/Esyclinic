@@ -1102,9 +1102,9 @@
                     const scanImageContainer = document.querySelector('.scan-type-container');
                     scanImageContainer.innerHTML = '';
                     if (organData.ORGAN_NAME) {
+                        document.title = `${organData.ORGAN_NAME} Test`
                         const searchbar = document.querySelector('.searchbar-container');
                         searchbar.style.width = '58%';
-                        document.title = `${organData.ORGAN_NAME} Test`
                         const imagediv = document.createElement('div');
                         imagediv.classList.add("scan_image", "wow", "fadeInUp");
                         const img = document.createElement("img");
@@ -1123,11 +1123,41 @@
                     }
                     else if (organData.DASH_ID) {
                         document.title = `${organData.DASH_NAME} Test`
+                        const searchbar = document.querySelector('.searchbar-container');
+                        searchbar.style.width = '58%';
+                        const imagediv = document.createElement('div');
+                        imagediv.classList.add("scan_image", "wow", "fadeInUp");
+                        const img = document.createElement("img");
+                        img.src = organData.PHOTO_URL;
+                        const text = document.createElement("p");
+                        text.textContent = organData.DASH_NAME;
+                        text.classList.add("wow", "fadeInUp");
+
+                        imagediv.appendChild(img);
+                        scanImageContainer.appendChild(imagediv);
+                        scanImageContainer.appendChild(text);
+
+                        scanImageContainer.style.display = 'flex';
                         populateSymptomsTests(organData)
                         populateDoctors();
                     }
                     else if (organData.SAMPLE_NAME) {
                         document.title = `${organData.SAMPLE_NAME} Pathology Test`
+                        const searchbar = document.querySelector('.searchbar-container');
+                        searchbar.style.width = '58%';
+                        const imagediv = document.createElement('div');
+                        imagediv.classList.add("scan_image", "wow", "fadeInUp");
+                        const img = document.createElement("img");
+                        img.src = `pathology_btn.jpeg`;
+                        const text = document.createElement("p");
+                        text.textContent = 'Pathology Test';
+                        text.classList.add("wow", "fadeInUp");
+
+                        imagediv.appendChild(img);
+                        scanImageContainer.appendChild(imagediv);
+                        scanImageContainer.appendChild(text);
+
+                        scanImageContainer.style.display = 'flex';
                         populateSampleTests(organData);
                         populateSampleSearch(organData.SAMPLE_NAME);
                     }
@@ -1417,7 +1447,7 @@
         async function addItemToCart(item) {
             let testdata = item.DETAILS ? item.DETAILS : item;
 
-            await showMainPopup(testdata)
+        showMainPopup(testdata)
 
         }
 
@@ -1527,9 +1557,9 @@
                 ]
             };
 
-            await populateTimeSlotGrid(testdata, morningGrid, slots["MORNING"]);
-            await populateTimeSlotGrid(testdata, afternoonGrid, slots["AFTERNOON"]);
-            await populateTimeSlotGrid(testdata, eveningGrid, slots["EVENING"]);
+            populateTimeSlotGrid(testdata, morningGrid, slots["MORNING"]);
+            populateTimeSlotGrid(testdata, afternoonGrid, slots["AFTERNOON"]);
+            populateTimeSlotGrid(testdata, eveningGrid, slots["EVENING"]);
         }
 
         // Function to populate time slot grids
@@ -1549,6 +1579,7 @@
                         cartCount++; // Increment cart count
                         updateCartCount(); // Update cart count display
                         saveCartItemsToLocalStorage(); // Save cart items to localStorage
+                        
                         openConfirmationModal()
                     }
 
@@ -1612,9 +1643,6 @@
                 document.getElementById("timeSlotModal").style.display = "none";
                 // document.getElementById("dateGridContainer").style.display = "none";
                 document.querySelectorAll('.modal').style.display = 'none'
-
-
-
             };
 
             document.getElementById("proceedToCartBtn").onclick = function () {
@@ -1752,9 +1780,7 @@
                 }
                 else { }
                 toggleSearchButtonState(data.TEST_NAME, isInCart);
-                setTimeout(() => {
-                    window, location.href = '/labtestBooking.html';
-                }, 500);
+                
             })
             return testItem;
         }

@@ -337,7 +337,7 @@
 
     .doctor img {
       width: 60%;
-      height: 100px;
+      height: 120px;
       /* Ensure proper image aspect ratio */
       border-radius: 50%;
       margin-top: -50px;
@@ -1032,7 +1032,7 @@
           console.log(symptom); // Print symptom data when clicked
         });
         const symptomImg = document.createElement("img");
-        symptomImg.src = symptom.PHOTO_URL;
+        symptomImg.src = symptom.PHOTO_URL==""||symptom.PHOTO_URL===null?symptom.PHOTO1_URL:symptom.PHOTO_URL;
         const symptomName = document.createElement("p");
         symptomName.textContent = symptom.SYM_NAME;
         symptomDiv.appendChild(symptomImg);
@@ -1185,7 +1185,7 @@
       // Data to be sent in the request body
       const postData = {
         // Add any necessary data for the API call
-        PHARMAID: userData.PHARMA_ID,
+        PHARMA_ID: userData.PHARMA_ID,
       };
       // Display overlay and loader
 
@@ -1207,7 +1207,7 @@
               ? response.data.data.symptoms
               : null;
             const doctorSpecialistsData = response.data.data
-              ? response.data.data.total_doctors
+              ? response.data.data.total_doctor
               : null;
             // Hide overlay and loader when API call is completed
             document.getElementById('overlay').style.display = 'none';
@@ -1217,13 +1217,22 @@
             headers.forEach((header) => {
               header.style.display = 'block'
             })
-            populateTodayDoctors(todayDoctorsData);
+            if (todayDoctorsData != null) {
+              populateTodayDoctors(todayDoctorsData);
+            }
+            if (specialistsData != null) {
+              populateSpecialistContainer(specialistsData)
+            }
+            if (symptomsData != null) {
+              populateSymptomsContainer(symptomsData)
+            }
 
-            populateSpecialistContainer(specialistsData)
+            if (doctorSpecialistsData != null) {
+              populateTotalDoctorsConatiner(doctorSpecialistsData)
+            }
 
-            populateSymptomsContainer(symptomsData)
 
-            populateTotalDoctorsConatiner(doctorSpecialistsData)
+
 
 
 
