@@ -260,7 +260,6 @@
 
         .doctors_heading {
             height: 40px;
-            margin-top: 100px;
             width: 100%;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             text-align: center;
@@ -279,11 +278,13 @@
         }
 
         .filter-buttons button {
-            margin-right: 10px;
-            padding: 8px 16px;
+            margin: 10px;
+            margin-top: 0;
+            padding: 8px 10px;
             font-size: large;
             border: 1px solid #ccc;
             border-radius: 20px;
+            width: 180px;
             cursor: pointer;
             background-color: #fff;
             transition: background-color 0.3s ease, color 0.3s ease, font-size 0.3s ease;
@@ -326,7 +327,6 @@
 
         .bannerContainer {
             width: 40%;
-            height: 100vh;
             /* Full viewport height */
             background-color: #f0f0f0;
             /* Change this to your desired background color or image */
@@ -351,7 +351,7 @@
             background-size: contain;
             background-color: #007bff;
             background-repeat: no-repeat;
-            height: 250px;          
+            height: 250px;
         }
 
         .bannerContainer h2 {
@@ -371,6 +371,7 @@
             padding: 20px;
             box-sizing: border-box;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 100px;
         }
 
 
@@ -406,51 +407,123 @@
             color: #01b5cd;
         }
 
-        @media (max-width: 1200px) {
-            .doctors-container {
-                grid-template-columns: repeat(5, 1fr);
-                /* Adjust for smaller screens */
+        @media (max-width: 1500px){
+            .doctor {
+                width: 180px;
             }
         }
-
-        @media (max-width: 1024px) {
-            .doctors-container {
-                grid-template-columns: repeat(4, 1fr);
-                /* Adjust for smaller screens */
-            }
-        }
-
-        @media (max-width: 768px) {
+        @media (max-width: 1350px){
             .doctors-container {
                 grid-template-columns: repeat(3, 1fr);
                 /* Adjust for smaller screens */
             }
+            .doctor {
+                width: 220px;
+            }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 1200px) {
+            .doctor {
+                width: 200px;
+            }
+        }
+        @media (max-width: 1140px) {
+            .doctor {
+                width: 190px;
+            }
+        }
+        @media (max-width: 1090px) {
+            .doctor {
+                width: 180px;
+            }
+        }
+
+        @media (max-width: 950px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .bannerContainer {
+                position: relative;
+                width: 100%;
+
+            }
+
+            .doctors-section {
+                width: 100%;
+                margin-left: 0;
+                margin: 0;
+                padding: 0;
+            }
+
+            .doctors-container {
+                grid-template-columns: repeat(4, 1fr);
+                /* Adjust for smaller screens */
+            }
+
+            .doctor {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .doctors-container {
+                grid-template-columns: repeat(3, 1fr);
+                /* Adjust for smaller screens */
+            }
+
+            .doctor {
+                width: 225px;
+            }
+            .bannerDescription{
+                width: 90%;
+                margin-left: auto;
+            }
+            .bannnerImage {
+                width: 92%;
+                margin-left: auto;
+            }
+        }
+        @media (max-width: 720px){
+            .doctor{
+                width: 200px;
+            }
+        }
+        @media (max-width: 650px){
             .doctors-container {
                 grid-template-columns: repeat(2, 1fr);
                 /* Adjust for smaller screens */
             }
+            .doctor{
+                width: 245px;
+            }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 520px){
+            .doctor{
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 475px) {
+            .doctor{
+                width: 250px;
+            }
             .doctors-container {
                 grid-template-columns: repeat(1, 1fr);
-                /* Single column layout for narrower screens */
+                /* Adjust for smaller screens */
             }
         }
 
 
         .doctor {
             margin-top: 50px;
-            margin-bottom: 20PX;
+            margin-bottom: 20px;
             padding: 0 3px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             /* Add shadow effect */
             cursor: pointer;
-            width: 200px;
             /* Add pointer cursor */
             background: #fff;
             /* Gradient background */
