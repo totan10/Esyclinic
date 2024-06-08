@@ -319,13 +319,66 @@
             -webkit-text-fill-color: transparent;
         }
 
+        .main-container {
+            display: flex;
+            width: 100%
+        }
+
+        .bannerContainer {
+            width: 40%;
+            height: 100vh;
+            /* Full viewport height */
+            background-color: #f0f0f0;
+            /* Change this to your desired background color or image */
+            /* padding: 20px; */
+            box-sizing: border-box;
+            position: fixed;
+            display: flex;
+            margin-top: 100px;
+            flex-direction: column;
+        }
+
+        .bannerDescription,
+        .bannnerImage {
+            width: 95%;
+            margin: 10px;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .bannnerImage {
+            background-size: contain;
+            background-color: #007bff;
+            background-repeat: no-repeat;
+            height: 250px;          
+        }
+
+        .bannerContainer h2 {
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .bannerDescription {
+            background-color: #cbeeea;
+            text-align: justify;
+        }
+
+        .doctors-section {
+            width: 60%;
+            margin-left: 40%;
+            /* Offset by the width of the fixed banner */
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
 
 
         /* Custom CSS for Doctors Grid for Today */
         .doctors-container {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 10px;
             /* Adjust the gap between grid items */
             padding: 20px;
@@ -397,7 +450,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             /* Add shadow effect */
             cursor: pointer;
-            width: 225px;
+            width: 200px;
             /* Add pointer cursor */
             background: #fff;
             /* Gradient background */
@@ -469,15 +522,23 @@
             </div>
         </nav>
     </div>
-    <div class="doctors_heading"></div>
-    <div class="filter-buttons">
-        <button id="femaleDoctorsBtn"><i class="fas fa-venus"></i> Female Doctors</button>
-        <button id="availableTodayBtn"><i class="fas fa-calendar-day"></i> Available Today</button>
-        <button id="budgetFriendlyBtn"> <i id="budgetIcon" class="fas fa-money-bill-wave"></i> Budget Friendly</button>
-        <button id="ratingBtn"><i class="fas fa-star"></i> Rating</button>
-    </div>
-    <div class="doctors-container" id="doctorContainer">
-
+    <div class="main-container">
+        <div class="bannerContainer">
+            <div class="bannnerImage"></div>
+            <h2>Short Description</h2>
+            <div class="bannerDescription"></div>
+        </div>
+        <div class="doctors-section">
+            <div class="doctors_heading"></div>
+            <div class="filter-buttons">
+                <button id="femaleDoctorsBtn"><i class="fas fa-venus"></i> Female Doctors</button>
+                <button id="availableTodayBtn"><i class="fas fa-calendar-day"></i> Available Today</button>
+                <button id="budgetFriendlyBtn"> <i id="budgetIcon" class="fas fa-money-bill-wave"></i> Budget
+                    Friendly</button>
+                <button id="ratingBtn"><i class="fas fa-star"></i> Rating</button>
+            </div>
+            <div class="doctors-container" id="doctorContainer"></div>
+        </div>
     </div>
     <!-- JavaScript libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
@@ -599,22 +660,8 @@
             const headContent = specialistData.SYM_ID ? `Doctors For ${headername} Treatment` : `Available ${headername}`
             heading.textContent = headContent
             heading.style.display = 'block'
-            // if (!isSortedByFees) {
-            //     doctorsList.sort((a, b) => {
-            //         const dateA = a.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object a
-            //         const dateB = b.DETAILS.SCH_DT[0].SCH_DT; // Get the AVAILABLE_DT from object b
-
-            //         // Compare the date strings as strings (assuming they are in "YYYYMMDD" format)
-            //         if (dateA < dateB) {
-            //             return -1; // dateA comes before dateB
-            //         }
-            //         if (dateA > dateB) {
-            //             return 1; // dateA comes after dateB
-            //         }
-            //         return 0; // dates are equal
-            //     });
-            // }
-
+            const bannerDes = document.querySelector('.bannerDescription');
+            bannerDes.textContent = `${specialistData.DESCRIPTION}`
 
             console.log(doctorsList);
             wow = new WOW(
@@ -800,7 +847,7 @@
                 const text = document.createElement("p");
                 const pageTitle = specialistData.SPECIALIST ? specialistData.SPECIALIST : specialistData.SYM_NAME;
                 text.classList.add("wow", "fadeInUp");
-                text.textContent=pageTitle
+                text.textContent = pageTitle
                 imagediv.appendChild(img);
                 scanImageContainer.appendChild(imagediv);
                 scanImageContainer.appendChild(text);
