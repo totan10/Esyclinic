@@ -89,7 +89,7 @@
 
         .searchbar-container {
             position: relative;
-            width: 67%;
+            width: 65%;
             /* Search bar takes 60% of the navbar width */
         }
 
@@ -1309,28 +1309,33 @@
 
             .searchbar-container {
                 width: 100%;
+                margin-bottom: 5px;
             }
 
             .profile-icon {
                 /* display: none; */
                 position: absolute;
-                right: 0;
                 font-size: small;
-                top: 20px;
-                margin-right: 0;
+                top: 24px;
+                right: 40px;
                 max-width: 100px;
             }
 
             .cart-icon {
                 position: absolute;
                 top: 24px;
-                right: 100px;
+                right: 40px;
                 height: 35px;
+                right: 5px;
+            }
+
+            .cart-icon svg {
+                font-size: large;
             }
 
             .cart-icon span {
-                top:-2px;
-                left: 15px;
+                top: 1px;
+                left: 11px;
                 font-size: 8px;
                 padding: 0px 6px;
             }
@@ -1338,6 +1343,47 @@
             #searchResults {
                 top: 24px;
                 /* Adjust top position for smaller screens */
+            }
+
+            .scan-type-container {
+                display: flex;
+                position: absolute;
+                left: 160px;
+                height: 40px;
+                max-height: 60px;
+                top: 20px;
+            }
+
+            .scan-type-container p {
+                font-size: smaller;
+            }
+
+            .scan_image img {
+                height: 38px;
+                max-height: 58px;
+            }
+
+            .modal-content1,
+            .modal-content,
+            #timeSlotModal .modal-content {
+                width: 95%;
+                max-width: 95%;
+                min-width: 70%;
+            }
+
+            #dateGridContainer {
+                max-width: 100%;
+            }
+            .time-slot-grid{
+                grid-template-columns: repeat(3, 1fr);
+                gap: 7px;
+                margin-bottom: 10px;
+            }
+            .time-slot-item{
+                min-height: 20px;
+                max-height: 30px;
+                padding: 10px 0;
+                font-size: smaller;
             }
         }
     </style>
@@ -1958,7 +2004,6 @@
                 updateScanImageContainer('pathology_btn.jpeg', 'Pathology Test');
 
                 const searchbar = document.querySelector('.searchbar-container');
-                searchbar.style.width = '58%';
 
             } catch (error) {
                 console.error('Error handling pathology click:', error);
@@ -1975,7 +2020,6 @@
                 updateScanImageContainer(commonScan.PHOTO_URL, commonScan.DASH_NAME);
 
                 const searchbar = document.querySelector('.searchbar-container');
-                searchbar.style.width = '58%';
 
                 doctorsData = await fetchSearchCommonScan(commonScan.DASH_NAME);
                 console.log(doctorsData);
