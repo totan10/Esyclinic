@@ -89,7 +89,7 @@
 
         .searchbar-container {
             position: relative;
-            width: 60%;
+            width: 67%;
             /* Search bar takes 60% of the navbar width */
         }
 
@@ -516,26 +516,8 @@
             color: green;
         }
 
-        /* .cart-item .remove-btn {
-            background-color: #ff3333;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .cart-item .remove-btn:hover {
-            background-color: #cc0000;
-        } */
-
         /* CSS for Cart Icon */
         .cart-icon {
-            /* position: absolute;
-             top: 110px; 
-            right: 20px; */
-
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -1312,6 +1294,50 @@
             to {
                 transform: translateY(0);
                 opacity: 1;
+            }
+        }
+
+        @media (max-width: 1030px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar-brand img {
+                max-height: 50px;
+            }
+
+            .searchbar-container {
+                width: 100%;
+            }
+
+            .profile-icon {
+                /* display: none; */
+                position: absolute;
+                right: 0;
+                font-size: small;
+                top: 20px;
+                margin-right: 0;
+                max-width: 100px;
+            }
+
+            .cart-icon {
+                position: absolute;
+                top: 24px;
+                right: 100px;
+                height: 35px;
+            }
+
+            .cart-icon span {
+                top:-2px;
+                left: 15px;
+                font-size: 8px;
+                padding: 0px 6px;
+            }
+
+            #searchResults {
+                top: 24px;
+                /* Adjust top position for smaller screens */
             }
         }
     </style>
@@ -2712,7 +2738,7 @@
             const cartItemCount = document.getElementById("cartItemCount");
             cartItemCount.textContent = cartCount;
         }
-        
+
         // Function to add item to cart
         async function addItemToCart(item) {
             let testdata = item.DETAILS ? item.DETAILS : item;
@@ -2721,7 +2747,7 @@
 
         }
 
-        
+
 
         async function showMainPopup(testdata) {
 

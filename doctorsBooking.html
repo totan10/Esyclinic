@@ -56,7 +56,7 @@
 
     .searchbar-container {
       position: relative;
-      width: 60%;
+      width: 67%;
       /* Search bar takes 60% of the navbar width */
     }
 
@@ -290,9 +290,10 @@
       justify-content: center;
       margin-top: 40px;
     }
-    .todayDoctorheader{
-        margin-top: 100px;
-      }
+
+    .todayDoctorheader {
+      margin-top: 100px;
+    }
 
     .doctor {
       margin-top: 45px;
@@ -639,6 +640,7 @@
         flex-direction: column;
         align-items: flex-start;
       }
+
       .navbar-brand img {
         max-height: 50px;
       }
@@ -659,8 +661,144 @@
         top: 20px;
         /* Adjust top position for smaller screens */
       }
-      .todayDoctorheader{
+
+      .todayDoctorheader {
         margin-top: 130px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .navbar-brand img {
+        max-height: 40px;
+      }
+
+      .searchbar {
+        font-size: 14px;
+        padding: 8px 20px 8px 8px;
+      }
+
+      .profile-icon {
+        font-size: small;
+      }
+
+      .slotitems {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      #searchResults {
+        top: 20px;
+        /* Adjust top position for smaller screens */
+      }
+
+      #searchResults li {
+        padding: 8px;
+        /* Reduce padding for smaller screens */
+      }
+    }
+
+    @media (max-width: 1300px) {
+      .navbar-brand img {
+        max-height: 50px;
+      }
+
+      .profile-icon {
+        font-size: medium;
+      }
+
+      .doctor-info p,
+      .doctor-info h5,
+      .slot-item .status {
+        font-size: small;
+      }
+
+      .slot-item .date-day {
+        font-size: small;
+      }
+
+      .searchbar-container {
+        width: 75%;
+      }
+
+    }
+
+    @media (max-width: 1030px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .navbar-brand img {
+        max-height: 50px;
+      }
+
+      .searchbar-container {
+        width: 100%;
+      }
+
+      .profile-icon {
+        /* display: none; */
+        position: absolute;
+        right: 0;
+        font-size: medium;
+        top: 20px;
+      }
+
+      #searchResults {
+        top: 24px;
+        /* Adjust top position for smaller screens */
+      }
+
+      .slot-item {
+        padding-left: 0;
+      }
+
+      .doctor-info p,
+      .doctor-info h5,
+      .slot-item .date-day,
+      .slot-item .status {
+        font-size: smaller;
+      }
+    }
+
+    @media (max-width: 700px) {
+
+      .doctor-info p,
+      .doctor-info h5,
+      .slot-item .status {
+        font-size: x-small;
+      }
+
+      .slot-item .date-day {
+        font-size: xx-small;
+      }
+    }
+
+    @media (max-width: 500px) {
+
+      .doctor-info p,
+      .doctor-info h5,
+      .slot-item .status {
+        font-size: xx-small;
+      }
+
+      .slot-item {
+        margin-left: 5px;
+        padding: 0;
+      }
+
+      .slot-item .date-day {
+        font-size: 8px;
+      }
+
+      .doctor-photo img {
+        width: 40px;
+      }
+    }
+
+    @media (max-width: 450px) {
+      .doctor-info {
+        margin-left: 3px;
       }
     }
 
@@ -1095,7 +1233,7 @@
           console.log(symptom); // Print symptom data when clicked
         });
         const symptomImg = document.createElement("img");
-        symptomImg.src = symptom.PHOTO_URL==""||symptom.PHOTO_URL===null?symptom.PHOTO1_URL:symptom.PHOTO_URL;
+        symptomImg.src = symptom.PHOTO_URL == "" || symptom.PHOTO_URL === null ? symptom.PHOTO1_URL : symptom.PHOTO_URL;
         const symptomName = document.createElement("p");
         symptomName.textContent = symptom.SYM_NAME;
         symptomDiv.appendChild(symptomImg);

@@ -53,7 +53,7 @@
 
     .searchbar-container {
       position: relative;
-      width: 60%;
+      width: 67%;
       /* Search bar takes 60% of the navbar width */
     }
 
@@ -325,8 +325,26 @@
       }
     }
 
+    @media (max-width: 1300px){
+      .navbar-brand img {
+        max-height: 50px;
+      }
+      .profile-icon{
+        font-size: medium;
+      }
+      .doctor-info p,.doctor-info h5,  .slot-item .status{
+        font-size: small;
+      }
+      .slot-item .date-day{
+        font-size: small;
+      }
+      .searchbar-container {
+        width: 75%;
+      }
 
-    @media (max-width: 830px) {
+    }
+
+    @media (max-width: 1030px) {
       .navbar {
         flex-direction: column;
         align-items: flex-start;
@@ -348,7 +366,7 @@
       }
 
       #searchResults {
-        top: 20px;
+        top: 24px;
         /* Adjust top position for smaller screens */
       }
       .slot-item{

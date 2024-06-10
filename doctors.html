@@ -88,7 +88,7 @@
 
         .searchbar-container {
             position: relative;
-            width: 60%;
+            width: 67%;
             /* Search bar takes 60% of the navbar width */
         }
 
@@ -322,7 +322,8 @@
 
         .main-container {
             display: flex;
-            width: 100%
+            width: 100%;
+            margin-top: 100px;
         }
 
         .bannerContainer {
@@ -334,13 +335,13 @@
             box-sizing: border-box;
             position: fixed;
             display: flex;
-            margin-top: 100px;
+           
             flex-direction: column;
         }
 
         .bannerDescription,
         .bannnerImage {
-            width: 95%;
+            width: 90%;
             margin: 10px;
             border-radius: 10px;
             padding: 10px;
@@ -348,10 +349,9 @@
         }
 
         .bannnerImage {
-            background-size: contain;
-            background-color: #007bff;
+            background-size: cover;
             background-repeat: no-repeat;
-            height: 250px;
+            height: 190px;
         }
 
         .bannerContainer h2 {
@@ -368,10 +368,9 @@
             width: 60%;
             margin-left: 40%;
             /* Offset by the width of the fixed banner */
-            padding: 20px;
+            padding: 10px;
             box-sizing: border-box;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 100px;
+            /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); */
         }
 
 
@@ -407,16 +406,18 @@
             color: #01b5cd;
         }
 
-        @media (max-width: 1500px){
+        @media (max-width: 1500px) {
             .doctor {
                 width: 180px;
             }
         }
-        @media (max-width: 1350px){
+
+        @media (max-width: 1350px) {
             .doctors-container {
                 grid-template-columns: repeat(3, 1fr);
                 /* Adjust for smaller screens */
             }
+
             .doctor {
                 width: 220px;
             }
@@ -427,11 +428,13 @@
                 width: 200px;
             }
         }
+
         @media (max-width: 1140px) {
             .doctor {
                 width: 190px;
             }
         }
+
         @media (max-width: 1090px) {
             .doctor {
                 width: 180px;
@@ -441,12 +444,17 @@
         @media (max-width: 950px) {
             .main-container {
                 flex-direction: column;
+                margin-top: 120px;
             }
 
             .bannerContainer {
                 position: relative;
                 width: 100%;
+                
 
+            }
+            .bannnerImage{
+                height: 280px;
             }
 
             .doctors-section {
@@ -475,42 +483,72 @@
             .doctor {
                 width: 225px;
             }
-            .bannerDescription{
-                width: 100%;
+
+            .bannnerImage {
+                width: 92%;
+                margin-left: auto;
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .doctor {
+                width: 200px;
             }
             .bannnerImage {
                 width: 92%;
                 margin-left: auto;
+                height: 230px;
             }
         }
-        @media (max-width: 720px){
-            .doctor{
-                width: 200px;
-            }
-        }
-        @media (max-width: 650px){
+
+        @media (max-width: 650px) {
             .doctors-container {
                 grid-template-columns: repeat(2, 1fr);
                 /* Adjust for smaller screens */
             }
-            .doctor{
+
+            .doctor {
                 width: 245px;
+            }
+            .bannnerImage {
+                width: 92%;
+                margin-left: auto;
+                height: 195px;
             }
         }
 
-        @media (max-width: 520px){
-            .doctor{
+        @media (max-width: 520px) {
+            .doctor {
                 width: 220px;
+            }
+            .bannerDescription{
+                width: auto;
+            }
+            .bannnerImage {
+                width: 92%;
+                margin-left: auto;
+                height: 180px;
             }
         }
 
         @media (max-width: 475px) {
-            .doctor{
+            .doctor {
                 width: 250px;
             }
+
             .doctors-container {
                 grid-template-columns: repeat(1, 1fr);
                 /* Adjust for smaller screens */
+            }
+            .bannnerImage {
+                width: 92%;
+                margin-left: auto;
+                height: 170px;
+            }
+            .filter-buttons {
+                margin: 0;
+                margin-top: 10px;
             }
         }
 
@@ -561,6 +599,243 @@
             margin: 5px 0;
             line-height: 1.5;
             /* text-align: center; */
+        }
+
+        @media (max-width: 830px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar-brand img {
+                max-height: 50px;
+            }
+
+            .searchbar-container {
+                width: 100%;
+            }
+
+            .profile-icon {
+                /* display: none; */
+                position: absolute;
+                right: 0;
+                font-size: medium;
+                top: 20px;
+            }
+
+            #searchResults {
+                top: 20px;
+                /* Adjust top position for smaller screens */
+            }
+
+            .todayDoctorheader {
+                margin-top: 130px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .navbar-brand img {
+                max-height: 40px;
+            }
+
+            .searchbar {
+                font-size: 14px;
+                padding: 8px 20px 8px 8px;
+            }
+
+            .profile-icon {
+                font-size: small;
+            }
+
+            .slotitems {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            #searchResults {
+                top: 20px;
+                /* Adjust top position for smaller screens */
+            }
+
+            #searchResults li {
+                padding: 8px;
+                /* Reduce padding for smaller screens */
+            }
+        }
+
+        @media (max-width: 1300px) {
+            .navbar-brand img {
+                max-height: 50px;
+            }
+
+            .profile-icon {
+                font-size: medium;
+            }
+
+            .doctor-info p,
+            .doctor-info h5,
+            .slot-item .status {
+                font-size: small;
+            }
+
+            .slot-item .date-day {
+                font-size: small;
+            }
+
+            .searchbar-container {
+                width: 75%;
+            }
+
+        }
+
+        @media (max-width: 1030px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar-brand img {
+                max-height: 50px;
+            }
+
+            .searchbar-container {
+                width: 95%;
+            }
+
+            .profile-icon {
+                /* display: none; */
+                position: absolute;
+                right: 0;
+                font-size: medium;
+                top: 20px;
+            }
+
+            #searchResults {
+                top: 24px;
+                /* Adjust top position for smaller screens */
+            }
+
+            .slot-item {
+                padding-left: 0;
+            }
+
+            .doctor-info p,
+            .doctor-info h5,
+            .slot-item .date-day,
+            .slot-item .status {
+                font-size: smaller;
+            }
+
+            .scan-type-container {
+                display: flex;
+                position: absolute;
+                left: 150px;
+                height: 60px;
+                top: 2px;
+            }
+            .scan_image img{
+                height: 58px;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .doctor-info p,
+            .doctor-info h5,
+            .slot-item .status {
+                font-size: x-small;
+            }
+
+            .slot-item .date-day {
+                font-size: xx-small;
+            }
+            .scan_image{
+                height: 42px;
+            }
+            .scan_image img{
+                height: 40px;
+            }
+            .scan-type-container{
+                max-height: 45px;
+                top: unset;
+            }
+            .scan-type-container p{
+                font-size: small;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .doctor-info p,
+            .doctor-info h5,
+            .slot-item .status {
+                font-size: xx-small;
+            }
+
+            .slot-item {
+                margin-left: 5px;
+                padding: 0;
+            }
+
+            .slot-item .date-day {
+                font-size: 8px;
+            }
+
+            .doctor-photo img {
+                width: 40px;
+            }
+
+            .scan_image{
+                height: 32px;
+            }
+            .scan_image img{
+                height: 30px;
+            }
+            .scan-type-container{
+                max-height: 35px;
+                top: unset;
+            }
+            .scan-type-container p{
+                font-size: x-small;
+            }
+            .profile-icon{
+                margin-right: 0;
+                font-size: x-small;
+                max-width: 70px;
+                padding: 0;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .doctor-info {
+                margin-left: 3px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .navbar-brand img {
+                max-height: 40px;
+            }
+
+            .searchbar {
+                font-size: 14px;
+                padding: 8px 20px 8px 8px;
+            }
+
+            .slotitems {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            #searchResults {
+                top: 20px;
+                /* Adjust top position for smaller screens */
+            }
+
+            #searchResults li {
+                padding: 8px;
+                /* Reduce padding for smaller screens */
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
@@ -911,7 +1186,6 @@
                 const scanImageContainer = document.querySelector('.scan-type-container');
                 scanImageContainer.innerHTML = '';
                 const searchbar = document.querySelector('.searchbar-container');
-                searchbar.style.width = '58%';
                 const imagediv = document.createElement('div');
                 imagediv.classList.add("scan_image", "wow", "fadeInUp");
                 const img = document.createElement("img");
@@ -950,18 +1224,19 @@
                     const clinicName = document.querySelector(".profile-icon")
                     clinicName.innerHTML = `${userData.PHARMA_NAME}`
                 }
-                showDoctors(specialistData.DIS_ID)
+                showDoctors(specialistData.DIS_ID, specialistData.SYM_ID)
             }
             else {
                 window.location.href = '/'
             }
         });
-        function showDoctors(DIS_ID) {
+        function showDoctors(DIS_ID, SYM_ID) {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "http://easyhealths.com/api/admcatgclinicdr1"
+            const url = "http://easyhealths.com/api/admcatgclinicdr1_dummy"
             const params = {
                 PHARMA_ID: PHARMA_ID,
-                DIS_ID: DIS_ID
+                DIS_ID: DIS_ID,
+                SYM_ID: SYM_ID
             };
             console.log(params);
             axios
@@ -970,7 +1245,12 @@
                     const data = response.data.data;
                     doctorsList = data;
                     console.log(doctorsList);
-                    populateList(doctorsList)
+                    populateList(doctorsList.Doctors)
+                    const banner = document.querySelector('.bannnerImage');
+                    const bannerData = doctorsList.Catg_Banner[0];
+                    banner.style.backgroundImage = `url(${bannerData.BANNER_URL})`;
+                    console.log( doctorsList.Catg_Banner[0].BANNER_DESC);
+                    document.querySelector('.bannerDescription').textContent = doctorsList.Catg_Banner[0].BANNER_DESC?doctorsList.Catg_Banner[0].BANNER_DESC:doctorsList.Catg_Banner[0].DESCRIPTION;
                 })
                 .catch((error) => {
                     console.error("Error:", error);
