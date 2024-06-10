@@ -158,7 +158,7 @@
         }
 
         #searchResults li:hover {
-            background-color: #f3f3f3;
+            background-color: #f9f9f9;
         }
 
         /* Custom Styles for Search Results */
@@ -403,7 +403,7 @@
             overflow: hidden;
         }
 
-       
+
         .collapsible-body.active {
             display: block;
             color: #747373;
@@ -747,9 +747,10 @@
 
             #familyPackageContainer {
                 grid-template-columns: repeat(2, 1fr);
-                
+
             }
-            .family_package{
+
+            .family_package {
                 width: 280px;
                 height: 500px;
             }
@@ -761,7 +762,8 @@
                 grid-template-columns: repeat(1, 1fr);
                 justify-items: center;
             }
-            .family_package{
+
+            .family_package {
                 width: 300px;
                 height: 500px;
             }
@@ -894,22 +896,23 @@
         }
 
         .profile_test img,
-        .common_scan img
-         {
+        .common_scan img {
             width: 100%;
             height: 80%;
             /* Ensure proper image aspect ratio */
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
         }
-        .family_package img{
-            
+
+        .family_package img {
+
             width: 100%;
             height: 90%;
             /* Ensure proper image aspect ratio */
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
         }
+
         .profile_test p,
         .common_scan p {
             margin: 5px 0;
@@ -1389,17 +1392,23 @@
             #dateGridContainer {
                 max-width: 100%;
             }
-            .time-slot-grid{
+
+            .time-slot-grid {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 7px;
                 margin-bottom: 10px;
             }
-            .time-slot-item{
+
+            .time-slot-item {
                 min-height: 20px;
                 max-height: 30px;
                 padding: 10px 0;
                 font-size: smaller;
             }
+        }
+
+        #searchResults li.selected {
+            background-color: #e0f7fa;
         }
     </style>
 </head>
@@ -1840,131 +1849,6 @@
             })
         }
 
-        // function generateCommonScan(commonScans) {
-        //     const container = document.getElementById('commonScanContainer');
-        //     container.innerHTML = '';
-        //     const commonScanBtn = document.getElementById('commonScanBtn');
-
-        //     const pathoDiv = document.createElement('div');
-        //     pathoDiv.classList.add("common_scan", "wow", "fadeInLeft");
-        //     const symptomImg = document.createElement("img");
-        //     symptomImg.src = 'pathology_btn.jpeg';
-        //     const symptomName = document.createElement("p");
-        //     symptomName.textContent = 'Pathology Test';
-        //     pathoDiv.appendChild(symptomImg);
-        //     pathoDiv.appendChild(symptomName);
-        //     container.appendChild(pathoDiv);
-
-        //     pathoDiv.addEventListener('click', () => {
-        //         document.getElementById('overlay').style.display = 'block';
-        //         document.getElementById('loader').style.display = 'block';
-
-        //         // Assuming fetchSearchPathology() and fetchAllpathology() are async
-        //         fetchSearchPathology();
-        //         fetchAllpathology();
-
-        //         const query = searchInput.value; // Ensure searchInput is defined and accessible
-        //         populatefilteredSearchResults(query); // Add console log to check if called
-
-        //         document.getElementById('overlay').style.display = 'none';
-        //         document.getElementById('loader').style.display = 'none';
-
-        //         const symptomImg1 = document.createElement("img");
-        //         symptomImg1.src = 'pathology_btn.jpeg';
-        //         const symptomName1 = document.createElement("p");
-        //         symptomName1.textContent = 'Pathology Test';
-
-        //         const scanImageContainer = document.querySelector('.scan-type-container');
-        //         scanImageContainer.innerHTML = '';
-        //         const imagediv = document.createElement('div');
-        //         imagediv.classList.add("scan_image", "wow", "fadeInUp");
-        //         symptomName1.classList.add("wow", "fadeInUp");
-
-        //         imagediv.appendChild(symptomImg1);
-        //         scanImageContainer.appendChild(imagediv);
-        //         scanImageContainer.appendChild(symptomName1);
-
-        //         const searchbar = document.querySelector('.searchbar-container');
-        //         searchbar.style.width = '58%';
-        //         scanImageContainer.style.display = 'flex';
-
-        //         scanImageContainer.addEventListener('click', () => {
-        //             scanImageContainer.style.display = 'none';
-        //             doctorsData = searchtests;
-        //             const headerContent = document.getElementById('commonOrgan');
-        //             headerContent.style.display = 'none';
-
-        //             const container = document.getElementById('commonOrganContainer');
-        //             container.innerHTML = '';
-
-        //             const query1 = searchInput.value; // Ensure searchInput is defined and accessible
-        //             populatefilteredSearchResults(query1); // Add console log to check if called
-        //         });
-        //     });
-
-        //     commonScans.forEach(commonScan => {
-        //         const profileDiv = document.createElement("div");
-        //         profileDiv.classList.add("common_scan", "wow", "fadeInLeft");
-
-        //         const symptomImg = document.createElement("img");
-        //         symptomImg.src = commonScan.PHOTO_URL;
-        //         const symptomName = document.createElement("p");
-        //         symptomName.textContent = commonScan.DASH_NAME;
-
-        //         profileDiv.appendChild(symptomImg);
-        //         profileDiv.appendChild(symptomName);
-        //         container.appendChild(profileDiv);
-
-        //         profileDiv.addEventListener("click", () => {
-        //             localStorage.setItem('cartItems', JSON.stringify(cartItems));
-
-
-        //             const symptomImg1 = document.createElement("img");
-        //             symptomImg1.src = commonScan.PHOTO_URL;
-        //             const symptomName1 = document.createElement("p");
-        //             symptomName1.textContent = commonScan.DASH_NAME;
-
-        //             const scanImageContainer = document.querySelector('.scan-type-container');
-        //             scanImageContainer.innerHTML = '';
-        //             const imagediv = document.createElement('div');
-        //             imagediv.classList.add("scan_image", "wow", "fadeInUp");
-        //             symptomName1.classList.add("wow", "fadeInUp");
-
-        //             imagediv.appendChild(symptomImg1);
-        //             scanImageContainer.appendChild(imagediv);
-        //             scanImageContainer.appendChild(symptomName1);
-
-        //             const searchbar = document.querySelector('.searchbar-container');
-        //             searchbar.style.width = '58%';
-        //             scanImageContainer.style.display = 'flex';
-        //             doctorsData=fetchSearchCommonScan(commonScan.DASH_NAME);
-        //             console.log(doctorsData);
-        //             searchInput.click();
-        //             searchInput.focus() 
-        //             const query = searchInput.value;// Ensure searchInput is defined and accessible
-        //             populatefilteredSearchResults(query); // Add console log to check if called
-        //             openOrganGrid(commonScan);
-
-        //             scanImageContainer.addEventListener('click', () => {
-        //                 scanImageContainer.style.display = 'none';
-        //                 doctorsData = searchtests;
-        //                 const headerContent = document.getElementById('commonOrgan');
-        //                 headerContent.style.display = 'none';
-
-        //                 const container = document.getElementById('commonOrganContainer');
-        //                 container.innerHTML = '';
-
-        //                 const query1 = searchInput.value; // Ensure searchInput is defined and accessible
-        //                 populatefilteredSearchResults(query1); // Add console log to check if called
-        //             });
-        //         });
-        //     });
-
-        //     showOneRow('.common_scan');
-        //     commonScanBtn.addEventListener('click', () => {
-        //         toggleGridView('.common_scan', 'commonScanBtn');
-        //     });
-        // }
         async function generateCommonScan(commonScans) {
             const container = document.getElementById('commonScanContainer');
             container.innerHTML = '';
@@ -2358,8 +2242,13 @@
                 });
         }
 
+        // Track the currently selected index
+        let currentIndex = -1;
+        let latestEvent = null;
 
         searchInput.addEventListener("input", () => {
+            currentIndex = -1; // Reset index when new input is entered
+            latestEvent = null; // Reset latest event
             const query = searchInput.value;
             populateSearchResults(query);
         });
@@ -2451,14 +2340,74 @@
                     console.log('Test Details clicked for:', doctor);
                 });
 
-                // listItem.querySelector('.book-now-btn').addEventListener('click', () => {
-                //     addItemToCart(doctor);
-                //     disableButton(listItem.querySelector('.book-now-btn'));
-                // });
+                listItem.addEventListener("mouseenter", () => {
+                    if (latestEvent !== "keyboard") {
+                        currentIndex = index;
+                        latestEvent = "mouse";
+                        clearSelections(items);
+                        listItem.classList.add("selected");
+                    }
+                });
+
+                listItem.addEventListener("mouseleave", () => {
+                    if (latestEvent === "mouse") {
+                        listItem.classList.remove("selected");
+                    }
+                });
+
+
             });
 
             searchResults.classList.add("active"); // Show search results
         }
+
+        function clearSelections(items) {
+            items.forEach(item => item.classList.remove("selected"));
+        }
+
+        searchInput.addEventListener("click", () => {
+            latestEvent = null; // Reset latest event
+            currentIndex = -1; // Reset current index
+            const items = searchResults.querySelectorAll("li");
+            clearSelections(items); // Clear selection from all items
+            // searchResults.classList.remove("active"); // Hide search results
+        });
+
+        searchInput.addEventListener("keydown", (event) => {
+            const items = searchResults.querySelectorAll("li");
+
+            if (items.length === 0) return;
+
+            if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+                // Set the latest event to keyboard
+                latestEvent = "keyboard";
+
+                if (event.key === "ArrowDown") {
+                    // Move down the list
+                    currentIndex = (currentIndex + 1) % items.length;
+                } else if (event.key === "ArrowUp") {
+                    // Move up the list
+                    currentIndex = (currentIndex - 1 + items.length) % items.length;
+                }
+
+                clearSelections(items);
+                updateSelected(items);
+            } else if (event.key === "Enter") {
+                // Trigger click event on selected item
+                if (currentIndex >= 0) {
+                    items[currentIndex].querySelector(".book-now-btn, .remove-btn").click();
+                }
+            }
+        });
+
+        function updateSelected(items) {
+            if (currentIndex >= 0 && currentIndex < items.length) {
+                console.log(`current idex`, currentIndex, items.length);
+                items[currentIndex].classList.add("selected");
+                items[currentIndex].scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+        }
+
 
         // Updated event listener for "Book Now" button in search results
         searchResults.addEventListener('click', async (event) => {

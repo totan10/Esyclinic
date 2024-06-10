@@ -1036,9 +1036,14 @@
                 padding: 10px 0;
                 font-size: smaller;
             }
-            #popularTest{
+
+            #popularTest {
                 margin-top: 120px;
             }
+        }
+
+        #searchResults li.selected {
+            background-color: #e0f7fa;
         }
     </style>
 </head>
@@ -1390,7 +1395,13 @@
         }
 
 
+        // Track the currently selected index
+        let currentIndex = -1;
+        let latestEvent = null;
+
         searchInput.addEventListener("input", () => {
+            currentIndex = -1; // Reset index when new input is entered
+            latestEvent = null; // Reset latest event
             const query = searchInput.value;
             populateSearchResults(query);
         });
@@ -1399,13 +1410,16 @@
             const isClickInsideSearchContainer =
                 searchInput.contains(event.target) ||
                 searchResults.contains(event.target);
+            console.log(isClickInsideSearchContainer);
             if (!isClickInsideSearchContainer) {
                 closeSearchResults();
             }
         });
+
         function closeSearchResults() {
             searchResults.classList.remove("active"); // Hide search results
         }
+
         searchInput.addEventListener("click", (event) => {
             event.stopPropagation();
             if (searchResults.innerHTML.trim() !== "") {
@@ -1425,6 +1439,7 @@
                 const cleanItemName = item.ITEM_NAME.toLowerCase();
                 return cleanItemName.includes(query.toLowerCase());
             });
+            console.log(filteredDoctors);
 
             if (filteredDoctors.length === 0) {
                 console.log(filteredDoctors);
@@ -1478,14 +1493,74 @@
                     console.log('Test Details clicked for:', doctor);
                 });
 
-                // listItem.querySelector('.book-now-btn').addEventListener('click', () => {
-                //     addItemToCart(doctor);
-                //     disableButton(listItem.querySelector('.book-now-btn'));
-                // });
+                listItem.addEventListener("mouseenter", () => {
+                    if (latestEvent !== "keyboard") {
+                        currentIndex = index;
+                        latestEvent = "mouse";
+                        clearSelections(items);
+                        listItem.classList.add("selected");
+                    }
+                });
+
+                listItem.addEventListener("mouseleave", () => {
+                    if (latestEvent === "mouse") {
+                        listItem.classList.remove("selected");
+                    }
+                });
+
+
             });
 
             searchResults.classList.add("active"); // Show search results
         }
+
+        function clearSelections(items) {
+            items.forEach(item => item.classList.remove("selected"));
+        }
+
+        searchInput.addEventListener("click", () => {
+            latestEvent = null; // Reset latest event
+            currentIndex = -1; // Reset current index
+            const items = searchResults.querySelectorAll("li");
+            clearSelections(items); // Clear selection from all items
+            // searchResults.classList.remove("active"); // Hide search results
+        });
+
+        searchInput.addEventListener("keydown", (event) => {
+            const items = searchResults.querySelectorAll("li");
+
+            if (items.length === 0) return;
+
+            if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+                // Set the latest event to keyboard
+                latestEvent = "keyboard";
+
+                if (event.key === "ArrowDown") {
+                    // Move down the list
+                    currentIndex = (currentIndex + 1) % items.length;
+                } else if (event.key === "ArrowUp") {
+                    // Move up the list
+                    currentIndex = (currentIndex - 1 + items.length) % items.length;
+                }
+
+                clearSelections(items);
+                updateSelected(items);
+            } else if (event.key === "Enter") {
+                // Trigger click event on selected item
+                if (currentIndex >= 0) {
+                    items[currentIndex].querySelector(".book-now-btn, .remove-btn").click();
+                }
+            }
+        });
+
+        function updateSelected(items) {
+            if (currentIndex >= 0 && currentIndex < items.length) {
+                console.log(`current idex`, currentIndex, items.length);
+                items[currentIndex].classList.add("selected");
+                items[currentIndex].scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+        }
+
 
         // Updated event listener for "Book Now" button
         searchResults.addEventListener('click', (event) => {
