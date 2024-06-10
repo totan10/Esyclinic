@@ -85,7 +85,6 @@
             height: 70px;
             border-radius: 10px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-
         }
 
         .searchbar-container {
@@ -1549,6 +1548,9 @@
                 // Trigger click event on selected item
                 if (currentIndex >= 0) {
                     items[currentIndex].querySelector(".book-now-btn, .remove-btn").click();
+                }
+                else {
+                    items[0].querySelector(".book-now-btn, .remove-btn").click();
                 }
             }
         });

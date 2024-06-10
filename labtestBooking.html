@@ -59,10 +59,10 @@
         .scan-type-container {
             display: none;
             align-items: center;
-            height: 72px;
+            height: 68px;
             margin: 0;
             padding: 0;
-            min-width: 110px;
+            min-width: 120px;
         }
 
         .scan-type-container:hover {
@@ -82,8 +82,9 @@
         }
 
         .scan_image img {
-            height: 70px;
-
+            height: 66px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .searchbar-container {
@@ -260,9 +261,10 @@
         }
 
         .profile-icon {
+            margin-left: 10px;
             margin-right: 20px;
             /* Margin between search bar and profile icon */
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             /* Font size for profile icon */
             cursor: pointer;
@@ -752,7 +754,7 @@
 
             .family_package {
                 width: 280px;
-                height: 500px;
+                height: 450px;
             }
 
         }
@@ -1316,6 +1318,10 @@
         }
 
         @media (max-width: 1030px) {
+            #commonScan {
+                margin-top: 60px;
+            }
+
             .navbar {
                 flex-direction: column;
                 align-items: flex-start;
@@ -2396,6 +2402,9 @@
                 // Trigger click event on selected item
                 if (currentIndex >= 0) {
                     items[currentIndex].querySelector(".book-now-btn, .remove-btn").click();
+                }
+                else {
+                    items[0].querySelector(".book-now-btn, .remove-btn").click();
                 }
             }
         });
