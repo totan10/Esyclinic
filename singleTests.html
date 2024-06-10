@@ -57,7 +57,6 @@
 
         .scan-type-container {
             display: none;
-            justify-content: space-between;
             align-items: center;
             height: 72px;
             margin: 0;
@@ -91,7 +90,7 @@
 
         .searchbar-container {
             position: relative;
-            width: 60%;
+            width: 65%;
             /* Search bar takes 60% of the navbar width */
         }
 
@@ -405,8 +404,10 @@
             overflow: hidden;
         }
 
+
         .collapsible-body.active {
             display: block;
+            color: #747373;
         }
 
         .collapsible-body.show {
@@ -1035,6 +1036,9 @@
                 padding: 10px 0;
                 font-size: smaller;
             }
+            #popularTest{
+                margin-top: 120px;
+            }
         }
     </style>
 </head>
@@ -1196,7 +1200,6 @@
                     if (organData.ORGAN_NAME) {
                         document.title = `${organData.ORGAN_NAME} Test`
                         const searchbar = document.querySelector('.searchbar-container');
-                        searchbar.style.width = '58%';
                         const imagediv = document.createElement('div');
                         imagediv.classList.add("scan_image", "wow", "fadeInUp");
                         const img = document.createElement("img");
@@ -1216,7 +1219,6 @@
                     else if (organData.DASH_ID) {
                         document.title = `${organData.DASH_NAME} Test`
                         const searchbar = document.querySelector('.searchbar-container');
-                        searchbar.style.width = '58%';
                         const imagediv = document.createElement('div');
                         imagediv.classList.add("scan_image", "wow", "fadeInUp");
                         const img = document.createElement("img");
@@ -1236,7 +1238,6 @@
                     else if (organData.SAMPLE_NAME) {
                         document.title = `${organData.SAMPLE_NAME} Pathology Test`
                         const searchbar = document.querySelector('.searchbar-container');
-                        searchbar.style.width = '58%';
                         const imagediv = document.createElement('div');
                         imagediv.classList.add("scan_image", "wow", "fadeInUp");
                         const img = document.createElement("img");
@@ -1969,7 +1970,7 @@
             const target = event.target;
 
             // Check if the target or any of its parents has the class 'collapse-toggle'
-            if (target.closest('.collapse-toggle')) {
+            if (target.closest('.collapsible-header')) {
                 const collapsibleHeader = target.closest('.collapsible-header');
                 const collapsibleBody = collapsibleHeader.nextElementSibling;
 

@@ -368,8 +368,10 @@
             overflow: hidden;
         }
 
+
         .collapsible-body.active {
             display: block;
+            color: #747373;
         }
 
         .collapsible-body.show {
@@ -1753,7 +1755,7 @@
             const target = event.target;
 
             // Check if the target or any of its parents has the class 'collapse-toggle'
-            if (target.closest('.collapse-toggle')) {
+            if (target.closest('.collapsible-header')) {
                 const collapsibleHeader = target.closest('.collapsible-header');
                 const collapsibleBody = collapsibleHeader.nextElementSibling;
 
