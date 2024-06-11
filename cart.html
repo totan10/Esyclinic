@@ -1347,12 +1347,26 @@
         #searchResults li.selected {
             background-color: #e0f7fa;
         }
+
+        #cartLoader {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn1 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+        }
     </style>
 </head>
 
 <body>
-    <div id="overlay"></div>
-    <div id="loader"></div>
+    <!-- <div id="overlay"></div>
+    <div id="loader"></div> -->
+    <div id="cartLoader"></div>
     <!-- Navbar Container -->
     <div class="navbar-container">
         <!-- Navbar -->
@@ -1417,11 +1431,11 @@
                     <option value="Unmarried">Unmarried</option>
                 </select>
                 <input type="number" id="patientAge" autocomplete="off" placeholder="Your Age*" required />
-                <input type="text" id="advicedBy" autocomplete="off" placeholder="Advised By" />
+                <input type="text" id="advicedBy" autocomplete="off" placeholder="Advised By*" required />
                 <small id="advisorError" class="text-danger"></small>
                 <input type="text" id="drmessage" autocomplete="off" placeholder="Doctor Message" />
                 <div class="buttonContainer">
-                    <input type="submit" value="Proceed" />
+                    <input type="submit" value="Book Test" />
                     <button type="button" id="cancelButton" onclick="closeForm()">
                         Cancel
                     </button>
@@ -1516,6 +1530,14 @@
             }
         )
         wow.init();
+        // Load the Lottie animation
+        var animation = lottie.loadAnimation({
+            container: document.getElementById('cartLoader'),
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: 'hearbeat.json' // Replace with the path to your Lottie animation file
+        });
 
         // Load cart items when cart page is loaded
         window.addEventListener('DOMContentLoaded', loadCartItems);
@@ -1537,8 +1559,8 @@
                     const clinicName = document.querySelector(".profile-icon")
                     clinicName.innerHTML = `${userData.PHARMA_NAME}`
                     companyLogo.src = userData.LOGO_URL;
-                    document.getElementById('overlay').style.display = 'block';
-                    document.getElementById('loader').style.display = 'block';
+                    document.getElementById('cartLoader').style.display = 'block';
+                    // document.getElementById('loader').style.display = 'block';
                     document.getElementById('cartContainer').style.display = 'none';
                     populateDoctors();
 
@@ -1577,8 +1599,8 @@
                     const data = response.data.data;
                     doctorsData = data;
                     console.log(doctorsData);
-                    document.getElementById('overlay').style.display = 'none';
-                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('cartLoader').style.display = 'none';
+                    // document.getElementById('loader').style.display = 'none';
                     document.getElementById('cartContainer').style.display = 'block';
                 })
                 .catch((error) => {
@@ -2343,10 +2365,9 @@
                     event.preventDefault(); // Prevent input if the key is not allowed
                 }
             });
-        document
-            .getElementById("patientMobile")
-            .addEventListener("input", function () {
 
+        document
+            .getElementById("patientMobile").addEventListener('blur', function () {
                 let mobile = document.getElementById('patientMobile').value;
                 mobile = mobile.replace(/\D/g, '');
                 if (!isValidMobile(mobile)) {
@@ -2367,8 +2388,16 @@
                         mobileNumberError.style.width = '0%';
                         document.getElementById('patientMobile').style.marginBottom = '10px'
                     }
+                    else if(mobile.length<10){
+                        mobileNumberError.textContent = 'Enter a complete Mobile number!!!';
+                        mobileNumberError.classList.add('text-danger');
+                        mobileNumberError.style.width = '100%'
+                        const patientDropdown = document.getElementById("patientDropdown");
+                        patientDropdown.style.display = "none";
+                        document.getElementById('patientMobile').style.marginBottom = '0'
+                    }
                     else {
-                        mobileNumberError.textContent = 'Enter a valid 10-digit number!!!';
+                        mobileNumberError.textContent = 'Enter the valid Mobile number!!!';
                         mobileNumberError.classList.add('text-danger');
                         mobileNumberError.style.width = '100%'
                         const patientDropdown = document.getElementById("patientDropdown");
@@ -2383,12 +2412,57 @@
                     mobileNumberError.style.width = '0%';
                     document.getElementById('patientMobile').style.marginBottom = '10px'
                     // Call function to handle mobile number with 10 digits
+                    // handleMobileNumberWith10Digits(mobile);
+                }
+            })
+
+        document
+            .getElementById("patientMobile")
+            .addEventListener("input", function () {
+
+                let mobile = document.getElementById('patientMobile').value;
+                mobile = mobile.replace(/\D/g, '');
+                if (!isValidMobile(mobile)) {
+                    // Make name and age fields editable
+                    const patientNameInput = document.getElementById("patientName");
+                    const patientAgeInput = document.getElementById("patientAge");
+                    const patientSexInput = document.getElementById("patientGender")
+                    const patientDropdown = document.getElementById("patientDropdown");
+                    patientNameInput.disabled = false;
+                    patientAgeInput.disabled = false;
+                    patientSexInput.disabled = false;
+                    patientNameInput.value = '';
+                    patientAgeInput.value = '';
+                    patientSexInput.value = ''
+                    if (mobile == ''||mobile.length<10) {
+                        mobileNumberError.textContent = ''; // Clear error message
+                        mobileNumberError.classList.remove('text-danger');
+                        mobileNumberError.style.width = '0%';
+                        patientDropdown.style.display = "none";
+                        document.getElementById('patientMobile').style.marginBottom = '10px'
+                    }
+                    else if(mobile.length==10) {
+                        mobileNumberError.textContent = 'Enter a valid 10-digit number!!!';
+                        mobileNumberError.classList.add('text-danger');
+                        mobileNumberError.style.width = '100%'
+                       
+                        patientDropdown.style.display = "none";
+                        document.getElementById('patientMobile').style.marginBottom = '0'
+                    }
+
+                } else {
+
+                    mobileNumberError.textContent = ''; // Clear error message
+                    mobileNumberError.classList.remove('text-danger');
+                    mobileNumberError.style.width = '0%';
+                    document.getElementById('patientMobile').style.marginBottom = '10px'
+                    // Call function to handle mobile number with 10 digits
                     handleMobileNumberWith10Digits(mobile);
                 }
             });
+
         document
-            .getElementById("alternateMobile")
-            .addEventListener("input", function () {
+            .getElementById("alternateMobile").addEventListener('blur', function () {
                 const mobileError = document.getElementById('alterMobileNumberError');
                 let mobile = document.getElementById('alternateMobile').value;
                 mobile = mobile.replace(/\D/g, '');
@@ -2399,7 +2473,45 @@
                         mobileError.style.width = '0%';
                         document.getElementById('alternateMobile').style.marginBottom = '10px'
                     }
+                    else if(mobile.length<10){
+                        mobileError.textContent = 'Enter a complete Alternate Mobile number!!!';
+                        mobileError.classList.add('text-danger');
+                        mobileError.style.width = '100%'
+                        const patientDropdown = document.getElementById("patientDropdown");
+                        patientDropdown.style.display = "none";
+                        document.getElementById('alternateMobile').style.marginBottom = '0'
+                    }
                     else {
+                        console.log("not validate number");
+                        mobileError.textContent = 'Enter a valid 10-digit number!!!';
+                        mobileError.classList.add('text-danger');
+                        mobileError.style.width = '100%'
+                        document.getElementById('alternateMobile').style.marginBottom = '0'
+                    }
+
+                } else {
+
+                    mobileError.textContent = ''; // Clear error message
+                    mobileError.classList.remove('text-danger');
+                    mobileError.style.width = '0%';
+                    document.getElementById('alternateMobile').style.marginBottom = '10px'
+                }
+            })
+
+        document
+            .getElementById("alternateMobile")
+            .addEventListener("input", function () {
+                const mobileError = document.getElementById('alterMobileNumberError');
+                let mobile = document.getElementById('alternateMobile').value;
+                mobile = mobile.replace(/\D/g, '');
+                if (!isValidMobile(mobile)) {
+                    if (mobile == ''|| mobile.length<10) {
+                        mobileError.textContent = ''; // Clear error message
+                        mobileError.classList.remove('text-danger');
+                        mobileError.style.width = '0%';
+                        document.getElementById('alternateMobile').style.marginBottom = '10px'
+                    }
+                    else if(mobile.length==10) {
                         console.log("not validate number");
                         mobileError.textContent = 'Enter a valid 10-digit number!!!';
                         mobileError.classList.add('text-danger');
@@ -2718,8 +2830,8 @@
                     bookingForm.style.display = "none"; // Show booking form
 
                     // proceedToPay();
-                    document.getElementById('overlay').style.display = 'block';
-                    document.getElementById('loader').style.display = 'block';
+                    // document.getElementById('overlay').style.display = 'block';
+                    document.getElementById('cartLoader').style.display = 'block';
                     bookTest();
 
                 }
@@ -2787,7 +2899,7 @@
                         FROM: cartItem.FROM,
                         TO: cartItem.TO,
                         // PRESCRIPTION_URL: cartItem ? cartItem.PRESCRIPTION : null,
-                        HOME_COLLECT: cartItem ? cartItem.HOME_COLLECT : null,
+                        HOME_COLLECT: cartItem.HOME_COLLECT ? cartItem.HOME_COLLECT : '',
                         PKG_COST: PKG_COST
                     }
 
@@ -2798,12 +2910,12 @@
                     const testdata = {
                         TEST_ID: cartItem ? cartItem.TEST_ID : null,
                         TEST_NAME: cartItem ? cartItem.TEST_NAME : null,
-                        CATEGORY: cartItem ? cartItem.TEST_CATG : null,
+                        CATEGORY: cartItem.TEST_CATG ? cartItem.TEST_CATG : '',
                         SLOT_DATE: cartItem.BOOKING_DT,
                         FROM: cartItem.FROM,
                         TO: cartItem.TO,
                         // PRESCRIPTION_URL: cartItem ? cartItem.PRESCRIPTION : null,
-                        HOME_COLLECT: cartItem ? cartItem.HOME_COLLECT : null,
+                        HOME_COLLECT: cartItem.HOME_COLLECT ? cartItem.HOME_COLLECT : '',
                         COST: PKG_COST
                     }
                     console.log(testdata.HOME_COLLECT);
@@ -2864,8 +2976,8 @@
             timeSlotModal.style.display = "none";
             cartItems = []
             localStorage.setItem('cartItems', JSON.stringify(cartItems));
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('loader').style.display = 'none';
+            // document.getElementById('overlay').style.display = 'none';
+            document.getElementById('cartLoader').style.display = 'none';
             // Create popup element
             // const bookingId = data.BOOK_ID ? data.BOOK_ID : null;
             // const patientId=data.PATIENT_ID?data.PATIENT_ID :patientData.PATIENT_ID;
