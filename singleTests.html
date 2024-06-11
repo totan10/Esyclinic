@@ -1117,7 +1117,7 @@
     <!-- New Modal for "Test at Home" and "Test at Clinic" -->
     <div id="testLocationModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn">&times;</span>
+            <!-- <span class="close-btn">&times;</span> -->
             <p>Test Mode</p>
             <div class="button-group">
                 <button id="testAtHomeBtn">Test from Home</button>
@@ -1573,7 +1573,7 @@
                 const doctor = doctorsData.find(item => item.ITEM_NAME === doctorName);
 
                 if (target.classList.contains('book-now-btn')) {
-                    addItemToCart(doctor);
+                    addItemToCart(doctor, target, 'Add to Cart', 'book-now-btn');
                     enableButton(target, 'Remove', 'remove-btn');
                     updateSingleTestButtonState(doctorName, 'remove-btn');
                 } else if (target.classList.contains('remove-btn')) {
@@ -1614,16 +1614,16 @@
             window.location.href = "cart.html"
         }
         // Function to add item to cart
-        async function addItemToCart(item) {
+        async function addItemToCart(item, button, text, newClass) {
             let testdata = item.DETAILS ? item.DETAILS : item;
 
-            showMainPopup(testdata)
+            showMainPopup(testdata, button, text, newClass)
 
         }
 
 
 
-        async function showMainPopup(testdata) {
+        async function showMainPopup(testdata, button, text, newClass) {
 
             console.log("inside", testdata);
             // Show modal
@@ -1631,15 +1631,17 @@
             modal.style.display = "block";
 
             // Close modal when the close button or outside modal area is clicked
-            const closeButton = document.querySelector(".close");
+            const closeButton = document.querySelector("#mainPopup .close");
             closeButton.onclick = function () {
                 modal.style.display = "none";
+                modal.style.overflowY = "auto";
+                enableButton(button, text, newClass)
             };
             window.onclick = function (event) {
                 if (event.target == modal) {
                     modal.style.display = "none";
                     modal.style.overflowY = "auto";
-
+                    enableButton(button, text, newClass)
                 }
             };
 
@@ -1690,11 +1692,12 @@
                 timeSlotModal.style.display = "none";
                 modal.style.display = "block";
             };
-            window.onclick = function (event) {
-                if (event.target == timeSlotModal) {
-                    timeSlotModal.style.display = "none";
-                }
-            };
+            // window.onclick = function (event) {
+            //     if (event.target == timeSlotModal) {
+            //         timeSlotModal.style.display = "none";
+            //         modal.style.display = "block";
+            //     }
+            // };
             // Populate time slot grids
             const morningGrid = document.getElementById("morningSlotGrid");
             const afternoonGrid = document.getElementById("afternoonSlotGrid");
@@ -1765,16 +1768,16 @@
             const testLocationModal = document.getElementById("testLocationModal");
             testLocationModal.style.display = "block";
 
-            // Close test location modal when clicking outside of it
-            const closeButton = document.querySelector("#testLocationModal .close-btn");
-            closeButton.onclick = function () {
-                testLocationModal.style.display = "none";
-            };
-            window.onclick = function (event) {
-                if (event.target == testLocationModal) {
-                    testLocationModal.style.display = "none";
-                }
-            };
+            // // Close test location modal when clicking outside of it
+            // const closeButton = document.querySelector("#testLocationModal .close-btn");
+            // closeButton.onclick = function () {
+            //     testLocationModal.style.display = "none";
+            // };
+            // window.onclick = function (event) {
+            //     if (event.target == testLocationModal) {
+            //         testLocationModal.style.display = "none";
+            //     }
+            // };
 
             // Handle button clicks
             document.getElementById("testAtHomeBtn").onclick = function () {
@@ -1804,6 +1807,9 @@
             window.onclick = function (event) {
                 if (event.target == confirmationModal) {
                     confirmationModal.style.display = "none";
+                    document.getElementById("timeSlotModal").style.display = "none";
+                    // document.getElementById("dateGridContainer").style.display = "none";
+                    document.querySelectorAll('.modal').style.display = 'none'
                 }
             };
 
@@ -1942,7 +1948,7 @@
             bookNowBtn.addEventListener('click', () => {
                 const isInCart = bookNowBtn.classList.contains('book-now-btn');
                 if (bookNowBtn.classList.contains('book-now-btn')) {
-                    addItemToCart(data);
+                    addItemToCart(data, bookNowBtn, 'Book Now', 'book-now-btn');
                     enableButton(bookNowBtn, 'Remove', 'remove-btn');
                 } else if (bookNowBtn.classList.contains('remove-btn')) {
                     removeItemFromCart(data);

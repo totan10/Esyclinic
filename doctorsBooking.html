@@ -831,6 +831,10 @@
         /* Reduce padding for smaller screens */
       }
     }
+
+    .highlighted {
+      background-color: #bcedf9;
+    }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css">
 </head>
@@ -933,6 +937,7 @@
   <script>
     let doctorsData = [];
     let userData = null;
+    let currentIndex = -1; // Track the current index
     const searchInput = document.getElementById("searchInput");
     const searchResults = document.getElementById("searchResults");
     wow = new WOW(
@@ -1432,11 +1437,6 @@
               populateTotalDoctorsConatiner(doctorSpecialistsData)
             }
 
-
-
-
-
-
           })
           .catch((error) => {
             // Handle errors
@@ -1460,8 +1460,46 @@
         closeSearchResults();
       }
     });
+
+    searchInput.addEventListener("keydown", (event) => {
+      const results = searchResults.querySelectorAll("li");
+
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        if (currentIndex < results.length - 1) {
+          currentIndex++;
+          highlightResult(results);
+        }
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        if (currentIndex > 0) {
+          currentIndex--;
+          highlightResult(results);
+        }
+      } else if (event.key === "Enter") {
+        event.preventDefault();
+        if (currentIndex === -1 && results.length > 0) {
+          currentIndex = 0; // Default to the first item
+        }
+        if (currentIndex >= 0 && currentIndex < results.length) {
+          results[currentIndex].click();
+        }
+      }
+    });
+
+    function highlightResult(results) {
+      results.forEach((result, index) => {
+        if (index === currentIndex) {
+          result.style.backgroundColor = "#e0f7fa"; // Highlight color
+          result.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        } else {
+          result.style.backgroundColor = "#f9f9f9"; // Highlight color
+        }
+      });
+    }
     function closeSearchResults() {
       searchResults.classList.remove("active"); // Hide search results
+      currentIndex = -1; // Reset currentIndex when closing results
     }
     searchInput.addEventListener("click", (event) => {
       event.stopPropagation();
@@ -1631,6 +1669,13 @@
             // Convert object to query string
             const queryParams = objectToQueryString(doctordata);
             console.log(queryParams);
+            window.location.href = `demo.html?${queryParams}`;
+          });
+          // Add click event listener to the list item
+          listItem.addEventListener("click", () => {
+            console.log("Redirecting to demo.html with doctor data:", doctor);
+            const doctordata = doctor ? doctor : null;
+            const queryParams = objectToQueryString(doctordata);
             window.location.href = `demo.html?${queryParams}`;
           });
 

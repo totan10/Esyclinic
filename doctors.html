@@ -335,7 +335,7 @@
             box-sizing: border-box;
             position: fixed;
             display: flex;
-           
+
             flex-direction: column;
         }
 
@@ -344,7 +344,6 @@
             width: 90%;
             margin: 10px;
             border-radius: 10px;
-            padding: 10px;
             box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
         }
 
@@ -352,16 +351,21 @@
             background-size: cover;
             background-repeat: no-repeat;
             height: 190px;
+            padding: 10px;
         }
 
         .bannerContainer h2 {
             text-align: center;
             font-weight: 500;
+            margin-bottom: 5px;
         }
 
         .bannerDescription {
             background-color: #cbeeea;
             text-align: justify;
+            min-height: 55px;
+            padding: 20px 10px;
+            line-height: 1.25;
         }
 
         .doctors-section {
@@ -450,10 +454,11 @@
             .bannerContainer {
                 position: relative;
                 width: 100%;
-                
+
 
             }
-            .bannnerImage{
+
+            .bannnerImage {
                 height: 280px;
             }
 
@@ -495,6 +500,7 @@
             .doctor {
                 width: 200px;
             }
+
             .bannnerImage {
                 width: 92%;
                 margin-left: auto;
@@ -511,6 +517,7 @@
             .doctor {
                 width: 245px;
             }
+
             .bannnerImage {
                 width: 92%;
                 margin-left: auto;
@@ -522,9 +529,11 @@
             .doctor {
                 width: 220px;
             }
-            .bannerDescription{
+
+            .bannerDescription {
                 width: auto;
             }
+
             .bannnerImage {
                 width: 92%;
                 margin-left: auto;
@@ -541,11 +550,13 @@
                 grid-template-columns: repeat(1, 1fr);
                 /* Adjust for smaller screens */
             }
+
             .bannnerImage {
                 width: 92%;
                 margin-left: auto;
                 height: 170px;
             }
+
             .filter-buttons {
                 margin: 0;
                 margin-top: 10px;
@@ -692,7 +703,7 @@
             .navbar {
                 flex-direction: column;
                 align-items: flex-start;
-                
+
             }
 
             .navbar-brand img {
@@ -701,7 +712,7 @@
 
             .searchbar-container {
                 width: 95%;
-               
+
             }
 
             .profile-icon {
@@ -735,7 +746,8 @@
                 height: 60px;
                 top: 2px;
             }
-            .scan_image img{
+
+            .scan_image img {
                 height: 58px;
             }
         }
@@ -751,17 +763,21 @@
             .slot-item .date-day {
                 font-size: xx-small;
             }
-            .scan_image{
+
+            .scan_image {
                 height: 42px;
             }
-            .scan_image img{
+
+            .scan_image img {
                 height: 40px;
             }
-            .scan-type-container{
+
+            .scan-type-container {
                 max-height: 45px;
                 top: unset;
             }
-            .scan-type-container p{
+
+            .scan-type-container p {
                 font-size: small;
             }
         }
@@ -787,20 +803,24 @@
                 width: 40px;
             }
 
-            .scan_image{
+            .scan_image {
                 height: 32px;
             }
-            .scan_image img{
+
+            .scan_image img {
                 height: 30px;
             }
-            .scan-type-container{
+
+            .scan-type-container {
                 max-height: 35px;
                 top: unset;
             }
-            .scan-type-container p{
+
+            .scan-type-container p {
                 font-size: x-small;
             }
-            .profile-icon{
+
+            .profile-icon {
                 margin-right: 0;
                 font-size: x-small;
                 max-width: 70px;
@@ -899,6 +919,7 @@
         let userData = null;
         let specialistData = null
         let doctorsList = []
+        let currentIndex = -1; // Track the current index
         const femaleDoctorsBtn = document.getElementById("femaleDoctorsBtn");
         const availableTodayBtn = document.getElementById("availableTodayBtn");
         const budgetFriendlyBtn = document.getElementById("budgetFriendlyBtn");
@@ -1251,8 +1272,8 @@
                     const banner = document.querySelector('.bannnerImage');
                     const bannerData = doctorsList.Catg_Banner[0];
                     banner.style.backgroundImage = `url(${bannerData.BANNER_URL})`;
-                    console.log( doctorsList.Catg_Banner[0].BANNER_DESC);
-                    document.querySelector('.bannerDescription').textContent = doctorsList.Catg_Banner[0].BANNER_DESC?doctorsList.Catg_Banner[0].BANNER_DESC:doctorsList.Catg_Banner[0].DESCRIPTION;
+                    console.log(doctorsList.Catg_Banner[0].BANNER_DESC);
+                    document.querySelector('.bannerDescription').textContent = doctorsList.Catg_Banner[0].BANNER_DESC ? doctorsList.Catg_Banner[0].BANNER_DESC : doctorsList.Catg_Banner[0].DESCRIPTION;
                 })
                 .catch((error) => {
                     console.error("Error:", error);
@@ -1297,8 +1318,45 @@
                 closeSearchResults();
             }
         });
+        searchInput.addEventListener("keydown", (event) => {
+            const results = searchResults.querySelectorAll("li");
+
+            if (event.key === "ArrowDown") {
+                event.preventDefault();
+                if (currentIndex < results.length - 1) {
+                    currentIndex++;
+                    highlightResult(results);
+                }
+            } else if (event.key === "ArrowUp") {
+                event.preventDefault();
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    highlightResult(results);
+                }
+            } else if (event.key === "Enter") {
+                event.preventDefault();
+                if (currentIndex === -1 && results.length > 0) {
+                    currentIndex = 0; // Default to the first item
+                }
+                if (currentIndex >= 0 && currentIndex < results.length) {
+                    results[currentIndex].click();
+                }
+            }
+        });
+
+        function highlightResult(results) {
+            results.forEach((result, index) => {
+                if (index === currentIndex) {
+                    result.style.backgroundColor = "#e0f7fa"; // Highlight color
+                    result.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                } else {
+                    result.style.backgroundColor = "#f9f9f9"; // Highlight color
+                }
+            });
+        }
         function closeSearchResults() {
             searchResults.classList.remove("active"); // Hide search results
+            currentIndex = -1; // Reset currentIndex when closing results
         }
         searchInput.addEventListener("click", (event) => {
             event.stopPropagation();
@@ -1501,6 +1559,13 @@
                         // Convert object to query string
                         const queryParams = objectToQueryString(doctordata);
                         console.log(queryParams);
+                        window.location.href = `demo.html?${queryParams}`;
+                    });
+                    // Add click event listener to the list item
+                    listItem.addEventListener("click", () => {
+                        console.log("Redirecting to demo.html with doctor data:", doctor);
+                        const doctordata = doctor ? doctor : null;
+                        const queryParams = objectToQueryString(doctordata);
                         window.location.href = `demo.html?${queryParams}`;
                     });
 
