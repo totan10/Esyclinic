@@ -1466,33 +1466,33 @@
       return age >= 0;
     }
 
-    // Function to display error message
-    function displayError(inputField, message) {
-      const parentElement = inputField.parentElement;
-      const errorElement = parentElement.querySelector(".error-message");
+    // // Function to display error message
+    // function displayError(inputField, message) {
+    //   const parentElement = inputField.parentElement;
+    //   const errorElement = parentElement.querySelector(".error-message");
 
-      // Create error message element if not already present
-      if (!errorElement) {
-        const errorMessage = document.createElement("div");
-        errorMessage.classList.add("error-message");
-        parentElement.appendChild(errorMessage);
-        errorElement = errorMessage;
-      }
+    //   // Create error message element if not already present
+    //   if (!errorElement) {
+    //     let errorMessage = document.createElement("div");
+    //     errorMessage.classList.add("error-message");
+    //     parentElement.appendChild(errorMessage);
+    //     errorElement = errorMessage;
+    //   }
 
-      // Display error message
-      errorElement.textContent = message;
-    }
+    //   // Display error message
+    //   errorElement.textContent = message;
+    // }
 
-    // Function to clear error message
-    function clearError(inputField) {
-      const parentElement = inputField.parentElement;
-      const errorElement = parentElement.querySelector(".error-message");
+    // // Function to clear error message
+    // function clearError(inputField) {
+    //   const parentElement = inputField.parentElement;
+    //   const errorElement = parentElement.querySelector(".error-message");
 
-      // Clear error message
-      if (errorElement) {
-        parentElement.removeChild(errorElement);
-      }
-    }
+    //   // Clear error message
+    //   if (errorElement) {
+    //     parentElement.removeChild(errorElement);
+    //   }
+    // }
 
     // Add event listeners to input fields for validation
     document
@@ -1574,35 +1574,35 @@
         // Perform validation before submitting the form
         let isValid = true;
 
-        if (!isValidName(patientName)) {
-          displayError(
-            document.getElementById("patientName"),
-            "Name should only contain alphabets."
-          );
-          isValid = false;
-        } else {
-          clearError(document.getElementById("patientName"));
-        }
+        // if (!isValidName(patientName)) {
+        //   displayError(
+        //     document.getElementById("patientName"),
+        //     "Name should only contain alphabets."
+        //   );
+        //   isValid = false;
+        // } else {
+        //   clearError(document.getElementById("patientName"));
+        // }
 
-        if (!isValidMobile(patientMobile)) {
-          displayError(
-            document.getElementById("patientMobile"),
-            "Mobile number should be exactly 10 digits."
-          );
-          isValid = false;
-        } else {
-          clearError(document.getElementById("patientMobile"));
-        }
+        // if (!isValidMobile(patientMobile)) {
+        //   displayError(
+        //     document.getElementById("patientMobile"),
+        //     "Mobile number should be exactly 10 digits."
+        //   );
+        //   isValid = false;
+        // } else {
+        //   clearError(document.getElementById("patientMobile"));
+        // }
 
-        if (!isValidAge(patientAge)) {
-          displayError(
-            document.getElementById("patientAge"),
-            "Age cannot be negative."
-          );
-          isValid = false;
-        } else {
-          clearError(document.getElementById("patientAge"));
-        }
+        // if (!isValidAge(patientAge)) {
+        //   displayError(
+        //     document.getElementById("patientAge"),
+        //     "Age cannot be negative."
+        //   );
+        //   isValid = false;
+        // } else {
+        //   clearError(document.getElementById("patientAge"));
+        // }
 
         // If all fields are valid, submit the form
         if (isValid) {
