@@ -754,7 +754,7 @@
 
             .family_package {
                 width: 280px;
-                height: 450px;
+                height: 400px;
             }
 
         }
@@ -886,7 +886,7 @@
             /* Add pointer cursor */
             background: #F2F2F2;
             /* Gradient background */
-            height: 450px;
+            height: 400px;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
@@ -1198,6 +1198,7 @@
             margin-bottom: 10px;
             color: #0a4aab;
             text-align: center;
+            align-content: center;
             font-size: larger;
             height: 40px;
             /* Adjust margin bottom */
@@ -1354,63 +1355,64 @@
             }
 
             .cart-icon svg {
-                font-size: large;
+                font-size: x-large;
             }
 
             .cart-icon span {
-                top: 1px;
-                left: 11px;
+                top: -3px;
+                left: 15px;
                 font-size: 8px;
-                padding: 0px 6px;
+                padding: 2px 6px;
             }
+        
 
-            #searchResults {
-                top: 24px;
-                /* Adjust top position for smaller screens */
-            }
+        #searchResults {
+            top: 24px;
+            /* Adjust top position for smaller screens */
+        }
 
-            .scan-type-container {
-                display: flex;
-                position: absolute;
-                left: 160px;
-                height: 40px;
-                max-height: 60px;
-                top: 20px;
-            }
+        .scan-type-container {
+            display: flex;
+            position: absolute;
+            left: 160px;
+            height: 40px;
+            max-height: 60px;
+            top: 20px;
+        }
 
-            .scan-type-container p {
-                font-size: smaller;
-            }
+        .scan-type-container p {
+            font-size: smaller;
+        }
 
-            .scan_image img {
-                height: 38px;
-                max-height: 58px;
-            }
+        .scan_image img {
+            height: 38px;
+            max-height: 58px;
+        }
 
-            .modal-content1,
-            .modal-content,
-            #timeSlotModal .modal-content {
-                width: 95%;
-                max-width: 95%;
-                min-width: 70%;
-            }
+        .modal-content1,
+        .modal-content,
+        #timeSlotModal .modal-content {
+            width: 95%;
+            max-width: 95%;
+            min-width: 70%;
+        }
 
-            #dateGridContainer {
-                max-width: 100%;
-            }
+        #dateGridContainer {
+            max-width: 100%;
+        }
 
-            .time-slot-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 7px;
-                margin-bottom: 10px;
-            }
+        .time-slot-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 7px;
+            margin-bottom: 10px;
+        }
 
-            .time-slot-item {
-                min-height: 20px;
-                max-height: 30px;
-                padding: 10px 0;
-                font-size: smaller;
-            }
+        .time-slot-item {
+            min-height: 20px;
+            max-height: 30px;
+            padding: 10px 0;
+            font-size: smaller;
+        }
         }
 
         #searchResults li.selected {
@@ -1443,157 +1445,161 @@
             <polyline id="front2" points="0.157 23.954, 14 23.954, 21.843 48, 43 0, 50 24, 64 24"></polyline>
         </svg>
     </div> -->
-    <div id="cartLoader"></div>
-    <div class="navbar-container">
-        <!-- Navbar -->
-        <nav class="navbar">
-            <!-- Logo -->
-            <a class="navbar-brand" href="dashboard.html">
-                <img src="logo.png" alt="Company Logo" id="companyLogo" />
-            </a>
-            <div class="scan-type-container"></div>
-            <!-- Search Bar with Search Icon -->
-            <div class="input-group searchbar-container">
-                <input type="text" class="form-control searchbar" placeholder="Search" aria-label="Search"
-                    aria-describedby="search-button" id="searchInput" autocomplete="off" />
-                <div class="input-group-text">
-                    <i class="fas fa-search"></i>
+    <div id="content">
+        <div id="cartLoader"></div>
+        <div class="navbar-container">
+            <!-- Navbar -->
+            <nav class="navbar">
+                <!-- Logo -->
+                <a class="navbar-brand" href="dashboard.html">
+                    <img src="logo.png" alt="Company Logo" id="companyLogo" />
+                </a>
+                <div class="scan-type-container"></div>
+                <!-- Search Bar with Search Icon -->
+                <div class="input-group searchbar-container">
+                    <input type="text" class="form-control searchbar" placeholder="Search" aria-label="Search"
+                        aria-describedby="search-button" id="searchInput" autocomplete="off" />
+                    <div class="input-group-text">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <ul id="searchResults"></ul>
                 </div>
-                <ul id="searchResults"></ul>
-            </div>
-            <!-- Profile Icon -->
-            <div class="profile-icon">
-                <i class="fas fa-user"></i>
-                <!-- Adjust icon as needed -->
-            </div>
+                <!-- Profile Icon -->
+                <div class="profile-icon">
+                    <i class="fas fa-user"></i>
+                    <!-- Adjust icon as needed -->
+                </div>
 
-            <!-- Cart Icon -->
-            <div id="cartIcon" class="cart-icon" onclick="openCart()">
-                <i class="fas fa-shopping-cart"></i>
-                <span id="cartItemCount">0</span> <!-- Cart count -->
-            </div>
-        </nav>
-    </div>
-
-
-    <!-- Cart Container -->
-    <div id="cartContainer" class="cart-container">
-        <!-- Cart items will be rendered here -->
-    </div>
-
-    <div class="header" id="commonOrgan">
-    </div>
-    <div class="common-organ-container" id="commonOrganContainer">
-        <!-- Tests will be dynamically added here -->
-    </div>
-
-    <div class="header" id="commonScan">
-        Most Common Scans and Pathology
-        <div class="view-all-btn">
-            <button type="button" id="commonScanBtn">View All</button>
+                <!-- Cart Icon -->
+                <div id="cartIcon" class="cart-icon" onclick="openCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cartItemCount">0</span> <!-- Cart count -->
+                </div>
+            </nav>
         </div>
-    </div>
-    <div class="common-scan-container" id="commonScanContainer">
-        <!-- Tests will be dynamically added here -->
-    </div>
 
-    <!-- Add the modal at the end of the body -->
-    <div id="organsModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modalOrgansContent"></div>
-        </div>
-    </div>
 
-    <div class="header" id="popularTest">
-        Most Prescribed Doctor's Test
-        <div class="view-all-btn">
-            <button type="button" id="popularTestBtn">View All</button>
+        <!-- Cart Container -->
+        <div id="cartContainer" class="cart-container">
+            <!-- Cart items will be rendered here -->
         </div>
-    </div>
-    <div class="popular-tests-container" id="popularTestsContainer">
-        <!-- Tests will be dynamically added here -->
-    </div>
 
-    <div class="header" id="symptomaticTest">
-        Trending Symptomatic Test
-        <div class="view-all-btn">
-            <button type="button" id="symptomaticTestBtn">View All</button>
+        <div class="header" id="commonOrgan">
         </div>
-    </div>
-    <div class="trending-tests-container" id="trendingTestsContainer">
-        <!-- Tests will be dynamically added here -->
-    </div>
+        <div class="common-organ-container" id="commonOrganContainer">
+            <!-- Tests will be dynamically added here -->
+        </div>
 
-    <div class="header" id="profileTest">
-        Test by Health Risk
-        <div class="view-all-btn">
-            <button type="button" id="profileTestBtn">View All</button>
-        </div>
-    </div>
-    <div class="profile-tests-container" id="profileTestsContainer">
-        <!-- Tests will be dynamically added here -->
-    </div>
-
-    <div class="header" id="familyPackage">
-        Top Family Care Package
-        <div class="view-all-btn">
-            <button type="button" id="familyCareBtn">View All</button>
-        </div>
-    </div>
-    <div class="familyPackage-container" id="familyPackageContainer">
-        <!-- Tests will be dynamically added here -->
-    </div>
-
-    <!-- Add the modal at the end of the body -->
-    <div id="detailsModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modalDetailsContent"></div>
-        </div>
-    </div>
-    <div id="mainPopup" class="modal">
-        <div class="modal-content1">
-            <span class="close">&times;</span>
-            <div class="grid-container" id="dateGridContainer"></div>
-        </div>
-    </div>
-    <!-- New modal for selecting preferred time slots -->
-    <div id="timeSlotModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Select Preferred Time Slot</h2>
-            <h3>Morning <img src="/morning_icon.jpeg" alt="Morning" style="width: 30px; height: 30px;"></h4>
-                <div class="time-slot-grid" id="morningSlotGrid"></div>
-                <h3>Afternoon <img src="/afternoon_icon.jpeg" alt="Afternoon" style="width: 30px; height: 30px;"></h4>
-                    <div class="time-slot-grid" id="afternoonSlotGrid"></div>
-                    <h3>Evening <img src="/evening_icon.jpeg" alt="Evening" style="width: 30px; height: 30px;"></h4>
-                        <div class="time-slot-grid" id="eveningSlotGrid"></div>
-        </div>
-    </div>
-
-    <!-- New Modal for "Test at Home" and "Test at Clinic" -->
-    <div id="testLocationModal" class="modal">
-        <div class="modal-content">
-            <!-- <span class="close-btn">&times;</span> -->
-            <p>Test Mode</p>
-            <div class="button-group">
-                <button id="testAtHomeBtn">Test from Home</button>
-                <button id="testAtClinicBtn">Test at Center</button>
+        <div class="header" id="commonScan">
+            Most Common Scans and Pathology
+            <div class="view-all-btn">
+                <button type="button" id="commonScanBtn">View All</button>
             </div>
         </div>
-    </div>
+        <div class="common-scan-container" id="commonScanContainer">
+            <!-- Tests will be dynamically added here -->
+        </div>
 
-    <!-- New Modal for "Test added to Cart" -->
-    <div id="confirmationModal" class="modal">
-        <div class="confirmation-content">
-            <p>Test added to Cart successfully</p>
-            <div class="button-group">
-                <button id="addMoreTestBtn">Add more Tests</button>
-                <button id="proceedToCartBtn">Proceed to Cart</button>
+        <!-- Add the modal at the end of the body -->
+        <div id="organsModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modalOrgansContent"></div>
+            </div>
+        </div>
+
+        <div class="header" id="popularTest">
+            Most Prescribed Doctor's Test
+            <div class="view-all-btn">
+                <button type="button" id="popularTestBtn">View All</button>
+            </div>
+        </div>
+        <div class="popular-tests-container" id="popularTestsContainer">
+            <!-- Tests will be dynamically added here -->
+        </div>
+
+        <div class="header" id="symptomaticTest">
+            Trending Symptomatic Test
+            <div class="view-all-btn">
+                <button type="button" id="symptomaticTestBtn">View All</button>
+            </div>
+        </div>
+        <div class="trending-tests-container" id="trendingTestsContainer">
+            <!-- Tests will be dynamically added here -->
+        </div>
+
+        <div class="header" id="profileTest">
+            Test by Health Risk
+            <div class="view-all-btn">
+                <button type="button" id="profileTestBtn">View All</button>
+            </div>
+        </div>
+        <div class="profile-tests-container" id="profileTestsContainer">
+            <!-- Tests will be dynamically added here -->
+        </div>
+
+        <div class="header" id="familyPackage">
+            Top Family Care Package
+            <div class="view-all-btn">
+                <button type="button" id="familyCareBtn">View All</button>
+            </div>
+        </div>
+        <div class="familyPackage-container" id="familyPackageContainer">
+            <!-- Tests will be dynamically added here -->
+        </div>
+
+        <!-- Add the modal at the end of the body -->
+        <div id="detailsModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modalDetailsContent"></div>
+            </div>
+        </div>
+        <div id="mainPopup" class="modal">
+            <div class="modal-content1">
+                <span class="close">&times;</span>
+                <div class="grid-container" id="dateGridContainer"></div>
+            </div>
+        </div>
+        <!-- New modal for selecting preferred time slots -->
+        <div id="timeSlotModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2>Select Preferred Time Slot</h2>
+                <h3>Morning <img src="/morning_icon.jpeg" alt="Morning" style="width: 30px; height: 30px;"></h4>
+                    <div class="time-slot-grid" id="morningSlotGrid"></div>
+                    <h3>Afternoon <img src="/afternoon_icon.jpeg" alt="Afternoon" style="width: 30px; height: 30px;">
+                        </h4>
+                        <div class="time-slot-grid" id="afternoonSlotGrid"></div>
+                        <h3>Evening <img src="/evening_icon.jpeg" alt="Evening" style="width: 30px; height: 30px;"></h4>
+                            <div class="time-slot-grid" id="eveningSlotGrid"></div>
+            </div>
+        </div>
+
+        <!-- New Modal for "Test at Home" and "Test at Clinic" -->
+        <div id="testLocationModal" class="modal">
+            <div class="modal-content">
+                <!-- <span class="close-btn">&times;</span> -->
+                <p>Test Mode</p>
+                <div class="button-group">
+                    <button id="testAtHomeBtn">Test from Home</button>
+                    <button id="testAtClinicBtn">Test at Center</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Modal for "Test added to Cart" -->
+        <div id="confirmationModal" class="modal">
+            <div class="confirmation-content">
+                <p>Test added to Cart successfully</p>
+                <div class="button-group">
+                    <button id="addMoreTestBtn">Add more Tests</button>
+                    <button id="proceedToCartBtn">Proceed to Cart</button>
+                </div>
             </div>
         </div>
     </div>
+
 
     <!-- JavaScript libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
