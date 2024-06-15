@@ -410,7 +410,7 @@
             color: #01b5cd;
         }
 
-        @media (max-width: 1500px) {
+        @media (max-width: 1600px) {
             .doctor {
                 width: 180px;
             }
@@ -543,11 +543,12 @@
 
         @media (max-width: 475px) {
             .doctor {
-                width: 250px;
+                width: 45vw;
             }
 
             .doctors-container {
-                grid-template-columns: repeat(1, 1fr);
+                grid-template-columns: repeat(2, 1fr);
+                padding: 10px;
                 /* Adjust for smaller screens */
             }
 
@@ -711,7 +712,7 @@
             }
 
             .searchbar-container {
-                width: 95%;
+                width: 100%;
 
             }
 
@@ -752,12 +753,12 @@
             }
         }
 
-        @media (max-width: 700px) {
+        @media (max-width: 769px) {
 
             .doctor-info p,
             .doctor-info h5,
             .slot-item .status {
-                font-size: x-small;
+                font-size: xx-small;
             }
 
             .slot-item .date-day {
@@ -780,27 +781,44 @@
             .scan-type-container p {
                 font-size: small;
             }
+
+            .doctor-photo {
+                height: 60%;
+            }
         }
 
         @media (max-width: 500px) {
+            .slotitems {
+                width: 12vw;
+            }
+            .doctor-info{
+                width: 12%;
+            }
 
             .doctor-info p,
-            .doctor-info h5,
-            .slot-item .status {
-                font-size: xx-small;
+            .doctor-info h5
+            {
+                font-size: 7px;
+                overflow-wrap: break-word;
+            }
+            .slot-item .status{
+                font-size: 6px;
+                overflow-wrap: break-word;
             }
 
             .slot-item {
-                margin-left: 5px;
+                margin-left: 3px;
                 padding: 0;
             }
 
             .slot-item .date-day {
-                font-size: 8px;
+                font-size: 6px;
             }
-
+            .doctor-photo{
+                width: 10vw;
+            }
             .doctor-photo img {
-                width: 40px;
+                width: 100%;
             }
 
             .scan_image {
@@ -813,7 +831,7 @@
 
             .scan-type-container {
                 max-height: 35px;
-                top: unset;
+                top: 20px;
             }
 
             .scan-type-container p {
@@ -845,7 +863,7 @@
             }
 
             .slotitems {
-                width: 100%;
+                /* width: 100%; */
                 margin-bottom: 10px;
             }
 

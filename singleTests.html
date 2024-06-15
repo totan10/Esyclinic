@@ -15,6 +15,8 @@
             padding: 0;
             background-color: #fff;
             font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+            box-sizing: border-box;
         }
 
         .header {
@@ -22,12 +24,13 @@
             padding-top: 10px;
             /* Dark blue background */
             height: 40px;
+            width: 100vw;
             /* Height of the header */
             color: #fff;
             /* Text color */
             text-align: center;
             /* Center align text */
-            font-size: 24px;
+            font-size: x-large;
             /* Font size */
         }
 
@@ -37,7 +40,7 @@
             /* Fix the navbar container */
             top: 0;
             /* Position at the top */
-            width: 100%;
+            width: 100vw;
             /* Full width */
             z-index: 999;
             /* Ensure it's above other content */
@@ -610,22 +613,28 @@
         }
 
         .popular-tests-container {
-            margin: 10px;
             margin-top: 30px;
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            /* Maximum 6 items per row */
             gap: 20px;
-            /* Gap between items */
-            /* justify-content: center; */
         }
-
+        @media (min-width: 1400px){
+            .test-item{
+                width: 200px;
+            }
+            .test-details-btn{
+                padding: 6px 36px;
+            }
+            
+        }
         @media (max-width: 1400px) {
 
             .popular-tests-container {
                 grid-template-columns: repeat(5, 1fr);
-                justify-items: center;
                 /* Adjust for smaller screens */
+            }
+            .test-details-btn{
+                padding: 6px 36px;
             }
         }
 
@@ -648,17 +657,39 @@
         @media (max-width: 700px) {
 
             .popular-tests-container {
+                width: 100vw;
                 grid-template-columns: repeat(2, 1fr);
+                margin-left: 10px;
+                margin-right: 10px;
+                padding: 0;
+                gap: 10px;
                 /* Adjust for smaller screens */
+            }
+
+            .test-name {
+                height: 20%;
+                font-weight: 500;
+                font-size: smaller;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .test-item {
+                width: 38vw;
+                margin: 0;
+            }
+            .test-details-btn{
+                font-size: smaller;
+                /* padding: 4px 20px; */
             }
         }
 
         .test-item {
             background-color: #F2F2F2;
             padding: 10px;
-            width: 200px;
             border-radius: 10px;
             display: flex;
+            
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
@@ -691,15 +722,16 @@
         }
 
         .test-name {
+            height: 20px;
             color: red;
             margin-top: 0;
             text-align: center;
         }
 
         .test-details-btn {
-            background-color: #22e3ca;
+            background-color: #1b9081;
             color: #fff;
-            padding: 6px 36px;
+            /* padding: 6px 36px; */
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -989,7 +1021,7 @@
             }
 
             #searchResults {
-                top: 24px;
+                top: 26px;
                 /* Adjust top position for smaller screens */
             }
 
@@ -1044,7 +1076,7 @@
         #searchResults li.selected {
             background-color: #e0f7fa;
         }
-        
+
         #cartLoader {
             position: fixed;
             top: 0;
@@ -1956,7 +1988,7 @@
             const testItem = document.createElement('div');
             testItem.classList.add('test-item', "wow", "fadeInLeft");
             testItem.innerHTML = `
-            <h4 class="test-name">${data.TEST_NAME}</h4>
+            <h5 class="test-name">${data.TEST_NAME}</h5>
             <div class="test-details-btn">Test Details</div>
             <p class="test-price">Price: <span class="price-value">₹${data.COST}</span></p>
             <button class="${isItemInCart(data.TEST_NAME) ? 'remove-btn' : 'book-now-btn'}">

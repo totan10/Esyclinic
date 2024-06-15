@@ -33,7 +33,7 @@
       /* Fix the navbar container */
       top: 0;
       /* Position at the top */
-      width: 100%;
+      width: 100vw;
       /* Full width */
       z-index: 999;
       /* Ensure it's above other content */
@@ -276,17 +276,16 @@
       grid-template-columns: repeat(4, 1fr);
     }
 
-    @media (max-width: 1000px) {
+    @media (max-width: 1050px) {
       .row {
         grid-template-columns: repeat(2, 1fr);
       }
-    }
-
-    @media (max-width: 768px) {
-      .row {
-        grid-template-columns: repeat(1, 1fr);
+      .service-box{
+        width: 36vw;
+        margin: 10px;
       }
     }
+
 
 
     .icon-container {
@@ -348,6 +347,8 @@
       .navbar {
         flex-direction: column;
         align-items: flex-start;
+        padding-left: 0;
+        width: 100%;
       }
       .navbar-brand img {
         max-height: 50px;
@@ -413,6 +414,7 @@
       .searchbar {
         font-size: 14px;
         padding: 8px 20px 8px 8px;
+        margin-left: 5px;
       }
 
       .profile-icon {

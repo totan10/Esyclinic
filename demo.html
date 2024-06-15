@@ -728,6 +728,50 @@
         transform: rotate(360deg);
       }
     }
+
+    @media (max-width: 500px) {
+      .modal-slot-item {
+        width: 42vw;
+      }
+
+      .modal-slot-item span {
+        font-size: small;
+      }
+
+      .modal-slot-item .availability {
+        font-size: small;
+      }
+
+      .booking-container {
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        right: 5px;
+      }
+
+      .buttonContainer {
+        display: flex;
+        justify-content: space-evenly;
+      }
+
+      .booking-form input[type="submit"],
+      #cancelButton {
+        margin-left: 0;
+        width: 33vw;
+      }
+
+      .popup-overlay {
+        position: fixed;
+        top: 0;
+        height: 100%;
+        width: 100vw;
+      }
+      .booking-confirmation{
+        width: 100%;
+        border-radius: none;
+      }
+
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
 </head>
@@ -913,7 +957,7 @@
           const formattedDate = getFormattedDate(slot.SCH_DT);
           const dayName = slot.SCH_DAY;
           const slotItem = document.createElement("div");
-          slotItem.classList.add("col-md-6");
+          slotItem.classList.add("col-md-6", "col-6");
 
           // Determine status text and color based on conditions
           let statusText, statusColor;
@@ -1210,6 +1254,14 @@
       const bookingForm = document.querySelector(".booking-form");
 
       bookingForm.style.display = "block"; // Show booking form
+      // Get the computed style of the booking container
+      const computedStyle = window.getComputedStyle(bookingContainer);
+      console.log(computedStyle.position);
+
+      if (computedStyle.position === 'absolute') {
+        // Hide the doctor profile container if the booking container is absolute positioned
+        document.getElementById('doctorProfileContainer').style.display = 'none';
+      }
     }
 
     document
@@ -1361,7 +1413,7 @@
         }
       });
 
-      document
+    document
       .getElementById("alternateMobile")
       .addEventListener("blur", function () {
         const mobileError = document.getElementById('alterMobileNumberError');
@@ -1374,7 +1426,7 @@
             mobileError.style.width = '0%';
             document.getElementById('alternateMobile').style.marginBottom = '10px'
           }
-          else if(mobile.length<10){
+          else if (mobile.length < 10) {
             console.log("not validate number");
             mobileError.textContent = 'Enter a complete Alternate Mobile number!!!';
             mobileError.classList.add('text-danger');
@@ -1538,7 +1590,7 @@
       slotContainer.style.display = "block";
       bookingContainer.style.display = "none";
       const bookingForm = document.querySelector(".booking-form");
-
+      document.getElementById('doctorProfileContainer').display = 'block';
       bookingForm.style.display = "none"; // Show booking form
     }
     // Modify form submission event listener to include validation
