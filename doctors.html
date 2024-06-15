@@ -1013,7 +1013,7 @@
         // Function to apply filters based on current state
         function applyFilters() {
 
-            let filteredDoctors = doctorsList.slice();
+            let filteredDoctors = doctorsList.Doctors.slice();
 
             // Apply filters based on active filters
             if (activeFilters.budgetFriendly) {
@@ -1073,8 +1073,6 @@
             const headContent = specialistData.SYM_ID ? `Doctors For ${headername} Treatment` : `Available ${headername}`
             heading.textContent = headContent
             heading.style.display = 'block'
-            const bannerDes = document.querySelector('.bannerDescription');
-            bannerDes.textContent = `${specialistData.DESCRIPTION}`
 
             console.log(doctorsList);
             wow = new WOW(
@@ -1318,8 +1316,10 @@
                     const banner = document.querySelector('.bannnerImage');
                     const bannerData = doctorsList.Catg_Banner[0];
                     banner.style.backgroundImage = `url(${bannerData.BANNER_URL})`;
-                    console.log(doctorsList.Catg_Banner[0].BANNER_DESC);
-                    document.querySelector('.bannerDescription').textContent = doctorsList.Catg_Banner[0].BANNER_DESC ? doctorsList.Catg_Banner[0].BANNER_DESC : doctorsList.Catg_Banner[0].DESCRIPTION;
+
+                    const bannerDescription=doctorsList.Catg_Banner[0].BANNER_DESC ? doctorsList.Catg_Banner[0].BANNER_DESC : doctorsList.Catg_Banner[0].DESCRIPTION;
+                    document.querySelector('.bannerDescription').textContent = bannerDescription;
+                    console.log(bannerDescription);
                     document.getElementById('cartLoader').style.display = 'none';
                 })
                 .catch((error) => {
