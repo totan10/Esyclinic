@@ -280,7 +280,8 @@
       .row {
         grid-template-columns: repeat(2, 1fr);
       }
-      .service-box{
+
+      .service-box {
         width: 36vw;
         margin: 10px;
       }
@@ -324,19 +325,25 @@
       }
     }
 
-    @media (max-width: 1300px){
+    @media (max-width: 1300px) {
       .navbar-brand img {
         max-height: 50px;
       }
-      .profile-icon{
+
+      .profile-icon {
         font-size: medium;
       }
-      .doctor-info p,.doctor-info h5,  .slot-item .status{
+
+      .doctor-info p,
+      .doctor-info h5,
+      .slot-item .status {
         font-size: small;
       }
-      .slot-item .date-day{
+
+      .slot-item .date-day {
         font-size: small;
       }
+
       .searchbar-container {
         width: 75%;
       }
@@ -350,6 +357,7 @@
         padding-left: 0;
         width: 100%;
       }
+
       .navbar-brand img {
         max-height: 50px;
       }
@@ -370,38 +378,56 @@
         top: 24px;
         /* Adjust top position for smaller screens */
       }
-      .slot-item{
+
+      .slot-item {
         padding-left: 0;
       }
-      .doctor-info p,.doctor-info h5, .slot-item .date-day, .slot-item .status{
+
+      .doctor-info p,
+      .doctor-info h5,
+      .slot-item .date-day,
+      .slot-item .status {
         font-size: smaller;
       }
     }
+
     @media (max-width: 700px) {
-      .doctor-info p,.doctor-info h5,  .slot-item .status{
+
+      .doctor-info p,
+      .doctor-info h5,
+      .slot-item .status {
         font-size: x-small;
       }
-      .slot-item .date-day{
+
+      .slot-item .date-day {
         font-size: xx-small;
       }
     }
+
     @media (max-width: 500px) {
-      .doctor-info p,.doctor-info h5,  .slot-item .status{
+
+      .doctor-info p,
+      .doctor-info h5,
+      .slot-item .status {
         font-size: xx-small;
       }
-      .slot-item{
+
+      .slot-item {
         margin-left: 5px;
         padding: 0;
       }
-      .slot-item .date-day{
+
+      .slot-item .date-day {
         font-size: 8px;
       }
-      .doctor-photo img{
+
+      .doctor-photo img {
         width: 40px;
       }
     }
-    @media (max-width: 450px){
-      .doctor-info{
+
+    @media (max-width: 450px) {
+      .doctor-info {
         margin-left: 3px;
       }
     }
@@ -436,8 +462,6 @@
         /* Reduce padding for smaller screens */
       }
     }
-
-
   </style>
 
 </head>
@@ -503,10 +527,16 @@
     <!-- Doctor data will be dynamically added here -->
   </div>
 
+  <div id="content">
+    <!-- This is where content will be dynamically loaded -->
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.8/lottie.min.js"></script>
   <script>
     let doctorsData = [];
     let userData = null;
@@ -521,6 +551,7 @@
     function handlePaymentModule() {
       window.location.href = 'paymentModule.html'
     }
+
     document.addEventListener("DOMContentLoaded", function () {
       // Check if the user is already logged in
       const isLoggedIn = localStorage.getItem("isLoggedIn");
