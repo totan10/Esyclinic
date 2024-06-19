@@ -846,7 +846,7 @@
         }
 
         .symptom img {
-            width: 95%;
+            width: 100%;
             height: 80%;
             margin: 2px;
             /* Ensure proper image aspect ratio */
@@ -1325,8 +1325,11 @@
         }
 
         @media (max-width: 450px) {
-            .common_scan {
+            .sample,.common_scan,.organ {
                 max-width: 170px;
+            }
+            .symptom, .profile_test {
+                height: 160px;
             }
 
             .common_scan img {
@@ -1442,7 +1445,7 @@
             }
 
             #commonOrgan {
-                margin-top: 120px;
+                margin-top: 130px;
             }
         }
 
@@ -2615,7 +2618,6 @@
                     window.location.href = `singleTests.html?${queryString}`;
                 });
                 document.getElementById('commonScan').style.marginTop = '10px'
-                headerContent.style.marginTop = '100px'
                 headerContent.style.display = 'block'
             })
             showOneRow('.organ');

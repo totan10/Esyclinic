@@ -730,6 +730,50 @@
           transform: rotate(360deg);
         }
       }
+
+      @media (max-width: 500px) {
+      .modal-slot-item {
+        width: 42vw;
+      }
+
+      .modal-slot-item span {
+        font-size: small;
+      }
+
+      .modal-slot-item .availability {
+        font-size: small;
+      }
+
+      .booking-container {
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        right: 5px;
+      }
+
+      .buttonContainer {
+        display: flex;
+        justify-content: space-evenly;
+      }
+
+      .booking-form input[type="submit"],
+      #cancelButton {
+        margin-left: 0;
+        width: 33vw;
+      }
+
+      .popup-overlay {
+        position: fixed;
+        top: 0;
+        height: 100%;
+        width: 100vw;
+      }
+      .booking-confirmation{
+        width: 100%;
+        border-radius: none;
+      }
+
+    }
     </style>
   </head>
 
@@ -1068,6 +1112,13 @@
         slotContainer.style.display = "none";
         bookingContainer.style.display = "block";
         const bookingForm = document.querySelector(".booking-form");
+        const computedStyle = window.getComputedStyle(bookingContainer);
+      console.log(computedStyle.position);
+
+      if (computedStyle.position === 'absolute') {
+        // Hide the doctor profile container if the booking container is absolute positioned
+        document.getElementById('doctorProfileContainer').style.display = 'none';
+      }
 
         bookingForm.style.display = "block"; // Show booking form
       }
@@ -1092,78 +1143,163 @@
             event.preventDefault(); // Prevent input if the key is not allowed
           }
         });
-      document
-        .getElementById("patientMobile")
-        .addEventListener("input", function () {
+        document
+      .getElementById("patientMobile")
+      .addEventListener("input", function () {
 
-          let mobile = document.getElementById('patientMobile').value;
-          mobile = mobile.replace(/\D/g, '');
-          if (!isValidMobile(mobile)) {
-            const patientNameInput = document.getElementById("patientName");
-            const patientAgeInput = document.getElementById("patientAge");
-            const patientSexInput = document.getElementById("patientGender")
+        let mobile = document.getElementById('patientMobile').value;
+        mobile = mobile.replace(/\D/g, '');
+        if (!isValidMobile(mobile)) {
+          // Make name and age fields editable
+          const patientNameInput = document.getElementById("patientName");
+          const patientAgeInput = document.getElementById("patientAge");
+          const patientSexInput = document.getElementById("patientGender")
 
-            patientNameInput.disabled = false;
-            patientAgeInput.sdisabled = false;
-            patientSexInput.disabled = false;
-            patientNameInput.value = '';
-            patientAgeInput.value = '';
-            patientSexInput.value = ''
-            if (mobile == '') {
-              mobileNumberError.textContent = ''; // Clear error message
-              mobileNumberError.classList.remove('text-danger');
-              mobileNumberError.style.width = '0%';
-              document.getElementById('patientMobile').style.marginBottom = '10px'
-            }
-            else {
-              mobileNumberError.textContent = 'Enter a valid 10-digit number!!!';
-              mobileNumberError.classList.add('text-danger');
-              mobileNumberError.style.width = '100%'
-              const patientDropdown = document.getElementById("patientDropdown");
-              patientDropdown.style.display = "none";
-              document.getElementById('patientMobile').style.marginBottom = '0'
-            }
-
-          } else {
-
+          patientNameInput.disabled = false;
+          patientAgeInput.sdisabled = false;
+          patientSexInput.disabled = false;
+          patientNameInput.value = '';
+          patientAgeInput.value = '';
+          patientSexInput.value = ''
+          if (mobile == '' || mobile.length < 10) {
             mobileNumberError.textContent = ''; // Clear error message
             mobileNumberError.classList.remove('text-danger');
             mobileNumberError.style.width = '0%';
+            const patientDropdown = document.getElementById("patientDropdown");
+            patientDropdown.style.display = "none";
             document.getElementById('patientMobile').style.marginBottom = '10px'
-            // Call function to handle mobile number with 10 digits
-            handleMobileNumberWith10Digits(mobile);
           }
-        });
-      document
-        .getElementById("alternateMobile")
-        .addEventListener("input", function () {
-          const mobileError = document.getElementById('alterMobileNumberError');
-          let mobile = document.getElementById('alternateMobile').value;
-          mobile = mobile.replace(/\D/g, '');
-          if (!isValidMobile(mobile)) {
-            if (mobile == '') {
-              mobileError.textContent = ''; // Clear error message
-              mobileError.classList.remove('text-danger');
-              mobileError.style.width = '0%';
-              document.getElementById('alternateMobile').style.marginBottom = '10px'
-            }
-            else {
-              console.log("not validate number");
-              mobileError.textContent = 'Enter a valid 10-digit number!!!';
-              mobileError.classList.add('text-danger');
-              mobileError.style.width = '100%'
-              document.getElementById('alternateMobile').style.marginBottom = '0'
-            }
+          else if (mobile.length == 10) {
+            mobileNumberError.textContent = 'Enter a valid 10-digit number!!!';
+            mobileNumberError.classList.add('text-danger');
+            mobileNumberError.style.width = '100%'
+            const patientDropdown = document.getElementById("patientDropdown");
+            patientDropdown.style.display = "none";
+            document.getElementById('patientMobile').style.marginBottom = '0'
+          }
 
+        } else {
+
+          mobileNumberError.textContent = ''; // Clear error message
+          mobileNumberError.classList.remove('text-danger');
+          mobileNumberError.style.width = '0%';
+          document.getElementById('patientMobile').style.marginBottom = '10px'
+          // Call function to handle mobile number with 10 digits
+          handleMobileNumberWith10Digits(mobile);
+        }
+      });
+
+        
+        document
+      .getElementById("patientMobile")
+      .addEventListener("blur", function () {
+
+        let mobile = document.getElementById('patientMobile').value;
+        mobile = mobile.replace(/\D/g, '');
+        if (!isValidMobile(mobile)) {
+          // Make name and age fields editable
+          const patientNameInput = document.getElementById("patientName");
+          const patientAgeInput = document.getElementById("patientAge");
+          const patientSexInput = document.getElementById("patientGender")
+          const patientDropdown = document.getElementById("patientDropdown");
+
+          patientNameInput.disabled = false;
+          patientAgeInput.sdisabled = false;
+          patientSexInput.disabled = false;
+          patientNameInput.value = '';
+          patientAgeInput.value = '';
+          patientSexInput.value = ''
+          if (mobile == '') {
+            mobileNumberError.textContent = ''; // Clear error message
+            mobileNumberError.classList.remove('text-danger');
+            mobileNumberError.style.width = '0%';
+            patientDropdown.style.display = "none";
+            document.getElementById('patientMobile').style.marginBottom = '10px'
+          }
+          else if (mobile.length < 10) {
+            mobileNumberError.textContent = 'Enter a complete Mobile number!!!';
+            mobileNumberError.classList.add('text-danger');
+            mobileNumberError.style.width = '100%'
+            patientDropdown.style.display = "none";
+            document.getElementById('patientMobile').style.marginBottom = '0'
           } else {
 
+            mobileNumberError.textContent = 'Enter the valid Mobile number!!!';
+            mobileNumberError.classList.add('text-danger');
+            mobileNumberError.style.width = '100%'
+            patientDropdown.style.display = "none";
+            document.getElementById('patientMobile').style.marginBottom = '0'
+          }
+        } else {
+
+          mobileNumberError.textContent = ''; // Clear error message
+          mobileNumberError.classList.remove('text-danger');
+          mobileNumberError.style.width = '0%';
+          document.getElementById('patientMobile').style.marginBottom = '10px'
+          // Call function to handle mobile number with 10 digits
+          // handleMobileNumberWith10Digits(mobile);
+        }
+      });
+
+    document
+      .getElementById("alternateMobile")
+      .addEventListener("input", function () {
+        const mobileError = document.getElementById('alterMobileNumberError');
+        let mobile = document.getElementById('alternateMobile').value;
+        mobile = mobile.replace(/\D/g, '');
+        if (!isValidMobile(mobile)) {
+          if (mobile == '') {
             mobileError.textContent = ''; // Clear error message
             mobileError.classList.remove('text-danger');
             mobileError.style.width = '0%';
             document.getElementById('alternateMobile').style.marginBottom = '10px'
           }
-        });
+          else {
+            console.log("not validate number");
+            mobileError.textContent = 'Enter a valid 10-digit number!!!';
+            mobileError.classList.add('text-danger');
+            mobileError.style.width = '100%'
+            document.getElementById('alternateMobile').style.marginBottom = '0'
+          }
 
+        } else {
+
+          mobileError.textContent = ''; // Clear error message
+          mobileError.classList.remove('text-danger');
+          mobileError.style.width = '0%';
+          document.getElementById('alternateMobile').style.marginBottom = '10px'
+        }
+      });
+
+    document
+      .getElementById("alternateMobile")
+      .addEventListener("blur", function () {
+        const mobileError = document.getElementById('alterMobileNumberError');
+        let mobile = document.getElementById('alternateMobile').value;
+        mobile = mobile.replace(/\D/g, '');
+        if (!isValidMobile(mobile)) {
+          if (mobile == '') {
+            mobileError.textContent = ''; // Clear error message
+            mobileError.classList.remove('text-danger');
+            mobileError.style.width = '0%';
+            document.getElementById('alternateMobile').style.marginBottom = '10px'
+          }
+          else if (mobile.length < 10) {
+            console.log("not validate number");
+            mobileError.textContent = 'Enter a complete Alternate Mobile number!!!';
+            mobileError.classList.add('text-danger');
+            mobileError.style.width = '100%'
+            document.getElementById('alternateMobile').style.marginBottom = '0'
+          }
+
+        } else {
+
+          mobileError.textContent = ''; // Clear error message
+          mobileError.classList.remove('text-danger');
+          mobileError.style.width = '0%';
+          document.getElementById('alternateMobile').style.marginBottom = '10px'
+        }
+      });
 
       async function handleMobileNumberWith10Digits(mobile) {
         const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/srchmob";
@@ -1226,7 +1362,7 @@
       }
       // Function to check if a string contains only alphabets
       function isValidName(name) {
-        return /^[a-zA-Z]+$/.test(name);
+        return /^[A-Za-z\s]+$/.test(name);
       }
 
       // Function to check if a mobile number is valid (exactly 10 digits)
@@ -1269,30 +1405,30 @@
 
       // Add event listeners to input fields for validation
       document
-        .getElementById("patientName")
-        .addEventListener("input", function (event) {
-          const name = document.getElementById('patientName');
-          const nameError = document.getElementById('nameError');
-          if (!isValidName(name.value.trim())) {
-            if (name.value == '') {
-              nameError.textContent = "Name should not be blank!"
-              nameError.classList.add('text-danger');
-              nameError.style.width = '100%';
-              document.getElementById('patientName').style.marginBottom = '0px'
-            }
-            else {
-              nameError.textContent = "Name should contain only alphabets!"
-              nameError.classList.add('text-danger');
-              nameError.style.width = '100%';
-              document.getElementById('patientName').style.marginBottom = '0px'
-            }
-          } else {
-            nameError.textContent = ""
-            nameError.classList.remove('text-danger');
-            nameError.style.width = '0';
-            document.getElementById('patientName').style.marginBottom = '10px'
+      .getElementById("patientName")
+      .addEventListener("input", function (event) {
+        const name = document.getElementById('patientName');
+        const nameError = document.getElementById('nameError');
+        if (!isValidName(name.value.trim())) {
+          if (name.value == '') {
+            nameError.textContent = "Name should not be blank!"
+            nameError.classList.add('text-danger');
+            nameError.style.width = '100%';
+            document.getElementById('patientName').style.marginBottom = '0px'
           }
-        });
+          else {
+            nameError.textContent = "Name should contain only alphabets!"
+            nameError.classList.add('text-danger');
+            nameError.style.width = '100%';
+            document.getElementById('patientName').style.marginBottom = '0px'
+          }
+        } else {
+          nameError.textContent = ""
+          nameError.classList.remove('text-danger');
+          nameError.style.width = '0';
+          document.getElementById('patientName').style.marginBottom = '10px'
+        }
+      });
 
       document
         .getElementById("patientAge")
@@ -1309,11 +1445,13 @@
         const slotContainer = document.querySelector(".slot-container");
         const bookingContainer =
           document.querySelector(".booking-container");
-        slotContainer.style.display = "block";
+       
         bookingContainer.style.display = "none";
         const bookingForm = document.querySelector(".booking-form");
-
+        
         bookingForm.style.display = "none"; // Show booking form
+        document.getElementById('doctorProfileContainer').display = 'block';
+        slotContainer.style.display = "block";
       }
       // Modify form submission event listener to include validation
       document
