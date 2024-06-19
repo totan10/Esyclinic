@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const password = document.getElementById("password").value;
     
           // Perform API call for login validation using Axios
-          axios.post('http://easyhealths.com/api/cliniclogin', {
+          axios.post('http://healthezy.easytechitsolutions.com/healthezyapi/api/cliniclogin', {
               "MOBILE": username,
               "PASSWORD": password
           })

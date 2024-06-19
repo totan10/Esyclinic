@@ -1330,7 +1330,7 @@
         });
         function populateSampleTests(data) {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "https://easyhealths.com/api/sample_pathology_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/sample_pathology_dummy";
             const params = {
                 PHARMA_ID: PHARMA_ID,
                 SAMPLE_NAME: data.SAMPLE_NAME
@@ -1352,7 +1352,7 @@
 
         function populateSymptomsTests(data) {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "https://easyhealths.com/api/symptom_tests_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/symptom_tests_dummy";
             const params = {
                 PHARMA_ID: PHARMA_ID,
                 DASH_ID: data.DASH_ID
@@ -1406,7 +1406,7 @@
         // Function to format date from "YYYYMMDD" to "dd-Month-YYYY"
         function populateDoctors() {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "https://easyhealths.com/api/testsearch_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/testsearch_dummy";
             const params = {
                 PHARMA_ID: PHARMA_ID,
             };
@@ -1428,7 +1428,7 @@
         // Function to format date from "YYYYMMDD" to "dd-Month-YYYY"
         function populateSampleSearch(sample_name) {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "https://easyhealths.com/api/pathology_samplesrch_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/pathology_samplesrch_dummy";
             const params = {
                 PHARMA_ID: PHARMA_ID,
                 SAMPLE_NAME: sample_name
@@ -1931,7 +1931,7 @@
 
         async function populateTests(organData) {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "https://easyhealths.com/api/clinicitemorgantest_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/clinicitemorgantest_dummy";
             const params = {
                 PHARMA_ID: PHARMA_ID,
                 DASH_NAME: organData.DASH_NAME,

@@ -1032,7 +1032,7 @@
           APPNT_DT: SCH_DT
         };
         console.log(params);
-        const url = "http://easyhealths.com/api/vuslot";
+        const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/vuslot";
         try {
           console.log(params);
           const response = await axios.post(url, params);
@@ -1166,7 +1166,7 @@
 
 
       async function handleMobileNumberWith10Digits(mobile) {
-        const url = "http://easyhealths.com/api/srchmob";
+        const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/srchmob";
         const params = {
           MOBILE: mobile,
         };
@@ -1617,7 +1617,7 @@
           .addEventListener("click", function () {
             hideSubPopup();
             console.log(patientDetails);
-            const url = "http://easyhealths.com/api/booking";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/booking";
             const params = patientDetails;
             // Call bookAppointment and handle the promise
             document.querySelector('.loaderOverlay').style.visibility = 'visible';
@@ -1668,7 +1668,7 @@
             console.log(patientDetails);
             document.querySelector('.loaderOverlay').style.visibility = 'visible';
             document.querySelector('.loader').style.display = 'block';
-            const url = "http://easyhealths.com/api/admbooking";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/admbooking";
             const params = patientDetails;
             // Call bookAppointment and handle the promise
             bookAppointment(url, params)

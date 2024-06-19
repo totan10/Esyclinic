@@ -1352,7 +1352,7 @@
         // Function to format date from "YYYYMMDD" to "dd-Month-YYYY"
         function populateDoctors() {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "https://easyhealths.com/api/testsearch_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/testsearch_dummy";
             const params = {
                 PHARMA_ID: PHARMA_ID,
             };
@@ -1854,7 +1854,7 @@
         }
         async function populatePackages(organData) {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "https://easyhealths.com/api/labpackagesdtl_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/labpackagesdtl_dummy";
             const params = {
                 PHARMA_ID: PHARMA_ID,
                 DASH_ID: organData.DASH_ID,
@@ -1892,7 +1892,7 @@
         }
         async function populateProfiles(organData) {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "https://easyhealths.com/api/labprofilesdtl_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/labprofilesdtl_dummy";
             const params = {
                 PHARMA_ID: PHARMA_ID,
                 DASH_ID: organData.DASH_ID,

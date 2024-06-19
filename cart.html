@@ -1734,7 +1734,7 @@
         function populateDoctors() {
             console.log("inside");
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "https://easyhealths.com/api/testsearch_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/testsearch_dummy";
             const params = {
                 PHARMA_ID: PHARMA_ID,
             };
@@ -2675,7 +2675,7 @@
             });
 
         async function handleMobileNumberWith10Digits(mobile) {
-            const url = "http://easyhealths.com/api/srchmob";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/srchmob";
             const params = {
                 MOBILE: mobile,
             };
@@ -3102,7 +3102,7 @@
 
         async function booking_confirm(booking_data) {
 
-            const url = "https://easyhealths.com/api/booktest_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/booktest_dummy";
 
 
             axios
@@ -3138,7 +3138,7 @@
             document.body.appendChild(popup);
         }
         async function getinvoice(bookingId, patientId) {
-            const url = "https://easyhealths.com/api/testinvoice_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/testinvoice_dummy";
             const params = {
                 BOOKING_ID: bookingId,
                 PHARMA_ID: userData.PHARMA_ID,

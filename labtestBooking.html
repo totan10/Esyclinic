@@ -2061,7 +2061,7 @@
         }
 
         async function fetchSearchCommonScan(DASH_NAME) {
-            const url = "https://easyhealths.com/api/radiologyscan_search_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/radiologyscan_search_dummy";
             const params = {
                 PHARMA_ID: userData.PHARMA_ID,
                 DASH_NAME: DASH_NAME,
@@ -2210,7 +2210,7 @@
         //         });
         // }
         async function fetchSearchPathology() {
-            const url = "https://easyhealths.com/api/pathologysearch_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/pathologysearch_dummy";
             const params = {
                 PHARMA_ID: userData.PHARMA_ID,
             };
@@ -2229,7 +2229,7 @@
                 });
         }
         async function fetchAllpathology() {
-            const url = "https://easyhealths.com/api/clinic_pathology_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/clinic_pathology_dummy";
             const params = {
                 PHARMA_ID: userData.PHARMA_ID,
             };
@@ -2250,7 +2250,7 @@
         }
         async function populateTests() {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "https://easyhealths.com/api/labdashboard1_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/labdashboard1_dummy";
             const params = {
                 PHARMA_ID: PHARMA_ID,
             };
@@ -2313,7 +2313,7 @@
         // Function to format date from "YYYYMMDD" to "dd-Month-YYYY"
         function populateDoctors() {
             const PHARMA_ID = userData ? userData.PHARMA_ID : null
-            const url = "https://easyhealths.com/api/testsearch_dummy";
+            const url = "http://healthezy.easytechitsolutions.com/healthezyapi/api/testsearch_dummy";
             const params = {
                 PHARMA_ID: PHARMA_ID,
             };
@@ -3172,4 +3172,4 @@
     </script>
 </body>
 
-</html>
+</html> 
